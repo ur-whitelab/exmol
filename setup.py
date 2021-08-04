@@ -16,7 +16,8 @@ setup(name='counterstone',
           'selfies',
           'numpy',
           'rdkit-pypi',
-          'matplotlib'],
+          'matplotlib',
+          'scikit-learn'],
       test_suite='tests',
       zip_safe=True
       )
