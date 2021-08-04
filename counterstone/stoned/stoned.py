@@ -206,6 +206,7 @@
 # 1. Replaced np.random with numpy random
 # 2. Minimized imports
 # 3. broke out fingerprint distance
+# 4. Added callback
 
 import selfies
 import random

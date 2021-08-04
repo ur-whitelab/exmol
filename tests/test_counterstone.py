@@ -33,20 +33,18 @@ def test_run_stones():
 def test_run_stones_callback():
     result = counterstone.run_stoned(
         'N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC',
-        num_samples=10, max_mutations=1, stop_callback=lambda x: True)
+        num_samples=10, max_mutations=1, stop_callback=lambda x, y: True)
     assert len(result[0]) == 10
 
 
 def test_explain():
-    def model(s):
-        return len(s) > 5
+    def model(s, se):
+        return 'N' in s
     explanation = counterstone.explain(
         'CCCC', model, top_k=3, cluster=False, batched=False)
-    print(explanation)
 
 
 def test_cluster_explain():
-    def model(s):
-        return len(s) > 5
+    def model(s, se):
+        return 'N' in s
     explanation = counterstone.explain('CCCC', model, top_k=3, batched=False)
-    print(explanation)

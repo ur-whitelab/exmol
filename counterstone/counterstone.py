@@ -1,11 +1,23 @@
+from dataclasses import dataclass
+import numpy as np
+from sklearn.cluster import AgglomerativeClustering
+import selfies
 from counterstone.stoned.stoned import get_fingerprint
 import itertools
+import math
 from typing import Type
 from . import stoned
 from rdkit.Chem import MolFromSmiles as smi2mol
-import selfies
-from sklearn.cluster import AgglomerativeClustering
-import numpy as np
+from rdkit.Chem.Draw import MolToImage as smi2img
+
+
+@dataclass
+class Explanation:
+    smiles: str
+    selfies: str
+    similarity: float
+    position: np.ndarray = np.array([0, 0])
+    is_base: bool = False
 
 
 def _fp_dist_matrix(smiles, fp_type='ECFP4'):
@@ -24,7 +36,7 @@ def run_stoned(
     '''
     num_mutation_ls = list(range(1, max_mutations + 1))
     if stop_callback is None:
-        def stop_callback(x): return False
+        def stop_callback(x, y): return False
 
     mol = smi2mol(s)
     if mol == None:
@@ -37,6 +49,7 @@ def run_stoned(
     selfies_ls = [selfies.encoder(x) for x in randomized_smile_orderings]
 
     all_smiles_collect = []
+    all_selfies_collect = []
     for num_mutations in num_mutation_ls:
         # Mutate the SELFIES:
         selfies_mut = stoned.get_mutated_SELFIES(
@@ -44,7 +57,8 @@ def run_stoned(
         # Convert back to SMILES:
         smiles_back = [selfies.decoder(x) for x in selfies_mut]
         all_smiles_collect = all_smiles_collect + smiles_back
-        if stop_callback(smiles_back):
+        all_selfies_collect = all_selfies_collect + selfies_mut
+        if stop_callback(smiles_back, selfies_mut):
             break
 
     # Work on:  all_smiles_collect
@@ -58,26 +72,26 @@ def run_stoned(
 
     canon_smi_ls_scores = stoned.get_fp_scores(
         canon_smi_ls, target_smi=s, fp_type=fp_type)
-    return canon_smi_ls, canon_smi_ls_scores
+    return canon_smi_ls, all_selfies_collect, canon_smi_ls_scores
 
 
 def explain(smi, f, batched=True, top_k=10,  cluster=True, stoned_kwargs=None):
     batched_f = f
     if not batched:
-        def batched_f(s): return [f(si) for si in s]
+        def batched_f(sm, se): return [f(smi, sei) for smi, sei in zip(sm, se)]
     if stoned_kwargs is None:
         stoned_kwargs = {}
 
-    def callback(s):
+    def callback(sm, se):
         try:
-            complete = sum(batched_f(s))
+            complete = sum(batched_f(sm, se))
         except TypeError as e:
             print('Maybe you forgot to indicate your function is not batched')
             raise e
         return complete
     stoned_kwargs['stop_callback'] = callback
-    smiles, scores = run_stoned(smi, **stoned_kwargs)
-    switched = batched_f(smiles)
+    smiles, selfies, scores = run_stoned(smi, **stoned_kwargs)
+    switched = batched_f(smiles, selfies)
     if not sum(switched):
         raise ValueError(
             'Failed to find counterfactual. Try adjusting stoned_kwargs')
@@ -86,8 +100,12 @@ def explain(smi, f, batched=True, top_k=10,  cluster=True, stoned_kwargs=None):
     scores = [s for s, l in zip(scores, switched) if l]
     if cluster and len(smiles) >= top_k:
         # compute distance matrix
+        from sklearn.decomposition import PCA
         dmat = _fp_dist_matrix(smiles,
                                stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
+        # compute positions
+        pca = PCA(n_components=2)
+        proj_dmat = pca.fit_transform(dmat)
 
         # do clustering
         clustering = AgglomerativeClustering(
@@ -95,10 +113,26 @@ def explain(smi, f, batched=True, top_k=10,  cluster=True, stoned_kwargs=None):
         # get highest in each label
         result = []
         for i in range(top_k):
-            ci = [(sm, s) for i, (sm, s) in enumerate(
-                zip(smiles, scores)) if clustering.labels_[i]]
-            result.append(sorted(ci, key=lambda k: k[1])[-1])
+            ci = [Explanation(sm, se, s, proj_dmat[i]) for i, (sm, se, s) in enumerate(
+                zip(smiles, selfies, scores)) if clustering.labels_[i]]
+            result.append(sorted(ci, key=lambda k: k.similarity)[-1])
     else:
-        result = [(sm, s) for sm, s in zip(smiles, scores)]
-        result = sorted(result, key=lambda v: v[1], reverse=True)[:top_k]
-    return result
+        result = [Explanation(sm, se, s)
+                  for sm, se, s in zip(smiles, selfies, scores)]
+        result = sorted(result, key=lambda v: v.similarity,
+                        reverse=True)[:top_k]
+    # add base smiles to output
+    return [Explanation(smi, 1.0, np.array([0, 0]), True)] + result
+
+
+def plot_explanation(exps, figure_kwargs=None):
+    import matplotlib.pyplot as plt
+    imgs = [smi2img(e.smiles) for e in exps]
+    if figure_kwargs is None:
+        figure_kwargs = {}
+    N = math.ceil(math.sqrt(len(imgs)))
+    fig, axs = plt.subplots(N, N, **figure_kwargs)
+    axs = axs.flatten()
+    for i, e in zip(imgs, exps):
+        axs[0].set_title('Base' if e.is_base else f'{e.similarity:.2f}')
+        axs[0].imshow(np.asarray(imgs))
