@@ -127,7 +127,6 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
             n_clusters=max_k, affinity='precomputed', linkage='complete').fit(dmat)
         # get highest in each label
         result = []
-        print(clustering.labels_)
         for i in range(max_k):
             ci = [Explanation(sm, se, s, proj_dmat[j, :]) for j, (sm, se, s) in enumerate(
                 zip(c_smiles, c_selfies, c_scores)) if clustering.labels_[j] == i]
@@ -153,7 +152,6 @@ def plot_explanation(exps, figure_kwargs=None):
         _grid_plot_explanation(exps, figure_kwargs)
     else:
         _project_plot_explanation(exps, figure_kwargs)
-    
 
 
 def _project_plot_explanation(exps, figure_kwargs=None):
@@ -161,7 +159,25 @@ def _project_plot_explanation(exps, figure_kwargs=None):
     imgs = [mol2img(smi2mol(e.smiles), size=(150, 100)) for e in exps]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
-    plt.axes('off')
+    x = np.array([e.position[0] for e in exps])
+    y = np.array([e.position[1] for e in exps])
+    ax = plt.gca()
+    _image_scatter(x, y, imgs, ax)
+    ax.set_facecolor('white')
+    ax.set_xbound(-np.amax(np.abs(x)), np.amax(np.abs(x)))
+    ax.set_ybound(-np.amax(np.abs(y)), np.amax(np.abs(y)))
+    ax.axis('off')
+
+
+def _image_scatter(x, y, imgs, ax):
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+
+    ax.scatter(x, y)
+
+    for x0, y0, i in zip(x, y, imgs):
+        ab = AnnotationBbox(OffsetImage(np.asarray(i)),
+                            (x0, y0), frameon=False)
+        ax.add_artist(ab)
 
 
 def _grid_plot_explanation(exps, figure_kwargs=None):
@@ -170,7 +186,7 @@ def _grid_plot_explanation(exps, figure_kwargs=None):
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
-    R = len(imgs) // C
+    R = math.ceil(len(imgs) / C)
     fig, axs = plt.subplots(R, C, **figure_kwargs)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
