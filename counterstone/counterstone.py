@@ -9,6 +9,7 @@ from typing import Type
 from . import stoned
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
+import rdkit.Chem
 
 
 @dataclass
@@ -21,6 +22,17 @@ class Explanation:
     is_base: bool = False
 
 
+def trim(im):
+    from PIL import Image, ImageChops
+    # https://stackoverflow.com/a/10616717
+    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
+    diff = ImageChops.difference(im, bg)
+    diff = ImageChops.add(diff, diff, 2.0, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
+
+
 def _fp_dist_matrix(smiles, fp_type='ECFP4'):
     mols = [smi2mol(s) for s in smiles]
     fp = [stoned.get_fingerprint(m, fp_type) for m in mols]
@@ -28,6 +40,18 @@ def _fp_dist_matrix(smiles, fp_type='ECFP4'):
     dist = list(1 - stoned.TanimotoSimilarity(x, y)
                 for x, y in itertools.product(fp, repeat=2))
     return np.array(dist).reshape(len(mols), len(mols))
+
+
+def _draw_svg(smi, size=(400, 200)):
+    m = smi2mol(smi)
+    rdkit.Chem.rdDepictor.Compute2DCoords(m)
+
+    drawer = rdkit.Chem.Draw.rdMolDraw2D.MolDraw2DSVG(*size)
+    drawer.drawOptions().bgColor = None
+    drawer.DrawMolecule(m)
+    drawer.FinishDrawing()
+    svg = drawer.GetDrawingText().replace('svg:', '')
+    return svg
 
 
 def run_stoned(
@@ -73,7 +97,6 @@ def run_stoned(
     # remove redundant/non-unique/duplicates
     # in a way to keep the selfies
     canon_smi_ls = list(set(canon_smi_ls))
-    print('NUMBER OF UNIQUE SMILES', len(canon_smi_ls))
 
     canon_smi_ls_scores = stoned.get_fp_scores(
         canon_smi_ls, target_smi=s, fp_type=fp_type)
@@ -108,13 +131,24 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
             'Failed to find counterfactual. Try adjusting stoned_kwargs')
     max_k = min(max_k, sum(switched))
 
+    # GET PROJECTED COORDINATES
+    if cluster:
+        # compute distance matrix
+        from sklearn.decomposition import PCA
+        full_dmat = _fp_dist_matrix(smiles,
+                                    stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
+        # compute positions
+        pca = PCA(n_components=2)
+        proj_dmat = pca.fit_transform(full_dmat)
+
     # PROCESSING COUNTERFACTUALS
     # reduce to subset
     c_smiles = [s for s, l in zip(smiles, switched) if l]
     c_scores = [s for s, l in zip(scores, switched) if l]
     c_selfies = [s for s, l in zip(selfies, switched) if l]
     if cluster and len(c_smiles) >= max_k:
-        # compute distance matrix
+        # compute distance matrix Again
+        # TODO: maybe do not do twice?
         from sklearn.decomposition import PCA
         dmat = _fp_dist_matrix(c_smiles,
                                stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
@@ -139,7 +173,7 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
 
     # PROCESSING NEARBY NON-COUNTERFACTUALS
     # TODO
-    # nc_scores = [s for ]
+    #  nc_scores = [s for]
 
     # apply final filter
     result = [r for r in result if r.similarity > min_similarity]
@@ -148,41 +182,66 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
 
 
 def plot_explanation(exps, figure_kwargs=None):
+    # get aligned images
+    ms = [smi2mol(e.smiles) for e in exps]
+    rdkit.Chem.AllChem.Compute2DCoords(ms[0])
+    for m in ms[1:]:
+        rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
+            m, ms[0], acceptFailure=True)
     if exps[-1].position is None:
-        _grid_plot_explanation(exps, figure_kwargs)
+        _grid_plot_explanation(exps, ms, figure_kwargs)
     else:
-        _project_plot_explanation(exps, figure_kwargs)
+        _project_plot_explanation(exps, ms, figure_kwargs)
 
 
-def _project_plot_explanation(exps, figure_kwargs=None):
+def _project_plot_explanation(exps, mols, figure_kwargs=None, mol_size=(200, 200)):
     import matplotlib.pyplot as plt
-    imgs = [mol2img(smi2mol(e.smiles), size=(150, 100)) for e in exps]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
-    x = np.array([e.position[0] for e in exps])
-    y = np.array([e.position[1] for e in exps])
-    ax = plt.gca()
-    _image_scatter(x, y, imgs, ax)
-    ax.set_facecolor('white')
-    ax.set_xbound(-np.amax(np.abs(x)), np.amax(np.abs(x)))
-    ax.set_ybound(-np.amax(np.abs(y)), np.amax(np.abs(y)))
-    ax.axis('off')
+    plt.figure(**figure_kwargs)
+    imgs = [mol2img(m, size=mol_size) for m in mols]
+    clabel = False
+    plabel = False
+    for i, e in enumerate(exps[1:]):
+        if e.is_counter:
+            plt.plot([0, e.position[0]], [0, e.position[1]],
+                     marker='o', color='C0', label='Counterfactual' if not clabel else None)
+            clabel = True
+        else:
+            plt.plot([0, e.position[0]], [0, e.position[1]],
+                     marker='o', color='C1', label='Counterfactual' if not plabel else None)
+            plabel = True
+    plt.gca().set_facecolor('white')
+    plt.axis('off')
+    plt.gca().set_aspect('equal')
+    x = [e.position[0] for e in exps]
+    y = [e.position[1] for e in exps]
+    titles = [f'Similarity = {e.similarity:.2f}' for e in exps]
+    _image_scatter(x, y, imgs, titles, plt.gca())
+    plt.legend()
 
 
-def _image_scatter(x, y, imgs, ax):
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+def _image_scatter(x, y, imgs, subtitles, ax):
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
 
     ax.scatter(x, y)
 
-    for x0, y0, i in zip(x, y, imgs):
-        ab = AnnotationBbox(OffsetImage(np.asarray(i)),
-                            (x0, y0), frameon=False)
-        ax.add_artist(ab)
+    for x0, y0, i, t in zip(x, y, imgs, subtitles):
+        # add transparency
+        i = trim(i)
+        img_data = np.asarray(i)
+        img_box = OffsetImage(img_data)
+        title_box = TextArea(t)
+        packed = VPacker(children=[img_box, title_box],
+                         pad=0, sep=4, align='center')
+        bb = AnnotationBbox(packed,
+                            (x0, y0),  alpha=0.0, frameon=True)
+        ax.add_artist(bb)
 
 
-def _grid_plot_explanation(exps, figure_kwargs=None):
+def _grid_plot_explanation(exps, mols, figure_kwargs=None):
     import matplotlib.pyplot as plt
-    imgs = [mol2img(smi2mol(e.smiles), size=(150, 100)) for e in exps]
+    imgs = [mol2img(m, size=(150, 100)) for m in mols]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
