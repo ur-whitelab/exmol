@@ -200,7 +200,7 @@ def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned
     return [Explanation(smi, sf.decoder(smi), 1.0, index=0, position=proj_dmat[0, :] if cluster else None, is_base=True)] + result, exps
 
 
-def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None):
+def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None, mol_size=(200,200)):
     # optionally filter out para
     if not show_para:
         exps = [e for e in exps if e.is_counter or e.is_base]
@@ -211,9 +211,9 @@ def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None):
         rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
             m, ms[0], acceptFailure=True)
     if space is None:
-        _grid_plot_explanation(exps, ms, figure_kwargs)
+        _grid_plot_explanation(exps, ms, figure_kwargs, mol_size)
     else:
-        _project_plot_explanation(exps, space, ms, figure_kwargs)
+        _project_plot_explanation(exps, space, ms, figure_kwargs, mol_size)
 
 
 def _project_plot_explanation(exps, space, mols, figure_kwargs=None, mol_size=(200, 200)):
@@ -287,9 +287,9 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax):
     return bbs
 
 
-def _grid_plot_explanation(exps, mols, figure_kwargs=None):
+def _grid_plot_explanation(exps, mols, figure_kwargs=None, mol_size=(200,200)):
     import matplotlib.pyplot as plt
-    imgs = [mol2img(m, size=(250, 200)) for m in mols]
+    imgs = [mol2img(m, size=mol_size) for m in mols]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
