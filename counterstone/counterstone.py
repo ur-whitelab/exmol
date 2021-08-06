@@ -200,7 +200,10 @@ def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned
     return [Explanation(smi, sf.decoder(smi), 1.0, index=0, position=proj_dmat[0, :] if cluster else None, is_base=True)] + result, exps
 
 
-def plot_explanation(exps, space=None, figure_kwargs=None):
+def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None):
+    # optionally filter out para
+    if not show_para:
+        exps = [e for e in exps if e.is_counter or e.is_base]
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
     rdkit.Chem.AllChem.Compute2DCoords(ms[0])
@@ -248,7 +251,7 @@ def _project_plot_explanation(exps, space, mols, figure_kwargs=None, mol_size=(2
             titles.append('Base')
             colors.append(base_color)
     _image_scatter(x, y, imgs, titles, colors, plt.gca())
-    # plt.legend()
+    plt.legend()
     plt.gca().set_aspect('auto')
 
 
