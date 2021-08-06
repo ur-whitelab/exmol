@@ -11,7 +11,7 @@ setup(name='counterstone',
       author_email='andrew.white@rochester.edu',
       url='github.com/ur-whitelab/counterstone',
       license='MIT',
-      packages=['counterstone'],
+      packages=['counterstone', 'counterstone.stoned'],
       install_requires=[
           'selfies',
           'numpy',

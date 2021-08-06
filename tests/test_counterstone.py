@@ -41,8 +41,8 @@ def test_run_stones_callback():
 def test_explain():
     def model(s, se):
         return 'N' in s
-    explanation = counterstone.explain(
-        'CCCC', model, top_k=3, cluster=False, batched=False)
+    explanation,_ = counterstone.explain(
+        'CCCC', model, max_k=3, cluster=False, batched=False)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
@@ -50,11 +50,11 @@ def test_explain():
 def test_cluster_explain():
     def model(s, se):
         return 'N' in s
-    explanation = counterstone.explain('CCCC', model, top_k=3, batched=False)
+    explanation, _ = counterstone.explain('CCCC', model, max_k=3, batched=False)
 
 
 def test_plot():
     def model(s, se):
         return 'N' in s
-    explanation = counterstone.explain('CCCC', model, top_k=3, batched=False)
+    explanation, _ = counterstone.explain('CCCC', model, max_k=3, batched=False)
     counterstone.plot_explanation(explanation)

@@ -254,7 +254,7 @@ def sanitize_smiles(smi):
         mol = smi2mol(smi, sanitize=True)
         smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
         return (mol, smi_canon, True)
-    except Chem.rdchem.MolSanitizeException as e:
+    except Exception as e:
         return (None, None, False)
 
 
