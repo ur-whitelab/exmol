@@ -1,3 +1,5 @@
 mordred[full]==1.2.0
 sklearn
 jupyter
+seaborn
+pandas
