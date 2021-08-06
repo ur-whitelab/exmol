@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.decomposition import PCA
 import selfies as sf
 from counterstone.stoned.stoned import get_fingerprint
 import itertools
@@ -17,6 +18,7 @@ class Explanation:
     smiles: str
     selfies: str
     similarity: float
+    index: int
     position: np.ndarray = None
     is_counter: bool = True
     is_base: bool = False
@@ -55,8 +57,8 @@ def _draw_svg(smi, size=(400, 200)):
 
 
 def run_stoned(
-        s, fp_type='ECFP4', num_samples=1000,
-        max_mutations=3, stop_callback=None, fp_matrix=False):
+        s, fp_type='ECFP4', num_samples=5000,
+        max_mutations=2, stop_callback=None, fp_matrix=False):
     '''Run ths STONED SELFIES algorithm
     '''
     num_mutation_ls = list(range(1, max_mutations + 1))
@@ -104,7 +106,7 @@ def run_stoned(
     return canon_smi_ls, canon_smi_ls_scores
 
 
-def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, min_similarity=0.5):
+def explain(smi, f, batched=True, max_k=3,  cluster=True, stoned_kwargs=None, min_similarity=0.5):
 
     # ARGUMENT PROCESSING
     batched_f = f
@@ -115,7 +117,7 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
 
     def callback(sm, se):
         try:
-            complete = sum(batched_f(sm, se))
+            complete = sum(batched_f(sm, se)) > max_k
         except TypeError as e:
             print('Maybe you forgot to indicate your function is not batched')
             raise e
@@ -130,55 +132,62 @@ def explain(smi, f, batched=True, max_k=10,  cluster=True, stoned_kwargs=None, m
         raise ValueError(
             'Failed to find counterfactual. Try adjusting stoned_kwargs')
     max_k = min(max_k, sum(switched))
+    print('Adjusting max_k to', max_k)
+    # only cluster if 3
+    cluster = cluster and max_k > 2
 
+    # pack them into data structure with filtering
+    exps = [
+        Explanation(sm, se, s, index=i, is_counter=l) for i, (sm, se, s, l) in
+        enumerate(zip(smiles, selfies, scores, switched)) if s < 1.0
+    ]
+
+    print('Starting with', len(exps), 'explanations')
+    result = []
     # GET PROJECTED COORDINATES
     if cluster:
         # compute distance matrix
-        from sklearn.decomposition import PCA
         full_dmat = _fp_dist_matrix(smiles,
                                     stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
-        # compute positions
-        pca = PCA(n_components=2)
-        proj_dmat = pca.fit_transform(full_dmat)
 
-    # PROCESSING COUNTERFACTUALS
-    # reduce to subset
-    c_smiles = [s for s, l in zip(smiles, switched) if l]
-    c_scores = [s for s, l in zip(scores, switched) if l]
-    c_selfies = [s for s, l in zip(selfies, switched) if l]
-    if cluster and len(c_smiles) >= max_k:
-        # compute distance matrix Again
-        # TODO: maybe do not do twice?
-        from sklearn.decomposition import PCA
-        dmat = _fp_dist_matrix(c_smiles,
-                               stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
-        # compute positions
-        pca = PCA(n_components=2)
-        proj_dmat = pca.fit_transform(dmat)
-
-        # do clustering
+        # do clustering everwhere (maybe do counter/same separately?)
         clustering = AgglomerativeClustering(
-            n_clusters=max_k, affinity='precomputed', linkage='complete').fit(dmat)
-        # get highest in each label
-        result = []
+            n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
+
+        # get highest in each label using helper function
+        def cluster_score(e, i, c):
+            return (clustering.labels_[e.index] == i) * (e.is_counter == c) * e.similarity
         for i in range(max_k):
-            ci = [Explanation(sm, se, s, proj_dmat[j, :]) for j, (sm, se, s) in enumerate(
-                zip(c_smiles, c_selfies, c_scores)) if clustering.labels_[j] == i]
-            result.append(sorted(ci, key=lambda k: k.similarity)[-1])
-    else:
-        result = [Explanation(sm, se, s)
-                  for sm, se, s in zip(c_smiles, c_selfies, c_scores)]
-        result = sorted(result, key=lambda v: v.similarity,
-                        reverse=True)[:max_k]
-
-    # PROCESSING NEARBY NON-COUNTERFACTUALS
-    # TODO
-    #  nc_scores = [s for]
-
-    # apply final filter
-    result = [r for r in result if r.similarity > min_similarity]
+            close_counter = max(exps, key=lambda e,
+                                i=i: cluster_score(e, i, True))
+            close_same = close_counter = max(
+                exps, key=lambda e, i=i: cluster_score(e, i, False))
+            # check if actually is (since call could have been off)
+            # when inserting delete from exps for purposes of final step
+            if cluster_score(close_counter, i, True):
+                result.append(close_counter)
+                del exps[exps.index(close_counter)]
+            if cluster_score(close_same, i, False):
+                result.append(close_same)
+                del exps[exps.index(close_same)]
+    # fill in remaining
+    ncount = sum([e.is_counter for e in result])
+    fill = max(0, max_k - ncount)
+    result.extend(sorted(exps, key=lambda v: v.similarity * v.is_counter,
+                         reverse=True)[:fill])
+    fill = max(0, max_k - (len(result) - ncount))
+    result.extend(sorted(exps, key=lambda v: v.similarity * (~v.is_counter),
+                         reverse=True)[:fill])
+    if cluster:
+        idx = [e.index for e in result]
+        subdmat = full_dmat[idx][:, idx]
+        # compute PCA of subset
+        pca = PCA(n_components=2)
+        proj_dmat = pca.fit_transform(subdmat)
+        for i, e in enumerate(result):
+            e.position = proj_dmat[i, :]
     # add base smiles to output
-    return [Explanation(smi, sf.decoder(smi), 1.0, np.array([0, 0]), is_base=True)] + result
+    return [Explanation(smi, sf.decoder(smi), 1.0, index=None, position=np.array([0, 0]), is_base=True)] + result
 
 
 def plot_explanation(exps, figure_kwargs=None):
@@ -188,7 +197,8 @@ def plot_explanation(exps, figure_kwargs=None):
     for m in ms[1:]:
         rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
             m, ms[0], acceptFailure=True)
-    if exps[-1].position is None:
+    # TODO: Make this work someday
+    if True or exps[-1].position is None:
         _grid_plot_explanation(exps, ms, figure_kwargs)
     else:
         _project_plot_explanation(exps, ms, figure_kwargs)
@@ -204,29 +214,37 @@ def _project_plot_explanation(exps, mols, figure_kwargs=None, mol_size=(200, 200
     plabel = False
     for i, e in enumerate(exps[1:]):
         if e.is_counter:
-            plt.plot([0, e.position[0]], [0, e.position[1]],
+            plt.plot([exps[0].position[0], e.position[0]], [exps[0].position[1], e.position[1]],
                      marker='o', color='C0', label='Counterfactual' if not clabel else None)
             clabel = True
         else:
-            plt.plot([0, e.position[0]], [0, e.position[1]],
-                     marker='o', color='C1', label='Counterfactual' if not plabel else None)
+            plt.plot([exps[0].position[0], e.position[0]], [exps[0].position[1], e.position[1]],
+                     marker='o', color='C1', label='Parafactual' if not plabel else None)
             plabel = True
     plt.gca().set_facecolor('white')
     plt.axis('off')
     plt.gca().set_aspect('equal')
     x = [e.position[0] for e in exps]
     y = [e.position[1] for e in exps]
-    titles = [f'Similarity = {e.similarity:.2f}' for e in exps]
-    _image_scatter(x, y, imgs, titles, plt.gca())
+    titles = []
+    colors = []
+    for e in exps:
+        if not e.is_base:
+            titles.append(f'Similarity = {e.similarity:.2f}')
+            colors.append('C0' if e.is_counter else 'C1')
+        else:
+            titles.append('Base')
+            colors.append('C2')
+    _image_scatter(x, y, imgs, titles, colors, plt.gca())
     plt.legend()
 
 
-def _image_scatter(x, y, imgs, subtitles, ax):
+def _image_scatter(x, y, imgs, subtitles, colors, ax):
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
 
     ax.scatter(x, y)
 
-    for x0, y0, i, t in zip(x, y, imgs, subtitles):
+    for x0, y0, i, t, c in zip(x, y, imgs, subtitles, colors):
         # add transparency
         i = trim(i)
         img_data = np.asarray(i)
@@ -234,14 +252,16 @@ def _image_scatter(x, y, imgs, subtitles, ax):
         title_box = TextArea(t)
         packed = VPacker(children=[img_box, title_box],
                          pad=0, sep=4, align='center')
-        bb = AnnotationBbox(packed,
-                            (x0, y0),  alpha=0.0, frameon=True)
+        bb = AnnotationBbox(
+            packed, (x0, y0),
+            alpha=0.0, frameon=True,
+            bboxprops=dict(edgecolor=c))
         ax.add_artist(bb)
 
 
 def _grid_plot_explanation(exps, mols, figure_kwargs=None):
     import matplotlib.pyplot as plt
-    imgs = [mol2img(m, size=(150, 100)) for m in mols]
+    imgs = [mol2img(m, size=(250, 200)) for m in mols]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
@@ -249,8 +269,13 @@ def _grid_plot_explanation(exps, mols, figure_kwargs=None):
     fig, axs = plt.subplots(R, C, **figure_kwargs)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
-        axs[i].set_title('Base' if e.is_base else f'{e.similarity:.2f}')
+        title = 'Base' if e.is_base else f'Similarity = {e.similarity:.2f}'
+        if not e.is_base:
+            title += '\nCounterfactual' if e.is_counter else '\nParafactual'
+        axs[i].set_title(title)
         axs[i].imshow(np.asarray(img))
         axs[i].axis('off')
-
+    for j in range(i, C * R):
+        axs[j].axis('off')
+        axs[j].set_facecolor('white')
     plt.tight_layout()
