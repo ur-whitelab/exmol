@@ -103,13 +103,13 @@ def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned
         def batched_f(sm, se): return [f(smi, sei) for smi, sei in zip(sm, se)]
     if stoned_kwargs is None:
         stoned_kwargs = {}
-        if preset is 'medium':
+        if preset == 'medium':
             stoned_kwargs['num_samples'] = 1500
             stoned_kwargs['max_mutations'] = 2
-        elif preset is 'narrow':
+        elif preset == 'narrow':
             stoned_kwargs['num_samples'] = 3000
             stoned_kwargs['max_mutations'] = 1
-        elif preset is 'wide':
+        elif preset == 'wide':
             stoned_kwargs['num_samples'] = 600
             stoned_kwargs['max_mutations'] = 5
         else:
