@@ -1,3 +1,4 @@
+from rdkit.Chem import rdFMCS as MCS
 from dataclasses import dataclass
 import numpy as np
 from sklearn.cluster import KMeans
@@ -20,17 +21,6 @@ class Explanation:
     position: np.ndarray = None
     is_counter: bool = True
     is_base: bool = False
-
-
-def trim(im):
-    from PIL import Image, ImageChops
-    # https://stackoverflow.com/a/10616717
-    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
-    diff = ImageChops.difference(im, bg)
-    diff = ImageChops.add(diff, diff, 2.0, -100)
-    bbox = diff.getbbox()
-    if bbox:
-        return im.crop(bbox)
 
 
 def _fp_dist_matrix(smiles, fp_type='ECFP4'):
@@ -200,29 +190,39 @@ def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned
     return [Explanation(smi, sf.decoder(smi), 1.0, index=0, position=proj_dmat[0, :] if cluster else None, is_base=True)] + result, exps
 
 
-def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None, mol_size=(200,200)):
+def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None, mol_size=(200, 200)):
     # optionally filter out para
     if not show_para:
         exps = [e for e in exps if e.is_counter or e.is_base]
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
+    dos = rdkit.Chem.Draw.MolDrawOptions()
+    dos.useBWAtomPalette()
     rdkit.Chem.AllChem.Compute2DCoords(ms[0])
+    imgs = []
     for m in ms[1:]:
         rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
             m, ms[0], acceptFailure=True)
+        aidx, bidx = moldiff(ms[0], m)
+        imgs.append(mol2img(m, size=mol_size, options=dos,
+                            highlightAtoms=aidx, highlightBonds=bidx))
+    rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
+        ms[0], ms[1], acceptFailure=True)
+    imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
     if space is None:
-        _grid_plot_explanation(exps, ms, figure_kwargs, mol_size)
+        _grid_plot_explanation(exps, imgs, figure_kwargs, mol_size)
     else:
-        _project_plot_explanation(exps, space, ms, figure_kwargs, mol_size)
+        _project_plot_explanation(
+            exps, space, imgs, figure_kwargs, mol_size)
 
 
-def _project_plot_explanation(exps, space, mols, figure_kwargs=None, mol_size=(200, 200)):
+def _project_plot_explanation(exps, space, imgs, figure_kwargs=None, mol_size=(200, 200)):
     import matplotlib.pyplot as plt
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     base_color = 'gray'
     plt.figure(**figure_kwargs)
-    imgs = [mol2img(m, size=mol_size) for m in mols]
+
     plt.scatter([], [], label='Counterfactual')
     plt.scatter([], [], label='Parafactual')
     plt.scatter(
@@ -287,9 +287,8 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax):
     return bbs
 
 
-def _grid_plot_explanation(exps, mols, figure_kwargs=None, mol_size=(200,200)):
+def _grid_plot_explanation(exps, imgs, figure_kwargs=None, mol_size=(200, 200)):
     import matplotlib.pyplot as plt
-    imgs = [mol2img(m, size=mol_size) for m in mols]
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
@@ -307,3 +306,31 @@ def _grid_plot_explanation(exps, mols, figure_kwargs=None, mol_size=(200,200)):
         axs[j].axis('off')
         axs[j].set_facecolor('white')
     plt.tight_layout()
+
+
+def moldiff(template, query):
+    r = MCS.FindMCS([template, query])
+    substructure = rdkit.Chem.MolFromSmarts(r.smartsString)
+    raw_match = query.GetSubstructMatches(substructure)
+    # flatten it
+    match = list(itertools.chain(*raw_match))
+    # need to invert match to get diffs
+    inv_match = [i for i in range(
+        query.GetNumAtoms()) if i not in match]
+    # get bonds
+    bond_match = []
+    for b in query.GetBonds():
+        if b.GetBeginAtomIdx() in inv_match or b.GetEndAtomIdx() in inv_match:
+            bond_match.append(b.GetIdx())
+    return inv_match, bond_match
+
+
+def trim(im):
+    from PIL import Image, ImageChops
+    # https://stackoverflow.com/a/10616717
+    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
+    diff = ImageChops.difference(im, bg)
+    diff = ImageChops.add(diff, diff, 2.0, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
