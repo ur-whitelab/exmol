@@ -3,4 +3,4 @@ sklearn
 jupyter
 seaborn
 pandas
-tensorflow
+tensorflow>=2.4
