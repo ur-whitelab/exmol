@@ -11,6 +11,10 @@ from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
 import rdkit.Chem
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+delete_color = mpl.colors.to_rgb('#F06060')
+modify_color = mpl.colors.to_rgb('#1BBC9B')
 
 
 @dataclass
@@ -202,8 +206,8 @@ def counterfactual_explain(examples, nmols=3):
         return e.yhat != examples[0].yhat
 
     result = _select_examples(is_counter, examples[1:], nmols)
-    for r in result:
-        r.label = 'Counterfactual'
+    for i, r in enumerate(result):
+        r.label = f'Counterfactual {i+1}'
 
     return examples[:1] + result
 
@@ -220,12 +224,12 @@ def regression_explain(examples, delta=(-1, 1), nmols=4):
 
     hresult = [] if delta[0] is None else _select_examples(
         is_high, examples[1:], nmols // 2)
-    for h in hresult:
-        h.label = 'Increase'
+    for i, h in enumerate(hresult):
+        h.label = f'Increase ({i+1})'
     lresult = [] if delta[1] is None else _select_examples(
         is_low, examples[1:], nmols // 2)
-    for h in lresult:
-        h.label = 'Decrease'
+    for i, l in enumerate(lresult):
+        l.label = f'Decrease ({i+1})'
     return examples[:1] + lresult + hresult
 
 
@@ -240,15 +244,20 @@ def _mol_images(exps, mol_size):
         rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
             m, ms[0], acceptFailure=True)
         aidx, bidx = moldiff(ms[0], m)
+        # if it is too large, we ignore it
+        if len(aidx) > 5:
+            aidx = []
+            bidx = []
         imgs.append(mol2img(m, size=mol_size, options=dos,
-                            highlightAtoms=aidx, highlightBonds=bidx))
+                            highlightAtoms=aidx, highlightBonds=bidx,
+                            highlightColor=modify_color if len(bidx) > 0 else delete_color))
     rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
         ms[0], ms[1], acceptFailure=True)
     imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
     return imgs
 
 
-def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200)):
+def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200), offset=0):
     imgs = _mol_images(exps, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
@@ -278,23 +287,23 @@ def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200)):
         else:
             titles.append('Base')
             colors.append(base_color)
-    _image_scatter(x, y, imgs, titles, colors, plt.gca())
+    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
     plt.axis('off')
     plt.gca().set_aspect('auto')
 
 
-def _nearest_spiral_layout(x, y):
+def _nearest_spiral_layout(x, y, offset):
     # make spiral
-    angles = np.linspace(-np.pi, np.pi, len(x) + 1)
+    angles = np.linspace(-np.pi, np.pi, len(x) + 1 + offset)[offset:]
     coords = np.stack((np.cos(angles), np.sin(angles)), -1)
     order = np.argsort(np.arctan2(y, x))
     return coords[order]
 
 
-def _image_scatter(x, y, imgs, subtitles, colors, ax):
+def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
 
-    box_coords = _nearest_spiral_layout(x, y)
+    box_coords = _nearest_spiral_layout(x, y, offset)
     bbs = []
     for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
         # add transparency
@@ -339,16 +348,31 @@ def moldiff(template, query):
     r = MCS.FindMCS([template, query])
     substructure = rdkit.Chem.MolFromSmarts(r.smartsString)
     raw_match = query.GetSubstructMatches(substructure)
+    template_match = template.GetSubstructMatches(substructure)
     # flatten it
-    match = list(itertools.chain(*raw_match))
+    match = list(raw_match[0])
+    template_match = list(template_match[0])
+
     # need to invert match to get diffs
     inv_match = [i for i in range(
         query.GetNumAtoms()) if i not in match]
+
     # get bonds
     bond_match = []
     for b in query.GetBonds():
         if b.GetBeginAtomIdx() in inv_match or b.GetEndAtomIdx() in inv_match:
             bond_match.append(b.GetIdx())
+
+    # now get bonding changes from deletion
+
+    def neigh_hash(a):
+        return ''.join(sorted([n.GetSymbol() for n in a.GetNeighbors()]))
+
+    for ti, qi in zip(template_match, match):
+        if neigh_hash(template.GetAtomWithIdx(ti)) != \
+                neigh_hash(query.GetAtomWithIdx(qi)):
+            inv_match.append(qi)
+
     return inv_match, bond_match
 
 
