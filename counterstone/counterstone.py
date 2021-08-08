@@ -1,7 +1,7 @@
 from rdkit.Chem import rdFMCS as MCS
 from dataclasses import dataclass
 import numpy as np
-from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
@@ -10,17 +10,24 @@ from . import stoned
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
 import rdkit.Chem
+import matplotlib.pyplot as plt
 
 
 @dataclass
-class Explanation:
+class Examples:
     smiles: str
     selfies: str
     similarity: float
+    yhat: float
     index: int
     position: np.ndarray = None
-    is_counter: bool = True
-    is_base: bool = False
+    is_origin: bool = False
+    cluster: int = 0
+    label: str = None
+
+
+def change_classification(yhats, y):
+    return (yhats - y).astype(bool)
 
 
 def _fp_dist_matrix(smiles, fp_type='ECFP4'):
@@ -34,12 +41,10 @@ def _fp_dist_matrix(smiles, fp_type='ECFP4'):
 
 def run_stoned(
         s, fp_type='ECFP4', num_samples=2000,
-        max_mutations=2, stop_callback=None, fp_matrix=False):
+        max_mutations=2):
     '''Run ths STONED SELFIES algorithm
     '''
     num_mutation_ls = list(range(1, max_mutations + 1))
-    if stop_callback is None:
-        def stop_callback(x, y): return False
 
     mol = smi2mol(s)
     if mol == None:
@@ -61,11 +66,7 @@ def run_stoned(
         smiles_back = [sf.decoder(x) for x in selfies_mut]
         all_smiles_collect = all_smiles_collect + smiles_back
         all_selfies_collect = all_selfies_collect + selfies_mut
-        print('Round Complete with', len(smiles_back))
-        # TODO: GEt rid of callback -- to slow and we do not actually use it
-        # OR start using it
-        # if stop_callback(smiles_back, selfies_mut):
-        #    break
+        print('STONED Round Complete with', len(smiles_back))
 
     # Work on:  all_smiles_collect
     canon_smi_ls = []
@@ -85,12 +86,18 @@ def run_stoned(
     return canon_smi_ls, canon_smi_ls_scores
 
 
-def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned_kwargs=None, min_similarity=0.5):
-
-    # ARGUMENT PROCESSING
+def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=None):
     batched_f = f
     if not batched:
-        def batched_f(sm, se): return [f(smi, sei) for smi, sei in zip(sm, se)]
+        def batched_f(sm, se): return np.array(
+            [f(smi, sei) for smi, sei in zip(sm, se)])
+    smi_yhat = batched_f([origin_smiles], [sf.decoder(origin_smiles)])
+    try:
+        iter(smi_yhat)
+    except TypeError:
+        raise ValueError('Your model function does not appear to be batched')
+    smi_yhat = np.squeeze(smi_yhat[0])
+
     if stoned_kwargs is None:
         stoned_kwargs = {}
         if preset == 'medium':
@@ -105,95 +112,106 @@ def explain(smi, f, batched=True, max_k=3, preset='medium', cluster=True, stoned
         else:
             raise ValueError(f'Unknown preset "{preset}"')
 
-    def callback(sm, se):
-        try:
-            complete = sum(batched_f(sm, se)) > max_k
-        except TypeError as e:
-            print('Maybe you forgot to indicate your function is not batched')
-            raise e
-        return complete
-    stoned_kwargs['stop_callback'] = callback
-
     # STONED
-    smiles, scores = run_stoned(smi, **stoned_kwargs)
+    smiles, scores = run_stoned(origin_smiles, **stoned_kwargs)
     selfies = [sf.decoder(s) for s in smiles]
-    switched = batched_f(smiles, selfies)
-    if not sum(switched):
-        raise ValueError(
-            'Failed to find counterfactual. Try adjusting stoned_kwargs')
-    max_k = min(max_k, sum(switched))
-    print('Adjusting max_k to', max_k)
-    # only cluster if 3
-    cluster = cluster and max_k > 2
+    fxn_values = batched_f(smiles, selfies)
 
     # pack them into data structure with filtering
     exps = [
-        Explanation(sm, se, s, index=0, is_counter=l) for i, (sm, se, s, l) in
-        enumerate(zip(smiles, selfies, scores, switched)) if s < 1.0
+        Examples(origin_smiles, sf.decoder(origin_smiles),
+                 1.0, smi_yhat, index=0, is_origin=True)
+    ] +\
+        [
+        Examples(sm, se, s, np.squeeze(y), index=0) for i, (sm, se, s, y) in
+        enumerate(zip(smiles, selfies, scores, fxn_values)) if s < 1.0
     ]
-    # add 1 to leave space for base
     for i, e in enumerate(exps):
-        e.index = i + 1
+        e.index = i
 
-    print('Starting with', len(exps), 'explanations')
+    # compute distance matrix
+    full_dmat = _fp_dist_matrix([e.smiles for e in exps],
+                                stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
+
+    # compute PCA
+    pca = PCA(n_components=2)
+    proj_dmat = pca.fit_transform(full_dmat)
+    for e in exps:
+        e.position = proj_dmat[e.index, :]
+
+    # do clustering everwhere (maybe do counter/same separately?)
+    # clustering = AgglomerativeClustering(
+    #    n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
+    # Just do it on projected so it looks prettier.
+    clustering = DBSCAN(eps=0.15, min_samples=5).fit(proj_dmat)
+
+    for i, e in enumerate(exps):
+        e.cluster = clustering.labels_[i]
+
+    return exps
+
+
+def _select_examples(cond, examples, nmols):
     result = []
-    # GET PROJECTED COORDINATES
-    if cluster:
-        # compute distance matrix
-        full_dmat = _fp_dist_matrix([smi] + [e.smiles for e in exps],
-                                    stoned_kwargs['fp_type'] if ('fp_type' in stoned_kwargs) else 'ECFP4')
 
-        # compute PCA
-        pca = PCA(n_components=2)
-        proj_dmat = pca.fit_transform(full_dmat)
-        for e in exps:
-            e.position = proj_dmat[e.index, :]
+    # similarit filtered by if cluster/counter
+    def cluster_score(e, i):
+        return (e.cluster == i) * cond(e) * e.similarity
+    clusters = set([e.cluster for e in examples])
+    for i in clusters:
+        close_counter = max(examples, key=lambda e,
+                            i=i: cluster_score(e, i))
+        # check if actually is (since call could have been off)
+        if cluster_score(close_counter, i):
+            result.append(close_counter)
 
-        # do clustering everwhere (maybe do counter/same separately?)
-        # clustering = AgglomerativeClustering(
-        #    n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
-        # Just do it on projected so it looks prettier.
-        clustering = KMeans(n_clusters=max_k).fit(proj_dmat)
+    # trim, in case we had too many cluster
+    result = sorted(result, key=lambda v: v.similarity *
+                    cond(v), reverse=True)[:nmols]
 
-        # get highest in each label using helper function
-        def cluster_score(e, i, c):
-            return (clustering.labels_[e.index] == i) * (e.is_counter == c) * e.similarity
-        for i in range(max_k):
-            close_counter = max(exps, key=lambda e,
-                                i=i: cluster_score(e, i, True))
-            close_same = close_counter = max(
-                exps, key=lambda e, i=i: cluster_score(e, i, False))
-            # check if actually is (since call could have been off)
-            # when inserting delete from exps for purposes of final step
-            if cluster_score(close_counter, i, True):
-                result.append(close_counter)
-                del exps[exps.index(close_counter)]
-            if cluster_score(close_same, i, False):
-                result.append(close_same)
-                del exps[exps.index(close_same)]
     # fill in remaining
-    ncount = sum([e.is_counter for e in result])
-    fill = max(0, max_k - ncount)
-    result.extend(sorted(exps, key=lambda v: v.similarity * v.is_counter,
+    ncount = sum([cond(e) for e in result])
+    fill = max(0, nmols - ncount)
+    result.extend(sorted(examples, key=lambda v: v.similarity * cond(v),
                          reverse=True)[:fill])
-    fill = max(0, max_k - (len(result) - ncount))
-    result.extend(sorted(exps, key=lambda v: v.similarity * (~v.is_counter),
-                         reverse=True)[:fill])
-    # remove from original array so we do not get duplicates
+
+    return result
+
+
+def counterfactual_explain(examples, nmols=3):
+
+    def is_counter(e):
+        return e.yhat != examples[0].yhat
+
+    result = _select_examples(is_counter, examples[1:], nmols)
     for r in result:
-        if r in exps:
-            del exps[exps.index(r)]
-    # sort to have counterfactuals first
-    result = sorted(result, key=lambda v: v.similarity +
-                    max_k * v.is_counter, reverse=True)
-    # add base smiles to output
-    return [Explanation(smi, sf.decoder(smi), 1.0, index=0, position=proj_dmat[0, :] if cluster else None, is_base=True)] + result, exps
+        r.label = 'Counterfactual'
+
+    return examples[:1] + result
 
 
-def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None, mol_size=(200, 200)):
-    # optionally filter out para
-    if not show_para:
-        exps = [e for e in exps if e.is_counter or e.is_base]
+def regression_explain(examples, delta=(-1, 1), nmols=4):
+    if type(delta) is float:
+        delta = (-delta, delta)
+
+    def is_high(e):
+        return e.yhat + delta[0] >= examples[0].yhat
+
+    def is_low(e):
+        return e.yhat + delta[1] <= examples[0].yhat
+
+    hresult = [] if delta[0] is None else _select_examples(
+        is_high, examples[1:], nmols // 2)
+    for h in hresult:
+        h.label = 'Increase'
+    lresult = [] if delta[1] is None else _select_examples(
+        is_low, examples[1:], nmols // 2)
+    for h in lresult:
+        h.label = 'Decrease'
+    return examples[:1] + lresult + hresult
+
+
+def _mol_images(exps, mol_size):
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
     dos = rdkit.Chem.Draw.MolDrawOptions()
@@ -209,49 +227,41 @@ def plot_explanation(exps, space=None, show_para=False, figure_kwargs=None, mol_
     rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
         ms[0], ms[1], acceptFailure=True)
     imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
-    if space is None:
-        _grid_plot_explanation(exps, imgs, figure_kwargs, mol_size)
-    else:
-        _project_plot_explanation(
-            exps, space, imgs, figure_kwargs, mol_size)
+    return imgs
 
 
-def _project_plot_explanation(exps, space, imgs, figure_kwargs=None, mol_size=(200, 200)):
-    import matplotlib.pyplot as plt
+def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200)):
+    imgs = _mol_images(exps, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     base_color = 'gray'
     plt.figure(**figure_kwargs)
-
-    plt.scatter([], [], label='Counterfactual')
-    plt.scatter([], [], label='Parafactual')
+    yhats = [e.yhat for e in examples]
+    normalizer = plt.Normalize(min(yhats), max(yhats))
     plt.scatter(
-        [e.position[0] for e in space],
-        [e.position[1] for e in space],
-        c=['C0' if e.is_counter else 'C1' for e in space],
+        [e.position[0] for e in examples],
+        [e.position[1] for e in examples],
+        c=normalizer(yhats), cmap='viridis',
         alpha=0.5, edgecolors='none')
     plt.scatter(
-        [e.position[0] for e in exps[1:]],
-        [e.position[1] for e in exps[1:]],
-        c=['C0' if e.is_counter else 'C1' for e in exps[1:]],
-        alpha=1.0)
-    plt.scatter(*exps[0].position, color=base_color)
-    plt.gca().set_facecolor('white')
-    plt.axis('off')
-    plt.gca().set_aspect('equal')
+        [e.position[0] for e in exps],
+        [e.position[1] for e in exps],
+        c=normalizer([e.yhat for e in exps]), cmap='viridis',
+        edgecolors='black')
+
     x = [e.position[0] for e in exps]
     y = [e.position[1] for e in exps]
     titles = []
     colors = []
     for e in exps:
-        if not e.is_base:
-            titles.append(f'Similarity = {e.similarity:.2f}')
-            colors.append('C0' if e.is_counter else 'C1')
+        if not e.is_origin:
+            titles.append(f'Similarity = {e.similarity:.2f}\n{e.label}')
+            colors.append(base_color)
         else:
             titles.append('Base')
             colors.append(base_color)
     _image_scatter(x, y, imgs, titles, colors, plt.gca())
-    plt.legend()
+    plt.axis('off')
     plt.gca().set_aspect('auto')
 
 
@@ -287,8 +297,8 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax):
     return bbs
 
 
-def _grid_plot_explanation(exps, imgs, figure_kwargs=None, mol_size=(200, 200)):
-    import matplotlib.pyplot as plt
+def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200)):
+    imgs = _mol_images(exps, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     C = math.ceil(math.sqrt(len(imgs)))
@@ -296,9 +306,8 @@ def _grid_plot_explanation(exps, imgs, figure_kwargs=None, mol_size=(200, 200)):
     fig, axs = plt.subplots(R, C, **figure_kwargs)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
-        title = 'Base' if e.is_base else f'Similarity = {e.similarity:.2f}'
-        if not e.is_base:
-            title += '\nCounterfactual' if e.is_counter else '\nParafactual'
+        title = 'Base' if e.is_origin else f'Similarity = {e.similarity:.2f}\n{e.label}'
+        title += f'\nf(x) = {e.yhat:.3f}'
         axs[i].set_title(title)
         axs[i].imshow(np.asarray(img))
         axs[i].axis('off')
