@@ -64,7 +64,7 @@ def run_stoned(
             selfies_ls.copy(), num_mutations=num_mutations)
         # Convert back to SMILES:
         smiles_back = [sf.decoder(x) for x in selfies_mut]
-        all_smiles_collect = all_smiles_collect + smiles_back
+        all_smiles_collect = all_smiles_collect +   smiles_back
         all_selfies_collect = all_selfies_collect + selfies_mut
         print('STONED Round Complete with', len(smiles_back))
 
@@ -91,7 +91,7 @@ def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=
     if not batched:
         def batched_f(sm, se): return np.array(
             [f(smi, sei) for smi, sei in zip(sm, se)])
-    smi_yhat = batched_f([origin_smiles], [sf.decoder(origin_smiles)])
+    smi_yhat = batched_f([origin_smiles], [sf.encoder(origin_smiles)])
     try:
         iter(smi_yhat)
     except TypeError:
@@ -114,12 +114,12 @@ def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=
 
     # STONED
     smiles, scores = run_stoned(origin_smiles, **stoned_kwargs)
-    selfies = [sf.decoder(s) for s in smiles]
+    selfies = [sf.encoder(s) for s in smiles]
     fxn_values = batched_f(smiles, selfies)
 
     # pack them into data structure with filtering
     exps = [
-        Examples(origin_smiles, sf.decoder(origin_smiles),
+        Examples(origin_smiles, sf.encoder(origin_smiles),
                  1.0, smi_yhat, index=0, is_origin=True)
     ] +\
         [
