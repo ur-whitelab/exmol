@@ -41,9 +41,11 @@ def _fp_dist_matrix(smiles, fp_type='ECFP4'):
 
 def run_stoned(
         s, fp_type='ECFP4', num_samples=2000,
-        max_mutations=2):
+        max_mutations=2, alphabet=None):
     '''Run ths STONED SELFIES algorithm
     '''
+    if alphabet is None:
+        alphabet = list(sf.get_semantic_robust_alphabet())
     num_mutation_ls = list(range(1, max_mutations + 1))
 
     mol = smi2mol(s)
@@ -61,10 +63,10 @@ def run_stoned(
     for num_mutations in num_mutation_ls:
         # Mutate the SELFIES:
         selfies_mut = stoned.get_mutated_SELFIES(
-            selfies_ls.copy(), num_mutations=num_mutations)
+            selfies_ls.copy(), num_mutations=num_mutations, alphabet=alphabet)
         # Convert back to SMILES:
         smiles_back = [sf.decoder(x) for x in selfies_mut]
-        all_smiles_collect = all_smiles_collect +   smiles_back
+        all_smiles_collect = all_smiles_collect + smiles_back
         all_selfies_collect = all_selfies_collect + selfies_mut
         print('STONED Round Complete with', len(smiles_back))
 
@@ -117,14 +119,15 @@ def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=
     selfies = [sf.encoder(s) for s in smiles]
     fxn_values = batched_f(smiles, selfies)
 
-    # pack them into data structure with filtering
+    # pack them into data structure with filtering out identical
+    # and nan
     exps = [
         Examples(origin_smiles, sf.encoder(origin_smiles),
                  1.0, smi_yhat, index=0, is_origin=True)
     ] +\
         [
         Examples(sm, se, s, np.squeeze(y), index=0) for i, (sm, se, s, y) in
-        enumerate(zip(smiles, selfies, scores, fxn_values)) if s < 1.0
+        enumerate(zip(smiles, selfies, scores, fxn_values)) if s < 1.0 and np.squeeze(y)
     ]
     for i, e in enumerate(exps):
         e.index = i

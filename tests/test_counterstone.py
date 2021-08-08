@@ -30,6 +30,14 @@ def test_run_stones():
     assert len(result[0]) >= 9
 
 
+def test_run_stones_alphabet():
+    result = counterstone.run_stoned(
+        'N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC',
+        num_samples=10, max_mutations=1, alphabet=['[C]', '[O]'])
+    # Can get duplicates
+    assert len(result[0]) >= 9
+
+
 def test_sample():
     def model(s, se):
         return int('N' in s)
