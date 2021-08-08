@@ -26,10 +26,6 @@ class Examples:
     label: str = None
 
 
-def change_classification(yhats, y):
-    return (yhats - y).astype(bool)
-
-
 def _fp_dist_matrix(smiles, fp_type='ECFP4'):
     mols = [smi2mol(s) for s in smiles]
     fp = [stoned.get_fingerprint(m, fp_type) for m in mols]
@@ -39,6 +35,20 @@ def _fp_dist_matrix(smiles, fp_type='ECFP4'):
     return np.array(dist).reshape(len(mols), len(mols))
 
 
+def get_basic_alphabet():
+    a = sf.get_semantic_robust_alphabet()
+    # remove cations/anions except oxygen anion
+    to_remove = []
+    for ai in a:
+        if '+1' in ai:
+            to_remove.append(ai)
+        elif '-1' in ai:
+            to_remove.append(ai)
+    a -= set(to_remove)
+    a.add('[O-1expl]')
+    return a
+
+
 def run_stoned(
         s, fp_type='ECFP4', num_samples=2000,
         max_mutations=2, alphabet=None):
@@ -46,6 +56,8 @@ def run_stoned(
     '''
     if alphabet is None:
         alphabet = list(sf.get_semantic_robust_alphabet())
+    if type(alphabet) == set:
+        alphabet = list(alphabet)
     num_mutation_ls = list(range(1, max_mutations + 1))
 
     mol = smi2mol(s)
@@ -105,12 +117,15 @@ def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=
         if preset == 'medium':
             stoned_kwargs['num_samples'] = 1500
             stoned_kwargs['max_mutations'] = 2
+            stoned_kwargs['alphabet'] = get_basic_alphabet()
         elif preset == 'narrow':
             stoned_kwargs['num_samples'] = 3000
             stoned_kwargs['max_mutations'] = 1
+            stoned_kwargs['alphabet'] = get_basic_alphabet()
         elif preset == 'wide':
             stoned_kwargs['num_samples'] = 600
             stoned_kwargs['max_mutations'] = 5
+            stoned_kwargs['alphabet'] = sf.get_semantic_robust_alphabet()
         else:
             raise ValueError(f'Unknown preset "{preset}"')
 
@@ -127,7 +142,7 @@ def sample_space(origin_smiles, f, batched=True, preset='medium', stoned_kwargs=
     ] +\
         [
         Examples(sm, se, s, np.squeeze(y), index=0) for i, (sm, se, s, y) in
-        enumerate(zip(smiles, selfies, scores, fxn_values)) if s < 1.0 and np.squeeze(y)
+        enumerate(zip(smiles, selfies, scores, fxn_values)) if s < 1.0 and np.isfinite(np.squeeze(y))
     ]
     for i, e in enumerate(exps):
         e.index = i
