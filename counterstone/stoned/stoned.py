@@ -253,6 +253,9 @@ def sanitize_smiles(smi):
     try:
         mol = smi2mol(smi, sanitize=True)
         smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
+        check = smi2mol(smi_canon)
+        if check is None:
+            return None, None, False
         return (mol, smi_canon, True)
     except Exception as e:
         return (None, None, False)

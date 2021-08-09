@@ -55,14 +55,14 @@ def get_basic_alphabet():
 
 def run_stoned(
         s, fp_type='ECFP4', num_samples=2000,
-        max_mutations=2, alphabet=None):
+        max_mutations=2, min_mutations=1, alphabet=None):
     '''Run ths STONED SELFIES algorithm
     '''
     if alphabet is None:
         alphabet = list(sf.get_semantic_robust_alphabet())
     if type(alphabet) == set:
         alphabet = list(alphabet)
-    num_mutation_ls = list(range(1, max_mutations + 1))
+    num_mutation_ls = list(range(min_mutations, max_mutations + 1))
 
     mol = smi2mol(s)
     if mol == None:
@@ -91,7 +91,7 @@ def run_stoned(
     for item in all_smiles_collect:
         mol, smi_canon, did_convert = stoned.sanitize_smiles(item)
         if mol == None or smi_canon == '' or did_convert == False:
-            raise Exception('Invalid smile string found')
+            raise Exception('Invalid smiles string found')
         canon_smi_ls.append(smi_canon)
 
     # remove redundant/non-unique/duplicates
@@ -233,11 +233,12 @@ def regression_explain(examples, delta=(-1, 1), nmols=4):
     return examples[:1] + lresult + hresult
 
 
-def _mol_images(exps, mol_size):
+def _mol_images(exps, mol_size, fontsize):
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
     dos = rdkit.Chem.Draw.MolDrawOptions()
     dos.useBWAtomPalette()
+    dos.minFontSize = fontsize
     rdkit.Chem.AllChem.Compute2DCoords(ms[0])
     imgs = []
     for m in ms[1:]:
@@ -245,7 +246,7 @@ def _mol_images(exps, mol_size):
             m, ms[0], acceptFailure=True)
         aidx, bidx = moldiff(ms[0], m)
         # if it is too large, we ignore it
-        if len(aidx) > 5:
+        if len(aidx) > 8:
             aidx = []
             bidx = []
         imgs.append(mol2img(m, size=mol_size, options=dos,
@@ -257,8 +258,8 @@ def _mol_images(exps, mol_size):
     return imgs
 
 
-def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200), offset=0):
-    imgs = _mol_images(exps, mol_size)
+def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=8, offset=0):
+    imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     base_color = 'gray'
@@ -315,7 +316,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
                          pad=0, sep=4, align='center')
         bb = AnnotationBbox(
             packed, (x0, y0),
-            alpha=0.0, frameon=True, xybox=box_coords[i] + 0.5,
+            frameon=True, xybox=box_coords[i] + 0.5,
             arrowprops=dict(arrowstyle="->", edgecolor='black'), pad=0.3,
             boxcoords='axes fraction',
             bboxprops=dict(edgecolor=c))
@@ -324,12 +325,15 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     return bbs
 
 
-def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200)):
-    imgs = _mol_images(exps, mol_size)
+def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None):
+    imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
-    C = math.ceil(math.sqrt(len(imgs)))
-    R = math.ceil(len(imgs) / C)
+    if nrows is not None:
+        R = nrows
+    else:
+        R = math.ceil(math.sqrt(len(imgs)))
+    C = math.ceil(len(imgs) / R)
     fig, axs = plt.subplots(R, C, **figure_kwargs)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
