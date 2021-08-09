@@ -206,7 +206,7 @@
 # 1. Replaced np.random with numpy random
 # 2. Minimized imports
 # 3. broke out fingerprint distance
-# 4. Added callback
+# 4. Added optional passed in alphabet
 
 import selfies
 import random
@@ -336,7 +336,7 @@ def get_fingerprint(mol: Mol, fp_type: str):
     return _FingerprintCalculator().get_fingerprint(mol=mol, fp_type=fp_type)
 
 
-def mutate_selfie(selfie, max_molecules_len, write_fail_cases=False):
+def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
     '''Return a mutated selfie string (only one mutation on slefie is performed)
 
     Mutations are done until a valid molecule is obtained
@@ -362,8 +362,6 @@ def mutate_selfie(selfie, max_molecules_len, write_fail_cases=False):
         fail_counter += 1
 
         # 34 SELFIE characters
-        alphabet = list(selfies.get_semantic_robust_alphabet())
-
         choice_ls = [1, 2, 3]  # 1=Insert; 2=Replace; 3=Delete
         random_choice = random.choice(choice_ls)
 
@@ -412,7 +410,7 @@ def mutate_selfie(selfie, max_molecules_len, write_fail_cases=False):
     return (selfie_mutated, smiles_canon)
 
 
-def get_mutated_SELFIES(selfies_ls, num_mutations):
+def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
     ''' Mutate all the SELFIES in 'selfies_ls' 'num_mutations' number of times.
 
     Parameters:
@@ -431,7 +429,7 @@ def get_mutated_SELFIES(selfies_ls, num_mutations):
             max_molecules_len = len(str_chars) + num_mutations
 
             selfie_mutated, smiles_canon = mutate_selfie(
-                str_, max_molecules_len)
+                str_, max_molecules_len, alphabet)
             selfie_ls_mut_ls.append(selfie_mutated)
 
         selfies_ls = selfie_ls_mut_ls.copy()
