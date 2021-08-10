@@ -234,6 +234,8 @@ def regression_explain(examples, delta=(-1, 1), nmols=4):
 
 
 def _mol_images(exps, mol_size, fontsize):
+    if len(exps) == 0:
+        return []
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
     dos = rdkit.Chem.Draw.MolDrawOptions()

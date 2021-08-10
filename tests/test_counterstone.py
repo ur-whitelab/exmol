@@ -83,6 +83,14 @@ def test_plot():
     counterstone.plot_space(samples, exps)
 
 
+def test_empty_plot():
+    def model(s, se):
+        return int('N' in s)
+    samples = counterstone.sample_space('CCCC', model, batched=False)
+    exps = counterstone.counterfactual_explain(samples, 3)
+    counterstone.plot_space(samples, [])
+
+
 def test_compare_img():
     smi1 = 'CCCC'
     smi2 = 'CCN'
