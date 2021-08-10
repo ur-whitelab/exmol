@@ -260,23 +260,29 @@ def _mol_images(exps, mol_size, fontsize):
     return imgs
 
 
-def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=8, offset=0):
+def plot_space(examples, exps, figure_kwargs=None, mol_size=(200, 200), highlight_clusters=False, mol_fontsize=8, offset=0):
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
     base_color = 'gray'
     plt.figure(**figure_kwargs)
-    yhats = [e.yhat for e in examples]
-    normalizer = plt.Normalize(min(yhats), max(yhats))
+    if highlight_clusters:
+        colors = [e.cluster for e in examples]
+        normalizer = lambda x: x
+        cmap = 'Accent'
+    else:
+        colors = [e.yhat for e in examples]
+        normalizer = plt.Normalize(min(colors), max(colors))
+        cmap = 'viridis'
     plt.scatter(
         [e.position[0] for e in examples],
         [e.position[1] for e in examples],
-        c=normalizer(yhats), cmap='viridis',
+        c=normalizer(colors), cmap=cmap,
         alpha=0.5, edgecolors='none')
     plt.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
-        c=normalizer([e.yhat for e in exps]), cmap='viridis',
+        c=normalizer([e.cluster if highlight_clusters else e.yhat for e in exps]), cmap=cmap,
         edgecolors='black')
 
     x = [e.position[0] for e in exps]

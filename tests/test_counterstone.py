@@ -83,6 +83,15 @@ def test_plot():
     counterstone.plot_space(samples, exps)
 
 
+def test_plot_clusters():
+    def model(s, se):
+        return int('N' in s)
+    samples = counterstone.sample_space('CCCC', model, batched=False)
+    exps = counterstone.counterfactual_explain(samples, 3)
+    counterstone.plot_explanation(exps)
+    counterstone.plot_space(samples, exps, highlight_clusters=True)
+
+
 def test_empty_plot():
     def model(s, se):
         return int('N' in s)
