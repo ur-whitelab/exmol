@@ -200,7 +200,7 @@ def _select_examples(cond, examples, nmols):
     return result
 
 
-def counterfactual_explain(examples, nmols=3):
+def cf_explain(examples, nmols=3):
 
     def is_counter(e):
         return e.yhat != examples[0].yhat
@@ -212,7 +212,7 @@ def counterfactual_explain(examples, nmols=3):
     return examples[:1] + result
 
 
-def regression_explain(examples, delta=(-1, 1), nmols=4):
+def rcf_explain(examples, delta=(-1, 1), nmols=4):
     if type(delta) is float:
         delta = (-delta, delta)
 
@@ -333,7 +333,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     return bbs
 
 
-def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None):
+def plot_cf(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None):
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
