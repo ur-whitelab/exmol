@@ -48,6 +48,9 @@ def get_basic_alphabet():
             to_remove.append(ai)
         elif '-1' in ai:
             to_remove.append(ai)
+    #remove [P],[#P],[=P]
+    to_remove.extend(['[P]','[#P]','[=P]'])
+  
     a -= set(to_remove)
     a.add('[O-1expl]')
     return a
@@ -246,9 +249,9 @@ def _mol_images(exps, mol_size, fontsize):
             m, ms[0], acceptFailure=True)
         aidx, bidx = moldiff(ms[0], m)
         # if it is too large, we ignore it
-        if len(aidx) > 8:
-            aidx = []
-            bidx = []
+        #if len(aidx) > 8:
+        #    aidx = []
+        #    bidx = []
         imgs.append(mol2img(m, size=mol_size, options=dos,
                             highlightAtoms=aidx, highlightBonds=bidx,
                             highlightColor=modify_color if len(bidx) > 0 else delete_color))
@@ -325,7 +328,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     return bbs
 
 
-def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None):
+def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None,ncols=None):
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
@@ -333,7 +336,10 @@ def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize
         R = nrows
     else:
         R = math.ceil(math.sqrt(len(imgs)))
-    C = math.ceil(len(imgs) / R)
+    if ncols is not None:
+        C = ncols
+    else:
+        C = math.ceil(len(imgs) / R)
     fig, axs = plt.subplots(R, C, **figure_kwargs)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
