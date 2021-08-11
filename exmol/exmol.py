@@ -50,7 +50,7 @@ def get_basic_alphabet():
             to_remove.append(ai)
     #remove [P],[#P],[=P]
     to_remove.extend(['[P]','[#P]','[=P]'])
-  
+
     a -= set(to_remove)
     a.add('[O-1expl]')
     return a
@@ -336,11 +336,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     return bbs
 
 
-<<<<<<< HEAD:exmol/exmol.py
-def plot_cf(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None):
-=======
-def plot_explanation(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None,ncols=None):
->>>>>>> 5332058e08e61417d97062409f698a7c30aec85f:counterstone/counterstone.py
+def plot_cf(exps, figure_kwargs=None, mol_size=(200, 200), mol_fontsize=10, nrows=None,ncols=None):
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {'figsize': (12, 8)}
