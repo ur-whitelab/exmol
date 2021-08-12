@@ -221,26 +221,29 @@ from rdkit.Chem.AtomPairs.Sheridan import GetBPFingerprint, GetBTFingerprint
 from rdkit.Chem.Pharm2D import Generate, Gobbi_Pharm2D
 
 from rdkit import RDLogger
-RDLogger.DisableLog('rdApp.*')
+
+RDLogger.DisableLog("rdApp.*")
 
 
 def randomize_smiles(mol):
-    '''Returns a random (dearomatized) SMILES given an rdkit mol object of a molecule.
+    """Returns a random (dearomatized) SMILES given an rdkit mol object of a molecule.
     Parameters:
     mol (rdkit.Chem.rdchem.Mol) :  RdKit mol object (None if invalid smile string smi)
 
     Returns:
     mol (rdkit.Chem.rdchem.Mol) : RdKit mol object  (None if invalid smile string smi)
-    '''
+    """
     if not mol:
         return None
 
     Chem.Kekulize(mol)
-    return mol2smi(mol, canonical=False, doRandom=True, isomericSmiles=False,  kekuleSmiles=True)
+    return mol2smi(
+        mol, canonical=False, doRandom=True, isomericSmiles=False, kekuleSmiles=True
+    )
 
 
 def sanitize_smiles(smi):
-    '''Return a canonical smile representation of smi
+    """Return a canonical smile representation of smi
 
     Parameters:
     smi (string) : smile string to be canonicalized
@@ -249,7 +252,7 @@ def sanitize_smiles(smi):
     mol (rdkit.Chem.rdchem.Mol) : RdKit mol object                          (None if invalid smile string smi)
     smi_canon (string)          : Canonicalized smile representation of smi (None if invalid smile string smi)
     conversion_successful (bool): True/False to indicate if conversion was  successful
-    '''
+    """
     try:
         mol = smi2mol(smi, sanitize=True)
         smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
@@ -262,7 +265,7 @@ def sanitize_smiles(smi):
 
 
 def get_selfie_chars(selfie):
-    '''Obtain a list of all selfie characters in string selfie
+    """Obtain a list of all selfie characters in string selfie
 
     Parameters:
     selfie (string) : A selfie string - representing a molecule
@@ -273,28 +276,28 @@ def get_selfie_chars(selfie):
 
     Returns:
     chars_selfie: list of selfie characters present in molecule selfie
-    '''
+    """
     chars_selfie = []  # A list of all SELFIE sybols from string selfie
-    while selfie != '':
-        chars_selfie.append(selfie[selfie.find('['): selfie.find(']')+1])
-        selfie = selfie[selfie.find(']')+1:]
+    while selfie != "":
+        chars_selfie.append(selfie[selfie.find("[") : selfie.find("]") + 1])
+        selfie = selfie[selfie.find("]") + 1 :]
     return chars_selfie
 
 
 class _FingerprintCalculator:
-    ''' Calculate the fingerprint for a molecule, given the fingerprint type
+    """Calculate the fingerprint for a molecule, given the fingerprint type
     Parameters:
         mol (rdkit.Chem.rdchem.Mol) : RdKit mol object (None if invalid smile string smi)
         fp_type (string)            :Fingerprint type  (choices: AP/PHCO/BPF,BTF,PAT,ECFP4,ECFP6,FCFP4,FCFP6)
     Returns:
         RDKit fingerprint object
-    '''
+    """
 
     def get_fingerprint(self, mol: Mol, fp_type: str):
-        method_name = 'get_' + fp_type
+        method_name = "get_" + fp_type
         method = getattr(self, method_name)
         if method is None:
-            raise Exception(f'{fp_type} is not a supported fingerprint type.')
+            raise Exception(f"{fp_type} is not a supported fingerprint type.")
         return method(mol)
 
     def get_AP(self, mol: Mol):
@@ -326,7 +329,7 @@ class _FingerprintCalculator:
 
 
 def get_fingerprint(mol: Mol, fp_type: str):
-    ''' Fingerprint getter method. Fingerprint is returned after using object of
+    """Fingerprint getter method. Fingerprint is returned after using object of
         class '_FingerprintCalculator'
 
     Parameters:
@@ -335,12 +338,12 @@ def get_fingerprint(mol: Mol, fp_type: str):
     Returns:
         RDKit fingerprint object
 
-    '''
+    """
     return _FingerprintCalculator().get_fingerprint(mol=mol, fp_type=fp_type)
 
 
 def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
-    '''Return a mutated selfie string (only one mutation on slefie is performed)
+    """Return a mutated selfie string (only one mutation on slefie is performed)
 
     Mutations are done until a valid molecule is obtained
     Rules of mutation: With a 33.3% propbabily, either:
@@ -356,7 +359,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
     Returns:
     selfie_mutated    (string)  : Mutated SELFIE string
     smiles_canon      (string)  : canonical smile of mutated SELFIE string
-    '''
+    """
     valid = False
     fail_counter = 0
     chars_selfie = get_selfie_chars(selfie)
@@ -370,34 +373,42 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
         # Insert a character in a Random Location
         if random_choice == 1:
-            random_index = random.randint(0, len(chars_selfie)+1)
+            random_index = random.randint(0, len(chars_selfie) + 1)
             random_character = random.choice(alphabet)
 
-            selfie_mutated_chars = chars_selfie[:random_index] + \
-                [random_character] + chars_selfie[random_index:]
+            selfie_mutated_chars = (
+                chars_selfie[:random_index]
+                + [random_character]
+                + chars_selfie[random_index:]
+            )
 
         # Replace a random character
         elif random_choice == 2:
             random_index = random.randint(0, len(chars_selfie))
             random_character = random.choice(alphabet)
             if random_index == 0:
-                selfie_mutated_chars = [
-                    random_character] + chars_selfie[random_index+1:]
+                selfie_mutated_chars = [random_character] + chars_selfie[
+                    random_index + 1 :
+                ]
             else:
-                selfie_mutated_chars = chars_selfie[:random_index] + [
-                    random_character] + chars_selfie[random_index+1:]
+                selfie_mutated_chars = (
+                    chars_selfie[:random_index]
+                    + [random_character]
+                    + chars_selfie[random_index + 1 :]
+                )
 
         # Delete a random character
         elif random_choice == 3:
             random_index = random.randint(0, len(chars_selfie))
             if random_index == 0:
-                selfie_mutated_chars = chars_selfie[random_index+1:]
+                selfie_mutated_chars = chars_selfie[random_index + 1 :]
             else:
-                selfie_mutated_chars = chars_selfie[:random_index] + \
-                    chars_selfie[random_index+1:]
+                selfie_mutated_chars = (
+                    chars_selfie[:random_index] + chars_selfie[random_index + 1 :]
+                )
 
         else:
-            raise Exception('Invalid Operation trying to be performed')
+            raise Exception("Invalid Operation trying to be performed")
         selfie_mutated = "".join(x for x in selfie_mutated_chars)
         sf = "".join(x for x in chars_selfie)
 
@@ -414,7 +425,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
 
 def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
-    ''' Mutate all the SELFIES in 'selfies_ls' 'num_mutations' number of times.
+    """Mutate all the SELFIES in 'selfies_ls' 'num_mutations' number of times.
 
     Parameters:
     selfies_ls   (list)  : A list of SELFIES
@@ -423,7 +434,7 @@ def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
     Returns:
     selfies_ls   (list)  : A list of mutated SELFIES
 
-    '''
+    """
     for _ in range(num_mutations):
         selfie_ls_mut_ls = []
         for str_ in selfies_ls:
@@ -432,7 +443,8 @@ def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
             max_molecules_len = len(str_chars) + num_mutations
 
             selfie_mutated, smiles_canon = mutate_selfie(
-                str_, max_molecules_len, alphabet)
+                str_, max_molecules_len, alphabet
+            )
             selfie_ls_mut_ls.append(selfie_mutated)
 
         selfies_ls = selfie_ls_mut_ls.copy()
@@ -440,7 +452,7 @@ def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
 
 
 def get_fp_scores(smiles_back, target_smi, fp_type):
-    '''Calculate the Tanimoto fingerprint (using fp_type fingerint) similarity between a list
+    """Calculate the Tanimoto fingerprint (using fp_type fingerint) similarity between a list
        of SMILES and a known target structure (target_smi).
 
     Parameters:
@@ -450,7 +462,7 @@ def get_fp_scores(smiles_back, target_smi, fp_type):
 
     Returns:
     smiles_back_scores (list of floats) : List of fingerprint similarities
-    '''
+    """
     smiles_back_scores = []
     target = smi2mol(target_smi)
 
