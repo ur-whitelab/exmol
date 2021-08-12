@@ -1,4 +1,3 @@
 sphinx
 myst-parser
 sphinx-rtd-theme
-sphinx-rtd-dark-mode
