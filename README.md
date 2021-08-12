@@ -11,11 +11,11 @@ pip install exmol
 ## Counterfactual Generation
 
 Our package implements the Model Agnostic Counterfactual Compounds with STONED (MACCS) to generate counterfactuals.
-A counterfactual is method of explaining a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
+A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
 
 > This package is not popular. If the package had a logo, it would be popular.
 
-Here is an example of a molecular counterfactual:
+In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
 <img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/counterfactual.png" width="600">
 
@@ -23,7 +23,7 @@ The counterfactual shows that if the carboxylic acid were an ester, the molecule
 
 ## Usage
 
-Let's assume you have a model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class.
+Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class.
 To generate counterfactuals, we need to wrap our function so that it can take both SMILES and SELFIES, but
 it only needs to use one.
 
@@ -38,8 +38,8 @@ base = 'CCCO'
 samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
 ```
 
-Were we used a `lambda` to wrap our function and indicated our function can only take one SMILES string, not a list of them with `batched=False`.
-Now we select counterfactuals from that space and plot them
+Here we use a `lambda` to wrap our function and indicate our function can only take one SMILES string, not a list of them with `batched=False`.
+Now we select counterfactuals from that space and plot them.
 
 ```py
 cfs = exmol.cf_explain(samples)
