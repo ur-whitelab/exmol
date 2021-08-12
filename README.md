@@ -38,8 +38,8 @@ base = 'CCCO'
 samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
 ```
 
-Were we used a `lambda` to wrap our function and indicated our function can only take one SMILES string, not a list of them with `batched=False`. 
-Now we select counterfactuals from that space and plot them
+Here we use a `lambda` to wrap our function and indicate our function can only take one SMILES string, not a list of them with `batched=False`. 
+Now we select counterfactuals from that space and plot them.
 
 ```py
 cfs = exmol.cf_explain(samples)
