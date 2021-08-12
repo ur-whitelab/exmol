@@ -4,5 +4,5 @@ exmol
 .. toctree::
     :maxdepth: 3
 
-    readme_link.md
+    index.md
     api.rst
