@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Getting Started &mdash; exmol  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="exmol" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> exmol
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#counterfactual-generation">Counterfactual Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">exmol</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/readme_link.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="tex2jax_ignore mathjax_ignore section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p><img alt="tests" src="https://github.com/ur-whitelab/exmol/actions/workflows/tests.yml/badge.svg" /> <img alt="paper" src="https://github.com/ur-whitelab/exmol/actions/workflows/paper.yml/badge.svg" /> <img alt="docs" src="https://github.com/ur-whitelab/exmol/actions/workflows/docs.yml/badge.svg" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">exmol</span></code> is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property.</p>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install exmol
+</pre></div>
+</div>
+</div>
+<div class="section" id="counterfactual-generation">
+<h2>Counterfactual Generation<a class="headerlink" href="#counterfactual-generation" title="Permalink to this headline">¶</a></h2>
+<p>Our package implements the Model Agnostic Counterfactual Compounds with STONED (MACCS) to generate counterfactuals.
+A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:</p>
+<blockquote>
+<div><p>This package is not popular. If the package had a logo, it would be popular.</p>
+</div></blockquote>
+<p>In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:</p>
+<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/counterfactual.png" width="600">
+<p>The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Let’s assume you have a deep learning model <code class="docutils literal notranslate"><span class="pre">my_model(s)</span></code> that takes in one SMILES string and outputs a predicted binary class.
+To generate counterfactuals, we need to wrap our function so that it can take both SMILES and SELFIES, but
+it only needs to use one.</p>
+<p>We first expand chemical space around the prediction of interest</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">exmol</span>
+
+<span class="c1"># mol of interest</span>
+<span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;CCCO&#39;</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">smi</span><span class="p">,</span> <span class="n">sel</span><span class="p">:</span> <span class="n">my_model</span><span class="p">(</span><span class="n">smi</span><span class="p">),</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we use a <code class="docutils literal notranslate"><span class="pre">lambda</span></code> to wrap our function and indicate our function can only take one SMILES string, not a list of them with <code class="docutils literal notranslate"><span class="pre">batched=False</span></code>.
+Now we select counterfactuals from that space and plot them.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">cfs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">cf_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span><span class="n">cfs</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.png" width="600">
+<p>We can also plot the space around the counterfactual:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">cfs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">cf_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">plot_space</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">cfs</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-space.png" width="600">
+<p>Each counterfactual is a Python <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> with information allowing it to be used in your own analysis:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cfs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Examples</span><span class="p">(</span>
+  <span class="n">smiles</span><span class="o">=</span><span class="s1">&#39;CCOC(=O)c1ccc(N=CN(Cl)c2ccccc2)cc1&#39;</span><span class="p">,</span>
+  <span class="n">selfies</span><span class="o">=</span><span class="s1">&#39;[C][C][O][C][Branch1_2][C][=O][C][=C][C][=C][Branch1_1][#C][N][=C][N][Branch1_1][C][Cl][C][=C][C][=C][C][=C][Ring1][Branch1_2][C][=C][Ring1][S]&#39;</span><span class="p">,</span>
+  <span class="n">similarity</span><span class="o">=</span><span class="mf">0.8181818181818182</span><span class="p">,</span>
+  <span class="n">yhat</span><span class="o">=-</span><span class="mf">5.459493637084961</span><span class="p">,</span>
+  <span class="n">index</span><span class="o">=</span><span class="mi">1807</span><span class="p">,</span>
+  <span class="n">position</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">6.11371691</span><span class="p">,</span>  <span class="mf">1.24629293</span><span class="p">]),</span>
+  <span class="n">is_origin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+  <span class="n">cluster</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span>
+  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Counterfactual&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<p>Please cite <a class="reference external" href="https://arxiv.org/abs/">Wellawatte et al.</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">wellawatte2021model</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{Model agnostic generation of counterfactual explanations for molecules}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:????}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2021}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="exmol" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Geemi Wellawatte, Andrew D White.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
