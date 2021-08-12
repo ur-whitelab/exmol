@@ -70,3 +70,5 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "selfies": ("https://selfies.readthedocs.io/en/latest/", None),
 }
+
+master_doc = 'toc'
