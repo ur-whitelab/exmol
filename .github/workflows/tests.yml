@@ -32,8 +32,3 @@ jobs:
     - name: Run Test
       run: |
          pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-    - name: Install paper depends
-      run: |
-        pip install -r paper/requirements.txt
-    - name: Run paper experiments
-      run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper/*.ipynb" --to notebook --output-dir='temp' --clear-output
