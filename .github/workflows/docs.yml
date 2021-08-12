@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  docs:
 
     runs-on: ubuntu-latest
 

@@ -1,5 +1,7 @@
 # Explaining why that molecule
 
+![tests](https://github.com/ur-whitelab/exmol/actions/workflows/tests.yml/badge.svg) ![paper](https://github.com/ur-whitelab/exmol/actions/workflows/paper.yml/badge.svg) ![docs](https://github.com/ur-whitelab/exmol/actions/workflows/docs.yml/badge.svg)
+
 `exmol` is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property.
 
 ## Install
