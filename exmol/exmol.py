@@ -147,7 +147,8 @@ def run_stoned(
 def sample_space(
     origin_smiles: str,
     f: Union[
-        Callable[[str, str], float], Callable[[List[str], List[str]], List[float]]
+        Callable[[str, str], float], Callable[[
+            List[str], List[str]], List[float]]
     ],
     batched: bool = True,
     preset: str = "medium",
@@ -257,13 +258,15 @@ def _select_examples(cond, examples, nmols):
             result.append(close_counter)
 
     # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
+    result = sorted(result, key=lambda v: v.similarity *
+                    cond(v), reverse=True)[:nmols]
 
     # fill in remaining
     ncount = sum([cond(e) for e in result])
     fill = max(0, nmols - ncount)
     result.extend(
-        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
+        sorted(examples, key=lambda v: v.similarity *
+               cond(v), reverse=True)[:fill]
     )
 
     return result
@@ -310,12 +313,14 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+        [] if delta[0] is None else _select_examples(
+            is_high, examples[1:], nmols // 2)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
+        [] if delta[1] is None else _select_examples(
+            is_low, examples[1:], nmols // 2)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
@@ -404,7 +409,8 @@ def plot_space(
     plt.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
-        c=normalizer([e.cluster if highlight_clusters else e.yhat for e in exps]),
+        c=normalizer(
+            [e.cluster if highlight_clusters else e.yhat for e in exps]),
         cmap=cmap,
         edgecolors="black",
     )
@@ -444,7 +450,8 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
         img_data = np.asarray(im)
         img_box = OffsetImage(img_data)
         title_box = TextArea(t)
-        packed = VPacker(children=[img_box, title_box], pad=0, sep=4, align="center")
+        packed = VPacker(children=[img_box, title_box],
+                         pad=0, sep=4, align="center")
         bb = AnnotationBbox(
             packed,
             (x0, y0),
@@ -504,6 +511,7 @@ def plot_cf(
 
 def moldiff(template, query) -> Tuple[List[int], List[int]]:
     """Compare the two rdkit molecules.
+
     :param template: template molecule
     :param query: query molecule
     :return: list of modified atoms in query, list of modified bonds in query
