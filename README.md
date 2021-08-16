@@ -81,13 +81,15 @@ Examples(
 
 ## Citation
 
-Please cite [Wellawatte et al.](https://arxiv.org/abs/)
+Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
 
 ```bibtex
-@article{wellawatte2021model,
-  title={Model agnostic generation of counterfactual explanations for molecules},
-  author={Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D},
-  journal={arXiv preprint arXiv:????},
-  year={2021}
-}
+ @article{wellawatte_seshadri_white_2021, 
+ place={Cambridge}, 
+ title={Model agnostic generation of counterfactual explanations for molecules}, 
+ DOI={10.33774/chemrxiv-2021-4qkg8}, 
+ journal={ChemRxiv}, 
+ publisher={Cambridge Open Engage}, 
+ author={Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D}, 
+ year={2021}} This content is a preprint and has not been peer-reviewed.
 ```
