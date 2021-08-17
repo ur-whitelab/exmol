@@ -1,17 +1,17 @@
-from rdkit.Chem import rdFMCS as MCS
-from dataclasses import dataclass, asdict
-import numpy as np
-from sklearn.cluster import DBSCAN
-from sklearn.decomposition import PCA
-import selfies as sf
-import itertools
+from rdkit.Chem import rdFMCS as MCS # type: ignore
+from dataclasses import dataclass, asdict 
+import numpy as np # type: ignore
+from sklearn.cluster import DBSCAN # type: ignore
+from sklearn.decomposition import PCA # type: ignore
+import selfies as sf # type: ignore
+import itertools 
 import math
 from . import stoned
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem.Draw import MolToImage as mol2img
-import rdkit.Chem
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+from rdkit.Chem import MolFromSmiles as smi2mol # type: ignore
+from rdkit.Chem.Draw import MolToImage as mol2img # type: ignore
+import rdkit.Chem # type: ignore
+import matplotlib.pyplot as plt # type: ignore
+import matplotlib as mpl # type: ignore
 from typing import *
 
 delete_color = mpl.colors.to_rgb("#F06060")
@@ -39,7 +39,7 @@ class Example:
     #: Index of cluster, can be -1 for no cluster
     cluster: int = 0
     #: Label for this example
-    label: str = None
+    label: str = ''
 
     # to make it look nicer
     def __str__(self):
@@ -112,8 +112,9 @@ def run_stoned(
     # Convert all the molecules to SELFIES
     selfies_ls = [sf.encoder(x) for x in randomized_smile_orderings]
 
-    all_smiles_collect = []
-    all_selfies_collect = []
+    all_smiles_collect: List[str]
+    all_selfies_collect: List[str]
+
     for num_mutations in num_mutation_ls:
         # Mutate the SELFIES:
         selfies_mut = stoned.get_mutated_SELFIES(
@@ -440,7 +441,7 @@ def _nearest_spiral_layout(x, y, offset):
 
 
 def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker # type: ignore
 
     box_coords = _nearest_spiral_layout(x, y, offset)
     bbs = []
