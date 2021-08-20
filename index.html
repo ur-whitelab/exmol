@@ -207,7 +207,8 @@ Now we select counterfactuals from that space and plot them.</p>
 </pre></div>
 </div>
 <img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.png" width="600">
-<p>We can also plot the space around the counterfactual:</p>
+<p>We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix – the similarity with the base molecule.
+Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">cfs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">cf_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_space</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">cfs</span><span class="p">)</span>
 </pre></div>
