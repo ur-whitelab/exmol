@@ -177,6 +177,8 @@ def _run_zinced(
         time.sleep(timeout)
         new_ss = _run_zinced(s, N, fp_type, similarity, timeout, False)
         # see if we got new ones
+        if len(new_ss) == 0:
+            new_ss = set()
         new_ss = set(new_ss) - ssmiles
         # use new one if available - randomly?
         # I'm just making this up
