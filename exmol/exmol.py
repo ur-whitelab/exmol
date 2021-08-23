@@ -166,20 +166,30 @@ def _run_zinced(
     if not recurse:
         return smiles
 
+    ssmiles = set(smiles)
+    # do reverse because high similarity just brings us back
+    s = smiles[0]
+    for i in range(len(smiles) - 1):
+        if len(ssmiles) >= N:
+            break
+        print('ZINCED round with', len(ssmiles))
+        time.sleep(timeout)
+        new_ss = _run_zinced(s, N, fp_type, similarity, timeout, False)
+        # see if we got new ones
+        new_ss = set(new_ss) - ssmiles
+        # use new one if available - randomly?
+        # I'm just making this up
+        if len(new_ss) > 0 and math.random() < 0.5:
+            s = list(new_ss)[0]
+        else:
+            s = smiles[i+1]
+        # add new ones to existing
+        ssmiles = ssmiles | new_ss
+    smiles = list(ssmiles)
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     fp = [stoned.get_fingerprint(m, fp_type) for m in mols]
-    if recurse:
-        ssmiles = set(smiles)
-        for s in smiles:
-            if len(ssmiles) >= N:
-                break
-            print('ZINCED round with', len(ssmiles))
-            time.sleep(timeout)
-            new_ss = _run_zinced(s, N, fp_type, similarity, timeout, False)
-            ssmiles = ssmiles.union(set(new_ss))
-        smiles = list(ssmiles)
     scores = [stoned.TanimotoSimilarity(fp0, x) for x in fp]
     return smiles, scores
 
@@ -238,7 +248,8 @@ def sample_space(
 
     # STONED
     if preset == "zinc":
-        smiles, scores = _run_zinced(origin_smiles, 100)
+        print('ZINCED is experimental!')
+        smiles, scores = _run_zinced(origin_smiles, 250)
     else:
         smiles, scores = run_stoned(origin_smiles, **stoned_kwargs)
     selfies = [sf.encoder(s) for s in smiles]
