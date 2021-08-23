@@ -7,6 +7,7 @@ from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
 import math
+import random
 from . import stoned
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
@@ -179,7 +180,7 @@ def _run_zinced(
         new_ss = set(new_ss) - ssmiles
         # use new one if available - randomly?
         # I'm just making this up
-        if len(new_ss) > 0 and math.random() < 0.5:
+        if len(new_ss) > 0 and random.random() < 0.5:
             s = list(new_ss)[0]
         else:
             s = smiles[i+1]
