@@ -1,4 +1,5 @@
 from rdkit.Chem import rdFMCS as MCS
+import requests
 from dataclasses import dataclass, asdict
 import numpy as np
 from sklearn.cluster import DBSCAN
@@ -13,6 +14,7 @@ import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from typing import *
+import time
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
@@ -144,6 +146,43 @@ def run_stoned(
     return canon_smi_ls, canon_smi_ls_scores
 
 
+def _run_zinced(
+    origin_smiles:str,
+    N: int,
+    fp_type:str = "ECFP4",
+    similarity:float=0.1,
+    timeout: float=0.5,
+    recurse: bool=True
+    ) -> Tuple[List[str], List[float]]:
+    url = f'https://zinc15.docking.org/substances/'
+    # TODO Not sure about count
+    reply = requests.get(url, params={f'ecfp4_fp-tanimoto-{similarity}': origin_smiles, 'count': 'all'}, headers={'accept': 'text/json'})
+    try:
+        data = reply.json()
+    except:
+        return [], []
+    smiles = [d['smiles'] for d in data]
+
+    if not recurse:
+        return smiles
+
+    mol0 = smi2mol(origin_smiles)
+    mols = [smi2mol(s) for s in smiles]
+    fp0 = stoned.get_fingerprint(mol0, fp_type)
+    fp = [stoned.get_fingerprint(m, fp_type) for m in mols]
+    if recurse:
+        ssmiles = set(smiles)
+        for s in smiles:
+            if len(ssmiles) >= N:
+                break
+            print('ZINCED round with', len(ssmiles))
+            time.sleep(timeout)
+            new_ss = _run_zinced(s, N, fp_type, similarity, timeout, False)
+            ssmiles = ssmiles.union(set(new_ss))
+        smiles = list(ssmiles)
+    scores = [stoned.TanimotoSimilarity(fp0, x) for x in fp]
+    return smiles, scores
+
 def sample_space(
     origin_smiles: str,
     f: Union[
@@ -161,7 +200,7 @@ def sample_space(
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled
+    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. *Try `"zinc"` experimental preset to only sample commerically available compounds.
     :param stoned_kwargs: More control over STONED can be set here. See :func:`run_stoned`
     :return: List of generated :obj:`Example`
     """
@@ -192,11 +231,16 @@ def sample_space(
             stoned_kwargs["num_samples"] = 600
             stoned_kwargs["max_mutations"] = 5
             stoned_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
+        elif preset == "zinc":
+            pass
         else:
             raise ValueError(f'Unknown preset "{preset}"')
 
     # STONED
-    smiles, scores = run_stoned(origin_smiles, **stoned_kwargs)
+    if preset == "zinc":
+        smiles, scores = _run_zinced(origin_smiles, 100)
+    else:
+        smiles, scores = run_stoned(origin_smiles, **stoned_kwargs)
     selfies = [sf.encoder(s) for s in smiles]
     fxn_values = batched_f(smiles, selfies)
 
@@ -269,7 +313,7 @@ def _select_examples(cond, examples, nmols):
                cond(v), reverse=True)[:fill]
     )
 
-    return result
+    return list(filter(cond, result))
 
 
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
