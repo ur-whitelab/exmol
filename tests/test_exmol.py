@@ -62,7 +62,8 @@ def test_sample_preset():
     def model(s, se):
         return int("N" in s)
 
-    explanation = exmol.sample_space("CCCC", model, preset="narrow", batched=False)
+    explanation = exmol.sample_space(
+        "CCCC", model, preset="narrow", batched=False)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
@@ -71,7 +72,8 @@ def test_sample_zinc():
     def model(s, se):
         return int("N" in s)
 
-    explanation = exmol.sample_space("CCCC", model, preset="zinc", batched=False)
+    explanation = exmol.sample_space(
+        "CCCC", model, preset="zinc", batched=False, num_samples=50)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 

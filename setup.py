@@ -16,7 +16,7 @@ setup(
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
     packages=["exmol", "exmol.stoned"],
-    install_requires=["selfies", "numpy", "requests",
+    install_requires=["selfies", "numpy", "requests", "tqdm",
                       "rdkit-pypi", "matplotlib", "scikit-learn"],
     test_suite="tests",
     long_description=long_description,
