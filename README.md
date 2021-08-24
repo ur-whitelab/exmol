@@ -76,6 +76,21 @@ Examples(
   cluster=26,
   label='Counterfactual')
 ```
+
+## Chemical Space
+
+When calling `exmol.sample_space` you can pass `preset=<preset>`, which can be 
+one of the following:
+
+* `'narrow'`: Only one change to molecular structure, reduced set of possible bonds/elements
+* `'medium'`: Default. One or two changes to molecular structure, reduced set of possible bonds/elements
+* `'wide'`: One through five changes to molecular structure, large set of possible bonds/elements
+* `'zinc'`: A restrictive set where only commerically available molecules are considered via ZINC15 database. *Experimental*
+
+You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
+degenerate molecules. See API for complete description.
+
+
 ## API and Docs
 
 [Read docs here](https://ur-whitelab.github.io/exmol/)
