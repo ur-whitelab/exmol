@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#counterfactual-generation">Counterfactual Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chemical-space">Chemical Space</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#api-and-docs">API and Docs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
@@ -230,6 +231,19 @@ Due to how similarity is calculated, the base is going to be the farthest from a
   <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Counterfactual&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="chemical-space">
+<h2>Chemical Space<a class="headerlink" href="#chemical-space" title="Permalink to this headline">¶</a></h2>
+<p>When calling <code class="docutils literal notranslate"><span class="pre">exmol.sample_space</span></code> you can pass <code class="docutils literal notranslate"><span class="pre">preset=&lt;preset&gt;</span></code>, which can be
+one of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'narrow'</span></code>: Only one change to molecular structure, reduced set of possible bonds/elements</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'medium'</span></code>: Default. One or two changes to molecular structure, reduced set of possible bonds/elements</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'wide'</span></code>: One through five changes to molecular structure, large set of possible bonds/elements</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'zinc'</span></code>: A restrictive set where only commerically available molecules are considered via ZINC15 database. <em>Experimental</em></p></li>
+</ul>
+<p>You can also pass <code class="docutils literal notranslate"><span class="pre">num_samples</span></code> as a “request” for number of samples. You will typically end up with less due to
+degenerate molecules. See API for complete description.</p>
 </div>
 <div class="section" id="api-and-docs">
 <h2>API and Docs<a class="headerlink" href="#api-and-docs" title="Permalink to this headline">¶</a></h2>
