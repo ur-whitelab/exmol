@@ -245,7 +245,7 @@ def sample_space(
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. *Try `"zinc"` experimental preset to only sample commerically available compounds.
+    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"zinc"` experimental preset to only sample commerically available compounds.
     :param stoned_kwargs: More control over STONED can be set here. See :func:`run_stoned`
     :param num_samples: Number of desired samples. Can be set in `stoned_kwarg` (overrides) or here. `None` means default from preset.
     :return: List of generated :obj:`Example`
