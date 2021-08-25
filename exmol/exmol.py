@@ -161,6 +161,7 @@ def run_zinced(
     N: int,
     fp_type: str = "ECFP4",
     similarity: float = 0.1,
+    backtrack_prob: float = 0.2,
     delay: float = 1,
     _recurse: bool = True,
     _pbar: Any = None,
@@ -199,14 +200,15 @@ def run_zinced(
         if len(ssmiles) >= N:
             break
         time.sleep(delay)
-        new_ss = run_zinced(s, N, fp_type, similarity, delay, False)
+        new_ss = run_zinced(s, N, fp_type, similarity=similarity,
+            backtrack_prob=backtrack_prob, delay=delay, _recurse=False)
         # see if we got new ones
         if len(new_ss) == 0:
             new_ss = set()
         else:
             new_ss = set(new_ss) - ssmiles
         # descend with P(.5) or go to sibling
-        if len(new_ss) > 0 and random.random() < 0.5:
+        if len(new_ss) > 0 and random.random() < backtrack_prob:
             s = list(new_ss)[0]
             if _pbar:
                 _pbar.set_description('👇Descending👇')
