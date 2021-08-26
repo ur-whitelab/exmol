@@ -1,6 +1,6 @@
 # Explaining why that molecule
 
-[![tests](https://github.com/ur-whitelab/exmol/actions/workflows/tests.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![paper](https://github.com/ur-whitelab/exmol/actions/workflows/paper.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![docs](https://github.com/ur-whitelab/exmol/actions/workflows/docs.yml/badge.svg)](https://ur-whitelab.github.io/exmol/) 
+[![tests](https://github.com/ur-whitelab/exmol/actions/workflows/tests.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![paper](https://github.com/ur-whitelab/exmol/actions/workflows/paper.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![docs](https://github.com/ur-whitelab/exmol/actions/workflows/docs.yml/badge.svg)](https://ur-whitelab.github.io/exmol/)
 
 `exmol` is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property. [View on Github](https://github.com/ur-whitelab/exmol).
 
@@ -50,8 +50,8 @@ exmol.plot_cf(cfs)
 
 <img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.png" width="600">
 
-We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule. 
-Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot. 
+We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
+Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
 
 ```py
 cfs = exmol.cf_explain(samples)
@@ -79,34 +79,34 @@ Examples(
 
 ## Chemical Space
 
-When calling `exmol.sample_space` you can pass `preset=<preset>`, which can be 
+When calling `exmol.sample_space` you can pass `preset=<preset>`, which can be
 one of the following:
 
 * `'narrow'`: Only one change to molecular structure, reduced set of possible bonds/elements
 * `'medium'`: Default. One or two changes to molecular structure, reduced set of possible bonds/elements
 * `'wide'`: One through five changes to molecular structure, large set of possible bonds/elements
-* `'zinc'`: A restrictive set where only commerically available molecules are considered via ZINC15 database. *Experimental*
+* `'zinced'`: A restrictive set where only commerically available molecules are considered via ZINC15 database. *Experimental*
 
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
 
-
 ## API and Docs
 
-[Read docs here](https://ur-whitelab.github.io/exmol/)
+[Read docs here](https://ur-whitelab.github.io/exmol/). You should also read the paper (see below) for a more exact
+description of the methods and implementation.
 
 ## Citation
 
 Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
 
 ```bibtex
- @article{wellawatte_seshadri_white_2021, 
- place={Cambridge}, 
- title={Model agnostic generation of counterfactual explanations for molecules}, 
- DOI={10.33774/chemrxiv-2021-4qkg8}, 
- journal={ChemRxiv}, 
- publisher={Cambridge Open Engage}, 
- author={Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D}, 
- year={2021}} 
+ @article{wellawatte_seshadri_white_2021,
+ place={Cambridge},
+ title={Model agnostic generation of counterfactual explanations for molecules},
+ DOI={10.33774/chemrxiv-2021-4qkg8},
+ journal={ChemRxiv},
+ publisher={Cambridge Open Engage},
+ author={Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D},
+ year={2021}}
 ```
 This content is a preprint and has not been peer-reviewed.

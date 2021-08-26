@@ -158,7 +158,7 @@ def run_stoned(
 
 def run_zinced(
     origin_smiles: str,
-    N: int,
+    num_samples: int,
     fp_type: str = "ECFP4",
     similarity: float = 0.1,
     backtrack_prob: float = 0.2,
@@ -170,9 +170,10 @@ def run_zinced(
     This is analogous to the STONED method, except it explores the ZINC database near a given molecule via a tree search.
 
     :param origin_smiles: Base SMILES
-    :param N: Minimum number of returned ZINC molecules. May return less due to network timeout or exhausting tree
+    :param num_samples: Minimum number of returned ZINC molecules. May return less due to network timeout or exhausting tree
     :param fp_type: Fingerprint type
     :param similarity: Tanimoto similarity to use in query to ZINC
+    :param backtrack_prob: Probability to halt a depth first search and return to sibling of base molecule
     :param delay: Time to wait between ZINC queries
     :return: SMILES
     """
@@ -197,18 +198,18 @@ def run_zinced(
         _pbar.update(len(ssmiles))
     s = smiles[0]
     for i in range(len(smiles) - 1):
-        if len(ssmiles) >= N:
+        if len(ssmiles) >= num_samples:
             break
         time.sleep(delay)
-        new_ss = run_zinced(s, N, fp_type, similarity=similarity,
-            backtrack_prob=backtrack_prob, delay=delay, _recurse=False)
+        new_ss = run_zinced(s, num_samples, fp_type, similarity=similarity,
+                            backtrack_prob=backtrack_prob, delay=delay, _recurse=False)
         # see if we got new ones
         if len(new_ss) == 0:
             new_ss = set()
         else:
             new_ss = set(new_ss) - ssmiles
         # descend with P(.5) or go to sibling
-        if len(new_ss) > 0 and random.random() < backtrack_prob:
+        if len(new_ss) > 0 and random.random() < 1 - backtrack_prob:
             s = list(new_ss)[0]
             if _pbar:
                 _pbar.set_description('👇Descending👇')
@@ -237,8 +238,9 @@ def sample_space(
     ],
     batched: bool = True,
     preset: str = "medium",
-    stoned_kwargs: Dict = None,
+    method_kwargs: Dict = None,
     num_samples: int = None,
+    stoned_kwargs: Dict = None
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -248,8 +250,9 @@ def sample_space(
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"zinc"` experimental preset to only sample commerically available compounds.
-    :param stoned_kwargs: More control over STONED can be set here. See :func:`run_stoned`
-    :param num_samples: Number of desired samples. Can be set in `stoned_kwarg` (overrides) or here. `None` means default from preset.
+    :param method_kwargs: More control over STONED or ZINCED can be set here. See :func:`run_stoned` and :func:`run_zinced`
+    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default from preset.
+    :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :return: List of generated :obj:`Example`
     """
     batched_f = f
@@ -265,37 +268,42 @@ def sample_space(
         raise ValueError("Your model function does not appear to be batched")
     smi_yhat = np.squeeze(smi_yhat[0])
 
-    if stoned_kwargs is None:
-        stoned_kwargs = {}
+    if stoned_kwargs is not None:
+        method_kwargs = stoned_kwargs
+
+    if method_kwargs is None:
+        method_kwargs = {}
         if preset == "medium":
-            stoned_kwargs["num_samples"] = 1500
-            stoned_kwargs["max_mutations"] = 2
-            stoned_kwargs["alphabet"] = get_basic_alphabet()
+            method_kwargs["num_samples"] = 1500
+            method_kwargs["max_mutations"] = 2
+            method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "narrow":
-            stoned_kwargs["num_samples"] = 3000
-            stoned_kwargs["max_mutations"] = 1
-            stoned_kwargs["alphabet"] = get_basic_alphabet()
+            method_kwargs["num_samples"] = 3000
+            method_kwargs["max_mutations"] = 1
+            method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "wide":
-            stoned_kwargs["num_samples"] = 600
-            stoned_kwargs["max_mutations"] = 5
-            stoned_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
+            method_kwargs["num_samples"] = 600
+            method_kwargs["max_mutations"] = 5
+            method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
         elif preset == "zinc":
-            pass
+            method_kwargs["num_samples"] = 150
         else:
             raise ValueError(f'Unknown preset "{preset}"')
-
+    if num_samples is not None:
+        method_kwargs["num_samples"] = num_samples
     if num_samples is None:
         num_samples = 150
-    if "num_samples" in stoned_kwargs:
-        num_samples = stoned_kwargs["num_samples"]
+        if "num_samples" in method_kwargs:
+            num_samples = method_kwargs["num_samples"]
+    num_samples = method_kwargs["num_samples"]
 
     pbar = tqdm.tqdm(total=num_samples)
 
     # STONED
-    if preset == "zinc":
-        smiles, scores = run_zinced(origin_smiles, num_samples, _pbar=pbar)
+    if preset.startswith("zinc"):
+        smiles, scores = run_zinced(origin_smiles, _pbar=pbar, **method_kwargs)
     else:
-        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **stoned_kwargs)
+        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
     selfies = [sf.encoder(s) for s in smiles]
 
     pbar.set_description('😀Calling your model function😀')
@@ -326,7 +334,7 @@ def sample_space(
     # compute distance matrix
     full_dmat = _fp_dist_matrix(
         [e.smiles for e in exps],
-        stoned_kwargs["fp_type"] if ("fp_type" in stoned_kwargs) else "ECFP4",
+        method_kwargs["fp_type"] if ("fp_type" in method_kwargs) else "ECFP4",
         _pbar=pbar
     )
 
