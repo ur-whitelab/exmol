@@ -289,13 +289,12 @@ def sample_space(
             method_kwargs["num_samples"] = 150
         else:
             raise ValueError(f'Unknown preset "{preset}"')
-    if num_samples is not None:
-        method_kwargs["num_samples"] = num_samples
-    if num_samples is None:
-        num_samples = 150
-        if "num_samples" in method_kwargs:
-            num_samples = method_kwargs["num_samples"]
-    num_samples = method_kwargs["num_samples"]
+    try:
+        num_samples = method_kwargs["num_samples"]
+    except KeyError as e:
+        if num_samples is None:
+            num_samples = 150
+        methods_kwargs["num_samples"] = num_samples
 
     pbar = tqdm.tqdm(total=num_samples)
 
