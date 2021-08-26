@@ -200,7 +200,11 @@ def run_chemed(
     mols = [smi2mol(s) for s in smiles]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
+    # drop Nones
+    smiles = [s for s,m in zip(smiles, mols) if m is not None]
     for m in mols:
+        if m is None:
+            continue
         fp  = stoned.get_fingerprint(m, fp_type)
         scores.append(stoned.TanimotoSimilarity(fp0, fp))
         if _pbar: _pbar.update()
@@ -252,19 +256,19 @@ def sample_space(
     if method_kwargs is None:
         method_kwargs = {}
         if preset == "medium":
-            method_kwargs["num_samples"] = 1500
+            method_kwargs["num_samples"] = 1500 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 2
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "narrow":
-            method_kwargs["num_samples"] = 3000
+            method_kwargs["num_samples"] = 3000 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 1
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "wide":
-            method_kwargs["num_samples"] = 600
+            method_kwargs["num_samples"] = 600 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 5
             method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
         elif preset == "chemed":
-            method_kwargs["num_samples"] = 150
+            method_kwargs["num_samples"] = 150 if num_samples is None else num_samples
         else:
             raise ValueError(f'Unknown preset "{preset}"')
     try:
