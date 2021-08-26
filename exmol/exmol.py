@@ -294,7 +294,7 @@ def sample_space(
     except KeyError as e:
         if num_samples is None:
             num_samples = 150
-        methods_kwargs["num_samples"] = num_samples
+        method_kwargs["num_samples"] = num_samples
 
     pbar = tqdm.tqdm(total=num_samples)
 
