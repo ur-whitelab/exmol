@@ -1,6 +1,12 @@
 # Explaining why that molecule
 
 [![tests](https://github.com/ur-whitelab/exmol/actions/workflows/tests.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![paper](https://github.com/ur-whitelab/exmol/actions/workflows/paper.yml/badge.svg)](https://github.com/ur-whitelab/exmol) [![docs](https://github.com/ur-whitelab/exmol/actions/workflows/docs.yml/badge.svg)](https://ur-whitelab.github.io/exmol/)
+[![PyPI version](https://badge.fury.io/py/exmol.svg)](https://badge.fury.io/py/exmol)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ur-whitelab/exmol)
+
+
+
 
 `exmol` is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property. [View on Github](https://github.com/ur-whitelab/exmol).
 
@@ -110,3 +116,5 @@ Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-det
  year={2021}}
 ```
 This content is a preprint and has not been peer-reviewed.
+
+
