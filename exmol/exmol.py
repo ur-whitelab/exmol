@@ -17,6 +17,7 @@ import matplotlib as mpl
 from typing import *
 import time
 import tqdm
+from ratelimit import limits, sleep_and_retry
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
@@ -155,76 +156,56 @@ def run_stoned(
     # NOTE Do not think of returning selfies. They have duplicates
     return canon_smi_ls, canon_smi_ls_scores
 
+FIFTEEN_MINUTES=900
 
-def run_zinced(
+@sleep_and_retry
+@limits(calls=50, period=FIFTEEN_MINUTES)
+def run_chemed(
     origin_smiles: str,
-    N: int,
-    fp_type: str = "ECFP4",
+    num_samples: int,
     similarity: float = 0.1,
-    delay: float = 1,
-    _recurse: bool = True,
+    fp_type: str = 'ECFP4',
     _pbar: Any = None,
 ) -> Tuple[List[str], List[float]]:
     """
-    This is analogous to the STONED method, except it explores the ZINC database near a given molecule via a tree search.
-
+    This method is similar to STONED but works by quering PubChem
     :param origin_smiles: Base SMILES
-    :param N: Minimum number of returned ZINC molecules. May return less due to network timeout or exhausting tree
-    :param fp_type: Fingerprint type
-    :param similarity: Tanimoto similarity to use in query to ZINC
-    :param delay: Time to wait between ZINC queries
+    :param num_samples: Minimum number of returned molecules. May return less due to network timeout or exhausting tree
+    :param similarity: Tanimoto similarity to use in query (float between 0 to 1)
     :return: SMILES
     """
-    if _recurse and _pbar:
-        _pbar.set_description('⚡ZINCED⚡ is Experimental ☠️')
-    elif _recurse:
-        print('⚡ZINCED⚡ is Experimental ☠️')
-    url = f'https://zinc15.docking.org/substances/'
-    reply = requests.get(url, params={
-                         f'ecfp4_fp-tanimoto-{similarity}': origin_smiles, 'count': 'all'}, headers={'accept': 'text/json'})
+    if _pbar:
+        _pbar.set_description('⚡CHEMED⚡ is Experimental ☠️')
+    else:
+        print('⚡CHEMED⚡ is Experimental ☠️')
+    url = f'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON'
+    try:
+        reply = requests.get(url, params={
+                         'Threshold': int(similarity), 'MaxRecords':num_samples},
+                             headers={'accept': 'text/json'},
+                            timeout=10)
+    except requests.exceptions.Timeout:
+        print('Pubchem seems to be down right now ️☠️☠️')
+        return [], []
     try:
         data = reply.json()
     except:
-        return []
-    smiles = [d['smiles'] for d in data]
+        return [], []
+    smiles = [d['CanonicalSMILES'] for d in data['PropertyTable']['Properties']]
+    smiles = set(smiles)
 
-    if not _recurse:
-        return smiles
+    if _pbar: _pbar.set_description(f'Received {len(smiles)} similar molecules')
 
-    ssmiles = set(smiles)
-    if _pbar:
-        _pbar.update(len(ssmiles))
-    s = smiles[0]
-    for i in range(len(smiles) - 1):
-        if len(ssmiles) >= N:
-            break
-        time.sleep(delay)
-        new_ss = run_zinced(s, N, fp_type, similarity, delay, False)
-        # see if we got new ones
-        if len(new_ss) == 0:
-            new_ss = set()
-        else:
-            new_ss = set(new_ss) - ssmiles
-        # descend with P(.5) or go to sibling
-        if len(new_ss) > 0 and random.random() < 0.5:
-            s = list(new_ss)[0]
-            if _pbar:
-                _pbar.set_description('👇Descending👇')
-        else:
-            if _pbar:
-                _pbar.set_description(f'👉Sibling {i+1}👉')
-            s = smiles[i+1]
-        # add new ones to existing
-        if _pbar:
-            _pbar.update(len(new_ss))
-        ssmiles = ssmiles | new_ss
-    smiles = list(ssmiles)
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
-    fp = [stoned.get_fingerprint(m, fp_type) for m in mols]
-    scores = [stoned.TanimotoSimilarity(fp0, x) for x in fp]
+    scores = []
+    for m in mols:
+        fp  = stoned.get_fingerprint(m, fp_type)
+        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        if _pbar: _pbar.update()
     return smiles, scores
+
 
 
 def sample_space(
@@ -235,8 +216,9 @@ def sample_space(
     ],
     batched: bool = True,
     preset: str = "medium",
-    stoned_kwargs: Dict = None,
+    method_kwargs: Dict = None,
     num_samples: int = None,
+    stoned_kwargs: Dict = None
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -245,9 +227,10 @@ def sample_space(
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"zinc"` experimental preset to only sample commerically available compounds.
-    :param stoned_kwargs: More control over STONED can be set here. See :func:`run_stoned`
-    :param num_samples: Number of desired samples. Can be set in `stoned_kwarg` (overrides) or here. `None` means default from preset.
+    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` experimental preset to only sample commerically available compounds.
+    :param method_kwargs: More control over STONED or CHEMED can be set here. See :func:`run_stoned` and :func:`run_chemed`
+    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default from preset.
+    :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :return: List of generated :obj:`Example`
     """
     batched_f = f
@@ -263,37 +246,41 @@ def sample_space(
         raise ValueError("Your model function does not appear to be batched")
     smi_yhat = np.squeeze(smi_yhat[0])
 
-    if stoned_kwargs is None:
-        stoned_kwargs = {}
+    if stoned_kwargs is not None:
+        method_kwargs = stoned_kwargs
+
+    if method_kwargs is None:
+        method_kwargs = {}
         if preset == "medium":
-            stoned_kwargs["num_samples"] = 1500
-            stoned_kwargs["max_mutations"] = 2
-            stoned_kwargs["alphabet"] = get_basic_alphabet()
+            method_kwargs["num_samples"] = 1500
+            method_kwargs["max_mutations"] = 2
+            method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "narrow":
-            stoned_kwargs["num_samples"] = 3000
-            stoned_kwargs["max_mutations"] = 1
-            stoned_kwargs["alphabet"] = get_basic_alphabet()
+            method_kwargs["num_samples"] = 3000
+            method_kwargs["max_mutations"] = 1
+            method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "wide":
-            stoned_kwargs["num_samples"] = 600
-            stoned_kwargs["max_mutations"] = 5
-            stoned_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
-        elif preset == "zinc":
-            pass
+            method_kwargs["num_samples"] = 600
+            method_kwargs["max_mutations"] = 5
+            method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
+        elif preset == "chemed":
+            method_kwargs["num_samples"] = 150
         else:
             raise ValueError(f'Unknown preset "{preset}"')
-
-    if num_samples is None:
-        num_samples = 150
-    if "num_samples" in stoned_kwargs:
-        num_samples = stoned_kwargs["num_samples"]
+    try:
+        num_samples = method_kwargs["num_samples"]
+    except KeyError as e:
+        if num_samples is None:
+            num_samples = 150
+        method_kwargs["num_samples"] = num_samples
 
     pbar = tqdm.tqdm(total=num_samples)
 
     # STONED
-    if preset == "zinc":
-        smiles, scores = run_zinced(origin_smiles, num_samples, _pbar=pbar)
+    if preset.startswith("chem"):
+        smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
     else:
-        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **stoned_kwargs)
+        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
     selfies = [sf.encoder(s) for s in smiles]
 
     pbar.set_description('😀Calling your model function😀')
@@ -324,7 +311,7 @@ def sample_space(
     # compute distance matrix
     full_dmat = _fp_dist_matrix(
         [e.smiles for e in exps],
-        stoned_kwargs["fp_type"] if ("fp_type" in stoned_kwargs) else "ECFP4",
+        method_kwargs["fp_type"] if ("fp_type" in method_kwargs) else "ECFP4",
         _pbar=pbar
     )
 
@@ -478,6 +465,7 @@ def plot_space(
     highlight_clusters: bool = False,
     mol_fontsize: int = 8,
     offset: int = 0,
+    ax: Any = None
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -488,12 +476,14 @@ def plot_space(
     :param highlight_clusters: if `True`, cluster indices are rendered instead of :obj:Example.yhat
     :param mol_fontsize: minimum font size passed to rdkit
     :param offset: offset annotations to allow colorbar or other elements to fit into plot.
+    :param fig: axis onto which to plot
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
-    plt.figure(**figure_kwargs)
+    if ax is None:
+        ax = plt.figure(**figure_kwargs).gca()
     if highlight_clusters:
         colors = [e.cluster for e in examples]
 
@@ -505,7 +495,7 @@ def plot_space(
         colors = [e.yhat for e in examples]
         normalizer = plt.Normalize(min(colors), max(colors))
         cmap = "viridis"
-    plt.scatter(
+    ax.scatter(
         [e.position[0] for e in examples],
         [e.position[1] for e in examples],
         c=normalizer(colors),
@@ -513,7 +503,7 @@ def plot_space(
         alpha=0.5,
         edgecolors="none",
     )
-    plt.scatter(
+    ax.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
         c=normalizer(
@@ -534,8 +524,8 @@ def plot_space(
             titles.append("Base")
             colors.append(base_color)
     _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
-    plt.axis("off")
-    plt.gca().set_aspect("auto")
+    ax.axis("off")
+    ax.set_aspect("auto")
 
 
 def _nearest_spiral_layout(x, y, offset):
@@ -576,6 +566,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
 
 def plot_cf(
     exps: List[Example],
+    fig: Any = None,
     figure_kwargs: Dict = None,
     mol_size: Tuple[int, int] = (200, 200),
     mol_fontsize: int = 10,
@@ -585,6 +576,7 @@ def plot_cf(
     """Draw the given set of Examples in a grid
 
     :param exps: Small list of :obj:Example which will be drawn
+    :param fig: Figure to plot onto
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param mol_size: size of rdkit molecule rendering, in pixles
     :param mol_fontsize: minimum font size passed to rdkit
@@ -592,8 +584,6 @@ def plot_cf(
     :param ncols: number of columns to draw in grid
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
-    if figure_kwargs is None:
-        figure_kwargs = {"figsize": (12, 8)}
     if nrows is not None:
         R = nrows
     else:
@@ -602,7 +592,12 @@ def plot_cf(
         C = ncols
     else:
         C = math.ceil(len(imgs) / R)
-    fig, axs = plt.subplots(R, C, **figure_kwargs)
+    if fig is None:
+        if figure_kwargs is None:
+            figure_kwargs = {'figsize': (12,8)}
+        fig, axs = plt.subplots(R, C, **figure_kwargs)
+    else:
+        axs = fig.subplots(R, C)
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"

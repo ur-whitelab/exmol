@@ -38,6 +38,15 @@ def test_run_stones():
     assert len(result[0]) >= 0
 
 
+def test_run_chemed():
+    result = exmol.run_chemed(
+        "CCCCO",
+        num_samples=10
+    )
+    # Can get duplicates
+    assert len(result[0]) >= 0
+
+
 def test_run_stones_alphabet():
     result = exmol.run_stoned(
         "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC",
@@ -68,14 +77,18 @@ def test_sample_preset():
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
 
-def test_sample_zinc():
+def test_sample_chem():
     def model(s, se):
         return int("N" in s)
 
     explanation = exmol.sample_space(
-        "CCCC", model, preset="zinc", batched=False, num_samples=50)
+        "CCCC", model, preset="chemed", batched=False, num_samples=50)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
+
+    # try other keywords
+    explanation = exmol.sample_space(
+        "CCCC", model, preset="chemed", batched=False, num_samples=50, method_kwargs={'similarity': 0.2})
 
 
 def test_cf_explain():
