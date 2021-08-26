@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v0.3.1 (2021-08-26)
+-------------------
+* Fixed num_samples not passed correctly
+* Fixed unparsable simles coming from pubchem
+
 v0.3.0 (2021-08-25)
 --------------------
 
