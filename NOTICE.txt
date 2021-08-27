@@ -1,0 +1,7 @@
+exmol
+Copyright (c) 2021 White Laboratory
+
+This product includes software develped by Aspuru-Guzik group (Apache 2.0)
+https://github.com/aspuru-guzik-group/stoned-selfies
+Copyright (c) 2021 Aspuru-Guzik group
+
