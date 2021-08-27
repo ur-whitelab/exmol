@@ -70,10 +70,9 @@ def get_descriptors(smiles):
     get_descriptors('CCC1CC(CCC1=O)C(=O)C1=CC=CC(C)=C1')
     get_descriptors('CCO')
     """
-    from rdkit import Chem
     from mordred import HydrogenBond, RingCount, TopoPSA, Polarizability
     from mordred import LogS, AcidBase, BertzCT, Aromatic, BondCount 
-    mol = Chem.MolFromSmiles(smiles)
+    mol = MolFromSmiles(smiles)
     NumHBD = HydrogenBond.HBondDonor()(mol)
     NumHBA = HydrogenBond.HBondAcceptor()(mol)
     Acids = AcidBase.AcidicGroupCount()(mol)
