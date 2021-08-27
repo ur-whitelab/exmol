@@ -402,6 +402,23 @@ def _select_examples(cond, examples, nmols):
     return list(filter(cond, result))
 
 
+def lime_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
+    """From given :obj:`Examples`, find
+
+    :param examples: Output from :func:`sample_space`
+    :param nmols: Desired number of molecules
+    """
+    def linear_fit(e, w, b):
+        return e.features*w + b
+
+    surrogate_model_loss = []
+    for e in example:
+        surrogate_model_loss.append(e.similarity * np.linalg.lstsq(e.yhat, linear_fit(e, w, b)))
+    # What should the w and b be? Is this correct?
+    # Should ideally return examples with low surrogate model loss?
+    return surrogate_model_loss
+
+
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
     """From given :obj:`Examples`, find best counterfactuals using :ref:`readme_link:counterfactual generation`
 
