@@ -8,7 +8,7 @@
 
 
 
-`exmol` is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property. [View on Github](https://github.com/ur-whitelab/exmol).
+`exmol` is a package to explain black-box predictions of molecules. The package uses model agnostic explanations to help users understand why a molecule is predicted to have a property.
 
 ## Install
 
