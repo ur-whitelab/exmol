@@ -63,6 +63,39 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     return np.array(dist).reshape(len(mols), len(mols))
 
 
+def get_descriptors(smiles):
+    """Returns set of descriptors for SMILES tokens
+
+    Examples:
+    get_descriptors('CCC1CC(CCC1=O)C(=O)C1=CC=CC(C)=C1')
+    get_descriptors('CCO')
+    """
+    from rdkit import Chem
+    from mordred import HydrogenBond, RingCount, TopoPSA, Polarizability
+    from mordred import LogS, AcidBase, BertzCT, Aromatic, BondCount 
+    mol = Chem.MolFromSmiles(smiles)
+    NumHBD = HydrogenBond.HBondDonor()(mol)
+    NumHBA = HydrogenBond.HBondAcceptor()(mol)
+    Acids = AcidBase.AcidicGroupCount()(mol)
+    Bases = AcidBase.BasicGroupCount()(mol)
+    # Bond count
+    AromaticBonds = Aromatic.AromaticBondsCount()(mol)
+    bonds = ['single', 'double', 'triple']
+    AliphaticBonds = sum([BondCount.BondCount(type=i)(mol) for i in bonds])
+    #aqueous solubility measure
+    logS = LogS.LogS()(mol)
+    #Atomic polarizability
+    aPol = Polarizability.APol()(mol)
+    #Aromatic ring count
+    Rcount = RingCount.RingCount()(mol)
+    #Topological polar surface area
+    TPSA = TopoPSA.TopoPSA(no_only=False)(mol)
+    # Bertz CT - measure of complexity of molecule
+    Bertz = BertzCT.BertzCT()(mol)
+    
+    return (NumHBD, NumHBA, Acids, Bases, AromaticBonds,AliphaticBonds, logS, aPol, Rcount, TPSA, Bertz)
+
+
 def get_basic_alphabet() -> Set[str]:
     """Returns set of interpretable SELFIES tokens
 
