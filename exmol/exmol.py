@@ -72,7 +72,9 @@ def get_descriptors(smiles):
     """
     from mordred import HydrogenBond, RingCount, TopoPSA, Polarizability
     from mordred import LogS, AcidBase, BertzCT, Aromatic, BondCount 
-    mol = MolFromSmiles(smiles)
+    mol = smi2mol(smiles)
+    if mol == None:
+        raise ValueError('Invalid SMILES string')
     NumHBD = HydrogenBond.HBondDonor()(mol)
     NumHBA = HydrogenBond.HBondAcceptor()(mol)
     Acids = AcidBase.AcidicGroupCount()(mol)
@@ -92,7 +94,12 @@ def get_descriptors(smiles):
     # Bertz CT - measure of complexity of molecule
     Bertz = BertzCT.BertzCT()(mol)
     
-    return (NumHBD, NumHBA, Acids, Bases, AromaticBonds,AliphaticBonds, logS, aPol, Rcount, TPSA, Bertz)
+    desc = {'NumHBD': NumHBD, 'NumHBA': NumHBA, 
+            'AcidGroups': Acids, 'BaseGroups': Bases, 
+            'AromaticBonds': AromaticBonds, 'AliphaticBonds': AliphaticBonds, 
+            'LogS': logS, 'APol': aPol,'RingCount': Rcount, 
+            'TPSA': TPSA, 'BertzCT': Bertz}
+    return desc
 
 
 def get_basic_alphabet() -> Set[str]:
