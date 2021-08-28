@@ -21,6 +21,7 @@ from ratelimit import limits, sleep_and_retry
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
+_calculator = None
 
 
 @dataclass
@@ -45,8 +46,13 @@ class Example:
     cluster: int = 0
     #: Label for this example
     label: str = None
+    #: descriptors
+    descriptors: tuple = None
+    #: descriptor names
+    descriptors_names: tuple = None
 
     # to make it look nicer
+
     def __str__(self):
         return str(asdict(self))
 
@@ -63,36 +69,37 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     return np.array(dist).reshape(len(mols), len(mols))
 
 
-def get_descriptors(smiles):
-    """Returns set of descriptors for SMILES tokens
+def _make_calculator():
+    from mordred import HydrogenBond, Polarizability
+    from mordred import SLogP, AcidBase, BertzCT, Aromatic, BondCount
+    from mordred import Calculator
+    c = Calculator()
+    c.register([HydrogenBond.HBondDonor, HydrogenBond.HBondAcceptor])
+    c.register([AcidBase.AcidicGroupCount, AcidBase.BasicGroupCount,
+                Aromatic.AromaticBondsCount])
+    c.register([SLogP.SLogP, Polarizability.APol,  BertzCT.BertzCT])
+    c.register([BondCount.BondCount(type='double'),
+                BondCount.BondCount(type='aromatic')])
+    return c
 
-    Examples:
-    get_descriptors('CCC1CC(CCC1=O)C(=O)C1=CC=CC(C)=C1')
-    get_descriptors('CCO')
+
+def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Example]:
+    """Returns set of descriptors for passed examples
+
+    :param examples: List of example
+    :param mols: Can be used if you already have rdkit Mols computed.
     """
-    from mordred import HydrogenBond, RingCount, TopoPSA, Polarizability
-    from mordred import LogS, AcidBase, BertzCT, Aromatic, BondCount 
-    mol = MolFromSmiles(smiles)
-    NumHBD = HydrogenBond.HBondDonor()(mol)
-    NumHBA = HydrogenBond.HBondAcceptor()(mol)
-    Acids = AcidBase.AcidicGroupCount()(mol)
-    Bases = AcidBase.BasicGroupCount()(mol)
-    # Bond count
-    AromaticBonds = Aromatic.AromaticBondsCount()(mol)
-    bonds = ['single', 'double', 'triple']
-    AliphaticBonds = sum([BondCount.BondCount(type=i)(mol) for i in bonds])
-    #aqueous solubility measure
-    logS = LogS.LogS()(mol)
-    #Atomic polarizability
-    aPol = Polarizability.APol()(mol)
-    #Aromatic ring count
-    Rcount = RingCount.RingCount()(mol)
-    #Topological polar surface area
-    TPSA = TopoPSA.TopoPSA(no_only=False)(mol)
-    # Bertz CT - measure of complexity of molecule
-    Bertz = BertzCT.BertzCT()(mol)
-    
-    return (NumHBD, NumHBA, Acids, Bases, AromaticBonds,AliphaticBonds, logS, aPol, Rcount, TPSA, Bertz)
+    global _calculator
+    if _calculator is None:
+        _calculator = _make_calculator()
+    if mols is None:
+        mols = [smi2mol(m.smiles) for m in examples]
+    names = tuple(d.description() for d in _calculator.descriptors)
+    # print(names)
+    for e, c in zip(examples, _calculator.map(mols, quiet=True)):
+        e.descriptors = tuple(v for v in c.values())
+        e.descriptors_names = names
+    return examples
 
 
 def get_basic_alphabet() -> Set[str]:
@@ -188,7 +195,9 @@ def run_stoned(
     # NOTE Do not think of returning selfies. They have duplicates
     return canon_smi_ls, canon_smi_ls_scores
 
-FIFTEEN_MINUTES=900
+
+FIFTEEN_MINUTES = 900
+
 
 @sleep_and_retry
 @limits(calls=50, period=FIFTEEN_MINUTES)
@@ -213,9 +222,9 @@ def run_chemed(
     url = f'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON'
     try:
         reply = requests.get(url, params={
-                         'Threshold': int(similarity), 'MaxRecords':num_samples},
-                             headers={'accept': 'text/json'},
-                            timeout=10)
+            'Threshold': int(similarity), 'MaxRecords': num_samples},
+            headers={'accept': 'text/json'},
+            timeout=10)
     except requests.exceptions.Timeout:
         print('Pubchem seems to be down right now ️☠️☠️')
         return [], []
@@ -223,25 +232,27 @@ def run_chemed(
         data = reply.json()
     except:
         return [], []
-    smiles = [d['CanonicalSMILES'] for d in data['PropertyTable']['Properties']]
+    smiles = [d['CanonicalSMILES']
+              for d in data['PropertyTable']['Properties']]
     smiles = set(smiles)
 
-    if _pbar: _pbar.set_description(f'Received {len(smiles)} similar molecules')
+    if _pbar:
+        _pbar.set_description(f'Received {len(smiles)} similar molecules')
 
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
     # drop Nones
-    smiles = [s for s,m in zip(smiles, mols) if m is not None]
+    smiles = [s for s, m in zip(smiles, mols) if m is not None]
     for m in mols:
         if m is None:
             continue
-        fp  = stoned.get_fingerprint(m, fp_type)
+        fp = stoned.get_fingerprint(m, fp_type)
         scores.append(stoned.TanimotoSimilarity(fp0, fp))
-        if _pbar: _pbar.update()
+        if _pbar:
+            _pbar.update()
     return smiles, scores
-
 
 
 def sample_space(
@@ -402,21 +413,43 @@ def _select_examples(cond, examples, nmols):
     return list(filter(cond, result))
 
 
-def lime_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
-    """From given :obj:`Examples`, find
-
-    :param examples: Output from :func:`sample_space`
-    :param nmols: Desired number of molecules
-    """
-    def linear_fit(e, w, b):
-        return e.features*w + b
-
-    surrogate_model_loss = []
-    for e in example:
-        surrogate_model_loss.append(e.similarity * np.linalg.lstsq(e.yhat, linear_fit(e, w, b)))
-    # What should the w and b be? Is this correct?
-    # Should ideally return examples with low surrogate model loss?
-    return surrogate_model_loss
+def lime_explain(examples: List[Example]) -> np.ndarray:
+    # TODO: return something more useful
+    try:
+        # try last, since base may have had descriptors
+        M = len(examples[-1].descriptors)
+    except TypeError:
+        # descriptors need to be calculated
+        examples = get_descriptors(examples)
+        M = len(examples[-1].descriptors)
+    if len(examples) <= M:
+        raise ValueError(
+            f'LIME requires more than {M} examples. Maybe you passed counterfactuals accidentally?')
+    x_mat = np.array([list(e.descriptors)
+                      for e in examples]).reshape(len(examples), -1)
+    # remove zero variance columns
+    y = np.array([e.yhat for e in examples]).reshape(
+        len(examples)).astype(float)
+    # sqrt to weights for lstq equation
+    w = np.sqrt([e.similarity for e in examples])
+    # remove bias
+    y -= np.mean(y)
+    # compute least squares fit
+    # we add a little noise to condition for perfectly correlated descriptors
+    noisey_x_mat = (x_mat +
+                    np.random.uniform(-1e-4, 1e-4,
+                                      size=x_mat.shape)) * w[:, np.newaxis]
+    xtinv = np.linalg.inv(noisey_x_mat.T @ noisey_x_mat)
+    beta = xtinv @ x_mat.T @ (y * w)
+    # compute standard error in beta
+    yhat = x_mat @ beta
+    resids = yhat - y
+    SSR = np.sum(resids**2)
+    se2_epsilon = SSR / (len(examples) - len(beta))
+    se2_beta = se2_epsilon * xtinv
+    # now compute t-statistic for existence of coefficients
+    tstat = np.sqrt(beta**2 / np.diag(se2_beta))
+    return tstat
 
 
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
@@ -647,7 +680,7 @@ def plot_cf(
         C = math.ceil(len(imgs) / R)
     if fig is None:
         if figure_kwargs is None:
-            figure_kwargs = {'figsize': (12,8)}
+            figure_kwargs = {'figsize': (12, 8)}
         fig, axs = plt.subplots(R, C, **figure_kwargs)
     else:
         axs = fig.subplots(R, C)
