@@ -147,3 +147,15 @@ def test_compare_img():
     m2 = smi2mol(smi2)
     r, _ = exmol.moldiff(m1, m2)
     assert len(r) > 0
+
+def test_corrupt_smiles():
+    badsmi = 'C/C=C/C(=O)C1CCC(C=C1C)(C)C'
+    badchars = exmol.stoned.get_selfie_chars(sf.encoder(badsmi))
+    basic = exmol.get_basic_alphabet()
+  
+    if len(list(set(badchars)-set(basic))) != 0:
+        goodsmi = exmol.stoned.sanitize_smiles(badsmi)[1]
+        goodchars = exmol.stoned.get_selfie_chars(sf.encoder(goodsmi))
+    
+    assert len(list(set(goodchars)-set(basic))) == 0
+    
