@@ -1,7 +1,8 @@
 import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
-
+import selfies as sf
+import numpy as np
 
 def test_version():
     assert exmol.__version__
@@ -147,3 +148,13 @@ def test_compare_img():
     m2 = smi2mol(smi2)
     r, _ = exmol.moldiff(m1, m2)
     assert len(r) > 0
+
+def test_corrupt_smiles():
+    def model(s, se):
+        return int("N" in s)
+
+    badsmi = 'C/C=C/C(=O)C1CCC(C=C1C)(C)C'
+    explanation = exmol.sample_space(badsmi, model, preset="narrow", batched=False)      
+    assert ~np.isnan(explanation[0].yhat)
+    
+

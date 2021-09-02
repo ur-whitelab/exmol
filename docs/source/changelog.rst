@@ -1,5 +1,8 @@
 Change Log
 ==========
+v0.3.2 (2021-09-02)
+-------------------
+* Added SMILES sanitization before generating sample space 
 
 v0.3.1 (2021-08-26)
 -------------------
