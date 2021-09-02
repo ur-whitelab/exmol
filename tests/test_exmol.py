@@ -2,6 +2,7 @@ import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 import selfies as sf
+import numpy as np
 
 def test_version():
     assert exmol.__version__
