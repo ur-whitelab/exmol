@@ -35,7 +35,7 @@ class Descriptors:
     t_stats: tuple
 
 @dataclass
-class Example(Descriptors):
+class Example:
     """Example of a molecule"""
 
     #: SMILES string for molecule
@@ -57,9 +57,9 @@ class Example(Descriptors):
     #: Label for this example
     label: str = None
     #: descriptors
-    # descriptors: tuple = None
+    descriptors: tuple = None
     #: descriptor names
-    # descriptors_names: tuple = None
+    descriptors_names: tuple = None
 
     # to make it look nicer
 
@@ -347,10 +347,10 @@ def sample_space(
     # and nan
     exps = [
         Example(
-            origin_smiles,
-            sf.encoder(origin_smiles),
-            1.0,
-            smi_yhat,
+            smiles=origin_smiles,
+            selfies=sf.encoder(origin_smiles),
+            similarity=1.0,
+            yhat=smi_yhat,
             index=0,
             is_origin=True,
         )
@@ -554,21 +554,21 @@ def _mol_images(exps, mol_size, fontsize):
     return imgs
 
 
-def _plot_mol_descriptors(exps, mol_size):
+def _plot_mol_descriptors(exps, beta, mol_size):
     if len(exps) == 0:
         return []
     # get bar plots for descriptor t_stats
-    mol_size = (mol_size[0]/2, mol_size[1])
-    desc = np.array([list(e.descriptors) for e in exps])
+    mol_size = (mol_size[0]/100, mol_size[1]/100)
+    desc = np.array([list(e.descriptors) * beta for e in exps])
     desc_plots = []
     cmap = plt.get_cmap("Set3", 10)
-    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in cmap.N]
+    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
     for d in desc:
         std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
-        fig, ax = plt.figure(figsize=mol_size)
-        ax.axvline(x=0, color='grey')
-        ax.barh(range(len(d)), std_d, height=0.5,color=colors)
-        ax.yticks([])
+        fig = plt.figure(figsize=mol_size)
+        plt.axvline(x=0, color='grey')
+        ax = plt.barh(range(len(d)), std_d, height=0.5,color=colors)
+        # ax.yticks([])
         desc_plots.append(ax)
     return desc_plots
 
@@ -582,7 +582,8 @@ def plot_space(
     mol_fontsize: int = 8,
     offset: int = 0,
     ax: Any = None,
-    plot_descriptors: bool = False
+    plot_descriptors: bool = False,
+    beta: np.ndarray = None
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -597,7 +598,9 @@ def plot_space(
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if plot_descriptors:
-        desc_plots = _plot_mol_descriptors(exps, mol_size)
+        if beta is None:
+            raise ValueError('Need to give beta to calculate t_stats')
+        desc_plots = _plot_mol_descriptors(exps, beta, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
@@ -635,7 +638,6 @@ def plot_space(
     y = [e.position[1] for e in exps]
     titles = []
     colors = []
-    desc_tstats = []
     for e in exps:
         if not e.is_origin:
             titles.append(f"Similarity = {e.similarity:.2f}\n{e.label}")
@@ -657,7 +659,7 @@ def _nearest_spiral_layout(x, y, offset):
 
 
 def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker, HPacker, DrawingArea
+    from matplotlib.offsetbox import (OffsetImage, AnnotationBbox, TextArea, VPacker, PaddedBox)
 
     box_coords = _nearest_spiral_layout(x, y, offset)
     if desc_plots is not None:
@@ -668,11 +670,11 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
             img_data = np.asarray(im)
             img_box = OffsetImage(img_data)
             title_box = TextArea(t)
-            tstats_box = DrawingArea(d)
-            packed = VPacker(children=[img_box, title_box],
+            tstats_box = PaddedBox(d)
+            packed = VPacker(children=[img_box, title_box, tstats_box],
                             pad=0, sep=4, align="center")
-            packed = HPacker(children=[packed, tstats_box],
-                            pad=0, sep=4, align="center")
+            # packed = HPacker(children=[packed, tstats_box],
+            #                 pad=0, sep=4, align="center")
             bb = AnnotationBbox(
                 packed,
                 (x0, y0),
