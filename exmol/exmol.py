@@ -23,9 +23,19 @@ delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
 _calculator = None
 
+@dataclass
+class Descriptors:
+    """Molecular descriptors"""
+
+    #: Descriptor names 
+    descriptors: tuple
+    # Descriptor value
+    descriptor_names: tuple
+    # t_stats for each molecule
+    t_stats: tuple
 
 @dataclass
-class Example:
+class Example(Descriptors):
     """Example of a molecule"""
 
     #: SMILES string for molecule
@@ -47,9 +57,9 @@ class Example:
     #: Label for this example
     label: str = None
     #: descriptors
-    descriptors: tuple = None
+    # descriptors: tuple = None
     #: descriptor names
-    descriptors_names: tuple = None
+    # descriptors_names: tuple = None
 
     # to make it look nicer
 
@@ -449,7 +459,8 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
     tstat = np.sqrt(beta**2 / np.diag(se2_beta))
-    return tstat
+    # Return tstats of the space and beta (feature weights) which are the fit 
+    return tstat, x_mat, beta
 
 
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
@@ -543,6 +554,25 @@ def _mol_images(exps, mol_size, fontsize):
     return imgs
 
 
+def _plot_mol_descriptors(exps, mol_size):
+    if len(exps) == 0:
+        return []
+    # get bar plots for descriptor t_stats
+    mol_size = (mol_size[0]/2, mol_size[1])
+    desc = np.array([list(e.descriptors) for e in exps])
+    desc_plots = []
+    cmap = plt.get_cmap("Set3", 10)
+    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in cmap.N]
+    for d in desc:
+        std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
+        fig, ax = plt.figure(figsize=mol_size)
+        ax.axvline(x=0, color='grey')
+        ax.barh(range(len(d)), std_d, height=0.5,color=colors)
+        ax.yticks([])
+        desc_plots.append(ax)
+    return desc_plots
+
+
 def plot_space(
     examples: List[Example],
     exps: List[Example],
@@ -551,7 +581,8 @@ def plot_space(
     highlight_clusters: bool = False,
     mol_fontsize: int = 8,
     offset: int = 0,
-    ax: Any = None
+    ax: Any = None,
+    plot_descriptors: bool = False
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -565,6 +596,8 @@ def plot_space(
     :param fig: axis onto which to plot
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
+    if plot_descriptors:
+        desc_plots = _plot_mol_descriptors(exps, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
@@ -602,6 +635,7 @@ def plot_space(
     y = [e.position[1] for e in exps]
     titles = []
     colors = []
+    desc_tstats = []
     for e in exps:
         if not e.is_origin:
             titles.append(f"Similarity = {e.similarity:.2f}\n{e.label}")
@@ -609,7 +643,7 @@ def plot_space(
         else:
             titles.append("Base")
             colors.append(base_color)
-    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
+    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset, desc_plots=desc_plots)
     ax.axis("off")
     ax.set_aspect("auto")
 
@@ -622,31 +656,35 @@ def _nearest_spiral_layout(x, y, offset):
     return coords[order]
 
 
-def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
+def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker, HPacker, DrawingArea
 
     box_coords = _nearest_spiral_layout(x, y, offset)
-    bbs = []
-    for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
-        # add transparency
-        im = trim(im)
-        img_data = np.asarray(im)
-        img_box = OffsetImage(img_data)
-        title_box = TextArea(t)
-        packed = VPacker(children=[img_box, title_box],
-                         pad=0, sep=4, align="center")
-        bb = AnnotationBbox(
-            packed,
-            (x0, y0),
-            frameon=True,
-            xybox=box_coords[i] + 0.5,
-            arrowprops=dict(arrowstyle="->", edgecolor="black"),
-            pad=0.3,
-            boxcoords="axes fraction",
-            bboxprops=dict(edgecolor=c),
-        )
-        ax.add_artist(bb)
-        bbs.append(bb)
+    if desc_plots is not None:
+        bbs = []
+        for i, (x0, y0, im, t, c, d) in enumerate(zip(x, y, imgs, subtitles, colors, desc_plots)):
+            # add transparency
+            im = trim(im)
+            img_data = np.asarray(im)
+            img_box = OffsetImage(img_data)
+            title_box = TextArea(t)
+            tstats_box = DrawingArea(d)
+            packed = VPacker(children=[img_box, title_box],
+                            pad=0, sep=4, align="center")
+            packed = HPacker(children=[packed, tstats_box],
+                            pad=0, sep=4, align="center")
+            bb = AnnotationBbox(
+                packed,
+                (x0, y0),
+                frameon=True,
+                xybox=box_coords[i] + 0.5,
+                arrowprops=dict(arrowstyle="->", edgecolor="black"),
+                pad=0.3,
+                boxcoords="axes fraction",
+                bboxprops=dict(edgecolor=c),
+            )
+            ax.add_artist(bb)
+            bbs.append(bb)
     return bbs
 
 
