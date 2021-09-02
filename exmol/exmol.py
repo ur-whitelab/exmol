@@ -242,7 +242,8 @@ def sample_space(
 
         def batched_f(sm, se):
             return np.array([f(smi, sei) for smi, sei in zip(sm, se)])
-
+    
+    origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     smi_yhat = batched_f([origin_smiles], [sf.encoder(origin_smiles)])
     try:
         iter(smi_yhat)
