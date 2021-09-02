@@ -687,6 +687,28 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
             )
             ax.add_artist(bb)
             bbs.append(bb)
+    else:
+        bbs = []
+        for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
+            # add transparency
+            im = trim(im)
+            img_data = np.asarray(im)
+            img_box = OffsetImage(img_data)
+            title_box = TextArea(t)
+            packed = VPacker(children=[img_box, title_box],
+                            pad=0, sep=4, align="center")
+            bb = AnnotationBbox(
+                packed,
+                (x0, y0),
+                frameon=True,
+                xybox=box_coords[i] + 0.5,
+                arrowprops=dict(arrowstyle="->", edgecolor="black"),
+                pad=0.3,
+                boxcoords="axes fraction",
+                bboxprops=dict(edgecolor=c),
+            )
+            ax.add_artist(bb)
+            bbs.append(bb)
     return bbs
 
 
