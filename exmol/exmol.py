@@ -112,7 +112,7 @@ def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Exa
         e.descriptors_names = names
     # MACCS Keys
     fps = [list(MACCSkeys.GenMACCSKeys(m).ToBitString()) for m in mols]
-    imp_feats = np.array([[i for i in j if i == '1'] for j in fps])
+    imp_feats = np.array([[i for i in range(167) if j[i] == '1'] for j in fps])
     print(imp_feats)
     return examples
 
