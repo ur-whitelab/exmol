@@ -1,0 +1,176 @@
+# 	Description
+0	ISOTOPE
+1	Atomic no 104
+2	Group IVa,Va,VIa Rows 4-6
+3	actinide
+4	Group IIIB,IVB (Sc...)
+5	Lanthanide
+6	Group VB,VIB,VIIB
+7	QAAA@1 Heteroatom with atleast 3 neighbors
+8	Group VIII (Fe...)
+9	Group IIa (Alkaline earth)
+10	4M Ring
+11	Group IB,IIB (Cu..)
+12	ON(C)C
+13	S-S
+14	OC(O)O
+15	QAA@1
+16	
+17	Group IIIA (B...)
+18	7M Ring
+19	
+20	C=C(Q)Q
+21	3M Ring
+22	NC(O)O
+23	N-O
+24	NC(N)N
+25	C$=C($A)$A
+26	I
+27	QCH2Q
+28	P
+29	CQ(C)(C)A
+30	QX
+31	CSN
+32	NS
+33	CH2=A
+34	Group IA (Alkali Metal)
+35	S Heterocycle
+36	NC(O)N
+37	NC(C)N
+38	OS(O)O
+39	S-O
+40	CTN
+41	F
+42	QHAQH
+43	OTHER
+44	C=CN
+45	BR
+46	SAN
+47	OQ(O)O
+48	CHARGE
+49	C=C(C)C
+50	CSO
+51	NN
+52	QHAAAQH
+53	QHAAQH
+54	
+55	ON(O)C
+56	O Heterocycle
+57	QSQ
+58	Snot%A%A
+59	S=O
+60	AS(A)A
+61	A$!A$A
+62	N=O
+63	A$A!S
+64	C%N
+65	CC(C)(C)A
+66	QS
+67	QHQH (&...) SPEC Incomplete
+68	QQH
+69	QNQ
+70	NO
+71	OAAO
+72	S=A
+73	CH3ACH3
+74	A!N$A
+75	C=C(A)A
+76	NAN
+77	C=N
+78	NAAN
+79	NAAAN
+80	SA(A)A
+81	ACH2QH
+82	QAAAA@1
+83	
+84	CN(C)C
+85	CH2QCH2
+86	X!A$A
+87	S
+88	OAAAO
+89	
+90	
+91	QHAACH2A
+92	
+93	
+94	QHAAACH2A
+95	OC(N)C
+96	QCH3
+97	QN
+98	NAAO
+99	5 M ring
+100	NAAAO
+101	QAAAAA@1
+102	C=C
+103	ACH2N
+104	
+105	
+106	8M Ring or larger. This only handles up to ring sizes of 14
+107	QO
+108	CL
+109	QHACH2A
+110	A$A($A)$A
+111	QA(Q)Q
+112	XA(A)A
+113	CH3AAACH2A
+114	ACH2O
+115	NCO
+116	NACH2A
+117	AA(A)(A)A
+118	Onot%A%A
+119	CH3CH2A
+120	CH3ACH2A
+121	CH3AACH2A
+122	NAO
+123	ACH2CH2A > 1
+124	N=A
+125	Heterocyclic atom > 1 (&...) Spec Incomplete
+126	N Heterocycle
+127	AN(A)A
+128	OCO
+129	QQ
+130	Aromatic Ring > 1
+131	A!O!A
+132	A$A!O > 1 (&...) Spec Incomplete
+133	
+134	
+135	ACH2AAACH2A
+136	
+137	ACH2AACH2A
+138	QQ > 1 (&...)  Spec Incomplete
+139	QH > 1
+140	OACH2A
+141	A$A!N
+142	X (HALOGEN)
+143	Nnot%A%A
+144	O=A>1
+145	Heterocycle
+146	QCH2A>1 (&...) Spec Incomplete
+147	OH
+148	O > 3 (&...) Spec Incomplete
+149	CH3 > 2  (&...) Spec Incomplete
+150	N > 1
+151	A$A!O
+152	Anot%A%Anot%A
+153	6M ring > 1
+154	O > 2
+155	ACH2CH2A
+156	AQ(A)A
+157	CH3 > 1
+158	A!A$A!A
+159	NH
+160	OC(C)C
+161	QCH2A
+162	C=O
+163	A!CH2!A
+164	NA(A)A
+165	C-O
+166	C-N
+167	O>1
+168	
+169	N
+170	Aromatic
+171	6M Ring
+172	O
+173	Ring
+174	Fragments  FIX: this can't be done in SMARTS

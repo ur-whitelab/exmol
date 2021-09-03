@@ -11,6 +11,7 @@ import random
 from . import stoned
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
+from rdkit.Chem import MACCSkeys
 import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -109,6 +110,10 @@ def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Exa
     for e, c in zip(examples, _calculator.map(mols, quiet=True)):
         e.descriptors = tuple(v for v in c.values())
         e.descriptors_names = names
+    # MACCS Keys
+    fps = [list(MACCSkeys.GenMACCSKeys(m).ToBitString()) for m in mols]
+    imp_feats = np.array([[i for i in j if i == '1'] for j in fps])
+    print(imp_feats)
     return examples
 
 
@@ -558,18 +563,23 @@ def _plot_mol_descriptors(exps, beta, mol_size):
     if len(exps) == 0:
         return []
     # get bar plots for descriptor t_stats
-    mol_size = (mol_size[0]/100, mol_size[1]/100)
+    mol_size = (mol_size[1]/100, mol_size[0]/100)
     desc = np.array([list(e.descriptors) * beta for e in exps])
+    print(desc.shape)
     desc_plots = []
     cmap = plt.get_cmap("Set3", 10)
     colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    for d in desc:
+    fig = plt.figure(figsize=mol_size)
+    rows = len(desc)//2 + 1
+    columns = len(desc)//2 + 1
+    for i, d in enumerate(desc):
         std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
-        fig = plt.figure(figsize=mol_size)
-        plt.axvline(x=0, color='grey')
-        ax = plt.barh(range(len(d)), std_d, height=0.5,color=colors)
+        ax = fig.add_subplot(rows, columns, i+1)
+        ax.axvline(x=0, color='grey')
+        ax.barh(range(len(d)), std_d, height=0.5,color=colors)
         # ax.yticks([])
         desc_plots.append(ax)
+    print(desc_plots)
     return desc_plots
 
 
@@ -645,7 +655,10 @@ def plot_space(
         else:
             titles.append("Base")
             colors.append(base_color)
-    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset, desc_plots=desc_plots)
+    if plot_descriptors:
+        _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset, desc_plots=desc_plots)
+    else:
+        _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
 
@@ -659,7 +672,7 @@ def _nearest_spiral_layout(x, y, offset):
 
 
 def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
-    from matplotlib.offsetbox import (OffsetImage, AnnotationBbox, TextArea, VPacker, PaddedBox)
+    from matplotlib.offsetbox import (OffsetImage, AnnotationBbox, DrawingArea, TextArea, VPacker, PaddedBox)
 
     box_coords = _nearest_spiral_layout(x, y, offset)
     if desc_plots is not None:
@@ -670,7 +683,8 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
             img_data = np.asarray(im)
             img_box = OffsetImage(img_data)
             title_box = TextArea(t)
-            tstats_box = PaddedBox(d)
+            tstats_box = DrawingArea(5,5)
+            tstats_box.add_artist(d)
             packed = VPacker(children=[img_box, title_box, tstats_box],
                             pad=0, sep=4, align="center")
             # packed = HPacker(children=[packed, tstats_box],
