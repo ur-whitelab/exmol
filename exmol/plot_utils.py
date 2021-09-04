@@ -30,6 +30,29 @@ def _extract_loc(e):
     return min(x), min(y)
 
 
+def _plot_mol_descriptors(exps, beta, mol_size):
+    if len(exps) == 0:
+        return []
+    # get bar plots for descriptor t_stats
+    mol_size = (mol_size[1]/100, mol_size[0]/100)
+    desc = np.array([list(e.descriptors) * beta for e in exps])
+    print(desc.shape)
+    desc_plots = []
+    cmap = plt.get_cmap("Set3", 10)
+    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
+    fig = plt.figure(figsize=mol_size)
+    rows = len(desc)//2 + 1
+    columns = len(desc)//2 + 1
+    for i, d in enumerate(desc):
+        std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
+        ax = fig.add_subplot(rows, columns, i+1)
+        ax.axvline(x=0, color='grey')
+        ax.barh(range(len(d)), std_d, height=0.5, color=colors)
+        # ax.yticks([])
+        desc_plots.append(ax)
+    return desc_plots
+
+
 def rewrite_svg(svg, rdict):
     ns = "http://www.w3.org/2000/svg"
     root, idmap = ET.XMLID(svg)

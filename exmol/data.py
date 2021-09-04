@@ -3,6 +3,18 @@ import numpy as np
 
 
 @dataclass
+class Descriptors:
+    """Molecular descriptors"""
+
+    #: Descriptor names
+    descriptors: tuple
+    # Descriptor value
+    descriptor_names: tuple
+    # t_stats for each molecule
+    t_stats: tuple
+
+
+@dataclass
 class Example:
     """Example of a molecule"""
 
