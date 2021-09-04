@@ -27,7 +27,7 @@ def _extract_loc(e):
             a1, a2 = a2, a1
         except ValueError:
             continue
-    return min(x), min(y)
+    return min(x), min(y), max(x) - min(x), max(y) - min(y)
 
 
 def rewrite_svg(svg, rdict):
@@ -35,7 +35,7 @@ def rewrite_svg(svg, rdict):
     root, idmap = ET.XMLID(svg)
     parent_map = {c: p for p in root.iter() for c in p}
     for rk, rvtup in rdict.items():
-        rv, scale = rvtup
+        rv, size = rvtup
         if rk in idmap:
             e = idmap[rk]
             # try to use id width/height
@@ -43,20 +43,25 @@ def rewrite_svg(svg, rdict):
             if 'width' in e.attrib:
                 x, y = e.attrib['x'], -float(e.attrib['y'])
                 # make new node
-                # to hold things (so we can transform)
+                # to hold things
                 new_e = ET.SubElement(
                     parent_map[e], f'{{{ns}}}g', {'id': f'{rk}-g'})
                 parent_map[e].remove(e)
+                #dx, dy = float(e.attrib['width']), float(e.attrib['height'])
+                dx, dy = size
                 e = new_e
             else:
                 # relying on there being a path object inside to give clue
                 # to size
                 c = list(e)[0]
-                x, y = _extract_loc(c)
+                x, y, dx, dy = _extract_loc(c)
                 e.remove(c)
-            # now set-up enclosing element transform for image
-            e.attrib['transform'] = f'translate({x}, {y}) scale({scale}, {scale})'
+            # set attributes on SVG so loc and width/height are correct
             rr = ET.fromstring(rv)
+            rr.attrib['x'] = str(x)
+            rr.attrib['y'] = str(y)
+            rr.attrib['width'] = str(dx)
+            rr.attrib['height'] = str(dy)
             e.insert(0, rr)
         else:
             print('Warning, could not find', rk)
@@ -73,11 +78,11 @@ def insert_svg(exps: List[Example],
     :param mol_size: If mol_size was specified, it needs to be re-specified here
     :return: SVG string that can be saved or displayed in juypter notebook
     """
+    size = mol_size
     mol_svgs = _mol_images(exps, mol_size, 12, True)
     svg = mpl2svg(bbox_inches='tight')
-    scale = 1
-    rewrites = {f'rdkit-img-{i}': (v, scale) for i, v in enumerate(mol_svgs)}
-    return rewrite_svg(svg, rewrites)
+    rewrites = {f'rdkit-img-{i}': (v, size) for i, v in enumerate(mol_svgs)}
+    return svg.decode(), mol_svgs[-1], rewrite_svg(svg, rewrites)
 
 
 def mpl2svg(**kwargs):
@@ -198,10 +203,16 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
     )
     if svg:
         imgs.insert(0, _mol2svg(ms[0], size=mol_size, options=dos))
+        imgs = _cleanup_rdkit_svgs(imgs)
     else:
         imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
     return imgs
 
+def _cleanup_rdkit_svgs(svgs):
+    for i in range(len(svgs)):
+        # simple approach
+        svgs[i] = svgs[i].replace('stroke-width:2.0px;', '')
+    return svgs
 
 def moldiff(template, query) -> Tuple[List[int], List[int]]:
     """Compare the two rdkit molecules.
