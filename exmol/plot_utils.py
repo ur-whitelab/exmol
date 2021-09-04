@@ -130,7 +130,7 @@ def insert_svg(exps: List[Example],
 
     scale = 1
     rewrites = {f'rdkit-img-{i}': (v, size) for i, v in enumerate(mol_svgs)}
-    return svg.decode(), mol_svgs[-1], rewrite_svg(svg, rewrites)
+    return rewrite_svg(svg, rewrites)
 
 
 def mpl2svg(**kwargs):
