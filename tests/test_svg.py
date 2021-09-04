@@ -34,7 +34,7 @@ def test_replace_svg():
     p.set_gid('offset_box_0')
 
     svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
+    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg,(300,300))})
 
 
 def test_replace_svg_img():
@@ -57,7 +57,7 @@ def test_replace_svg_img():
     offsetbox.properties()['children'][0].set_gid('offset_box_0')
 
     svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
+    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, (300,300))})
 
 
 def test_insert_svg():
