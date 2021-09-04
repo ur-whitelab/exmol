@@ -1,14 +1,13 @@
 from rdkit.Chem import rdFMCS as MCS
 import requests
-from dataclasses import dataclass, asdict
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
 import math
-import random
 from . import stoned
+from .plot_utils import _mol_images, _image_scatter
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
 from rdkit.Chem import MACCSkeys
@@ -16,56 +15,11 @@ import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from typing import *
-import time
 import tqdm
 from ratelimit import limits, sleep_and_retry
+from .data import *
 
-delete_color = mpl.colors.to_rgb("#F06060")
-modify_color = mpl.colors.to_rgb("#1BBC9B")
 _calculator = None
-
-@dataclass
-class Descriptors:
-    """Molecular descriptors"""
-
-    #: Descriptor names 
-    descriptors: tuple
-    # Descriptor value
-    descriptor_names: tuple
-    # t_stats for each molecule
-    t_stats: tuple
-
-@dataclass
-class Example:
-    """Example of a molecule"""
-
-    #: SMILES string for molecule
-    smiles: str
-    #: SELFIES for molecule, as output from :func:`selfies.encoder`
-    selfies: str
-    #: Tanimoto similarity relative to base
-    similarity: float
-    #: Output of model function
-    yhat: float
-    #: Index relative to other examples
-    index: int
-    #: PCA projected position from similarity
-    position: np.ndarray = None
-    #: True if base
-    is_origin: bool = False
-    #: Index of cluster, can be -1 for no cluster
-    cluster: int = 0
-    #: Label for this example
-    label: str = None
-    #: descriptors
-    descriptors: tuple = None
-    #: descriptor names
-    descriptors_names: tuple = None
-
-    # to make it look nicer
-
-    def __str__(self):
-        return str(asdict(self))
 
 
 def _fp_dist_matrix(smiles, fp_type, _pbar):
@@ -300,7 +254,7 @@ def sample_space(
 
         def batched_f(sm, se):
             return np.array([f(smi, sei) for smi, sei in zip(sm, se)])
-    
+
     origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
@@ -467,7 +421,7 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
     tstat = np.sqrt(beta**2 / np.diag(se2_beta))
-    # Return tstats of the space and beta (feature weights) which are the fit 
+    # Return tstats of the space and beta (feature weights) which are the fit
     return tstat, x_mat, beta
 
 
@@ -524,66 +478,6 @@ def rcf_explain(
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
     return examples[:1] + lresult + hresult
-
-
-def _mol_images(exps, mol_size, fontsize):
-    if len(exps) == 0:
-        return []
-    # get aligned images
-    ms = [smi2mol(e.smiles) for e in exps]
-    dos = rdkit.Chem.Draw.MolDrawOptions()
-    dos.useBWAtomPalette()
-    dos.minFontSize = fontsize
-    rdkit.Chem.AllChem.Compute2DCoords(ms[0])
-    imgs = []
-    for m in ms[1:]:
-        rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-            m, ms[0], acceptFailure=True
-        )
-        aidx, bidx = moldiff(ms[0], m)
-        # if it is too large, we ignore it
-        # if len(aidx) > 8:
-        #    aidx = []
-        #    bidx = []
-        imgs.append(
-            mol2img(
-                m,
-                size=mol_size,
-                options=dos,
-                highlightAtoms=aidx,
-                highlightBonds=bidx,
-                highlightColor=modify_color if len(bidx) > 0 else delete_color,
-            )
-        )
-    rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-        ms[0], ms[1], acceptFailure=True
-    )
-    imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
-    return imgs
-
-
-def _plot_mol_descriptors(exps, beta, mol_size):
-    if len(exps) == 0:
-        return []
-    # get bar plots for descriptor t_stats
-    mol_size = (mol_size[1]/100, mol_size[0]/100)
-    desc = np.array([list(e.descriptors) * beta for e in exps])
-    print(desc.shape)
-    desc_plots = []
-    cmap = plt.get_cmap("Set3", 10)
-    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    fig = plt.figure(figsize=mol_size)
-    rows = len(desc)//2 + 1
-    columns = len(desc)//2 + 1
-    for i, d in enumerate(desc):
-        std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
-        ax = fig.add_subplot(rows, columns, i+1)
-        ax.axvline(x=0, color='grey')
-        ax.barh(range(len(d)), std_d, height=0.5,color=colors)
-        # ax.yticks([])
-        desc_plots.append(ax)
-    print(desc_plots)
-    return desc_plots
 
 
 def plot_space(
@@ -658,75 +552,9 @@ def plot_space(
         else:
             titles.append("Base")
             colors.append(base_color)
-    if plot_descriptors:
-        _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset, desc_plots=desc_plots)
-    else:
-        _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
+    _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
-
-
-def _nearest_spiral_layout(x, y, offset):
-    # make spiral
-    angles = np.linspace(-np.pi, np.pi, len(x) + 1 + offset)[offset:]
-    coords = np.stack((np.cos(angles), np.sin(angles)), -1)
-    order = np.argsort(np.arctan2(y, x))
-    return coords[order]
-
-
-def _image_scatter(x, y, imgs, subtitles, colors, ax, offset, desc_plots=None):
-    from matplotlib.offsetbox import (OffsetImage, AnnotationBbox, DrawingArea, TextArea, VPacker, PaddedBox)
-
-    box_coords = _nearest_spiral_layout(x, y, offset)
-    if desc_plots is not None:
-        bbs = []
-        for i, (x0, y0, im, t, c, d) in enumerate(zip(x, y, imgs, subtitles, colors, desc_plots)):
-            # add transparency
-            im = trim(im)
-            img_data = np.asarray(im)
-            img_box = OffsetImage(img_data)
-            title_box = TextArea(t)
-            tstats_box = DrawingArea(5,5)
-            tstats_box.add_artist(d)
-            packed = VPacker(children=[img_box, title_box, tstats_box],
-                            pad=0, sep=4, align="center")
-            # packed = HPacker(children=[packed, tstats_box],
-            #                 pad=0, sep=4, align="center")
-            bb = AnnotationBbox(
-                packed,
-                (x0, y0),
-                frameon=True,
-                xybox=box_coords[i] + 0.5,
-                arrowprops=dict(arrowstyle="->", edgecolor="black"),
-                pad=0.3,
-                boxcoords="axes fraction",
-                bboxprops=dict(edgecolor=c),
-            )
-            ax.add_artist(bb)
-            bbs.append(bb)
-    else:
-        bbs = []
-        for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
-            # add transparency
-            im = trim(im)
-            img_data = np.asarray(im)
-            img_box = OffsetImage(img_data)
-            title_box = TextArea(t)
-            packed = VPacker(children=[img_box, title_box],
-                            pad=0, sep=4, align="center")
-            bb = AnnotationBbox(
-                packed,
-                (x0, y0),
-                frameon=True,
-                xybox=box_coords[i] + 0.5,
-                arrowprops=dict(arrowstyle="->", edgecolor="black"),
-                pad=0.3,
-                boxcoords="axes fraction",
-                bboxprops=dict(edgecolor=c),
-            )
-            ax.add_artist(bb)
-            bbs.append(bb)
-    return bbs
 
 
 def plot_cf(
@@ -768,66 +596,9 @@ def plot_cf(
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"
         title += f"\nf(x) = {e.yhat:.3f}"
         axs[i].set_title(title)
-        axs[i].imshow(np.asarray(img))
+        axs[i].imshow(np.asarray(img), gid=f'rdkit-img-{i}')
         axs[i].axis("off")
     for j in range(i, C * R):
         axs[j].axis("off")
         axs[j].set_facecolor("white")
     plt.tight_layout()
-
-
-def moldiff(template, query) -> Tuple[List[int], List[int]]:
-    """Compare the two rdkit molecules.
-
-    :param template: template molecule
-    :param query: query molecule
-    :return: list of modified atoms in query, list of modified bonds in query
-    """
-    r = MCS.FindMCS([template, query])
-    substructure = rdkit.Chem.MolFromSmarts(r.smartsString)
-    raw_match = query.GetSubstructMatches(substructure)
-    template_match = template.GetSubstructMatches(substructure)
-    # flatten it
-    match = list(raw_match[0])
-    template_match = list(template_match[0])
-
-    # need to invert match to get diffs
-    inv_match = [i for i in range(query.GetNumAtoms()) if i not in match]
-
-    # get bonds
-    bond_match = []
-    for b in query.GetBonds():
-        if b.GetBeginAtomIdx() in inv_match or b.GetEndAtomIdx() in inv_match:
-            bond_match.append(b.GetIdx())
-
-    # now get bonding changes from deletion
-
-    def neigh_hash(a):
-        return "".join(sorted([n.GetSymbol() for n in a.GetNeighbors()]))
-
-    for ti, qi in zip(template_match, match):
-        if neigh_hash(template.GetAtomWithIdx(ti)) != neigh_hash(
-            query.GetAtomWithIdx(qi)
-        ):
-            inv_match.append(qi)
-
-    return inv_match, bond_match
-
-
-def trim(im):
-    """Implementation of whitespace trim
-
-    credit: https://stackoverflow.com/a/10616717
-
-    :param im: PIL image
-    :return: PIL image
-    """
-    from PIL import Image, ImageChops
-
-    # https://stackoverflow.com/a/10616717
-    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
-    diff = ImageChops.difference(im, bg)
-    diff = ImageChops.add(diff, diff, 2.0, -100)
-    bbox = diff.getbbox()
-    if bbox:
-        return im.crop(bbox)
