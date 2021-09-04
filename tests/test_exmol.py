@@ -1,6 +1,8 @@
 import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
+import selfies as sf
+import numpy as np
 
 
 def test_version():
@@ -162,3 +164,13 @@ def test_limed():
         return int("N" in s)
     samples = exmol.sample_space("CCCC", model, batched=False)
     exmol.lime_explain(samples)
+
+
+def test_corrupt_smiles():
+    def model(s, se):
+        return int("N" in s)
+
+    badsmi = 'C/C=C/C(=O)C1CCC(C=C1C)(C)C'
+    explanation = exmol.sample_space(
+        badsmi, model, preset="narrow", batched=False)
+    assert ~np.isnan(explanation[0].yhat)
