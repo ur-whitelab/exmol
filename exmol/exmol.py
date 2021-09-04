@@ -510,7 +510,7 @@ def plot_cf(
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"
         title += f"\nf(x) = {e.yhat:.3f}"
         axs[i].set_title(title)
-        axs[i].imshow(np.asarray(img))
+        axs[i].imshow(np.asarray(img), gid=f'rdkit-img-{i}')
         axs[i].axis("off")
     for j in range(i, C * R):
         axs[j].axis("off")
