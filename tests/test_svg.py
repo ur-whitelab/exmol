@@ -15,7 +15,7 @@ def draw_svg(mol, width=300, height=300):
     return svg
 
 
-def test_replace_svg():
+def _test_replace_svg():
     from matplotlib.patches import Rectangle
     from matplotlib.offsetbox import (DrawingArea,
                                       AnnotationBbox)
@@ -37,7 +37,7 @@ def test_replace_svg():
     svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
 
 
-def test_replace_svg_img():
+def _test_replace_svg_img():
     from rdkit.Chem.Draw import MolToImage as mol2img
     from matplotlib.patches import Rectangle
     from matplotlib.offsetbox import (OffsetImage,
@@ -60,7 +60,7 @@ def test_replace_svg_img():
     svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
 
 
-def test_insert_svg():
+def _test_insert_svg():
     def model(s, se):
         return int("N" in s)
 
@@ -71,7 +71,7 @@ def test_insert_svg():
     svg = exmol.insert_svg(exps)
 
 
-def test_insert_svg_long():
+def _test_insert_svg_long():
     def model(s, se):
         return int("N" in s)
 
@@ -85,7 +85,7 @@ def test_insert_svg_long():
     #    f.write(svg)
 
 
-def test_insert_svg_grid():
+def _test_insert_svg_grid():
     def model(s, se):
         return int("N" in s)
 
@@ -96,3 +96,16 @@ def test_insert_svg_grid():
     svg = exmol.insert_svg(exps)
     # with open('test.svg', 'w') as f:
     #    f.write(svg)
+
+
+def test_insert_svg_grid_d():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space(
+        "CCCC", model, batched=False)
+    exps = exmol.cf_explain(samples, 3)
+    exmol.plot_cf(exps)
+    svg = exmol.insert_svg(exps, descriptors=True)
+    with open('test.svg', 'w') as f:
+        f.write(svg)

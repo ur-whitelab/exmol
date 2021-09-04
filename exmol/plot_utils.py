@@ -2,6 +2,7 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
 from typing import *
 import xml.etree.ElementTree as ET
 import io
+from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import numpy as np
 from rdkit.Chem import rdFMCS as MCS
@@ -88,16 +89,40 @@ def rewrite_svg(svg, rdict):
     return ET.tostring(root, encoding="unicode", method='xml')
 
 
+def _descriptor_layout(size):
+    # Somehow SVG uses 72 dpi no matter what.
+    # Add a bit of margin
+    fig = plt.figure(
+        figsize=(size[0] / 72 * 1.1, size[0] / 72 * 1.1), constrained_layout=True)
+    ax_dict = fig.subplot_mosaic('BAA')
+    r = Rectangle((0, 0), 1, 1)
+    ax_dict['A'].add_patch(r)
+    r.set_gid('mol-holder')
+    ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
+    ax_dict['A'].axis('off')
+
+
 def insert_svg(exps: List[Example],
-               mol_size: Tuple[int, int] = (200, 200)) -> str:
+               mol_size: Tuple[int, int] = (200, 200),
+               descriptors: bool = False) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
     :param mol_size: If mol_size was specified, it needs to be re-specified here
     :return: SVG string that can be saved or displayed in juypter notebook
     """
+    size = mol_size
+    if descriptors:
+        mol_size = (int(mol_size[0] * 2 / 3), mol_size[1])
     mol_svgs = _mol_images(exps, mol_size, 12, True)
     svg = mpl2svg(bbox_inches='tight')
+    if descriptors:
+        for i in range(len(mol_svgs)):
+            ms = mol_svgs[i]
+            _descriptor_layout(size)
+            rsvg = mpl2svg()
+            mol_svgs[i] = rewrite_svg(rsvg, {'mol-holder': (ms, 1)})
+
     scale = 1
     rewrites = {f'rdkit-img-{i}': (v, scale) for i, v in enumerate(mol_svgs)}
     return rewrite_svg(svg, rewrites)
@@ -141,7 +166,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     bbs = []
     for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
         # TODO Figure out how to put this back
-        #im = trim(im)
+        # im = trim(im)
         img_data = np.asarray(im)
         img_box = OffsetImage(img_data)
         title_box = TextArea(t)
