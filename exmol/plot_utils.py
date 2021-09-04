@@ -82,7 +82,7 @@ def insert_svg(exps: List[Example],
     mol_svgs = _mol_images(exps, mol_size, 12, True)
     svg = mpl2svg(bbox_inches='tight')
     rewrites = {f'rdkit-img-{i}': (v, size) for i, v in enumerate(mol_svgs)}
-    return svg.decode(), mol_svgs[-1], rewrite_svg(svg, rewrites)
+    return rewrite_svg(svg, rewrites)
 
 
 def mpl2svg(**kwargs):
@@ -208,11 +208,13 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
         imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
     return imgs
 
+
 def _cleanup_rdkit_svgs(svgs):
     for i in range(len(svgs)):
         # simple approach
         svgs[i] = svgs[i].replace('stroke-width:2.0px;', '')
     return svgs
+
 
 def moldiff(template, query) -> Tuple[List[int], List[int]]:
     """Compare the two rdkit molecules.

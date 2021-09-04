@@ -34,7 +34,8 @@ def test_replace_svg():
     p.set_gid('offset_box_0')
 
     svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
+    svg = exmol.plot_utils.rewrite_svg(
+        svg, {'offset_box_0': (msvg, (300, 300))})
 
 
 def test_replace_svg_img():
@@ -57,7 +58,8 @@ def test_replace_svg_img():
     offsetbox.properties()['children'][0].set_gid('offset_box_0')
 
     svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
+    svg = exmol.plot_utils.rewrite_svg(
+        svg, {'offset_box_0': (msvg, (300, 300))})
 
 
 def test_insert_svg():
@@ -81,8 +83,6 @@ def test_insert_svg_long():
     exmol.plot_cf(exps)
     exmol.plot_space(samples, exps, mol_size=(300, 200))
     svg = exmol.insert_svg(exps, mol_size=(300, 200))
-    # with open('test.svg', 'w') as f:
-    #    f.write(svg)
 
 
 def test_insert_svg_grid():
@@ -95,4 +95,4 @@ def test_insert_svg_grid():
     exmol.plot_cf(exps)
     svg = exmol.insert_svg(exps)
     # with open('test.svg', 'w') as f:
-    #    f.write(svg)
+    #     f.write(svg)
