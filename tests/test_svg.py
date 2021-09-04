@@ -69,5 +69,17 @@ def test_insert_svg():
     exmol.plot_cf(exps)
     exmol.plot_space(samples, exps)
     svg = exmol.insert_svg(exps)
-    with open('test.svg', 'w') as f:
-        f.write(svg)
+
+
+def test_insert_svg():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space(
+        "O=C(COCCCCCCCCCC)CC(C)C1CCCC1C2=CC=CC(F)=C2 ", model, batched=False)
+    exps = exmol.cf_explain(samples, 3)
+    exmol.plot_cf(exps)
+    exmol.plot_space(samples, exps, mol_size=(300, 200))
+    svg = exmol.insert_svg(exps, mol_size=(300, 200))
+    # with open('test.svg', 'w') as f:
+    #    f.write(svg)

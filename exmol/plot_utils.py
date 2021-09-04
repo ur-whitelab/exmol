@@ -67,9 +67,15 @@ def rewrite_svg(svg, rdict):
 
 def insert_svg(exps: List[Example],
                mol_size: Tuple[int, int] = (200, 200)) -> str:
+    """Replace rasterized image files with SVG versions of molecules
+
+    :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
+    :param mol_size: If mol_size was specified, it needs to be re-specified here
+    :return: SVG string that can be saved or displayed in juypter notebook
+    """
     mol_svgs = _mol_images(exps, mol_size, 12, True)
     svg = mpl2svg(bbox_inches='tight')
-    scale = 200 / max(mol_size)
+    scale = 1
     rewrites = {f'rdkit-img-{i}': (v, scale) for i, v in enumerate(mol_svgs)}
     return rewrite_svg(svg, rewrites)
 
