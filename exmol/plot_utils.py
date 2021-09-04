@@ -10,6 +10,7 @@ from rdkit.Chem.Draw import MolToImage as mol2img
 import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from .data import *
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
@@ -29,11 +30,12 @@ def _extract_loc(e):
     return min(x), min(y)
 
 
-def rewrite_svg(svg, rdict, scale):
+def rewrite_svg(svg, rdict):
     ns = "http://www.w3.org/2000/svg"
     root, idmap = ET.XMLID(svg)
     parent_map = {c: p for p in root.iter() for c in p}
-    for rk, rv in rdict.items():
+    for rk, rvtup in rdict.items():
+        rv, scale = rvtup
         if rk in idmap:
             e = idmap[rk]
             # try to use id width/height
@@ -61,6 +63,15 @@ def rewrite_svg(svg, rdict, scale):
             print(list(idmap.keys()))
     ET.register_namespace("", ns)
     return ET.tostring(root, encoding="unicode", method='xml')
+
+
+def insert_svg(exps: List[Example],
+               mol_size: Tuple[int, int] = (200, 200)) -> str:
+    mol_svgs = _mol_images(exps, mol_size, 12, True)
+    svg = mpl2svg(bbox_inches='tight')
+    scale = 200 / max(mol_size)
+    rewrites = {f'rdkit-img-{i}': (v, scale) for i, v in enumerate(mol_svgs)}
+    return rewrite_svg(svg, rewrites)
 
 
 def mpl2svg(**kwargs):
@@ -100,8 +111,8 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     box_coords = _nearest_spiral_layout(x, y, offset)
     bbs = []
     for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
-        # add transparency
-        im = trim(im)
+        # TODO Figure out how to put this back
+        #im = trim(im)
         img_data = np.asarray(im)
         img_box = OffsetImage(img_data)
         title_box = TextArea(t)
@@ -118,13 +129,25 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
             bboxprops=dict(edgecolor=c),
         )
         ax.add_artist(bb)
+
+        # add gid in case svg-rewrite
+        img_box.properties()['children'][0].set_gid(f'rdkit-img-{i}')
+
         bbs.append(bb)
     return bbs
 
 
-def _mol_images(exps, mol_size, fontsize):
+def _mol2svg(m, size, options, **kwargs):
+    d = rdkit.Chem.Draw.rdMolDraw2D.MolDraw2DSVG(*size)
+    d.SetDrawOptions(options)
+    d.DrawMolecule(m, **kwargs)
+    d.FinishDrawing()
+    return d.GetDrawingText()
+
+
+def _mol_images(exps, mol_size, fontsize, svg=False):
     if len(exps) == 0:
-        return []
+        return [], []
     # get aligned images
     ms = [smi2mol(e.smiles) for e in exps]
     dos = rdkit.Chem.Draw.MolDrawOptions()
@@ -137,24 +160,40 @@ def _mol_images(exps, mol_size, fontsize):
             m, ms[0], acceptFailure=True
         )
         aidx, bidx = moldiff(ms[0], m)
-        # if it is too large, we ignore it
-        # if len(aidx) > 8:
-        #    aidx = []
-        #    bidx = []
-        imgs.append(
-            mol2img(
-                m,
-                size=mol_size,
-                options=dos,
-                highlightAtoms=aidx,
-                highlightBonds=bidx,
-                highlightColor=modify_color if len(bidx) > 0 else delete_color,
+        if not svg:
+            imgs.append(
+                mol2img(
+                    m,
+                    size=mol_size,
+                    options=dos,
+                    highlightAtoms=aidx,
+                    highlightBonds=bidx,
+                    highlightColor=modify_color if len(
+                        bidx) > 0 else delete_color,
+                )
             )
-        )
+        else:
+            imgs.append(
+                _mol2svg(
+                    m,
+                    size=mol_size,
+                    options=dos,
+                    highlightAtoms=aidx,
+                    highlightBonds=bidx,
+                    highlightAtomColors={k: modify_color for k in aidx} if len(
+                        bidx) > 0 else {k: delete_color for k in aidx},
+                    highlightBondColors={k: modify_color for k in bidx} if len(
+                        bidx) > 0 else {k: delete_color for k in bidx},
+                )
+            )
+
     rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
         ms[0], ms[1], acceptFailure=True
     )
-    imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
+    if svg:
+        imgs.insert(0, _mol2svg(ms[0], size=mol_size, options=dos))
+    else:
+        imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
     return imgs
 
 

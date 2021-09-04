@@ -15,7 +15,7 @@ def draw_svg(mol, width=300, height=300):
     return svg
 
 
-def _test_replace_svg():
+def test_replace_svg():
     from matplotlib.patches import Rectangle
     from matplotlib.offsetbox import (DrawingArea,
                                       AnnotationBbox)
@@ -33,8 +33,8 @@ def _test_replace_svg():
     ax.add_artist(ab)
     p.set_gid('offset_box_0')
 
-    svg = exmol.mpl2svg()
-    svg = exmol.rewrite_svg(svg, {'offset_box_0': msvg}, 50 / 300)
+    svg = exmol.plot_utils.mpl2svg()
+    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
 
 
 def test_replace_svg_img():
@@ -56,7 +56,18 @@ def test_replace_svg_img():
     # differrent for images
     offsetbox.properties()['children'][0].set_gid('offset_box_0')
 
-    svg = exmol.mpl2svg()
-    svg = exmol.rewrite_svg(svg, {'offset_box_0': msvg}, 50 / 300)
+    svg = exmol.plot_utils.mpl2svg()
+    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, 50 / 300)})
+
+
+def test_insert_svg():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space("CCCC", model, batched=False)
+    exps = exmol.cf_explain(samples, 3)
+    exmol.plot_cf(exps)
+    exmol.plot_space(samples, exps)
+    svg = exmol.insert_svg(exps)
     with open('test.svg', 'w') as f:
         f.write(svg)

@@ -1,13 +1,11 @@
 from rdkit.Chem import rdFMCS as MCS
 import requests
-from dataclasses import dataclass, asdict
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
 import math
-import random
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter
 from rdkit.Chem import MolFromSmiles as smi2mol
@@ -16,37 +14,9 @@ import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from typing import *
-import time
 import tqdm
 from ratelimit import limits, sleep_and_retry
-
-
-@dataclass
-class Example:
-    """Example of a molecule"""
-
-    #: SMILES string for molecule
-    smiles: str
-    #: SELFIES for molecule, as output from :func:`selfies.encoder`
-    selfies: str
-    #: Tanimoto similarity relative to base
-    similarity: float
-    #: Output of model function
-    yhat: float
-    #: Index relative to other examples
-    index: int
-    #: PCA projected position from similarity
-    position: np.ndarray = None
-    #: True if base
-    is_origin: bool = False
-    #: Index of cluster, can be -1 for no cluster
-    cluster: int = 0
-    #: Label for this example
-    label: str = None
-
-    # to make it look nicer
-    def __str__(self):
-        return str(asdict(self))
+from .data import *
 
 
 def _fp_dist_matrix(smiles, fp_type, _pbar):
@@ -496,7 +466,7 @@ def plot_space(
         else:
             titles.append("Base")
             colors.append(base_color)
-    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
+    _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
 
