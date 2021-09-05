@@ -47,8 +47,8 @@ def rewrite_svg(svg, rdict):
                 new_e = ET.SubElement(
                     parent_map[e], f'{{{ns}}}g', {'id': f'{rk}-g'})
                 parent_map[e].remove(e)
-                #dx, dy = float(e.attrib['width']), float(e.attrib['height'])
-                dx, dy = size
+                dx, dy = float(e.attrib['width']), float(e.attrib['height'])
+                #dx, dy = size
                 e = new_e
             else:
                 # relying on there being a path object inside to give clue
