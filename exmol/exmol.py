@@ -319,14 +319,14 @@ def sample_space(
 def _select_examples(cond, examples, nmols):
     result = []
 
-    # similarit filtered by if cluster/counter
+    # similarity filtered by if cluster/counter
     def cluster_score(e, i):
         return (e.cluster == i) * cond(e) * e.similarity
 
     clusters = set([e.cluster for e in examples])
     for i in clusters:
         close_counter = max(examples, key=lambda e, i=i: cluster_score(e, i))
-        # check if actually is (since call could have been off)
+        # check if actually is (since call could have been zero)
         if cluster_score(close_counter, i):
             result.append(close_counter)
 
