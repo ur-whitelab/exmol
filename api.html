@@ -159,66 +159,6 @@
             
   <div class="section" id="module-exmol.exmol">
 <span id="api"></span><h1>API<a class="headerlink" href="#module-exmol.exmol" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="exmol.exmol.Example">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selfies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yhat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.Example" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example of a molecule</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.cluster">
-<span class="sig-name descname"><span class="pre">cluster</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#exmol.exmol.Example.cluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index of cluster, can be -1 for no cluster</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.index">
-<span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#exmol.exmol.Example.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index relative to other examples</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.is_origin">
-<span class="sig-name descname"><span class="pre">is_origin</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#exmol.exmol.Example.is_origin" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if base</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.label">
-<span class="sig-name descname"><span class="pre">label</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#exmol.exmol.Example.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Label for this example</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.position">
-<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><span class="pre">numpy.ndarray</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#exmol.exmol.Example.position" title="Permalink to this definition">¶</a></dt>
-<dd><p>PCA projected position from similarity</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.selfies">
-<span class="sig-name descname"><span class="pre">selfies</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#exmol.exmol.Example.selfies" title="Permalink to this definition">¶</a></dt>
-<dd><p>SELFIES for molecule, as output from <a class="reference external" href="https://selfies.readthedocs.io/en/latest/selfies.html#selfies.encoder" title="(in selfies)"><code class="xref py py-func docutils literal notranslate"><span class="pre">selfies.encoder()</span></code></a></p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.similarity">
-<span class="sig-name descname"><span class="pre">similarity</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#exmol.exmol.Example.similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tanimoto similarity relative to base</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.smiles">
-<span class="sig-name descname"><span class="pre">smiles</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#exmol.exmol.Example.smiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>SMILES string for molecule</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="exmol.exmol.Example.yhat">
-<span class="sig-name descname"><span class="pre">yhat</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#exmol.exmol.Example.yhat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Output of model function</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.exmol.cf_explain">
 <span class="sig-name descname"><span class="pre">cf_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.cf_explain" title="Permalink to this definition">¶</a></dt>
@@ -226,12 +166,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Output from <a class="reference internal" href="#exmol.exmol.sample_space" title="exmol.exmol.sample_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample_space()</span></code></a></p></li>
+<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]) – Output from <a class="reference internal" href="#exmol.exmol.sample_space" title="exmol.exmol.sample_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample_space()</span></code></a></p></li>
 <li><p><strong>nmols</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Desired number of molecules</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,33 +189,13 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="exmol.exmol.moldiff">
-<span class="sig-name descname"><span class="pre">moldiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.moldiff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compare the two rdkit molecules.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>template</strong> – template molecule</p></li>
-<li><p><strong>query</strong> – query molecule</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of modified atoms in query, list of modified bonds in query</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="exmol.exmol.plot_cf">
 <span class="sig-name descname"><span class="pre">plot_cf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(200,</span> <span class="pre">200)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.plot_cf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw the given set of Examples in a grid</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>exps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Small list of :obj:Example which will be drawn</p></li>
+<li><p><strong>exps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]) – Small list of :obj:Example which will be drawn</p></li>
 <li><p><strong>fig</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – Figure to plot onto</p></li>
 <li><p><strong>figure_kwargs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]) – kwargs to pass to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="(in Matplotlib v3.4.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt.figure</span></code></a></p></li>
 <li><p><strong>mol_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – size of rdkit molecule rendering, in pixles</p></li>
@@ -294,8 +214,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Large list of :obj:Example which make-up points</p></li>
-<li><p><strong>exps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Small list of :obj:Example which will be annotated</p></li>
+<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]) – Large list of :obj:Example which make-up points</p></li>
+<li><p><strong>exps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]) – Small list of :obj:Example which will be annotated</p></li>
 <li><p><strong>figure_kwargs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]) – kwargs to pass to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="(in Matplotlib v3.4.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt.figure</span></code></a></p></li>
 <li><p><strong>mol_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – size of rdkit molecule rendering, in pixles</p></li>
 <li><p><strong>highlight_clusters</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – if <cite>True</cite>, cluster indices are rendered instead of :obj:Example.yhat</p></li>
@@ -316,13 +236,13 @@ lower than base.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Output from <a class="reference internal" href="#exmol.exmol.sample_space" title="exmol.exmol.sample_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample_space()</span></code></a></p></li>
+<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]) – Output from <a class="reference internal" href="#exmol.exmol.sample_space" title="exmol.exmol.sample_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample_space()</span></code></a></p></li>
 <li><p><strong>delta</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – float or tuple of hi/lo indicating margin for what is counterfactual</p></li>
 <li><p><strong>nmols</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Desired number of molecules</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,25 +303,10 @@ lower than base.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of generated <a class="reference internal" href="#exmol.exmol.Example" title="exmol.exmol.Example"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Example</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="exmol.exmol.trim">
-<span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">im</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.trim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of whitespace trim</p>
-<p>credit: <a class="reference external" href="https://stackoverflow.com/a/10616717">https://stackoverflow.com/a/10616717</a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>im</strong> – PIL image</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>PIL image</p>
+<dd class="field-odd"><p>List of generated <code class="xref py py-obj docutils literal notranslate"><span class="pre">Example</span></code></p>
 </dd>
 </dl>
 </dd></dl>
