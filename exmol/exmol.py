@@ -1,54 +1,22 @@
 from rdkit.Chem import rdFMCS as MCS
 import requests
-from dataclasses import dataclass, asdict
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
 import math
-import random
 from . import stoned
+from .plot_utils import _mol_images, _image_scatter
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem.Draw import MolToImage as mol2img
 import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from typing import *
-import time
 import tqdm
 from ratelimit import limits, sleep_and_retry
-
-delete_color = mpl.colors.to_rgb("#F06060")
-modify_color = mpl.colors.to_rgb("#1BBC9B")
-
-
-@dataclass
-class Example:
-    """Example of a molecule"""
-
-    #: SMILES string for molecule
-    smiles: str
-    #: SELFIES for molecule, as output from :func:`selfies.encoder`
-    selfies: str
-    #: Tanimoto similarity relative to base
-    similarity: float
-    #: Output of model function
-    yhat: float
-    #: Index relative to other examples
-    index: int
-    #: PCA projected position from similarity
-    position: np.ndarray = None
-    #: True if base
-    is_origin: bool = False
-    #: Index of cluster, can be -1 for no cluster
-    cluster: int = 0
-    #: Label for this example
-    label: str = None
-
-    # to make it look nicer
-    def __str__(self):
-        return str(asdict(self))
+from .data import *
 
 
 def _fp_dist_matrix(smiles, fp_type, _pbar):
@@ -156,7 +124,9 @@ def run_stoned(
     # NOTE Do not think of returning selfies. They have duplicates
     return canon_smi_ls, canon_smi_ls_scores
 
-FIFTEEN_MINUTES=900
+
+FIFTEEN_MINUTES = 900
+
 
 @sleep_and_retry
 @limits(calls=50, period=FIFTEEN_MINUTES)
@@ -181,9 +151,9 @@ def run_chemed(
     url = f'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON'
     try:
         reply = requests.get(url, params={
-                         'Threshold': int(similarity), 'MaxRecords':num_samples},
-                             headers={'accept': 'text/json'},
-                            timeout=10)
+            'Threshold': int(similarity), 'MaxRecords': num_samples},
+            headers={'accept': 'text/json'},
+            timeout=10)
     except requests.exceptions.Timeout:
         print('Pubchem seems to be down right now ️☠️☠️')
         return [], []
@@ -191,25 +161,27 @@ def run_chemed(
         data = reply.json()
     except:
         return [], []
-    smiles = [d['CanonicalSMILES'] for d in data['PropertyTable']['Properties']]
+    smiles = [d['CanonicalSMILES']
+              for d in data['PropertyTable']['Properties']]
     smiles = set(smiles)
 
-    if _pbar: _pbar.set_description(f'Received {len(smiles)} similar molecules')
+    if _pbar:
+        _pbar.set_description(f'Received {len(smiles)} similar molecules')
 
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
     # drop Nones
-    smiles = [s for s,m in zip(smiles, mols) if m is not None]
+    smiles = [s for s, m in zip(smiles, mols) if m is not None]
     for m in mols:
         if m is None:
             continue
-        fp  = stoned.get_fingerprint(m, fp_type)
+        fp = stoned.get_fingerprint(m, fp_type)
         scores.append(stoned.TanimotoSimilarity(fp0, fp))
-        if _pbar: _pbar.update()
+        if _pbar:
+            _pbar.update()
     return smiles, scores
-
 
 
 def sample_space(
@@ -242,7 +214,7 @@ def sample_space(
 
         def batched_f(sm, se):
             return np.array([f(smi, sei) for smi, sei in zip(sm, se)])
-    
+
     origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
@@ -428,42 +400,6 @@ def rcf_explain(
     return examples[:1] + lresult + hresult
 
 
-def _mol_images(exps, mol_size, fontsize):
-    if len(exps) == 0:
-        return []
-    # get aligned images
-    ms = [smi2mol(e.smiles) for e in exps]
-    dos = rdkit.Chem.Draw.MolDrawOptions()
-    dos.useBWAtomPalette()
-    dos.minFontSize = fontsize
-    rdkit.Chem.AllChem.Compute2DCoords(ms[0])
-    imgs = []
-    for m in ms[1:]:
-        rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-            m, ms[0], acceptFailure=True
-        )
-        aidx, bidx = moldiff(ms[0], m)
-        # if it is too large, we ignore it
-        # if len(aidx) > 8:
-        #    aidx = []
-        #    bidx = []
-        imgs.append(
-            mol2img(
-                m,
-                size=mol_size,
-                options=dos,
-                highlightAtoms=aidx,
-                highlightBonds=bidx,
-                highlightColor=modify_color if len(bidx) > 0 else delete_color,
-            )
-        )
-    rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-        ms[0], ms[1], acceptFailure=True
-    )
-    imgs.insert(0, mol2img(ms[0], size=mol_size, options=dos))
-    return imgs
-
-
 def plot_space(
     examples: List[Example],
     exps: List[Example],
@@ -530,45 +466,9 @@ def plot_space(
         else:
             titles.append("Base")
             colors.append(base_color)
-    _image_scatter(x, y, imgs, titles, colors, plt.gca(), offset=offset)
+    _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
-
-
-def _nearest_spiral_layout(x, y, offset):
-    # make spiral
-    angles = np.linspace(-np.pi, np.pi, len(x) + 1 + offset)[offset:]
-    coords = np.stack((np.cos(angles), np.sin(angles)), -1)
-    order = np.argsort(np.arctan2(y, x))
-    return coords[order]
-
-
-def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
-
-    box_coords = _nearest_spiral_layout(x, y, offset)
-    bbs = []
-    for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
-        # add transparency
-        im = trim(im)
-        img_data = np.asarray(im)
-        img_box = OffsetImage(img_data)
-        title_box = TextArea(t)
-        packed = VPacker(children=[img_box, title_box],
-                         pad=0, sep=4, align="center")
-        bb = AnnotationBbox(
-            packed,
-            (x0, y0),
-            frameon=True,
-            xybox=box_coords[i] + 0.5,
-            arrowprops=dict(arrowstyle="->", edgecolor="black"),
-            pad=0.3,
-            boxcoords="axes fraction",
-            bboxprops=dict(edgecolor=c),
-        )
-        ax.add_artist(bb)
-        bbs.append(bb)
-    return bbs
 
 
 def plot_cf(
@@ -601,7 +501,7 @@ def plot_cf(
         C = math.ceil(len(imgs) / R)
     if fig is None:
         if figure_kwargs is None:
-            figure_kwargs = {'figsize': (12,8)}
+            figure_kwargs = {'figsize': (12, 8)}
         fig, axs = plt.subplots(R, C, **figure_kwargs)
     else:
         axs = fig.subplots(R, C)
@@ -610,66 +510,9 @@ def plot_cf(
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"
         title += f"\nf(x) = {e.yhat:.3f}"
         axs[i].set_title(title)
-        axs[i].imshow(np.asarray(img))
+        axs[i].imshow(np.asarray(img), gid=f'rdkit-img-{i}')
         axs[i].axis("off")
     for j in range(i, C * R):
         axs[j].axis("off")
         axs[j].set_facecolor("white")
     plt.tight_layout()
-
-
-def moldiff(template, query) -> Tuple[List[int], List[int]]:
-    """Compare the two rdkit molecules.
-
-    :param template: template molecule
-    :param query: query molecule
-    :return: list of modified atoms in query, list of modified bonds in query
-    """
-    r = MCS.FindMCS([template, query])
-    substructure = rdkit.Chem.MolFromSmarts(r.smartsString)
-    raw_match = query.GetSubstructMatches(substructure)
-    template_match = template.GetSubstructMatches(substructure)
-    # flatten it
-    match = list(raw_match[0])
-    template_match = list(template_match[0])
-
-    # need to invert match to get diffs
-    inv_match = [i for i in range(query.GetNumAtoms()) if i not in match]
-
-    # get bonds
-    bond_match = []
-    for b in query.GetBonds():
-        if b.GetBeginAtomIdx() in inv_match or b.GetEndAtomIdx() in inv_match:
-            bond_match.append(b.GetIdx())
-
-    # now get bonding changes from deletion
-
-    def neigh_hash(a):
-        return "".join(sorted([n.GetSymbol() for n in a.GetNeighbors()]))
-
-    for ti, qi in zip(template_match, match):
-        if neigh_hash(template.GetAtomWithIdx(ti)) != neigh_hash(
-            query.GetAtomWithIdx(qi)
-        ):
-            inv_match.append(qi)
-
-    return inv_match, bond_match
-
-
-def trim(im):
-    """Implementation of whitespace trim
-
-    credit: https://stackoverflow.com/a/10616717
-
-    :param im: PIL image
-    :return: PIL image
-    """
-    from PIL import Image, ImageChops
-
-    # https://stackoverflow.com/a/10616717
-    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
-    diff = ImageChops.difference(im, bg)
-    diff = ImageChops.add(diff, diff, 2.0, -100)
-    bbox = diff.getbbox()
-    if bbox:
-        return im.crop(bbox)
