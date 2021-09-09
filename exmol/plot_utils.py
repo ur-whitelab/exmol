@@ -31,29 +31,6 @@ def _extract_loc(e):
     return min(x), min(y), max(x) - min(x), max(y) - min(y)
 
 
-def _plot_mol_descriptors(exps, beta, mol_size):
-    if len(exps) == 0:
-        return []
-    # get bar plots for descriptor t_stats
-    mol_size = (mol_size[1]/100, mol_size[0]/100)
-    desc = np.array([list(e.descriptors) * beta for e in exps])
-    print(desc.shape)
-    desc_plots = []
-    cmap = plt.get_cmap("Set3", 10)
-    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    fig = plt.figure(figsize=mol_size)
-    rows = len(desc)//2 + 1
-    columns = len(desc)//2 + 1
-    for i, d in enumerate(desc):
-        std_d = (d - np.mean(d))/(np.max(d) - np.min(d))
-        ax = fig.add_subplot(rows, columns, i+1)
-        ax.axvline(x=0, color='grey')
-        ax.barh(range(len(d)), std_d, height=0.5, color=colors)
-        # ax.yticks([])
-        desc_plots.append(ax)
-    return desc_plots
-
-
 def rewrite_svg(svg, rdict):
     ns = "http://www.w3.org/2000/svg"
     root, idmap = ET.XMLID(svg)
@@ -94,16 +71,21 @@ def rewrite_svg(svg, rdict):
     return ET.tostring(root, encoding="unicode", method='xml')
 
 
-def _descriptor_layout(size):
+def _descriptor_layout(ds, size):
     # Somehow SVG uses 72 dpi no matter what.
     # Add a bit of margin
     fig = plt.figure(
         figsize=(size[0] / 72 * 1.1, size[0] / 72 * 1.1), constrained_layout=True)
-    ax_dict = fig.subplot_mosaic('BAAA')
+    ax_dict = fig.subplot_mosaic('BBAAA')
     r = Rectangle((0, 0), 1, 1)
     ax_dict['A'].add_patch(r)
     r.set_gid('mol-holder')
-    ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
+    # ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
+    cmap = plt.get_cmap("Set3", 10)
+    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
+    std_d = (ds - np.mean(ds))/(np.max(ds) - np.min(ds))
+    ax_dict['B'].axvline(x=0, color='grey')
+    ax_dict['B'].barh(range(len(ds)), std_d, color=colors)
     ax_dict['A'].axis('off')
 
 
@@ -124,7 +106,8 @@ def insert_svg(exps: List[Example],
     if descriptors:
         for i in range(len(mol_svgs)):
             ms = mol_svgs[i]
-            _descriptor_layout(size)
+            ds = list(exps[i].descriptors.tstats)
+            _descriptor_layout(ds, size)
             rsvg = mpl2svg()
             mol_svgs[i] = rewrite_svg(rsvg, {'mol-holder': (ms, mol_size)})
 

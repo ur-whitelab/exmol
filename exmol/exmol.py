@@ -60,14 +60,15 @@ def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Exa
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
     names = tuple(d.description() for d in _calculator.descriptors)
-    # print(names)
     for e, c in zip(examples, _calculator.map(mols, quiet=True)):
-        e.descriptors = tuple(v for v in c.values())
-        e.descriptors_names = names
+        descriptors = tuple(v for v in c.values())
+        descriptors_names = names
+        e.descriptors = Descriptors(descriptors=descriptors, 
+                                    descriptor_names=descriptors_names)
     # MACCS Keys
     fps = [list(MACCSkeys.GenMACCSKeys(m).ToBitString()) for m in mols]
     imp_feats = np.array([[i for i in range(167) if j[i] == '1'] for j in fps])
-    print(imp_feats)
+    # print(imp_feats)
     return examples
 
 
@@ -393,11 +394,11 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
     except TypeError:
         # descriptors need to be calculated
         examples = get_descriptors(examples)
-        M = len(examples[-1].descriptors)
+        M = len(examples[-1].descriptors.descriptors)
     if len(examples) <= M:
         raise ValueError(
             f'LIME requires more than {M} examples. Maybe you passed counterfactuals accidentally?')
-    x_mat = np.array([list(e.descriptors)
+    x_mat = np.array([list(e.descriptors.descriptors)
                       for e in examples]).reshape(len(examples), -1)
     # remove zero variance columns
     y = np.array([e.yhat for e in examples]).reshape(
@@ -413,6 +414,9 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
                                       size=x_mat.shape)) * w[:, np.newaxis]
     xtinv = np.linalg.inv(noisey_x_mat.T @ noisey_x_mat)
     beta = xtinv @ x_mat.T @ (y * w)
+    # compute tstats for each example
+    for e in examples:
+        e.descriptors.tstats = e.descriptors.descriptors * beta
     # compute standard error in beta
     yhat = x_mat @ beta
     resids = yhat - y
@@ -421,8 +425,8 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
     tstat = np.sqrt(beta**2 / np.diag(se2_beta))
-    # Return tstats of the space and beta (feature weights) which are the fit
-    return tstat, x_mat, beta
+    # Return tstats of the space and beta (feature weights) which are the fits
+    return tstat, beta
 
 
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
@@ -490,7 +494,6 @@ def plot_space(
     offset: int = 0,
     ax: Any = None,
     plot_descriptors: bool = False,
-    beta: np.ndarray = None
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -504,10 +507,6 @@ def plot_space(
     :param fig: axis onto which to plot
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
-    if plot_descriptors:
-        if beta is None:
-            raise ValueError('Need to give beta to calculate t_stats')
-        desc_plots = _plot_mol_descriptors(exps, beta, mol_size)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"

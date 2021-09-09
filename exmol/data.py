@@ -11,7 +11,7 @@ class Descriptors:
     # Descriptor value
     descriptor_names: tuple
     # t_stats for each molecule
-    t_stats: tuple
+    tstats: tuple = ()
 
 
 @dataclass
@@ -36,6 +36,8 @@ class Example:
     cluster: int = 0
     #: Label for this example
     label: str = None
+    #: Descriptors for this example
+    descriptors: Descriptors = None
 
     # to make it look nicer
     def __str__(self):
