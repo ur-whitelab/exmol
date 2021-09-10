@@ -4,6 +4,7 @@ from rdkit.Chem import MolToSmiles as mol2smi
 import selfies as sf
 import numpy as np
 
+
 def test_version():
     assert exmol.__version__
 
@@ -78,6 +79,17 @@ def test_sample_preset():
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
 
+def test_performance():
+    def model(s, se):
+        return int("F" in s)
+
+    exps = exmol.sample_space(
+        "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False)
+    assert len(exps) > 2000
+    cfs = exmol.cf_explain(exps)
+    assert cfs[1].similarity > 0.8
+
+
 def test_sample_chem():
     def model(s, se):
         return int("N" in s)
@@ -149,12 +161,12 @@ def test_compare_img():
     r, _ = exmol.moldiff(m1, m2)
     assert len(r) > 0
 
+
 def test_corrupt_smiles():
     def model(s, se):
         return int("N" in s)
 
     badsmi = 'C/C=C/C(=O)C1CCC(C=C1C)(C)C'
-    explanation = exmol.sample_space(badsmi, model, preset="narrow", batched=False)      
+    explanation = exmol.sample_space(
+        badsmi, model, preset="narrow", batched=False)
     assert ~np.isnan(explanation[0].yhat)
-    
-
