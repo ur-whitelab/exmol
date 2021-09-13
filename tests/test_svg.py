@@ -6,60 +6,6 @@ import exmol
 import io
 
 
-def draw_svg(mol, width=300, height=300):
-    drawer = Chem.Draw.rdMolDraw2D.MolDraw2DSVG(width, height)
-    drawer.drawOptions().bgColor = None
-    drawer.DrawMolecule(mol)
-    drawer.FinishDrawing()
-    svg = drawer.GetDrawingText()
-    return svg
-
-
-def test_replace_svg():
-    from matplotlib.patches import Rectangle
-    from matplotlib.offsetbox import (DrawingArea,
-                                      AnnotationBbox)
-    mol = Chem.MolFromSmiles(
-        'O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4')
-    msvg = draw_svg(mol, 300, 300)
-
-    fig, ax = plt.subplots()
-    p = Rectangle((0, 0), 50, 50)
-    offsetbox = DrawingArea(50, 50)
-    offsetbox.add_artist(p)
-
-    ab = AnnotationBbox(offsetbox, (0.5, 0.5))
-
-    ax.add_artist(ab)
-    p.set_gid('offset_box_0')
-
-    svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg,(300,300))})
-
-
-def test_replace_svg_img():
-    from rdkit.Chem.Draw import MolToImage as mol2img
-    from matplotlib.patches import Rectangle
-    from matplotlib.offsetbox import (OffsetImage,
-                                      AnnotationBbox)
-    mol = Chem.MolFromSmiles(
-        'O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4')
-    msvg = draw_svg(mol, 300, 300)
-    img = mol2img(mol, width=300, height=300)
-
-    fig, ax = plt.subplots()
-    offsetbox = OffsetImage(img, zoom=50 / 300)
-
-    ab = AnnotationBbox(offsetbox, (0.5, 0.5))
-
-    ax.add_artist(ab)
-    # differrent for images
-    offsetbox.properties()['children'][0].set_gid('offset_box_0')
-
-    svg = exmol.plot_utils.mpl2svg()
-    svg = exmol.plot_utils.rewrite_svg(svg, {'offset_box_0': (msvg, (300,300))})
-
-
 def test_insert_svg():
     def model(s, se):
         return int("N" in s)
@@ -69,6 +15,8 @@ def test_insert_svg():
     exmol.plot_cf(exps)
     exmol.plot_space(samples, exps)
     svg = exmol.insert_svg(exps)
+    with open('test-space.svg', 'w') as f:
+        f.write(svg)
 
 
 def test_insert_svg_long():
@@ -81,9 +29,8 @@ def test_insert_svg_long():
     exmol.plot_cf(exps)
     exmol.plot_space(samples, exps, mol_size=(300, 200))
     svg = exmol.insert_svg(exps, mol_size=(300, 200))
-    # for i, s in enumerate(svg):
-    #    with open(f'test{i}.svg', 'w') as f:
-    #        f.write(s)
+    with open('test-long.svg', 'w') as f:
+        f.write(svg)
 
 
 def test_insert_svg_grid():

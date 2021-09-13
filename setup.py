@@ -17,7 +17,7 @@ setup(
     license="MIT",
     packages=["exmol", "exmol.stoned"],
     install_requires=["selfies", "numpy", "requests", "tqdm", "ratelimit",
-                      "rdkit-pypi", "matplotlib", "scikit-learn"],
+                      "rdkit-pypi", "scikit-learn", "skunk >= 0.4.0"],
     test_suite="tests",
     long_description=long_description,
     long_description_content_type="text/markdown",

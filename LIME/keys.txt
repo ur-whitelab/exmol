@@ -1,176 +1,167 @@
-# 	Description
-0	ISOTOPE
-1	Atomic no 104
-2	Group IVa,Va,VIa Rows 4-6
-3	actinide
-4	Group IIIB,IVB (Sc...)
-5	Lanthanide
-6	Group VB,VIB,VIIB
-7	QAAA@1 Heteroatom with atleast 3 neighbors
-8	Group VIII (Fe...)
-9	Group IIa (Alkaline earth)
-10	4M Ring
-11	Group IB,IIB (Cu..)
-12	ON(C)C
-13	S-S
-14	OC(O)O
-15	QAA@1
-16	
-17	Group IIIA (B...)
-18	7M Ring
-19	
-20	C=C(Q)Q
-21	3M Ring
-22	NC(O)O
-23	N-O
-24	NC(N)N
-25	C$=C($A)$A
-26	I
-27	QCH2Q
-28	P
-29	CQ(C)(C)A
-30	QX
-31	CSN
-32	NS
-33	CH2=A
-34	Group IA (Alkali Metal)
-35	S Heterocycle
-36	NC(O)N
-37	NC(C)N
-38	OS(O)O
-39	S-O
-40	CTN
-41	F
-42	QHAQH
-43	OTHER
-44	C=CN
-45	BR
-46	SAN
-47	OQ(O)O
-48	CHARGE
-49	C=C(C)C
-50	CSO
-51	NN
-52	QHAAAQH
-53	QHAAQH
-54	
-55	ON(O)C
-56	O Heterocycle
-57	QSQ
-58	Snot%A%A
-59	S=O
-60	AS(A)A
-61	A$!A$A
-62	N=O
-63	A$A!S
-64	C%N
-65	CC(C)(C)A
-66	QS
-67	QHQH (&...) SPEC Incomplete
-68	QQH
-69	QNQ
-70	NO
-71	OAAO
-72	S=A
-73	CH3ACH3
-74	A!N$A
-75	C=C(A)A
-76	NAN
-77	C=N
-78	NAAN
-79	NAAAN
-80	SA(A)A
-81	ACH2QH
-82	QAAAA@1
-83	
-84	CN(C)C
-85	CH2QCH2
-86	X!A$A
-87	S
-88	OAAAO
-89	
-90	
-91	QHAACH2A
-92	
-93	
-94	QHAAACH2A
-95	OC(N)C
-96	QCH3
-97	QN
-98	NAAO
-99	5 M ring
-100	NAAAO
-101	QAAAAA@1
-102	C=C
-103	ACH2N
-104	
-105	
-106	8M Ring or larger. This only handles up to ring sizes of 14
-107	QO
-108	CL
-109	QHACH2A
-110	A$A($A)$A
-111	QA(Q)Q
-112	XA(A)A
-113	CH3AAACH2A
-114	ACH2O
-115	NCO
-116	NACH2A
-117	AA(A)(A)A
-118	Onot%A%A
-119	CH3CH2A
-120	CH3ACH2A
-121	CH3AACH2A
-122	NAO
-123	ACH2CH2A > 1
-124	N=A
-125	Heterocyclic atom > 1 (&...) Spec Incomplete
-126	N Heterocycle
-127	AN(A)A
-128	OCO
-129	QQ
-130	Aromatic Ring > 1
-131	A!O!A
-132	A$A!O > 1 (&...) Spec Incomplete
-133	
-134	
-135	ACH2AAACH2A
-136	
-137	ACH2AACH2A
-138	QQ > 1 (&...)  Spec Incomplete
-139	QH > 1
-140	OACH2A
-141	A$A!N
-142	X (HALOGEN)
-143	Nnot%A%A
-144	O=A>1
-145	Heterocycle
-146	QCH2A>1 (&...) Spec Incomplete
-147	OH
-148	O > 3 (&...) Spec Incomplete
-149	CH3 > 2  (&...) Spec Incomplete
-150	N > 1
-151	A$A!O
-152	Anot%A%Anot%A
-153	6M ring > 1
-154	O > 2
-155	ACH2CH2A
-156	AQ(A)A
-157	CH3 > 1
-158	A!A$A!A
-159	NH
-160	OC(C)C
-161	QCH2A
-162	C=O
-163	A!CH2!A
-164	NA(A)A
-165	C-O
-166	C-N
-167	O>1
-168	
-169	N
-170	Aromatic
-171	6M Ring
-172	O
-173	Ring
-174	Fragments  FIX: this can't be done in SMARTS
+ID	KeyDescription
+0	 Is it an ISOTOPE?
+1	 Is it Element 104 (Rf)?
+2	 Is it an element from Group IVa,Va,VIa Rows 4-6?
+3	 Is there an actinide?
+4	 Is it an element from Group IIIB,IVB (Sc...)?
+5	 Is there a Lanthanide?
+6	 Is it an element from Group VB,VIB,VIIB?
+7	 Is there a Heteroatom with atleast 3 neighbors and a ring linkage?
+8	 Is it an element from Group VIII (Fe...)?
+9	 Is it an element from Group IIa (Alkaline earth)?
+10	 Is there a 4M Ring?
+11	 Is it an element from Group IB,IIB (Cu..)?
+12	 Is there a nitrogen bonded to two carbon and one oxygen neighbors?
+13	 Is there a Disulfide bond?
+14	 Is there a Carbon with three oxygen neighbors?
+15	 Is tehre a Heteroatom bonded to atleast 2 neighbors in a ring? 
+16	 Is there a Carbon-carbon triple bond?
+17	 Is it an element from Group IIIA (B...)? 
+18	 Is there a 7M Ring?
+19	 Is there a Si?
+20	 C=C(Q)Q - Carbon double bond with carbon and two heteroatom neighbors
+21	 Is there a 3M Ring?
+22	 Is tehre a Carbon bonded to two oxygen and one nitrogen? 
+23	 Is there a Nitrogen-oxygen bonded with a single bond?
+24	 Is there a Carbon bonded with three nitrogen neighbors?
+25	 C$=C($A)$A - 
+26	 Is there an I?
+27	 Is there a hydrocarbon binded to two heteroatoms?
+28	 Is there a P?
+29	 CQ(C)(C)A - Is there a heteroatom with three carbon neighbors?
+30	 Is there a Heteroatom connected to a halogen?
+31	 Is there Carbon bonded to sulphur and nitrogen?
+32	 Is there a Nitrogen - sulfur bond?
+33	 Is there a Methylene group double bonded to another atom?
+34	 Is it an element from Group IA (Alkali Metal)?
+35	 Is it a Sulfur Heterocycle?
+36	 Is there a Nitrogen bonded to a carbon, oxygen and another nitrogen neighbor? 
+37	 Is there a Nitrogen bonded to two carbon neighbors and another Nitrogen neighbor?
+38	 Is tehre a Sulfur bonded to three oxygen neighbors?
+39	 Is there a Sulfur bonded to an oxygen?
+40	 Is there a Carbon nitrogen triple bond (cyanide)?
+41	 Is there a F?
+42	 Is there an atom with two heteroatom neighbors that are bonded to hydrogen?
+43	 Is there an atom other than H, C, N, O, Si, P, S, Cl, Br, I?
+44	 Is there a Carbon bonded to nitrogen and also bonded to carbon by a double bond?
+45	 Is there a Br?
+46	 Is there an atom bonded to both a sulfur and a nitrogen?
+47	 Is there a Heteroatom bonded to three oxygens?
+48	 Is there a charged atom/group?
+49	 Is there a Carbon double bonded to carbon and bonded to two other carbons?
+50	 Is there a Sulfur atom connected to both a carbon and an oxygen?
+51	 Is there a Nitrogen-nitrogen bond?
+52	 Are there two heteroatoms, both attached to at least one hydrogen and seperated by three atoms?
+53	 Are there two heteroatoms, both attached to at least one hydrogen and seperated by two atoms?
+54	 Is there a sulfur with two oxygen neighbors?
+55	 Is there a nutrogen with two oxygen and one carbon neighbor?
+56	 Is there an O-Heterocycle?
+57	 Is there a sulfur bonded to two heteroatoms?  
+58	 Is there an atom connected to sulfur by a non-aromatic ring bond and connected to another atom aromatically?  
+59	 Is there a sulfur-oxygen double bond?
+60	 Is there a sulfur with at least three neighbors?
+61	 Is there an atom at a ring/chain boundary? When a comparison is done with another atom the path passes through the chain bond.
+62	 Is there a nitrogen-oxygen double bond?
+63	 Is there an atom connected to another atom an aromatic bond and connected to a sulfur by a non-aromatic bond?
+64	 Is there an aromatic bond between an aromatic carbon and aromatic nitrogen?
+65	 Is there a carbon with 3 carbon neighbors and bonded to a forth atom?
+66	 Is there a heteroatom bonded to sulfur?
+67	 Are there two heteroatoms with atleast one hydrogen neighbor bonded to each other?
+68	 Is there a heteroatom with at least one hydrogen neighbor and bonded to another heteroatom? 
+69	 Is there a nitrogen with two heteroatom neighbors?
+70	 Is there a nitrogen-oxygen bond?
+71	 Is tehre an oxygen seperated by any 3 bonds from another oxygen?
+72	 Is there a sulfur double bonded to another atom?
+73	 Is there an atom bonded to two methyl groups? 
+74	 Is there a nitrogen bonded to one atom with a ring bond and another atom with a non-ring bond? 
+75	 C=C(A)A
+76	 NAN
+77	 C=N
+78	 NAAN
+79	 NAAAN
+80	 SA(A)A
+81	 ACH2QH
+82	 QAAAA@1
+83	NH2
+84	 CN(C)C
+85	 CH2QCH2
+86	 X!A$A
+87	 S
+88	 OAAAO
+89	 QHAACH2A
+90	 QHAAACH2A
+91	 OC(N)C
+92	 QCH3
+93	 QN
+94	 NAAO
+95	 5M ring
+96	 NAAAO
+97	 QAAAAA@1
+98	 C=C
+99	 ACH2N - 
+100	 Is there a 8M - 14M Ring ?
+101	 QO - Is there a heteroatom bonded to an oxygen by a single or double bond?
+102	 CL - Is there a Chlorine atom?
+103	 QHACH2A - Is there a heteroatom and a methylene group?
+104	 A$A($A)$A - Does an atom have more than two ring bonds?
+105	 QA(Q)Q - Are there at least three heteroatoms?
+106	 XA(A)A - Is there at least one halogen?
+107	 CH3AAACH2A - Are there at least two atoms with hydrocarbon neighbors?
+108	 ACH2O - Does the atom have at least one atom with a hydrocarbon neighbor and an oxygen?
+109	 NCO
+110	 NACH2A
+111	 AA(A)(A)A
+112	 Onot%A%A
+113	 CH3CH2A
+114	 CH3ACH2A
+115	 CH3AACH2A
+116	 NAO
+117	 ACH2CH2A > 1
+118	 N=A
+119	 Heterocyclic atom > 1 (&...) Spec Incomplete
+120	 N Heterocycle
+121	 AN(A)A
+122	 OCO
+123	 QQ
+124	 Aromatic Ring > 1 - Are there more than one aromatic rings?
+125	 A!O!A
+126	 A$A!O > 1 (&...) Spec Incomplete
+127	 ACH2AAACH2A
+128	 ACH2AACH2A
+129	 QQ > 1 (&...)  Spec Incomplete
+130	 QH > 1
+131	 OACH2A
+132	 A$A!N
+133	 X (HALOGEN)
+134	 Nnot%A%A
+135	 O=A>1
+136	 Heterocycle
+137	 QCH2A>1 - More than one hydrocarbon groups with two neighbors 
+138	 OH
+139	 O > 3 (&...) Spec Incomplete
+140	 CH3 > 2  (&...) Spec Incomplete
+141	 N > 1 - More than one nitrogen?
+142	 A$A!O
+143	 Anot%A%Anot%A - atom at an aromatic/non-aromatic boundary
+144	 6M ring > 1 - Are there more than one 6M rings?
+145	 O > 2 - Are there more than two oxygens? 
+146	 ACH2CH2A
+147	 AQ(A)A - Atom with three neighbors, at least one heteroatom
+148	 CH3 > 1
+149	 A!A$A!A
+150	 NH
+151	 OC(C)C
+152	 QCH2A - Hydrocarbon with two neighbors with at least one heteroatom
+153	 C=O - Carbon connected to oxygen by a double bond
+154	 A!CH2!A - Hydrocarbon with two neighbors connected by a non-ring bond?
+155	 NA(A)A - Is there a nitrogen with at least three neighbors?
+156	 C-O - Is a Carbon bonded to Oxygen?
+157	 C-N - Is a Carbon bonded to Nitrogen?
+158	 O>1 - Are there more than one oxygen atoms?
+159	 CH3 - Is it a methyl group?
+160	 N - Is there a nitrogen?
+161	 Is it an Aromatic atom?
+162	 Is there a 6M Ring?
+163	 O _ Is there an Oxygen?
+164	 Ring - Is it an atom in a ring?
+165	 Fragments  FIX: this can't be done in SMARTS

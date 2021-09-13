@@ -79,6 +79,17 @@ def test_sample_preset():
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
 
+def test_performance():
+    def model(s, se):
+        return int("F" in s)
+
+    exps = exmol.sample_space(
+        "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False)
+    assert len(exps) > 2000
+    cfs = exmol.cf_explain(exps)
+    assert cfs[1].similarity > 0.8
+
+
 def test_sample_chem():
     def model(s, se):
         return int("N" in s)
