@@ -81,11 +81,11 @@ def _descriptor_layout(ds, size):
     ax_dict['A'].add_patch(r)
     r.set_gid('mol-holder')
     # ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
-    cmap = plt.get_cmap("Set3", 10)
+    cmap = plt.get_cmap("gist_rainbow", 50)
     colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    std_d = (ds - np.mean(ds))/(np.max(ds) - np.min(ds))
-    ax_dict['B'].axvline(x=0, color='grey')
-    ax_dict['B'].barh(range(len(ds)), std_d, color=colors)
+    ax_dict['B'].axvline(x=0, color='grey', linewidth=0.5)
+    ax_dict['B'].barh(range(len(ds)), ds, color=colors)
+    ax_dict['B'].set_yticks([])
     ax_dict['A'].axis('off')
 
 

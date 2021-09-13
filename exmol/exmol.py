@@ -60,15 +60,12 @@ def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Exa
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
     names = tuple(d.description() for d in _calculator.descriptors)
-    for e, c in zip(examples, _calculator.map(mols, quiet=True)):
-        descriptors = tuple(v for v in c.values())
-        descriptors_names = names
+    for e, m, c in zip(examples, mols, _calculator.map(mols, quiet=True)):
+        fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
+        descriptors = tuple(int(i) for i in fps)
+        descriptor_names = ()
         e.descriptors = Descriptors(descriptors=descriptors, 
-                                    descriptor_names=descriptors_names)
-    # MACCS Keys
-    fps = [list(MACCSkeys.GenMACCSKeys(m).ToBitString()) for m in mols]
-    imp_feats = np.array([[i for i in range(167) if j[i] == '1'] for j in fps])
-    # print(imp_feats)
+                                    descriptor_names=descriptor_names)
     return examples
 
 
@@ -395,13 +392,17 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
         # descriptors need to be calculated
         examples = get_descriptors(examples)
         M = len(examples[-1].descriptors.descriptors)
-    if len(examples) <= M:
-        raise ValueError(
-            f'LIME requires more than {M} examples. Maybe you passed counterfactuals accidentally?')
-    x_mat = np.array([list(e.descriptors.descriptors)
+
+    # Consider the features to be difference from the base instance
+    for e in examples:
+        if e.is_origin:
+            x_base = np.array(list(e.descriptors.descriptors))
+            y_base = e.yhat
+    x_mat = np.array([list(np.subtract(x_base, e.descriptors.descriptors))
                       for e in examples]).reshape(len(examples), -1)
+    # Labels should also be a difference from base
     # remove zero variance columns
-    y = np.array([e.yhat for e in examples]).reshape(
+    y = np.array([y_base - e.yhat for e in examples]).reshape(
         len(examples)).astype(float)
     # sqrt to weights for lstq equation
     w = np.sqrt([e.similarity for e in examples])
@@ -414,9 +415,9 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
                                       size=x_mat.shape)) * w[:, np.newaxis]
     xtinv = np.linalg.inv(noisey_x_mat.T @ noisey_x_mat)
     beta = xtinv @ x_mat.T @ (y * w)
-    # compute tstats for each example
+    # compute tstats for each example as a difference from base
     for e in examples:
-        e.descriptors.tstats = e.descriptors.descriptors * beta
+        e.descriptors.tstats = np.subtract(x_base, e.descriptors.descriptors) * beta
     # compute standard error in beta
     yhat = x_mat @ beta
     resids = yhat - y
