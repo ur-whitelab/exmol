@@ -11,6 +11,7 @@ import rdkit.Chem
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from .data import *
+import skunk
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
@@ -30,46 +31,6 @@ def _extract_loc(e):
     return min(x), min(y), max(x) - min(x), max(y) - min(y)
 
 
-def rewrite_svg(svg, rdict):
-    ns = "http://www.w3.org/2000/svg"
-    root, idmap = ET.XMLID(svg)
-    parent_map = {c: p for p in root.iter() for c in p}
-    for rk, rvtup in rdict.items():
-        rv, size = rvtup
-        if rk in idmap:
-            e = idmap[rk]
-            # try to use id width/height
-            # case when we have image
-            if 'width' in e.attrib:
-                x, y = e.attrib['x'], -float(e.attrib['y'])
-                # make new node
-                # to hold things
-                new_e = ET.SubElement(
-                    parent_map[e], f'{{{ns}}}g', {'id': f'{rk}-g'})
-                parent_map[e].remove(e)
-                dx, dy = float(e.attrib['width']), float(e.attrib['height'])
-                #dx, dy = size
-                e = new_e
-            else:
-                # relying on there being a path object inside to give clue
-                # to size
-                c = list(e)[0]
-                x, y, dx, dy = _extract_loc(c)
-                e.remove(c)
-            # set attributes on SVG so loc and width/height are correct
-            rr = ET.fromstring(rv)
-            rr.attrib['x'] = str(x)
-            rr.attrib['y'] = str(y)
-            rr.attrib['width'] = str(dx)
-            rr.attrib['height'] = str(dy)
-            e.insert(0, rr)
-        else:
-            print('Warning, could not find', rk)
-            print(list(idmap.keys()))
-    ET.register_namespace("", ns)
-    return ET.tostring(root, encoding="unicode", method='xml')
-
-
 def insert_svg(exps: List[Example],
                mol_size: Tuple[int, int] = (200, 200)) -> str:
     """Replace rasterized image files with SVG versions of molecules
@@ -80,15 +41,9 @@ def insert_svg(exps: List[Example],
     """
     size = mol_size
     mol_svgs = _mol_images(exps, mol_size, 12, True)
-    svg = mpl2svg(bbox_inches='tight')
-    rewrites = {f'rdkit-img-{i}': (v, size) for i, v in enumerate(mol_svgs)}
-    return rewrite_svg(svg, rewrites)
-
-
-def mpl2svg(**kwargs):
-    with io.BytesIO() as output:
-        plt.savefig(output, format='svg', **kwargs)
-        return output.getvalue()
+    svg = skunk.pltsvg(bbox_inches="tight")
+    rewrites = {f'rdkit-img-{i}': v for i, v in enumerate(mol_svgs)}
+    return skunk.insert(rewrites, svg=svg)
 
 
 def trim(im):
@@ -125,7 +80,7 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
         # TODO Figure out how to put this back
         #im = trim(im)
         img_data = np.asarray(im)
-        img_box = OffsetImage(img_data)
+        img_box = skunk.ImageBox(f'rdkit-img-{i}', img_data)
         title_box = TextArea(t)
         packed = VPacker(children=[img_box, title_box],
                          pad=0, sep=4, align="center")
@@ -140,9 +95,6 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
             bboxprops=dict(edgecolor=c),
         )
         ax.add_artist(bb)
-
-        # add gid in case svg-rewrite
-        img_box.properties()['children'][0].set_gid(f'rdkit-img-{i}')
 
         bbs.append(bb)
     return bbs
