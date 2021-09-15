@@ -5,7 +5,7 @@ from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import selfies as sf
 import itertools
-import math
+import math, os
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter
 from rdkit.Chem import MolFromSmiles as smi2mol
@@ -48,25 +48,41 @@ def _make_calculator():
     return c
 
 
-def get_descriptors(examples: List[Example], mols: List[Any] = None) -> List[Example]:
+def get_descriptors(examples: List[Example], 
+                    descriptor_type: str = 'MACCS',
+                    mols: List[Any] = None) -> List[Example]:
     """Returns set of descriptors for passed examples
 
     :param examples: List of example
+    :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
-    global _calculator
-    if _calculator is None:
-        _calculator = _make_calculator()
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
-    names = tuple(d.description() for d in _calculator.descriptors)
-    for e, m, c in zip(examples, mols, _calculator.map(mols, quiet=True)):
-        fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
-        descriptors = tuple(int(i) for i in fps)
-        descriptor_names = ()
-        e.descriptors = Descriptors(descriptors=descriptors, 
-                                    descriptor_names=descriptor_names)
-    return examples
+    if descriptor_type == 'Classic':
+        global _calculator
+        if _calculator is None:
+            _calculator = _make_calculator()
+        names = tuple(d.description() for d in _calculator.descriptors)
+        for e, c in zip(examples, _calculator.map(mols, quiet=True)):
+            descriptors = tuple(v for v in c.values())
+            descriptor_names = names
+            e.descriptors = Descriptors(descriptors=descriptors, 
+                                        descriptor_names=descriptor_names)
+        return examples
+    elif descriptor_type == 'MACCS':
+        names = np.genfromtxt(os.path.join(os.path.dirname(__file__), 'MACCSkeys.txt'),
+                              delimiter='\t ', skip_header=1,
+                              usecols=[1], dtype=str)
+        for e, m in zip(examples, mols):
+            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
+            descriptors = tuple(int(i) for i in fps)
+            descriptor_names = names
+            e.descriptors = Descriptors(descriptors=descriptors, 
+                                        descriptor_names=descriptor_names)
+        return examples
+    else:
+        raise ValueError('Invalid descriptor string. Valid descriptor strings are \'Classic\' and \'MACCS\'.')
 
 
 def get_basic_alphabet() -> Set[str]:
@@ -383,26 +399,20 @@ def _select_examples(cond, examples, nmols):
     return list(filter(cond, result))
 
 
-def lime_explain(examples: List[Example]) -> np.ndarray:
+def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     # TODO: return something more useful
     try:
         # try last, since base may have had descriptors
         M = len(examples[-1].descriptors)
     except TypeError:
         # descriptors need to be calculated
-        examples = get_descriptors(examples)
+        examples = get_descriptors(examples, descriptor_type)
         M = len(examples[-1].descriptors.descriptors)
 
-    # Consider the features to be difference from the base instance
-    for e in examples:
-        if e.is_origin:
-            x_base = np.array(list(e.descriptors.descriptors))
-            y_base = e.yhat
-    x_mat = np.array([list(np.subtract(x_base, e.descriptors.descriptors))
+    x_mat = np.array([list(e.descriptors.descriptors)
                       for e in examples]).reshape(len(examples), -1)
-    # Labels should also be a difference from base
     # remove zero variance columns
-    y = np.array([y_base - e.yhat for e in examples]).reshape(
+    y = np.array([e.yhat for e in examples]).reshape(
         len(examples)).astype(float)
     # sqrt to weights for lstq equation
     w = np.sqrt([e.similarity for e in examples])
@@ -417,7 +427,7 @@ def lime_explain(examples: List[Example]) -> np.ndarray:
     beta = xtinv @ x_mat.T @ (y * w)
     # compute tstats for each example as a difference from base
     for e in examples:
-        e.descriptors.tstats = np.subtract(x_base, e.descriptors.descriptors) * beta
+        e.descriptors.tstats = e.descriptors.descriptors * beta
     # compute standard error in beta
     yhat = x_mat @ beta
     resids = yhat - y
