@@ -6,6 +6,7 @@ v0.4.0
 * Refactored code into files
 * Added SVG rewrite so mol structures are SVGs
 * SVGs are handled with skunks
+* Added cartoon style for scatter plot in plot_space
 
 
 v0.3.2 (2021-09-02)
