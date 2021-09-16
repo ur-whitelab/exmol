@@ -60,7 +60,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="paper/rf-space.svg" width="400">
+<img alt="chemical space" src="paper/rf-space.svg" width="600">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
