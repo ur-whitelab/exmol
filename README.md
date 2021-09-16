@@ -22,7 +22,7 @@ A counterfactual can explain a prediction by showing what would have to change i
 
 In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
-<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/counterfactual.png" width="600">
+<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/counterfactual.svg" width="400">
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
@@ -51,7 +51,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.png" width="600">
+<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.svg" width="400">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -60,7 +60,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-space.png" width="600">
+<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-space.svg" width="400">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
