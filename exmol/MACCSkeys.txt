@@ -11,157 +11,157 @@ ID	 KeyDescription
 9	 Is it an element from Group IIa (Alkaline earth)?
 10	 Is there a 4M Ring?
 11	 Is it an element from Group IB,IIB (Cu..)?
-12	 Is there a nitrogen bonded to two carbon and one oxygen neighbors?
-13	 Is there a Disulfide bond?
-14	 Is there a Carbon with three oxygen neighbors?
+12	 Is there a N bonded to two C and one O neighbors?
+13	 Is there a S-S bond?
+14	 Is there a C with three O neighbors?
 15	 Is tehre a Heteroatom bonded to atleast 2 neighbors in a ring? 
-16	 Is there a Carbon-carbon triple bond?
+16	 Is there a C#C (triple bond)?
 17	 Is it an element from Group IIIA (B...)? 
 18	 Is there a 7M Ring?
 19	 Is there a Si?
-20	 Is there a carbon bonded to another carbon by a double bond and also bonded to two heteroatom neighbors?
+20	 Is there a carbon double bonded to another carbon and also bonded to two heteroatom neighbors?
 21	 Is there a 3M Ring?
-22	 Is tehre a Carbon bonded to two oxygen and one nitrogen? 
-23	 Is there a Nitrogen-oxygen bonded with a single bond?
-24	 Is there a Carbon bonded with three nitrogen neighbors?
-25	 C$=C($A)$A - Is there a carbon in a ring double bond with another carbon that is bonded to two other neighbors by a ring bond?
+22	 Is there a C bonded to two O and one N? 
+23	 Is there a N-O single bond?
+24	 Is there a C bonded with three N neighbors?
+25	 Is there a carbon in a ring double bonded with another carbon that is bonded to two other neighbors by a ring bond?
 26	 Is there an I?
-27	 Is there a hydrocarbon binded to two heteroatoms?
+27	 Is there a CH2 group bonded to two heteroatoms?
 28	 Is there a P?
-29	 Is there a heteroatom bonded to at least four neighbors, three of which are carbons?
+29	 Is there a heteroatom bonded to at least four neighbors, three of which are C?
 30	 Is there a Heteroatom connected to a halogen?
-31	 Is there Carbon bonded to sulphur and nitrogen?
-32	 Is there a Nitrogen - sulfur bond?
-33	 Is there a Methylene carbon double bonded to another atom?
+31	 Is there C bonded to S and N?
+32	 Is there a N-S bond?
+33	 Is there a CH2 carbon double bonded to another atom?
 34	 Is it an element from Group IA (Alkali Metal)?
-35	 Is it a Sulfur Heterocycle?
-36	 Is there a Nitrogen bonded to a carbon, oxygen and another nitrogen neighbor? 
-37	 Is there a Nitrogen bonded to two carbon neighbors and another Nitrogen neighbor?
-38	 Is tehre a Sulfur bonded to three oxygen neighbors?
-39	 Is there a Sulfur bonded to an oxygen?
-40	 Is there a Carbon nitrogen triple bond (cyanide)?
+35	 Is it a S Heterocycle?
+36	 Is there a N bonded to a C, O and another N neighbor? 
+37	 Is there a N bonded to two C and one N neighbor?
+38	 Is there a S bonded to at least three O neighbors?
+39	 Is there a S-O bond?
+40	 Is there a C#N (cyanide group)?
 41	 Is there a F?
-42	 Is there an atom with two heteroatom neighbors that are bonded to hydrogen?
+42	 Is there an atom with two heteroatom neighbors that are bonded to H?
 43	 Is there an atom other than H, C, N, O, Si, P, S, Cl, Br, I?
-44	 Is there a Carbon bonded to nitrogen and also bonded to carbon by a double bond?
+44	 Is there a C bonded to N and also bonded to C by a double bond?
 45	 Is there a Br?
-46	 Is there an atom bonded to both a sulfur and a nitrogen?
-47	 Is there a Heteroatom bonded to three oxygens?
+46	 Is there an atom bonded to both S and N?
+47	 Is there a heteroatom bonded to three O?
 48	 Is there a charged atom/group?
-49	 Is there a Carbon double bonded to carbon and bonded to two other carbons?
-50	 Is there a Sulfur atom connected to both a carbon and an oxygen?
-51	 Is there a Nitrogen-nitrogen bond?
-52	 Are there two heteroatoms, both attached to at least one hydrogen and seperated by three atoms?
-53	 Are there two heteroatoms, both attached to at least one hydrogen and seperated by two atoms?
-54	 Is there a sulfur with two oxygen neighbors?
-55	 Is there a nutrogen with two oxygen and one carbon neighbor?
+49	 Is there a C double bonded to C and bonded to two other C atoms?
+50	 Is there a S atom connected to both C and O?
+51	 Is there a N-N bond?
+52	 Are there two heteroatoms, both attached to at least one H and seperated by any 4 bonds?
+53	 Are there two heteroatoms, both attached to at least one H and seperated by any 3 bonds?
+54	 Is there a S with two O neighbors?
+55	 Is there a N with two O and one C neighbor?
 56	 Is there an O-Heterocycle?
-57	 Is there a sulfur bonded to two heteroatoms?  
-58	 Is there an atom connected to sulfur by a non-aromatic ring bond and connected to another atom aromatically?  
-59	 Is there a sulfur-oxygen double bond?
-60	 Is there a sulfur with at least three neighbors?
+57	 Is there a S bonded to two heteroatoms?  
+58	 Is there an atom connected to S by a non-aromatic ring bond and connected to another atom aromatically?  
+59	 Is there a S=O double bond?
+60	 Is there a S with at least three neighbors?
 61	 Is there an atom at a ring/chain boundary? When a comparison is done with another atom the path passes through the chain bond.
-62	 Is there a nitrogen-oxygen double bond?
-63	 Is there an atom connected to another atom by an aromatic bond and connected to a sulfur by a non-aromatic bond?
-64	 Is there an aromatic bond between an aromatic carbon and aromatic nitrogen?
-65	 Is there a carbon with 3 carbon neighbors and bonded to a forth atom?
-66	 Is there a heteroatom bonded to sulfur?
-67	 Are there two heteroatoms with atleast one hydrogen neighbor bonded to each other?
-68	 Is there a heteroatom with at least one hydrogen neighbor and bonded to another heteroatom? 
-69	 Is there a nitrogen with two heteroatom neighbors?
-70	 Is there a nitrogen-oxygen bond?
-71	 Is there an oxygen seperated by any 3 bonds from another oxygen?
-72	 Is there a sulfur double bonded to another atom?
-73	 Is there an atom bonded to two methyl carbons? 
+62	 Is there a N=O double bond?
+63	 Is there an atom connected to another atom by an aromatic bond and connected to a S by a non-aromatic bond?
+64	 Is there an aromatic bond between an aromatic C and aromatic N?
+65	 Is there a C with 3 C neighbors and also bonded to a forth atom?
+66	 Is there a heteroatom bonded to S?
+67	 Are there two heteroatoms bonded to at least one H neighbor and bonded to each other?
+68	 Is there a heteroatom bonded to another heteroatom that has at least one H neighbor? 
+69	 Is there a N with two heteroatom neighbors?
+70	 Is there a N-O bond?
+71	 Is there an O seperated from another O by any 3 bonds?
+72	 Is there a S double bonded to another atom?
+73	 Is there an atom bonded to two CH3 groups? 
 74	 Is there a nitrogen bonded to one atom with a ring bond and another atom with a non-ring bond? 
-75	 Is there a Carbon double bonded to carbon and bonded to two other atoms?
-76	 Is there an atom bonded to two nitrogen neighbors?
-77	 Is there a carbon-nitrogen double bond?
-78	 Is there a nitrogen separated by two bonds from another nitrogen?
-79	 Is there a nitrogen separated by three bonds from another nitrogen?
-80	 Is there a sulfur bonded to atleast three other atoms?
-81	 Is there a hydrocarbon group bonded to another atom and a heteroatom that has at least one hydrogen neighbor? 
-82	 Is there a heterocarbon in a 5M ring?
-83	 Is there an amine group?
-84	 Is there a carbon bonded to one nitrogen and two carbon neighbors?
-85	 Is there a heteroatom bonded to at least two methylene carbons? 
+75	 Is there a C double bonded to C and bonded to two other atoms?
+76	 Is there an atom bonded to two N neighbors?
+77	 Is there a C=N double bond?
+78	 Is there a N separated from another N by any three bonds?
+79	 Is there a N separated from another N by any four bonds?
+80	 Is there a S bonded to atleast three other atoms?
+81	 Is there a CH2 group bonded to another atom and a heteroatom that is bonded to at least one H? 
+82	 Is there a heteroatom in a 5M ring?
+83	 Is there an amine (NH2) group?
+84	 Is there a C bonded to one N and two N neighbors?
+85	 Is there a heteroatom bonded to at least two CH2 carbons? 
 86	 Is there a halogen at a chain/ring boundary?
-87	 Is there a sulfur atom?
-88	 Is there an oxygen seperated by any 4 bonds from another oxygen?
-89	 Is there a heteroatom separated from a methylene carbon by any 3 bonds?
-90	 Is there a heteroatom separated from a methylene carbon by any 4 bonds?
-91	 Is there an oxygen bonded to one nitrogen and two carbon neighbors?
+87	 Is there a S?
+88	 Is there an O seperated by any 4 bonds from another O?
+89	 Is there a heteroatom separated from a CH2 carbon by any 3 bonds?
+90	 Is there a heteroatom separated from a CH2 carbon by any 4 bonds?
+91	 Is there an O bonded to one N and two C neighbors?
 92	 Is there a heteroatom bonded to a methyl carbon?
-93	 Is there a heteroatom bonded to a nitrogen? 
-94	 Is there a nitrogen seperated from an oxygen by any 3 bonds?
+93	 Is there a heteroatom bonded to a N? 
+94	 Is there a N seperated from an O by any 3 bonds?
 95	 Is there a 5M ring?
-96	 Is there a nitrogen seperated from an oxygen by any 4 bonds?
+96	 Is there a N seperated from an O by any 4 bonds?
 97	 Is there a heteroatom in a 6M ring?
-98	 Is there a carbon-carbon double bond?
-99	 Is there a methylene carbon bonded to a nitrogen and another atom?
+98	 Is there a C=C double bond?
+99	 Is there a CH2 group bonded to a N and another atom?
 100	 Is there a 8M - 14M Ring ?
-101	 Is there a heteroatom bonded to an oxygen by a single or double bond?
+101	 Is there a heteroatom bonded to an O by a single or double bond?
 102	 Is there a Chlorine atom?
 103	 Is there a heteroatom separated from a methylene carbon by any two bonds?
 104	 Is there an atom with more than two ring bonds?
 105	 Is there an atom with at least three heteroatom neighbors?
 106	 Is there a halogen bonded to atleast 3 other atoms?
-107	 Is there a methyl carbon separated from a methylene carbon by any four bonds?
-108	 Is there a methylene carbon bonded to an oxygen and another atom?
-109	 Is there a carbon bonded to an oxygen and a nitrogen?
-110	 Is there a nitrogen separated from a methylene carbon by any two bonds? 
+107	 Is there a CH3 group separated from a CH2 group by any four bonds?
+108	 Is there a CH2 group bonded to O and another atom?
+109	 Is there a C bonded to O and N?
+110	 Is there a N separated from a CH2 group by any two bonds? 
 111	 Is there an atom with at least four neighbors?
-112	 Is there an atom connected to an oxygen by a non-aromatic ring bond and connected to another atom aromatically? 
-113	 Is there an atom bonded to an ethyl group?
-114	 Is there a methyl carbon separated from a methylene carbon by any two bonds? 
-115	 Is there a methyl carbon separated from a methylene carbon by any three bonds? 
-116	 Is there a nitrogen separated by an oxygen by any two bonds?
-117	 Is there more than one fragment containing two methylene carbons bonded to each other?
-118	 Is there a nitrogen bonded to another atom by a double bond? 
+112	 Is there an atom bonded to O by a non-aromatic ring bond and connected to another atom aromatically? 
+113	 Is there an atom bonded to an CH3CH2- group?
+114	 Is there a CH3 group separated from a CH2 group by any two bonds? 
+115	 Is there a CH3 group separated from a CH2 group by any three bonds? 
+116	 Is there a N separated from O by any two bonds?
+117	 Is there more than one fragment containing two CH2 groups bonded to each other?
+118	 Is there a N bonded to another atom by a double bond? 
 119	 Are there multiple Heterocyclic atoms?
-120	 Is there a Nitrogen Heterocycle?
+120	 Is there a N-Heterocycle?
 121	 Is there an atom with atleast 2 bonded neighbors, one of which is nitrogen?
-122	 Is there a carbon bonded to two oxygen atoms?
+122	 Is there a C bonded to two O atoms?
 123	 Are there two heteroatoms bonded to each other?
-124	 Are there more than one aromatic rings?
-125	 Is there an oxygen with at least two chain bonds?
+124	 Are there multiple aromatic rings?
+125	 Is there an O with at least two chain bonds?
 126	 Are there multiple atoms connected aromatically to another atom and also connected to an oxygen by a non-ring bond?
-127	 Are there two methylene carbons separated by any four bonds?
-128	 Are there two methylene carbons separated by any three bonds?
+127	 Are there two CH2 groups separated by any four bonds?
+128	 Are there two CH2 groups separated by any three bonds?
 129	 Are there multiple heteroatoms bonded to at least one heteroatom neighbor?
-130	 Are there multiple heteroatoms bonded to at least one hydrogen neighbor?
-131	 Is there a methylene carbons separated from an oxygen by any two bonds?
-132	 Is there an atom bonded to another atom by a ring bond and bonded to a nitrogen by a chain bond?
+130	 Are there multiple heteroatoms bonded to at least one H atom?
+131	 Is there a CH2 group separated from O by any two bonds?
+132	 Is there an atom bonded to another atom by a ring bond and bonded to N by a chain bond?
 133	 Is there a halogen?
-134	 Is there an atom connected to nitrogen by a non-aromatic ring bond and connected to another atom aromatically? 
-135	 Are there multiple oxygen atoms that form a double bond with another atom?
+134	 Is there an atom connected to N by a non-aromatic ring bond and connected to another atom aromatically? 
+135	 Are there multiple O atoms that form a double bond with another atom?
 136	 Is there a heterocycle?
-137	 Is there more than one methylene carbon that is bonded to two neighbors, one of which is a heteroatom? 
-138	 Is there a hydroxy oxygen?
-139	 Are there more than 3 oxygen atoms?
-140	 Are there more than 2 methyl groups?
-141	 Is there more than one nitrogen atom?
-142	 Is there an atom bonded to another atom by a ring bond and bonded to a oxygen by a chain bond?
+137	 Is there more than one CH2 group that is bonded to two neighbors, one of which is a heteroatom? 
+138	 Is there a hydroxy oxygen (OH)?
+139	 Are there more than three O atoms?
+140	 Are there more than two CH3 groups?
+141	 Are there multiple N atoms?
+142	 Is there an atom bonded to another atom by a ring bond and bonded to O by a chain bond?
 143	 Is there an atom at an aromatic/non-aromatic boundary?
 144	 Are there more than one 6M rings?
-145	 Are there more than two oxygens? 
-146	 Are there two methylene carbons bonded by a single bond? Or are there two atoms separated by two methylene carbons?
+145	 Are there more than two O? 
+146	 Are there two CH2 groups bonded by a single bond? Or are there two atoms separated by two CH2 groups?
 147	 Is there an atom bonded to at least three neighbors, at least one of which is a heteroatom?
-148	 Is there more than one methyl group?
+148	 Is there more than one CH3 group?
 149	 Is there an atom at a ring/chain boundary?
-150	 Is there a nitrogen binded to at least one hydrogen? 
-151	 Is there an oxygen bonded to three carbon neighbors?
-152	 Is there a methylene carbon bonded to two neighbors, at least one of which is a heteroatom?
-153	 Is there a carbon connected to oxygen by a double bond?
-154	 Is there a methylene carbon bonded to two neighbors by a non-ring bond?
-155	 Is there a nitrogen with at least three neighbors?
-156	 Is a Carbon bonded to Oxygen by a single bond?
-157	 Is a Carbon bonded to Nitrogen by a single bond?
-158	 Is there more than one oxygen atom?
-159	 Is it a methyl group?
-160	 Is there a nitrogen?
+150	 Is there a N bonded to at least one H? 
+151	 Is there an O bonded to three C atoms?
+152	 Is there a CH2 group bonded to two neighbors, at least one of which is a heteroatom?
+153	 Is there a C=O double bond?
+154	 Is there a CH2 group bonded to two neighbors by a non-ring bond?
+155	 Is there a N with at least three neighbors?
+156	 Is a C-O single bond?
+157	 Is a C-N single bond?
+158	 Are there multiple O atoms?
+159	 Is there a CH3 group?
+160	 Is there a N?
 161	 Is it an Aromatic atom?
 162	 Is there a 6M Ring?
-163	 Is there an Oxygen?
+163	 Is there an O?
 164	 Is it an atom in a ring?
 165	 Fragments?
