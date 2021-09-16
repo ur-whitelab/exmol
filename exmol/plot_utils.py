@@ -32,7 +32,8 @@ def _extract_loc(e):
 
 
 def insert_svg(exps: List[Example],
-               mol_size: Tuple[int, int] = (200, 200)) -> str:
+               mol_size: Tuple[int, int] = (200, 200),
+               mol_fontsize: int = 10) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
@@ -40,7 +41,7 @@ def insert_svg(exps: List[Example],
     :return: SVG string that can be saved or displayed in juypter notebook
     """
     size = mol_size
-    mol_svgs = _mol_images(exps, mol_size, 12, True)
+    mol_svgs = _mol_images(exps, mol_size, mol_fontsize, True)
     svg = skunk.pltsvg(bbox_inches="tight")
     rewrites = {f'rdkit-img-{i}': v for i, v in enumerate(mol_svgs)}
     return skunk.insert(rewrites, svg=svg)

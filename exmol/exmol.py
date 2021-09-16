@@ -408,7 +408,9 @@ def plot_space(
     highlight_clusters: bool = False,
     mol_fontsize: int = 8,
     offset: int = 0,
-    ax: Any = None
+    ax: Any = None,
+    cartoon: bool = False,
+    rasterized: bool = False
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -419,7 +421,9 @@ def plot_space(
     :param highlight_clusters: if `True`, cluster indices are rendered instead of :obj:Example.yhat
     :param mol_fontsize: minimum font size passed to rdkit
     :param offset: offset annotations to allow colorbar or other elements to fit into plot.
-    :param fig: axis onto which to plot
+    :param ax: axis onto which to plot
+    :param cartoon: do cartoon outline on points?
+    :param rasterized: raster the scatter?
     """
     imgs = _mol_images(exps, mol_size, mol_fontsize)
     if figure_kwargs is None:
@@ -438,14 +442,47 @@ def plot_space(
         colors = [e.yhat for e in examples]
         normalizer = plt.Normalize(min(colors), max(colors))
         cmap = "viridis"
-    ax.scatter(
-        [e.position[0] for e in examples],
-        [e.position[1] for e in examples],
-        c=normalizer(colors),
-        cmap=cmap,
-        alpha=0.5,
-        edgecolors="none",
-    )
+    space_x = [e.position[0] for e in examples]
+    space_y = [e.position[1] for e in examples]
+    if cartoon:
+        # plot shading, lines, front
+        ax.scatter(
+            space_x,
+            space_y,
+            50,
+            "0.0",
+            lw=2,
+            rasterized=rasterized
+        )
+        ax.scatter(
+            space_x,
+            space_y,
+            50,
+            "1.0",
+            lw=0,
+            rasterized=rasterized
+        )
+        ax.scatter(
+            space_x,
+            space_y,
+            40,
+            c=normalizer(colors),
+            cmap=cmap,
+            lw=2,
+            alpha=0.1,
+            rasterized=rasterized
+        )
+    else:
+        ax.scatter(
+            space_x,
+            space_y,
+            c=normalizer(colors),
+            cmap=cmap,
+            alpha=0.5,
+            edgecolors="none",
+            rasterized=rasterized
+        )
+    # now plot cfs/annotated points
     ax.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
