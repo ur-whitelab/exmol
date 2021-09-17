@@ -43,6 +43,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#counterfactual-generation">Counterfactual Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#chemical-space">Chemical Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#svg">SVG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#api-and-docs">API and Docs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
@@ -156,6 +157,24 @@ one of the following:</p>
 </ul>
 <p>You can also pass <code class="docutils literal notranslate"><span class="pre">num_samples</span></code> as a “request” for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.</p>
+</section>
+<section id="svg">
+<h2>SVG<a class="headerlink" href="#svg" title="Permalink to this headline"></a></h2>
+<p>Molecules are by default drawn as PNGs. If you would like to have them drawn as SVGs, call <code class="docutils literal notranslate"><span class="pre">insert_svg</span></code> after calling
+<code class="docutils literal notranslate"><span class="pre">plot_space</span></code> or <code class="docutils literal notranslate"><span class="pre">plot_cf</span></code></p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">skunk</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span><span class="n">exps</span><span class="p">)</span>
+<span class="n">svg</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">insert_svg</span><span class="p">(</span><span class="n">exps</span><span class="p">,</span> <span class="n">mol_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># for Jupyter Notebook</span>
+<span class="n">skunk</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+
+<span class="c1"># To save to file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;myplot.svg&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is done with the <a class="reference external" href="https://github.com/whitead/skunk">skunk🦨 library</a>.</p>
 </section>
 <section id="api-and-docs">
 <h2>API and Docs<a class="headerlink" href="#api-and-docs" title="Permalink to this headline"></a></h2>
