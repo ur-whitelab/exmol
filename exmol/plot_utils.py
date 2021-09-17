@@ -52,7 +52,8 @@ def _descriptor_layout(ds, size):
 
 def insert_svg(exps: List[Example],
                mol_size: Tuple[int, int] = (200, 200),
-               descriptors: bool = False) -> str:
+               descriptors: bool = False,
+               mol_fontsize: int = 10) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
@@ -63,7 +64,7 @@ def insert_svg(exps: List[Example],
     size = mol_size
     if descriptors:
         mol_size = (int(mol_size[0] * 3/4), mol_size[1])
-    mol_svgs = _mol_images(exps, mol_size, 12, True)
+    mol_svgs = _mol_images(exps, mol_size, mol_fontsize, True)
     svg = skunk.pltsvg(bbox_inches="tight")
     if descriptors:
         for i in range(len(mol_svgs)):

@@ -22,7 +22,7 @@ A counterfactual can explain a prediction by showing what would have to change i
 
 In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
-<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/counterfactual.png" width="600">
+<img alt="counterfactual demo" src="paper/counterfactual.svg" width="400">
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
@@ -51,7 +51,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-simple.png" width="600">
+<img alt="set of counterfactuals" src="paper/rf-simple.svg" width="400">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -60,7 +60,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/rf-space.png" width="600">
+<img alt="chemical space" src="paper/rf-space.svg" width="600">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
@@ -92,6 +92,26 @@ one of the following:
 
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
+
+## SVG
+
+Molecules are by default drawn as PNGs. If you would like to have them drawn as SVGs, call `insert_svg` after calling
+`plot_space` or `plot_cf`
+
+```py
+import skunk
+exmol.plot_cf(exps)
+svg = exmol.insert_svg(exps, mol_fontsize=16)
+
+# for Jupyter Notebook
+skunk.display(svg)
+
+# To save to file
+with open('myplot.svg', 'w') as f:
+    f.write(svg)
+```
+
+This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 
 ## API and Docs
 
