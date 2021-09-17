@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-v0.4.0
+v0.4.0 (2021-09-17)
 -------------------
 * Refactored code into files
 * Added SVG rewrite so mol structures are SVGs
