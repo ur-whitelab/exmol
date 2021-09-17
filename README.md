@@ -93,6 +93,26 @@ one of the following:
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
 
+## SVG
+
+Molecules are by default drawn as PNGs. If you would like to have them drawn as SVGs, call `insert_svg` after calling
+`plot_space` or `plot_cf`
+
+```py
+import skunk
+exmol.plot_cf(exps)
+svg = exmol.insert_svg(exps, mol_fontsize=16)
+
+# for Jupyter Notebook
+skunk.display(svg)
+
+# To save to file
+with open('myplot.svg', 'w') as f:
+    f.write(svg)
+```
+
+This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
+
 ## API and Docs
 
 [Read API here](https://ur-whitelab.github.io/exmol/api.html). You should also read the paper (see below) for a more exact
