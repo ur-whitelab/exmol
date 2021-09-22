@@ -521,7 +521,7 @@ def plot_space(
     :param cartoon: do cartoon outline on points?
     :param rasterized: raster the scatter?
     """
-    imgs = _mol_images(exps, mol_size, mol_fontsize)
+    imgs = _mol_images(exps, mol_size, mol_fontsize)#, True)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
@@ -623,7 +623,7 @@ def plot_cf(
     :param nrows: number of rows to draw in grid
     :param ncols: number of columns to draw in grid
     """
-    imgs = _mol_images(exps, mol_size, mol_fontsize)
+    imgs = _mol_images(exps, mol_size, mol_fontsize, True)
     if nrows is not None:
         R = nrows
     else:

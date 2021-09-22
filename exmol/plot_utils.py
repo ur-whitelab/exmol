@@ -69,8 +69,9 @@ def insert_svg(exps: List[Example],
     if descriptors:
         for i in range(len(mol_svgs)):
             ms = mol_svgs[i]
-            ds = list(exps[i].descriptors.tstats)
-            _descriptor_layout(ds, size)
+            ds = {a:b for a,b in zip(list(exps[i].descriptors.descriptor_names),
+                list(exps[i].descriptors.tstats)) if abs(b) >= 2.96}
+            _descriptor_layout(ds.values(), size)
             rsvg = skunk.pltsvg()
             mol_svgs[i] = skunk._rewrite_svg(rsvg, {'mol-holder': ms})
 
@@ -183,9 +184,10 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
                 )
             )
 
-    rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-        ms[0], ms[1], acceptFailure=True
-    )
+    if len(ms) > 1:
+        rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
+            ms[0], ms[1], acceptFailure=True
+        )
     if svg:
         imgs.insert(0, _mol2svg(ms[0], size=mol_size, options=dos))
         imgs = _cleanup_rdkit_svgs(imgs)

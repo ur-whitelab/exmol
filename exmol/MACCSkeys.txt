@@ -11,35 +11,35 @@ ID	 KeyDescription
 9	 Is it an element from Group IIa (Alkaline earth)?
 10	 Is there a 4M Ring?
 11	 Is it an element from Group IB,IIB (Cu..)?
-12	 Is there a N bonded to two C and one O neighbors?
-13	 Is there a S-S bond?
-14	 Is there a C with three O neighbors?
+12	 Is there a Nitrone or aminoxyl group?
+13	 Is there a disulfide bond?
+14	 Is there a orthoester or carbonate ester?
 15	 Is tehre a Heteroatom bonded to atleast 2 neighbors in a ring? 
-16	 Is there a C#C (triple bond)?
+16	 Is there a alkyne group?
 17	 Is it an element from Group IIIA (B...)? 
 18	 Is there a 7M Ring?
 19	 Is there a Si?
-20	 Is there a carbon double bonded to another carbon and also bonded to two heteroatom neighbors?
+20	 Is there a alkene carbon bonded to two heteroatom neighbors?
 21	 Is there a 3M Ring?
-22	 Is there a C bonded to two O and one N? 
+22	 Is there a Carbamate group? 
 23	 Is there a N-O single bond?
-24	 Is there a C bonded with three N neighbors?
+24	 Is there a Methanetriamine or Guanidine group?
 25	 Is there a carbon in a ring double bonded with another carbon that is bonded to two other neighbors by a ring bond?
 26	 Is there an I?
-27	 Is there a CH2 group bonded to two heteroatoms?
+27	 Is there a methylene group bonded to two heteroatoms?
 28	 Is there a P?
 29	 Is there a heteroatom bonded to at least four neighbors, three of which are C?
 30	 Is there a Heteroatom connected to a halogen?
-31	 Is there C bonded to S and N?
+31	 Is there S-C-N bond?
 32	 Is there a N-S bond?
 33	 Is there a CH2 carbon double bonded to another atom?
 34	 Is it an element from Group IA (Alkali Metal)?
 35	 Is it a S Heterocycle?
 36	 Is there a N bonded to a C, O and another N neighbor? 
 37	 Is there a N bonded to two C and one N neighbor?
-38	 Is there a S bonded to at least three O neighbors?
-39	 Is there a S-O bond?
-40	 Is there a C#N (cyanide group)?
+38	 Is there a sulfonate or sulfite group?
+39	 Is there a S-O single bond?
+40	 Is there a cyano group?
 41	 Is there a F?
 42	 Is there an atom with two heteroatom neighbors that are bonded to H?
 43	 Is there an atom other than H, C, N, O, Si, P, S, Cl, Br, I?
@@ -48,31 +48,31 @@ ID	 KeyDescription
 46	 Is there an atom bonded to both S and N?
 47	 Is there a heteroatom bonded to three O?
 48	 Is there a charged atom/group?
-49	 Is there a C double bonded to C and bonded to two other C atoms?
+49	 Is there a tertiary carbon involved in a double bonded?
 50	 Is there a S atom connected to both C and O?
 51	 Is there a N-N bond?
 52	 Are there two heteroatoms, both attached to at least one H and seperated by any 4 bonds?
 53	 Are there two heteroatoms, both attached to at least one H and seperated by any 3 bonds?
-54	 Is there a S with two O neighbors?
-55	 Is there a N with two O and one C neighbor?
+54	 Is there a sulfonyl or sulfino or sulfur dioxide group?
+55	 Is there a Nitro group?
 56	 Is there an O-Heterocycle?
 57	 Is there a S bonded to two heteroatoms?  
 58	 Is there an atom connected to S by a non-aromatic ring bond and connected to another atom aromatically?  
 59	 Is there a S=O double bond?
 60	 Is there a S with at least three neighbors?
 61	 Is there an atom at a ring/chain boundary? When a comparison is done with another atom the path passes through the chain bond.
-62	 Is there a N=O double bond?
+62	 Is there a N=O, nitroso group?
 63	 Is there an atom connected to another atom by an aromatic bond and connected to a S by a non-aromatic bond?
 64	 Is there an aromatic bond between an aromatic C and aromatic N?
-65	 Is there a C with 3 C neighbors and also bonded to a forth atom?
+65	 Is there a tertiary C?
 66	 Is there a heteroatom bonded to S?
 67	 Are there two heteroatoms bonded to at least one H neighbor and bonded to each other?
 68	 Is there a heteroatom bonded to another heteroatom that has at least one H neighbor? 
 69	 Is there a N with two heteroatom neighbors?
-70	 Is there a N-O bond?
+70	 Is there a N-O single bond?
 71	 Is there an O seperated from another O by any 3 bonds?
 72	 Is there a S double bonded to another atom?
-73	 Is there an atom bonded to two CH3 groups? 
+73	 Is there an atom bonded to two methyl groups? 
 74	 Is there a nitrogen bonded to one atom with a ring bond and another atom with a non-ring bond? 
 75	 Is there a C double bonded to C and bonded to two other atoms?
 76	 Is there an atom bonded to two N neighbors?
@@ -83,22 +83,22 @@ ID	 KeyDescription
 81	 Is there a CH2 group bonded to another atom and a heteroatom that is bonded to at least one H? 
 82	 Is there a heteroatom in a 5M ring?
 83	 Is there an amine (NH2) group?
-84	 Is there a C bonded to one N and two N neighbors?
+84	 Is there a tertiary amine?
 85	 Is there a heteroatom bonded to at least two CH2 carbons? 
 86	 Is there a halogen at a chain/ring boundary?
 87	 Is there a S?
 88	 Is there an O seperated by any 4 bonds from another O?
 89	 Is there a heteroatom separated from a CH2 carbon by any 3 bonds?
 90	 Is there a heteroatom separated from a CH2 carbon by any 4 bonds?
-91	 Is there an O bonded to one N and two C neighbors?
+91	 Is there a carboxamide group?
 92	 Is there a heteroatom bonded to a methyl carbon?
 93	 Is there a heteroatom bonded to a N? 
 94	 Is there a N seperated from an O by any 3 bonds?
 95	 Is there a 5M ring?
 96	 Is there a N seperated from an O by any 4 bonds?
 97	 Is there a heteroatom in a 6M ring?
-98	 Is there a C=C double bond?
-99	 Is there a CH2 group bonded to a N and another atom?
+98	 Is there a alkene bond?
+99	 Is there a methylene group bonded to a N?
 100	 Is there a 8M - 14M Ring ?
 101	 Is there a heteroatom bonded to an O by a single or double bond?
 102	 Is there a Chlorine atom?
@@ -134,7 +134,7 @@ ID	 KeyDescription
 132	 Is there an atom bonded to another atom by a ring bond and bonded to N by a chain bond?
 133	 Is there a halogen?
 134	 Is there an atom connected to N by a non-aromatic ring bond and connected to another atom aromatically? 
-135	 Are there multiple O atoms that form a double bond with another atom?
+135	 Are there multiple O atoms involved in a double bond?
 136	 Is there a heterocycle?
 137	 Is there more than one CH2 group that is bonded to two neighbors, one of which is a heteroatom? 
 138	 Is there a hydroxy oxygen (OH)?
