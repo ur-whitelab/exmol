@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.4.1 (2021-09-27)
+-------------------
+* Fixed randint usage in stoned.py
+
 v0.4.0 (2021-09-17)
 -------------------
 * Refactored code into files
