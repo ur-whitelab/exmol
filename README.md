@@ -51,7 +51,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="paper/rf-simple.svg" width="400">
+<img alt="set of counterfactuals" src="paper/svg_figs/rf-simple.png" width="400">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -60,7 +60,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="paper/rf-space.svg" width="600">
+<img alt="chemical space" src="paper/svg_figs/rf-space.png" width="600">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
