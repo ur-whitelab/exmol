@@ -71,9 +71,10 @@ def get_descriptors(examples: List[Example],
                                         descriptor_names=descriptor_names)
         return examples
     elif descriptor_type == 'MACCS':
-        names = np.genfromtxt(os.path.join(os.path.dirname(__file__), 'MACCSkeys.txt'),
-                              delimiter='\t ', skip_header=1,
-                              usecols=[1], dtype=str)
+        names = tuple([line.strip().split('\t')[-1]
+                      for line 
+                      in list(open(os.path.join(os.path.dirname(__file__),
+                                                'MACCSkeys.txt')))[1:]])
         for e, m in zip(examples, mols):
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
             descriptors = tuple(int(i) for i in fps)
