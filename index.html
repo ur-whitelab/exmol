@@ -109,7 +109,7 @@ it only needs to use one.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">exmol</span>
 
 <span class="c1"># mol of interest</span>
-<span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;CCCO&#39;</span>
+<span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O&#39;</span>
 
 <span class="n">samples</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">smi</span><span class="p">,</span> <span class="n">sel</span><span class="p">:</span> <span class="n">my_model</span><span class="p">(</span><span class="n">smi</span><span class="p">),</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -120,28 +120,31 @@ Now we select counterfactuals from that space and plot them.</p>
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span><span class="n">cfs</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="set of counterfactuals" src="paper/rf-simple.svg" width="400">
+<img alt="set of counterfactuals" src="paper/svg_figs/rf-simple.png" width="500">
 <p>We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix – the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">cfs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">cf_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_space</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">cfs</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="chemical space" src="paper/rf-space.svg" width="600">
+<img alt="chemical space" src="paper/svg_figs/rf-space.png" width="600">
 <p>Each counterfactual is a Python <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> with information allowing it to be used in your own analysis:</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cfs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cfs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Examples</span><span class="p">(</span>
-  <span class="n">smiles</span><span class="o">=</span><span class="s1">&#39;CCOC(=O)c1ccc(N=CN(Cl)c2ccccc2)cc1&#39;</span><span class="p">,</span>
-  <span class="n">selfies</span><span class="o">=</span><span class="s1">&#39;[C][C][O][C][Branch1_2][C][=O][C][=C][C][=C][Branch1_1][#C][N][=C][N][Branch1_1][C][Cl][C][=C][C][=C][C][=C][Ring1][Branch1_2][C][=C][Ring1][S]&#39;</span><span class="p">,</span>
-  <span class="n">similarity</span><span class="o">=</span><span class="mf">0.8181818181818182</span><span class="p">,</span>
-  <span class="n">yhat</span><span class="o">=-</span><span class="mf">5.459493637084961</span><span class="p">,</span>
-  <span class="n">index</span><span class="o">=</span><span class="mi">1807</span><span class="p">,</span>
-  <span class="n">position</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">6.11371691</span><span class="p">,</span>  <span class="mf">1.24629293</span><span class="p">]),</span>
-  <span class="n">is_origin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-  <span class="n">cluster</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span>
-  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Counterfactual&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s1">&#39;smiles&#39;</span><span class="p">:</span> <span class="s1">&#39;Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C&#39;</span><span class="p">,</span> 
+<span class="s1">&#39;selfies&#39;</span><span class="p">:</span> <span class="s1">&#39;[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C]</span>
+            <span class="p">[</span><span class="n">Expl</span><span class="o">=</span><span class="n">Ring1</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_2</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="o">=</span><span class="n">O</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_2</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="o">=</span><span class="n">O</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Ring1</span><span class="p">][</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">S</span><span class="p">][</span><span class="n">C</span><span class="p">]</span>
+            <span class="p">[</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Ring1</span><span class="p">][</span><span class="n">Branch1_3</span><span class="p">][</span><span class="n">C</span><span class="p">]</span><span class="s1">&#39;, </span>
+<span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> 
+<span class="s1">&#39;yhat&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
+<span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1813</span><span class="p">,</span> 
+<span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">7.8032394</span> <span class="p">,</span>  <span class="mf">0.51781263</span><span class="p">]),</span> 
+<span class="s1">&#39;is_origin&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+<span class="s1">&#39;cluster&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+<span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Counterfactual 1&#39;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
