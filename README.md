@@ -38,7 +38,7 @@ We first expand chemical space around the prediction of interest
 import exmol
 
 # mol of interest
-base = 'CCCO'
+base = 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O'
 
 samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
 ```
@@ -65,19 +65,20 @@ exmol.plot_space(samples, cfs)
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
 ```py
-print(cfs[0])
+print(cfs[1])
 ```
 ```
-Examples(
-  smiles='CCOC(=O)c1ccc(N=CN(Cl)c2ccccc2)cc1',
-  selfies='[C][C][O][C][Branch1_2][C][=O][C][=C][C][=C][Branch1_1][#C][N][=C][N][Branch1_1][C][Cl][C][=C][C][=C][C][=C][Ring1][Branch1_2][C][=C][Ring1][S]',
-  similarity=0.8181818181818182,
-  yhat=-5.459493637084961,
-  index=1807,
-  position=array([-6.11371691,  1.24629293]),
-  is_origin=False,
-  cluster=26,
-  label='Counterfactual')
+{
+'smiles': 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C', 
+'selfies': '[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C][Expl=Ring1][N][C][Branch1_2][C][=O][N][C][C][Branch1_2][C][=O][N][C][Ring1][Branch1_1][S][C][Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]', 
+'similarity': 0.8, 
+'yhat': 1, 
+'index': 1813, 
+'position': array([-7.8032394 ,  0.51781263]), 
+'is_origin': False, 
+'cluster': -1, 
+'label': 'Counterfactual 1'
+}
 ```
 
 ## Chemical Space
