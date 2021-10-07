@@ -51,7 +51,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="paper/svg_figs/rf-simple.png" width="400">
+<img alt="set of counterfactuals" src="paper/svg_figs/rf-simple.png" width="600">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -70,7 +70,9 @@ print(cfs[1])
 ```
 {
 'smiles': 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C', 
-'selfies': '[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C][Expl=Ring1][N][C][Branch1_2][C][=O][N][C][C][Branch1_2][C][=O][N][C][Ring1][Branch1_1][S][C][Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]', 
+'selfies': '[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C]
+            [Expl=Ring1][N][C][Branch1_2][C][=O][N][C][C][Branch1_2][C][=O][N][C][Ring1][Branch1_1][S][C]
+            [Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]', 
 'similarity': 0.8, 
 'yhat': 1, 
 'index': 1813, 
