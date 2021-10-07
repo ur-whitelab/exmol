@@ -1,14 +1,17 @@
 Change Log
 ==========
 
-* Added SVG rewrite so mol structures are SVGs
-=======
+v0.4.1 (2021-09-27)
+-------------------
+* Fixed randint usage in stoned.py
+
 v0.4.0 (2021-09-17)
 -------------------
 * Refactored code into files
 * Added SVG rewrite so mol structures are SVGs
 * SVGs are handled with skunks
 * Added cartoon style for scatter plot in plot_space
+
 
 v0.3.2 (2021-09-02)
 -------------------
