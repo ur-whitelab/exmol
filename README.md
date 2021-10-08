@@ -22,7 +22,7 @@ A counterfactual can explain a prediction by showing what would have to change i
 
 In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
-<img alt="counterfactual demo" src="paper/counterfactual.svg" width="400">
+<img alt="counterfactual demo" src="paper/counterfactual.png" width="400">
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
