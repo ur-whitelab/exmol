@@ -10,3 +10,10 @@ repos:
     rev: 20.8b1
     hooks:
     - id: black
+  - repo: https://github.com/tomcatling/black-nb
+    rev: 0.5.0
+    hooks:
+      - id: black-nb
+        description: strip output and black source
+        additional_dependencies: ['black[jupyter]']
+        args: ["--clear-output"]
