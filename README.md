@@ -121,6 +121,10 @@ This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 [Read API here](https://ur-whitelab.github.io/exmol/api.html). You should also read the paper (see below) for a more exact
 description of the methods and implementation.
 
+## Developing
+
+This repo uses pre-commit, so after cloning run `pip install -r requirements.txt` and `pre-commit install` prior to committing.
+
 ## Citation
 
 Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
