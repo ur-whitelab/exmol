@@ -45,6 +45,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#chemical-space">Chemical Space</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#svg">SVG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#api-and-docs">API and Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developing">Developing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
 </li>
@@ -133,16 +134,16 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="s1">&#39;smiles&#39;</span><span class="p">:</span> <span class="s1">&#39;Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C&#39;</span><span class="p">,</span> 
+<span class="s1">&#39;smiles&#39;</span><span class="p">:</span> <span class="s1">&#39;Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C&#39;</span><span class="p">,</span>
 <span class="s1">&#39;selfies&#39;</span><span class="p">:</span> <span class="s1">&#39;[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C]</span>
             <span class="p">[</span><span class="n">Expl</span><span class="o">=</span><span class="n">Ring1</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_2</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="o">=</span><span class="n">O</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_2</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="o">=</span><span class="n">O</span><span class="p">][</span><span class="n">N</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Ring1</span><span class="p">][</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">S</span><span class="p">][</span><span class="n">C</span><span class="p">]</span>
-            <span class="p">[</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Ring1</span><span class="p">][</span><span class="n">Branch1_3</span><span class="p">][</span><span class="n">C</span><span class="p">]</span><span class="s1">&#39;, </span>
-<span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> 
-<span class="s1">&#39;yhat&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
-<span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1813</span><span class="p">,</span> 
-<span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">7.8032394</span> <span class="p">,</span>  <span class="mf">0.51781263</span><span class="p">]),</span> 
-<span class="s1">&#39;is_origin&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
-<span class="s1">&#39;cluster&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="p">[</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Branch1_1</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">C</span><span class="p">][</span><span class="n">Ring1</span><span class="p">][</span><span class="n">Branch1_3</span><span class="p">][</span><span class="n">C</span><span class="p">]</span><span class="s1">&#39;,</span>
+<span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+<span class="s1">&#39;yhat&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1813</span><span class="p">,</span>
+<span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">7.8032394</span> <span class="p">,</span>  <span class="mf">0.51781263</span><span class="p">]),</span>
+<span class="s1">&#39;is_origin&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="s1">&#39;cluster&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Counterfactual 1&#39;</span>
 <span class="p">}</span>
 </pre></div>
@@ -183,6 +184,10 @@ degenerate molecules. See API for complete description.</p>
 <h2>API and Docs<a class="headerlink" href="#api-and-docs" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="https://ur-whitelab.github.io/exmol/api.html">Read API here</a>. You should also read the paper (see below) for a more exact
 description of the methods and implementation.</p>
+</section>
+<section id="developing">
+<h2>Developing<a class="headerlink" href="#developing" title="Permalink to this headline"></a></h2>
+<p>This repo uses pre-commit, so after cloning run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> prior to committing.</p>
 </section>
 <section id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline"></a></h2>
