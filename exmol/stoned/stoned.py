@@ -384,7 +384,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
         # Replace a random character
         elif random_choice == 2:
-            random_index = random.randint(0, len(chars_selfie)-1)
+            random_index = random.randint(0, len(chars_selfie) - 1)
             random_character = random.choice(alphabet)
             if random_index == 0:
                 selfie_mutated_chars = [random_character] + chars_selfie[
@@ -399,7 +399,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
         # Delete a random character
         elif random_choice == 3:
-            random_index = random.randint(0, len(chars_selfie)-1)
+            random_index = random.randint(0, len(chars_selfie) - 1)
             if random_index == 0:
                 selfie_mutated_chars = chars_selfie[random_index + 1 :]
             else:

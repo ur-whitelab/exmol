@@ -16,17 +16,26 @@ setup(
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
     packages=["exmol", "exmol.stoned"],
-    install_requires=["selfies", "numpy", "requests", "tqdm", "ratelimit",
-                      "rdkit-pypi", "matplotlib", "scikit-learn", "skunk >= 0.4.0"],
+    install_requires=[
+        "selfies",
+        "numpy",
+        "requests",
+        "tqdm",
+        "ratelimit",
+        "rdkit-pypi",
+        "matplotlib",
+        "scikit-learn",
+        "skunk >= 0.4.0",
+    ],
     test_suite="tests",
     long_description=long_description,
     long_description_content_type="text/markdown",
-        classifiers=[
+    classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Chemistry",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
-        "Typing :: Typed"
-    ]
+        "Typing :: Typed",
+    ],
 )
