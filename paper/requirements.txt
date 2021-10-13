@@ -4,3 +4,4 @@ jupyter
 seaborn
 pandas
 tensorflow>=2.4
+svglib
