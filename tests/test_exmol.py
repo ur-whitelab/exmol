@@ -41,10 +41,7 @@ def test_run_stones():
 
 
 def test_run_chemed():
-    result = exmol.run_chemed(
-        "CCCCO",
-        num_samples=10
-    )
+    result = exmol.run_chemed("CCCCO", num_samples=10)
     # Can get duplicates
     assert len(result[0]) >= 0
 
@@ -73,8 +70,7 @@ def test_sample_preset():
     def model(s, se):
         return int("N" in s)
 
-    explanation = exmol.sample_space(
-        "CCCC", model, preset="narrow", batched=False)
+    explanation = exmol.sample_space("CCCC", model, preset="narrow", batched=False)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
@@ -84,7 +80,8 @@ def test_performance():
         return int("F" in s)
 
     exps = exmol.sample_space(
-        "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False)
+        "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False
+    )
     assert len(exps) > 2000
     cfs = exmol.cf_explain(exps)
     assert cfs[1].similarity > 0.8
@@ -95,13 +92,20 @@ def test_sample_chem():
         return int("N" in s)
 
     explanation = exmol.sample_space(
-        "CCCC", model, preset="chemed", batched=False, num_samples=50)
+        "CCCC", model, preset="chemed", batched=False, num_samples=50
+    )
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
     # try other keywords
     explanation = exmol.sample_space(
-        "CCCC", model, preset="chemed", batched=False, num_samples=50, method_kwargs={'similarity': 0.2})
+        "CCCC",
+        model,
+        preset="chemed",
+        batched=False,
+        num_samples=50,
+        method_kwargs={"similarity": 0.2},
+    )
 
 
 def test_cf_explain():
@@ -166,7 +170,6 @@ def test_corrupt_smiles():
     def model(s, se):
         return int("N" in s)
 
-    badsmi = 'C/C=C/C(=O)C1CCC(C=C1C)(C)C'
-    explanation = exmol.sample_space(
-        badsmi, model, preset="narrow", batched=False)
+    badsmi = "C/C=C/C(=O)C1CCC(C=C1C)(C)C"
+    explanation = exmol.sample_space(badsmi, model, preset="narrow", batched=False)
     assert ~np.isnan(explanation[0].yhat)

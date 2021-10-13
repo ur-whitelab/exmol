@@ -33,7 +33,7 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
-    'sphinx.ext.githubpages'
+    "sphinx.ext.githubpages",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -71,4 +71,4 @@ intersphinx_mapping = {
     "selfies": ("https://selfies.readthedocs.io/en/latest/", None),
 }
 
-master_doc = 'toc'
+master_doc = "toc"

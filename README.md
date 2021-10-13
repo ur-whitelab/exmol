@@ -69,16 +69,16 @@ print(cfs[1])
 ```
 ```
 {
-'smiles': 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C', 
+'smiles': 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C',
 'selfies': '[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C]
             [Expl=Ring1][N][C][Branch1_2][C][=O][N][C][C][Branch1_2][C][=O][N][C][Ring1][Branch1_1][S][C]
-            [Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]', 
-'similarity': 0.8, 
-'yhat': 1, 
-'index': 1813, 
-'position': array([-7.8032394 ,  0.51781263]), 
-'is_origin': False, 
-'cluster': -1, 
+            [Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]',
+'similarity': 0.8,
+'yhat': 1,
+'index': 1813,
+'position': array([-7.8032394 ,  0.51781263]),
+'is_origin': False,
+'cluster': -1,
 'label': 'Counterfactual 1'
 }
 ```
@@ -121,6 +121,10 @@ This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 [Read API here](https://ur-whitelab.github.io/exmol/api.html). You should also read the paper (see below) for a more exact
 description of the methods and implementation.
 
+## Developing
+
+This repo uses pre-commit, so after cloning run `pip install -r requirements.txt` and `pre-commit install` prior to committing.
+
 ## Citation
 
 Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
@@ -136,5 +140,3 @@ Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-det
  year={2021}}
 ```
 This content is a preprint and has not been peer-reviewed.
-
-

@@ -22,8 +22,7 @@ from .data import *
 def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
-    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0]
-          for m in mols]
+    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
     # 1 - Ts because we want distance
     dist = list(
         1 - stoned.TanimotoSimilarity(x, y) for x, y in itertools.product(fp, repeat=2)
@@ -59,7 +58,7 @@ def run_stoned(
     max_mutations: int = 2,
     min_mutations: int = 1,
     alphabet: Union[List[str], Set[str]] = None,
-    _pbar: Any = None
+    _pbar: Any = None,
 ) -> Tuple[List[str], List[str]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
 
@@ -93,7 +92,7 @@ def run_stoned(
     for num_mutations in num_mutation_ls:
         # Mutate the SELFIES:
         if _pbar:
-            _pbar.set_description(f'🥌STONED🥌 Mutations: {num_mutations}')
+            _pbar.set_description(f"🥌STONED🥌 Mutations: {num_mutations}")
         selfies_mut = stoned.get_mutated_SELFIES(
             selfies_ls.copy(), num_mutations=num_mutations, alphabet=alphabet
         )
@@ -106,7 +105,7 @@ def run_stoned(
 
     # Work on:  all_smiles_collect
     if _pbar:
-        _pbar.set_description(f'🥌STONED🥌 Done')
+        _pbar.set_description(f"🥌STONED🥌 Done")
     canon_smi_ls = []
     for item in all_smiles_collect:
         mol, smi_canon, did_convert = stoned.sanitize_smiles(item)
@@ -134,7 +133,7 @@ def run_chemed(
     origin_smiles: str,
     num_samples: int,
     similarity: float = 0.1,
-    fp_type: str = 'ECFP4',
+    fp_type: str = "ECFP4",
     _pbar: Any = None,
 ) -> Tuple[List[str], List[float]]:
     """
@@ -145,28 +144,29 @@ def run_chemed(
     :return: SMILES
     """
     if _pbar:
-        _pbar.set_description('⚡CHEMED⚡ is Experimental ☠️')
+        _pbar.set_description("⚡CHEMED⚡ is Experimental ☠️")
     else:
-        print('⚡CHEMED⚡ is Experimental ☠️')
-    url = f'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON'
+        print("⚡CHEMED⚡ is Experimental ☠️")
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON"
     try:
-        reply = requests.get(url, params={
-            'Threshold': int(similarity), 'MaxRecords': num_samples},
-            headers={'accept': 'text/json'},
-            timeout=10)
+        reply = requests.get(
+            url,
+            params={"Threshold": int(similarity), "MaxRecords": num_samples},
+            headers={"accept": "text/json"},
+            timeout=10,
+        )
     except requests.exceptions.Timeout:
-        print('Pubchem seems to be down right now ️☠️☠️')
+        print("Pubchem seems to be down right now ️☠️☠️")
         return [], []
     try:
         data = reply.json()
     except:
         return [], []
-    smiles = [d['CanonicalSMILES']
-              for d in data['PropertyTable']['Properties']]
+    smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
     smiles = set(smiles)
 
     if _pbar:
-        _pbar.set_description(f'Received {len(smiles)} similar molecules')
+        _pbar.set_description(f"Received {len(smiles)} similar molecules")
 
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
@@ -187,14 +187,13 @@ def run_chemed(
 def sample_space(
     origin_smiles: str,
     f: Union[
-        Callable[[str, str], float], Callable[[
-            List[str], List[str]], List[float]]
+        Callable[[str, str], float], Callable[[List[str], List[str]], List[float]]
     ],
     batched: bool = True,
     preset: str = "medium",
     method_kwargs: Dict = None,
     num_samples: int = None,
-    stoned_kwargs: Dict = None
+    stoned_kwargs: Dict = None,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -262,7 +261,7 @@ def sample_space(
         smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
     selfies = [sf.encoder(s) for s in smiles]
 
-    pbar.set_description('😀Calling your model function😀')
+    pbar.set_description("😀Calling your model function😀")
     fxn_values = batched_f(smiles, selfies)
 
     # pack them into data structure with filtering out identical
@@ -285,16 +284,16 @@ def sample_space(
         e.index = i
 
     pbar.reset(len(exps))
-    pbar.set_description('🔭Projecting...🔭')
+    pbar.set_description("🔭Projecting...🔭")
 
     # compute distance matrix
     full_dmat = _fp_dist_matrix(
         [e.smiles for e in exps],
         method_kwargs["fp_type"] if ("fp_type" in method_kwargs) else "ECFP4",
-        _pbar=pbar
+        _pbar=pbar,
     )
 
-    pbar.set_description('🥰Finishing up🥰')
+    pbar.set_description("🥰Finishing up🥰")
 
     # compute PCA
     pca = PCA(n_components=2)
@@ -311,7 +310,7 @@ def sample_space(
     for i, e in enumerate(exps):
         e.cluster = clustering.labels_[i]
 
-    pbar.set_description('🤘Done🤘')
+    pbar.set_description("🤘Done🤘")
     pbar.close()
     return exps
 
@@ -331,15 +330,13 @@ def _select_examples(cond, examples, nmols):
             result.append(close_counter)
 
     # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity *
-                    cond(v), reverse=True)[:nmols]
+    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
 
     # fill in remaining
     ncount = sum([cond(e) for e in result])
     fill = max(0, nmols - ncount)
     result.extend(
-        sorted(examples, key=lambda v: v.similarity *
-               cond(v), reverse=True)[:fill]
+        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
     )
 
     return list(filter(cond, result))
@@ -386,14 +383,12 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(
-            is_high, examples[1:], nmols // 2)
+        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(
-            is_low, examples[1:], nmols // 2)
+        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
@@ -410,7 +405,7 @@ def plot_space(
     offset: int = 0,
     ax: Any = None,
     cartoon: bool = False,
-    rasterized: bool = False
+    rasterized: bool = False,
 ):
     """Plot chemical space around example and annotate given examples.
 
@@ -446,22 +441,8 @@ def plot_space(
     space_y = [e.position[1] for e in examples]
     if cartoon:
         # plot shading, lines, front
-        ax.scatter(
-            space_x,
-            space_y,
-            50,
-            "0.0",
-            lw=2,
-            rasterized=rasterized
-        )
-        ax.scatter(
-            space_x,
-            space_y,
-            50,
-            "1.0",
-            lw=0,
-            rasterized=rasterized
-        )
+        ax.scatter(space_x, space_y, 50, "0.0", lw=2, rasterized=rasterized)
+        ax.scatter(space_x, space_y, 50, "1.0", lw=0, rasterized=rasterized)
         ax.scatter(
             space_x,
             space_y,
@@ -470,7 +451,7 @@ def plot_space(
             cmap=cmap,
             lw=2,
             alpha=0.1,
-            rasterized=rasterized
+            rasterized=rasterized,
         )
     else:
         ax.scatter(
@@ -480,14 +461,13 @@ def plot_space(
             cmap=cmap,
             alpha=0.5,
             edgecolors="none",
-            rasterized=rasterized
+            rasterized=rasterized,
         )
     # now plot cfs/annotated points
     ax.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
-        c=normalizer(
-            [e.cluster if highlight_clusters else e.yhat for e in exps]),
+        c=normalizer([e.cluster if highlight_clusters else e.yhat for e in exps]),
         cmap=cmap,
         edgecolors="black",
     )
@@ -538,7 +518,7 @@ def plot_cf(
         C = math.ceil(len(imgs) / R)
     if fig is None:
         if figure_kwargs is None:
-            figure_kwargs = {'figsize': (12, 8)}
+            figure_kwargs = {"figsize": (12, 8)}
         fig, axs = plt.subplots(R, C, **figure_kwargs)
     else:
         axs = fig.subplots(R, C)
@@ -547,7 +527,7 @@ def plot_cf(
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"
         title += f"\nf(x) = {e.yhat:.3f}"
         axs[i].set_title(title)
-        axs[i].imshow(np.asarray(img), gid=f'rdkit-img-{i}')
+        axs[i].imshow(np.asarray(img), gid=f"rdkit-img-{i}")
         axs[i].axis("off")
     for j in range(i, C * R):
         axs[j].axis("off")
