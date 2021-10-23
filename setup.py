@@ -17,7 +17,7 @@ setup(
     license="MIT",
     packages=["exmol", "exmol.stoned"],
     install_requires=[
-        "selfies",
+        "selfies == 1.0.4",
         "numpy",
         "requests",
         "tqdm",
