@@ -23,7 +23,6 @@ setup(
         "tqdm",
         "ratelimit",
         "rdkit-pypi",
-        "matplotlib",
         "scikit-learn",
         "skunk >= 0.4.0",
     ],
