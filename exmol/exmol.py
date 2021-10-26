@@ -1,21 +1,26 @@
-from rdkit.Chem import rdFMCS as MCS
-import requests
-import numpy as np
-from sklearn.cluster import DBSCAN
-from sklearn.decomposition import PCA
-import selfies as sf
+from typing import *
+
 import itertools
 import math
-from . import stoned
-from .plot_utils import _mol_images, _image_scatter
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem.Draw import MolToImage as mol2img
-import rdkit.Chem
+import requests
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from typing import *
+import selfies as sf
 import tqdm
+
 from ratelimit import limits, sleep_and_retry
+from sklearn.cluster import DBSCAN
+from sklearn.decomposition import PCA
+from rdkit.Chem import MolFromSmiles as smi2mol
+from rdkit.Chem import MolToSmiles as mol2smi
+from rdkit.Chem import rdchem
+from rdkit.Chem.Draw import MolToImage as mol2img
+from rdkit.Chem import rdFMCS as MCS
+
+
+from . import stoned
+from .plot_utils import _mol_images, _image_scatter
 from .data import *
 
 
@@ -59,7 +64,7 @@ def run_stoned(
     min_mutations: int = 1,
     alphabet: Union[List[str], Set[str]] = None,
     _pbar: Any = None,
-) -> Tuple[List[str], List[str]]:
+) -> Tuple[List[str], List[float]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
 
     :param s: SMILES string to start from
@@ -68,7 +73,7 @@ def run_stoned(
     :param max_mutations: Maximum number of mutations
     :param min_mutations: Minimum number of mutations
     :param alphabet: Alphabet to use for mutations, typically from :func:`get_basic_alphabet()`
-    :return: SMILES and SELFIES generated
+    :return: SMILES and SCORES generated
     """
     if alphabet is None:
         alphabet = list(sf.get_semantic_robust_alphabet())
@@ -141,7 +146,8 @@ def run_chemed(
     :param origin_smiles: Base SMILES
     :param num_samples: Minimum number of returned molecules. May return less due to network timeout or exhausting tree
     :param similarity: Tanimoto similarity to use in query (float between 0 to 1)
-    :return: SMILES
+    :param fp_type: Fingerprint type
+    :return: SMILES and SCORES
     """
     if _pbar:
         _pbar.set_description("⚡CHEMED⚡ is Experimental ☠️")
@@ -184,6 +190,44 @@ def run_chemed(
     return smiles, scores
 
 
+def run_custom(
+    origin_smiles: str,
+    data: List[Union[str, rdchem.Mol]],
+    fp_type: str = "ECFP4",
+    _pbar: Any = None,
+    **kwargs,
+) -> Tuple[List[str], List[float]]:
+    """
+    This method is similar to STONED but uses a custom dataset provided by the user
+    :param origin_smiles: Base SMILES
+    :param data: List of SMILES or RDKit molecules
+    :param fp_type: Fingerprint type
+    :return: SMILES and SCORES
+    """
+    if _pbar:
+        _pbar.set_description("⚡CUSTOM⚡ is Experimental ☠️")
+    else:
+        print("⚡CUSTOM⚡ is Experimental ☠️")
+    mol0 = smi2mol(origin_smiles)
+    fp0 = stoned.get_fingerprint(mol0, fp_type)
+    scores = []
+    smiles = []
+    # drop invalid molecules
+    for d in data:
+        if isinstance(d, str):
+            m = smi2mol(d)
+        else:
+            m = d
+        if m is None:
+            continue
+        smiles.append(mol2smi(m))
+        fp = stoned.get_fingerprint(m, fp_type)
+        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        if _pbar:
+            _pbar.update()
+    return smiles, scores
+
+
 def sample_space(
     origin_smiles: str,
     f: Union[
@@ -191,6 +235,7 @@ def sample_space(
     ],
     batched: bool = True,
     preset: str = "medium",
+    data: List[Union[str, rdchem.Mol]] = None,
     method_kwargs: Dict = None,
     num_samples: int = None,
     stoned_kwargs: Dict = None,
@@ -203,7 +248,8 @@ def sample_space(
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` experimental preset to only sample commerically available compounds.
-    :param method_kwargs: More control over STONED or CHEMED can be set here. See :func:`run_stoned` and :func:`run_chemed`
+    :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
+    :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default from preset.
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :return: List of generated :obj:`Example`
@@ -243,6 +289,8 @@ def sample_space(
             method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
         elif preset == "chemed":
             method_kwargs["num_samples"] = 150 if num_samples is None else num_samples
+        elif preset == "custom" and data is not None:
+            method_kwargs["num_samples"] = len(data)
         else:
             raise ValueError(f'Unknown preset "{preset}"')
     try:
@@ -257,6 +305,10 @@ def sample_space(
     # STONED
     if preset.startswith("chem"):
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
+    elif preset == "custom":
+        smiles, scores = run_custom(
+            origin_smiles, data=data, _pbar=pbar, **method_kwargs
+        )
     else:
         smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
     selfies = [sf.encoder(s) for s in smiles]

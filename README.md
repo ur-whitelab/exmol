@@ -92,6 +92,7 @@ one of the following:
 * `'medium'`: Default. One or two changes to molecular structure, reduced set of possible bonds/elements
 * `'wide'`: One through five changes to molecular structure, large set of possible bonds/elements
 * `'chemed'`: A restrictive set where only pubchem molecules are considered. *Experimental*
+* `'custom'`: A restrictive set where only molecules provided by the "data" key are considered. *Experimental*
 
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
