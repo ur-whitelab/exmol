@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.5.0 (2021-10-26)
+-------------------
+* Added custom lists for counterfactual source (contributed by @maclandrol)
+
 v0.4.1 (2021-09-27)
 -------------------
 * Fixed randint usage in stoned.py
