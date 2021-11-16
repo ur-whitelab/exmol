@@ -436,7 +436,7 @@ def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     se2_epsilon = SSR / (len(examples) - len(beta))
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
-    tstat = np.sqrt(beta**2 / np.diag(se2_beta))
+    tstat = beta * np.sqrt(1 / np.diag(se2_beta))
     # Return tstats of the space and beta (feature weights) which are the fits
     return tstat, beta
 
