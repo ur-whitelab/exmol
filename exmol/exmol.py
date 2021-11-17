@@ -157,7 +157,7 @@ def run_chemed(
     try:
         reply = requests.get(
             url,
-            params={"Threshold": int(similarity), "MaxRecords": num_samples},
+            params={"Threshold": int(similarity * 100), "MaxRecords": num_samples},
             headers={"accept": "text/json"},
             timeout=10,
         )
