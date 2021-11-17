@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.5.1 (2021-11-16)
+-------------------
+* Fixed similarity float vs int in chemed
+
 v0.5.0 (2021-10-26)
 -------------------
 * Added custom lists for counterfactual source (contributed by @maclandrol)
