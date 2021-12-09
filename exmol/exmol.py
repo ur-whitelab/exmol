@@ -460,8 +460,7 @@ def highcf_explain(
     :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
     :param nmols: Desired number of molecules
     """
-    if type(delta) is float:
-        delta = (-delta, delta)
+
 
     def is_high(e):
         return e.yhat + delta[0] >= examples[0].yhat
