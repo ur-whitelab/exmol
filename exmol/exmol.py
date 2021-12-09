@@ -468,7 +468,7 @@ def highcf_explain(
 
 
     hresult = (
-        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
