@@ -446,6 +446,35 @@ def rcf_explain(
         l.label = f"Decrease ({i+1})"
     return examples[:1] + lresult + hresult
 
+def highcf_explain(
+    examples: List[Example],
+    delta: Union[float, Tuple[float, float]] = (-1, 1),
+    nmols: int = 4,
+) -> List[Example]:
+    """From given :obj:`Examples`, find best counterfactuals using :ref:`readme_link:counterfactual generation`
+
+    This version works with regression, so that a counterfactual is if the given example is higher or
+    lower than base.
+
+    :param examples: Output from :func:`sample_space`
+    :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
+    :param nmols: Desired number of molecules
+    """
+    if type(delta) is float:
+        delta = (-delta, delta)
+
+    def is_high(e):
+        return e.yhat + delta[0] >= examples[0].yhat
+
+
+
+    hresult = (
+        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+    )
+    for i, h in enumerate(hresult):
+        h.label = f"Increase ({i+1})"
+    
+    return examples[:1]  + hresult
 
 def plot_space(
     examples: List[Example],
