@@ -153,7 +153,7 @@ def run_chemed(
         _pbar.set_description("⚡CHEMED⚡ is Experimental ☠️")
     else:
         print("⚡CHEMED⚡ is Experimental ☠️")
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{origin_smiles}/property/CanonicalSMILES/JSON"
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{requests.utils.quote(origin_smiles)}/property/CanonicalSMILES/JSON"
     try:
         reply = requests.get(
             url,
