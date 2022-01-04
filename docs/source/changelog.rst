@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.5.2 (2021-11-16)
+-------------------
+* Fixed SMILES escaping in URL in chemed
+
 v0.5.1 (2021-11-16)
 -------------------
 * Fixed similarity float vs int in chemed
