@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-v0.5.2 (2021-11-16)
+v0.5.2 (2021-1-4)
 -------------------
 * Fixed SMILES escaping in URL in chemed
 
