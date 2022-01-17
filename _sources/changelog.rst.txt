@@ -1,7 +1,11 @@
 Change Log
 ==========
 
-v0.5.2 (2021-1-4)
+v0.6.0 (2022-1-17)
+-------------------
+* Changed behavior of num_samples so that it is not affected by mutation count in STONED
+
+v0.5.2 (2022-1-4)
 -------------------
 * Fixed SMILES escaping in URL in chemed
 
