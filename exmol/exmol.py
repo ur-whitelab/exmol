@@ -69,7 +69,7 @@ def run_stoned(
 
     :param s: SMILES string to start from
     :param fp_type: Fingerprint type
-    :param num_samples: Number of molecules to generate per mutation
+    :param num_samples: Number of total molecules to generate
     :param max_mutations: Maximum number of mutations
     :param min_mutations: Minimum number of mutations
     :param alphabet: Alphabet to use for mutations, typically from :func:`get_basic_alphabet()`
@@ -85,8 +85,9 @@ def run_stoned(
     if mol == None:
         raise Exception("Invalid starting structure encountered")
 
+    # want it so after sampling have num_samples
     randomized_smile_orderings = [
-        stoned.randomize_smiles(mol) for _ in range(num_samples)
+        stoned.randomize_smiles(mol) for _ in range(num_samples // len(num_mutation_ls))
     ]
 
     # Convert all the molecules to SELFIES
@@ -242,7 +243,8 @@ def sample_space(
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
-    This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule.
+    This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule. ``num_samples`` will be
+    set to 3,000 by default if using STONED and 150 if using ``chemed``.
 
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
@@ -250,7 +252,7 @@ def sample_space(
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` experimental preset to only sample commerically available compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
-    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default from preset.
+    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :return: List of generated :obj:`Example`
     """
@@ -276,7 +278,7 @@ def sample_space(
     if method_kwargs is None:
         method_kwargs = {}
         if preset == "medium":
-            method_kwargs["num_samples"] = 1500 if num_samples is None else num_samples
+            method_kwargs["num_samples"] = 3000 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 2
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "narrow":
@@ -284,7 +286,7 @@ def sample_space(
             method_kwargs["max_mutations"] = 1
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "wide":
-            method_kwargs["num_samples"] = 600 if num_samples is None else num_samples
+            method_kwargs["num_samples"] = 3000 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 5
             method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
         elif preset == "chemed":

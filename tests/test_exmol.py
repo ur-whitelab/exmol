@@ -30,9 +30,7 @@ def test_sanitize_smiles():
 
 
 # TODO let STONED people write these when they finish their repo
-
-
-def test_run_stones():
+def test_run_stoned():
     result = exmol.run_stoned(
         "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC",
         num_samples=10,
@@ -40,6 +38,16 @@ def test_run_stones():
     )
     # Can get duplicates
     assert len(result[0]) >= 0
+    assert abs(len(result[0]) - 10) <= 1
+
+    result = exmol.run_stoned(
+        "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC",
+        num_samples=12,
+        max_mutations=3,
+    )
+    # Can get duplicates
+    assert len(result[0]) >= 0
+    assert abs(len(result[0]) - 12) <= 1
 
 
 def test_run_chemed():
