@@ -27,7 +27,8 @@ from .data import *
 def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
-    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
+    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0]
+          for m in mols]
     # 1 - Ts because we want distance
     dist = list(
         1 - stoned.TanimotoSimilarity(x, y) for x, y in itertools.product(fp, repeat=2)
@@ -69,7 +70,7 @@ def run_stoned(
 
     :param s: SMILES string to start from
     :param fp_type: Fingerprint type
-    :param num_samples: Number of molecules to generate per mutation
+    :param num_samples: Number of total molecules to generate
     :param max_mutations: Maximum number of mutations
     :param min_mutations: Minimum number of mutations
     :param alphabet: Alphabet to use for mutations, typically from :func:`get_basic_alphabet()`
@@ -85,8 +86,9 @@ def run_stoned(
     if mol == None:
         raise Exception("Invalid starting structure encountered")
 
+    # want it so after sampling have num_samples
     randomized_smile_orderings = [
-        stoned.randomize_smiles(mol) for _ in range(num_samples)
+        stoned.randomize_smiles(mol) for _ in range(num_samples // len(num_mutation_ls))
     ]
 
     # Convert all the molecules to SELFIES
@@ -157,7 +159,8 @@ def run_chemed(
     try:
         reply = requests.get(
             url,
-            params={"Threshold": int(similarity * 100), "MaxRecords": num_samples},
+            params={"Threshold": int(similarity * 100),
+                    "MaxRecords": num_samples},
             headers={"accept": "text/json"},
             timeout=10,
         )
@@ -168,7 +171,8 @@ def run_chemed(
         data = reply.json()
     except:
         return [], []
-    smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
+    smiles = [d["CanonicalSMILES"]
+              for d in data["PropertyTable"]["Properties"]]
     smiles = set(smiles)
 
     if _pbar:
@@ -231,7 +235,8 @@ def run_custom(
 def sample_space(
     origin_smiles: str,
     f: Union[
-        Callable[[str, str], float], Callable[[List[str], List[str]], List[float]]
+        Callable[[str, str], float], Callable[[
+            List[str], List[str]], List[float]]
     ],
     batched: bool = True,
     preset: str = "medium",
@@ -242,7 +247,8 @@ def sample_space(
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
-    This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule.
+    This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule. ``num_samples`` will be
+    set to 3,000 by default if using STONED and 150 if using ``chemed``.
 
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
@@ -250,7 +256,7 @@ def sample_space(
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` experimental preset to only sample commerically available compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
-    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default from preset.
+    :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :return: List of generated :obj:`Example`
     """
@@ -276,7 +282,7 @@ def sample_space(
     if method_kwargs is None:
         method_kwargs = {}
         if preset == "medium":
-            method_kwargs["num_samples"] = 1500 if num_samples is None else num_samples
+            method_kwargs["num_samples"] = 3000 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 2
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "narrow":
@@ -284,7 +290,7 @@ def sample_space(
             method_kwargs["max_mutations"] = 1
             method_kwargs["alphabet"] = get_basic_alphabet()
         elif preset == "wide":
-            method_kwargs["num_samples"] = 600 if num_samples is None else num_samples
+            method_kwargs["num_samples"] = 3000 if num_samples is None else num_samples
             method_kwargs["max_mutations"] = 5
             method_kwargs["alphabet"] = sf.get_semantic_robust_alphabet()
         elif preset == "chemed":
@@ -382,13 +388,15 @@ def _select_examples(cond, examples, nmols):
             result.append(close_counter)
 
     # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
+    result = sorted(result, key=lambda v: v.similarity *
+                    cond(v), reverse=True)[:nmols]
 
     # fill in remaining
     ncount = sum([cond(e) for e in result])
     fill = max(0, nmols - ncount)
     result.extend(
-        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
+        sorted(examples, key=lambda v: v.similarity *
+               cond(v), reverse=True)[:fill]
     )
 
     return list(filter(cond, result))
@@ -435,12 +443,14 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+        [] if delta[0] is None else _select_examples(
+            is_high, examples[1:], nmols // 2)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
+        [] if delta[1] is None else _select_examples(
+            is_low, examples[1:], nmols // 2)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
@@ -519,7 +529,8 @@ def plot_space(
     ax.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
-        c=normalizer([e.cluster if highlight_clusters else e.yhat for e in exps]),
+        c=normalizer(
+            [e.cluster if highlight_clusters else e.yhat for e in exps]),
         cmap=cmap,
         edgecolors="black",
     )
