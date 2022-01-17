@@ -27,8 +27,7 @@ from .data import *
 def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
-    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0]
-          for m in mols]
+    fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
     # 1 - Ts because we want distance
     dist = list(
         1 - stoned.TanimotoSimilarity(x, y) for x, y in itertools.product(fp, repeat=2)
@@ -159,8 +158,7 @@ def run_chemed(
     try:
         reply = requests.get(
             url,
-            params={"Threshold": int(similarity * 100),
-                    "MaxRecords": num_samples},
+            params={"Threshold": int(similarity * 100), "MaxRecords": num_samples},
             headers={"accept": "text/json"},
             timeout=10,
         )
@@ -171,8 +169,7 @@ def run_chemed(
         data = reply.json()
     except:
         return [], []
-    smiles = [d["CanonicalSMILES"]
-              for d in data["PropertyTable"]["Properties"]]
+    smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
     smiles = set(smiles)
 
     if _pbar:
@@ -235,8 +232,7 @@ def run_custom(
 def sample_space(
     origin_smiles: str,
     f: Union[
-        Callable[[str, str], float], Callable[[
-            List[str], List[str]], List[float]]
+        Callable[[str, str], float], Callable[[List[str], List[str]], List[float]]
     ],
     batched: bool = True,
     preset: str = "medium",
@@ -388,15 +384,13 @@ def _select_examples(cond, examples, nmols):
             result.append(close_counter)
 
     # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity *
-                    cond(v), reverse=True)[:nmols]
+    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
 
     # fill in remaining
     ncount = sum([cond(e) for e in result])
     fill = max(0, nmols - ncount)
     result.extend(
-        sorted(examples, key=lambda v: v.similarity *
-               cond(v), reverse=True)[:fill]
+        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
     )
 
     return list(filter(cond, result))
@@ -443,14 +437,12 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(
-            is_high, examples[1:], nmols // 2)
+        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(
-            is_low, examples[1:], nmols // 2)
+        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
@@ -529,8 +521,7 @@ def plot_space(
     ax.scatter(
         [e.position[0] for e in exps],
         [e.position[1] for e in exps],
-        c=normalizer(
-            [e.cluster if highlight_clusters else e.yhat for e in exps]),
+        c=normalizer([e.cluster if highlight_clusters else e.yhat for e in exps]),
         cmap=cmap,
         edgecolors="black",
     )
