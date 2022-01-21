@@ -485,7 +485,7 @@ def plot_space(
         colors = cast(Any, [e.yhat for e in examples])
         normalizer = plt.Normalize(min(colors), max(colors))
         cmap = "viridis"
-    space_x = [e.position[0] for e in list(examples)]
+    space_x = [e.position[0] for e in examples]
     space_y = [e.position[1] for e in examples]
     if cartoon:
         # plot shading, lines, front
