@@ -1,17 +1,16 @@
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker  # type: ignore
 from typing import *
-import xml.etree.ElementTree as ET
-import io
-import matplotlib.pyplot as plt
-import numpy as np
-from rdkit.Chem import rdFMCS as MCS
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem.Draw import MolToImage as mol2img
-import rdkit.Chem
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+import xml.etree.ElementTree as ET  # type: ignore
+import io  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
+import numpy as np  # type: ignore
+from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
+import rdkit.Chem  # type: ignore
+import matplotlib as mpl  # type: ignore
 from .data import *
-import skunk
+import skunk  # type: ignore
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
@@ -52,7 +51,7 @@ def trim(im):
     :param im: PIL image
     :return: PIL image
     """
-    from PIL import Image, ImageChops
+    from PIL import Image, ImageChops  # type: ignore
 
     # https://stackoverflow.com/a/10616717
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))

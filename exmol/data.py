@@ -1,5 +1,6 @@
 from dataclasses import dataclass, asdict
-import numpy as np
+from typing import Optional
+import numpy as np  # type: ignore
 
 
 @dataclass
@@ -17,13 +18,13 @@ class Example:
     #: Index relative to other examples
     index: int
     #: PCA projected position from similarity
-    position: np.ndarray = None
+    position: np.ndarray = np.array(None)
     #: True if base
     is_origin: bool = False
     #: Index of cluster, can be -1 for no cluster
     cluster: int = 0
     #: Label for this example
-    label: str = None
+    label: Optional[str] = None
 
     # to make it look nicer
     def __str__(self):
