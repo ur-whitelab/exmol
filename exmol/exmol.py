@@ -306,7 +306,7 @@ def sample_space(
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
     elif preset == "custom":
         smiles, scores = run_custom(
-            origin_smiles, data=data, _pbar=pbar, **method_kwargs
+            origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
     else:
         smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
@@ -322,7 +322,7 @@ def sample_space(
             origin_smiles,
             sf.encoder(origin_smiles),
             1.0,
-            smi_yhat,
+            cast(Any, smi_yhat),
             index=0,
             is_origin=True,
         )
@@ -412,7 +412,7 @@ def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
 
 def rcf_explain(
     examples: List[Example],
-    delta: Union[float, Tuple[float, float]] = (-1, 1),
+    delta: Union[Any, Tuple[float, float]] = (-1, 1),
     nmols: int = 4,
 ) -> List[Example]:
     """From given :obj:`Examples`, find best counterfactuals using :ref:`readme_link:counterfactual generation`
@@ -482,7 +482,7 @@ def plot_space(
 
         cmap = "Accent"
     else:
-        colors = [e.yhat for e in examples]
+        colors = cast(Any, [e.yhat for e in examples])
         normalizer = plt.Normalize(min(colors), max(colors))
         cmap = "viridis"
     space_x = [e.position[0] for e in examples]
@@ -527,10 +527,10 @@ def plot_space(
     for e in exps:
         if not e.is_origin:
             titles.append(f"Similarity = {e.similarity:.2f}\n{e.label}")
-            colors.append(base_color)
+            colors.append(cast(Any, base_color))
         else:
             titles.append("Base")
-            colors.append(base_color)
+            colors.append(cast(Any, base_color))
     _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
