@@ -32,6 +32,7 @@ jobs:
          mypy -p exmol --ignore-missing-imports
     - name: Build a binary wheel and a source tarball
       run: |
+        pip install python-build
         python -m build --sdist --wheel --outdir dist/ .
     - name: Publish distribution 📦 to PyPI
       if:  github.event_name == 'release'
