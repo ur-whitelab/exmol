@@ -1,4 +1,5 @@
 from dataclasses import dataclass, asdict
+from typing import Optional
 import numpy as np
 
 
@@ -23,7 +24,7 @@ class Example:
     #: Index of cluster, can be -1 for no cluster
     cluster: int = 0
     #: Label for this example
-    label: str = None
+    label: Optional[str] = None
 
     # to make it look nicer
     def __str__(self):
