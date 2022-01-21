@@ -332,8 +332,8 @@ def sample_space(
         if s < 1.0 and np.isfinite(np.squeeze(y))
     ]
 
-    for i, e in enumerate(exps):
-        e.index = i
+    for i, e in enumerate(exps):  # type: ignore
+        e.index = i  # type: ignore
 
     pbar.reset(len(exps))
     pbar.set_description("🔭Projecting...🔭")
@@ -350,8 +350,8 @@ def sample_space(
     # compute PCA
     pca = PCA(n_components=2)
     proj_dmat = pca.fit_transform(full_dmat)
-    for e in exps:
-        e.position = proj_dmat[e.index, :]
+    for e in exps:  # type: ignore
+        e.position = proj_dmat[e.index, :]  # type: ignore
 
     # do clustering everwhere (maybe do counter/same separately?)
     # clustering = AgglomerativeClustering(
@@ -359,8 +359,8 @@ def sample_space(
     # Just do it on projected so it looks prettier.
     clustering = DBSCAN(eps=0.15, min_samples=5).fit(proj_dmat)
 
-    for i, e in enumerate(exps):
-        e.cluster = clustering.labels_[i]
+    for i, e in enumerate(exps):  # type: ignore
+        e.cluster = clustering.labels_[i]  # type: ignore
 
     pbar.set_description("🤘Done🤘")
     pbar.close()
