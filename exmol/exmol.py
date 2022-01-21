@@ -1,9 +1,9 @@
 from typing import *
 
-import itertools  # type: ignore
+import itertools
 import math
 import requests  # type: ignore
-import numpy as np  # type: ignore
+import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
 import matplotlib as mpl  # type: ignore
 import selfies as sf  # type: ignore
