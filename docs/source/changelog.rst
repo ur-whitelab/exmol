@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v1.0.0 (2022-1-?)
+-------------------
+* Switched to SELFIES v2.0 branch, which has a different token list
+* Removed "experimental" tag from Chemed and Custom methods
+
 v0.6.0 (2022-1-17)
 -------------------
 * Changed behavior of num_samples so that it is not affected by mutation count in STONED

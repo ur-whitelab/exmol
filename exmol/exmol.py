@@ -52,7 +52,7 @@ def get_basic_alphabet() -> Set[str]:
     to_remove.extend(["[P]", "[#P]", "[=P]"])
 
     a -= set(to_remove)
-    a.add("[O-1expl]")
+    a.add("[O-1]")
     return a
 
 
@@ -151,9 +151,9 @@ def run_chemed(
     :return: SMILES and SCORES
     """
     if _pbar:
-        _pbar.set_description("⚡CHEMED⚡ is Experimental ☠️")
+        _pbar.set_description("⚡CHEMED⚡")
     else:
-        print("⚡CHEMED⚡ is Experimental ☠️")
+        print("⚡CHEMED⚡")
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{requests.utils.quote(origin_smiles)}/property/CanonicalSMILES/JSON"
     try:
         reply = requests.get(
@@ -206,9 +206,9 @@ def run_custom(
     :return: SMILES and SCORES
     """
     if _pbar:
-        _pbar.set_description("⚡CUSTOM⚡ is Experimental ☠️")
+        _pbar.set_description("⚡CUSTOM⚡")
     else:
-        print("⚡CUSTOM⚡ is Experimental ☠️")
+        print("⚡CUSTOM⚡")
     mol0 = smi2mol(origin_smiles)
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
@@ -249,7 +249,7 @@ def sample_space(
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` experimental preset to only sample commerically available compounds.
+    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample commerically available compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
