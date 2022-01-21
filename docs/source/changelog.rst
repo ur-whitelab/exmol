@@ -1,10 +1,12 @@
 Change Log
 ==========
 
-v1.0.0 (2022-1-?)
+v1.0.0 (2022-1-21)
 -------------------
-* Switched to SELFIES v2.0 branch, which has a different token list
+* Switched to SELFIES v2.0 release, which has a different token list
 * Removed "experimental" tag from Chemed and Custom methods
+* Type annotations now pass ``mypy`` 
+* Paper models now generate SVGs correctly and fixed token issues
 
 v0.6.0 (2022-1-17)
 -------------------
