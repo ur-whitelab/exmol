@@ -208,19 +208,19 @@
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
 
-import selfies
-import random
-from rdkit import Chem
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem import MolToSmiles as mol2smi
+import selfies  # type: ignore
+import random  # type: ignore
+from rdkit import Chem  # type: ignore
+from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 
-from rdkit.Chem import AllChem
-from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
-from rdkit.Chem import Mol
-from rdkit.Chem.AtomPairs.Sheridan import GetBPFingerprint, GetBTFingerprint
-from rdkit.Chem.Pharm2D import Generate, Gobbi_Pharm2D
+from rdkit.Chem import AllChem  # type: ignore
+from rdkit.DataStructs.cDataStructs import TanimotoSimilarity  # type: ignore
+from rdkit.Chem import Mol  # type: ignore
+from rdkit.Chem.AtomPairs.Sheridan import GetBPFingerprint, GetBTFingerprint  # type: ignore
+from rdkit.Chem.Pharm2D import Generate, Gobbi_Pharm2D  # type: ignore
 
-from rdkit import RDLogger
+from rdkit import RDLogger  # type: ignore
 
 RDLogger.DisableLog("rdApp.*")
 

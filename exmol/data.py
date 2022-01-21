@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict
 from typing import Optional
-import numpy as np
+import numpy as np  # type: ignore
 
 
 @dataclass
@@ -18,7 +18,7 @@ class Example:
     #: Index relative to other examples
     index: int
     #: PCA projected position from similarity
-    position: np.ndarray = None
+    position: np.ndarray = np.array(None)
     #: True if base
     is_origin: bool = False
     #: Index of cluster, can be -1 for no cluster

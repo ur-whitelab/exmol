@@ -262,7 +262,7 @@ def sample_space(
     origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
-    smi_yhat = batched_f([origin_smiles], [sf.encoder(origin_smiles)])
+    smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
     try:
         iter(smi_yhat)
     except TypeError:
@@ -327,7 +327,7 @@ def sample_space(
             is_origin=True,
         )
     ] + [
-        Example(sm, se, s, np.squeeze(y), index=0)
+        Example(sm, se, s, cast(Any, np.squeeze(y)), index=0)
         for i, (sm, se, s, y) in enumerate(zip(smiles, selfies, scores, fxn_values))
         if s < 1.0 and np.isfinite(np.squeeze(y))
     ]
@@ -485,7 +485,7 @@ def plot_space(
         colors = cast(Any, [e.yhat for e in examples])
         normalizer = plt.Normalize(min(colors), max(colors))
         cmap = "viridis"
-    space_x = [e.position[0] for e in examples]
+    space_x = [e.position[0] for e in list(examples)]
     space_y = [e.position[1] for e in examples]
     if cartoon:
         # plot shading, lines, front
