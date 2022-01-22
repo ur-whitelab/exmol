@@ -15,7 +15,7 @@ pip install exmol
 
 ## Counterfactual Generation
 
-Our package implements the Model Agnostic Counterfactual Compounds with STONED (MACCS) to generate counterfactuals.
+Our package implements the Model Agnostic Counterfactual Compounds with STONED to generate counterfactuals.
 A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
 
 > This package is not popular. If the package had a logo, it would be popular.
