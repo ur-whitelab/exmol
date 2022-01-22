@@ -34,6 +34,7 @@ def insert_svg(
     exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize: int = 10
 ) -> str:
     """Replace rasterized image files with SVG versions of molecules
+
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
     :param mol_size: If mol_size was specified, it needs to be re-specified here
     :return: SVG string that can be saved or displayed in juypter notebook
@@ -47,7 +48,9 @@ def insert_svg(
 
 def trim(im):
     """Implementation of whitespace trim
+
     credit: https://stackoverflow.com/a/10616717
+
     :param im: PIL image
     :return: PIL image
     """
@@ -167,6 +170,7 @@ def _cleanup_rdkit_svgs(svgs):
 
 def moldiff(template, query) -> Tuple[List[int], List[int]]:
     """Compare the two rdkit molecules.
+
     :param template: template molecule
     :param query: query molecule
     :return: list of modified atoms in query, list of modified bonds in query
