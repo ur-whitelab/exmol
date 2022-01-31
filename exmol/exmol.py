@@ -505,7 +505,6 @@ def plot_space(
     mol_fontsize: int = 8,
     offset: int = 0,
     ax: Any = None,
-    plot_descriptors: bool = False,
     cartoon: bool = False,
     rasterized: bool = False
 ):
@@ -535,6 +534,7 @@ def plot_space(
             return x
 
         cmap = "Accent"
+
     else:
         colors = [e.yhat for e in examples]
         normalizer = plt.Normalize(min(colors), max(colors))
