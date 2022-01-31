@@ -15,14 +15,14 @@ pip install exmol
 
 ## Counterfactual Generation
 
-Our package implements the Model Agnostic Counterfactual Compounds with STONED (MACCS) to generate counterfactuals.
+Our package implements the Model Agnostic Counterfactual Compounds with STONED to generate counterfactuals.
 A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
 
 > This package is not popular. If the package had a logo, it would be popular.
 
 In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
-<img alt="counterfactual demo" src="paper/counterfactual.svg" width="400">
+<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/counterfactual.png" width="400">
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
@@ -38,7 +38,7 @@ We first expand chemical space around the prediction of interest
 import exmol
 
 # mol of interest
-base = 'CCCO'
+base = 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O'
 
 samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
 ```
@@ -51,7 +51,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="paper/rf-simple.svg" width="400">
+<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-simple.png" width="500">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -60,24 +60,27 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="paper/rf-space.svg" width="600">
+<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-space.png" width="600">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
 ```py
-print(cfs[0])
+print(cfs[1])
 ```
 ```
-Examples(
-  smiles='CCOC(=O)c1ccc(N=CN(Cl)c2ccccc2)cc1',
-  selfies='[C][C][O][C][Branch1_2][C][=O][C][=C][C][=C][Branch1_1][#C][N][=C][N][Branch1_1][C][Cl][C][=C][C][=C][C][=C][Ring1][Branch1_2][C][=C][Ring1][S]',
-  similarity=0.8181818181818182,
-  yhat=-5.459493637084961,
-  index=1807,
-  position=array([-6.11371691,  1.24629293]),
-  is_origin=False,
-  cluster=26,
-  label='Counterfactual')
+{
+'smiles': 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C',
+'selfies': '[C][C][O][N][=C][Branch1_1][Branch2_3][C][=C][C][=C][C][=C][Ring1][Branch1_2][Cl][C]
+            [Expl=Ring1][N][C][Branch1_2][C][=O][N][C][C][Branch1_2][C][=O][N][C][Ring1][Branch1_1][S][C]
+            [Branch1_1][C][C][Branch1_1][C][C][C][Ring1][Branch1_3][C]',
+'similarity': 0.8,
+'yhat': 1,
+'index': 1813,
+'position': array([-7.8032394 ,  0.51781263]),
+'is_origin': False,
+'cluster': -1,
+'label': 'Counterfactual 1'
+}
 ```
 
 ## Chemical Space
@@ -88,7 +91,8 @@ one of the following:
 * `'narrow'`: Only one change to molecular structure, reduced set of possible bonds/elements
 * `'medium'`: Default. One or two changes to molecular structure, reduced set of possible bonds/elements
 * `'wide'`: One through five changes to molecular structure, large set of possible bonds/elements
-* `'chemed'`: A restrictive set where only pubchem molecules are considered. *Experimental*
+* `'chemed'`: A restrictive set where only pubchem molecules are considered.
+* `'custom'`: A restrictive set where only molecules provided by the "data" key are considered.
 
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
@@ -118,6 +122,10 @@ This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 [Read API here](https://ur-whitelab.github.io/exmol/api.html). You should also read the paper (see below) for a more exact
 description of the methods and implementation.
 
+## Developing
+
+This repo uses pre-commit, so after cloning run `pip install -r requirements.txt` and `pre-commit install` prior to committing.
+
 ## Citation
 
 Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
@@ -133,5 +141,3 @@ Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-det
  year={2021}}
 ```
 This content is a preprint and has not been peer-reviewed.
-
-

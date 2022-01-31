@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "exmol"
-copyright = "2021, Geemi Wellawatte, Andrew D White"
+copyright = "2022, Geemi Wellawatte, Andrew D White"
 author = "Geemi Wellawatte, Andrew D White"
 
 
@@ -33,8 +33,12 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
-    'sphinx.ext.githubpages'
+    "sphinx.ext.githubpages",
 ]
+
+# Prefix document path to section labels, to use:
+# `path/to/file:heading` instead of just `heading`
+autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -55,7 +59,7 @@ html_theme = "sphinx_rtd_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
 
 
 autosectionlabel_prefix_document = True
@@ -71,4 +75,4 @@ intersphinx_mapping = {
     "selfies": ("https://selfies.readthedocs.io/en/latest/", None),
 }
 
-master_doc = 'toc'
+master_doc = "toc"

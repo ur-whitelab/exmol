@@ -208,19 +208,19 @@
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
 
-import selfies
+import selfies  # type: ignore
 import random
-from rdkit import Chem
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem import MolToSmiles as mol2smi
+from rdkit import Chem  # type: ignore
+from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 
-from rdkit.Chem import AllChem
-from rdkit.DataStructs.cDataStructs import TanimotoSimilarity
-from rdkit.Chem import Mol
-from rdkit.Chem.AtomPairs.Sheridan import GetBPFingerprint, GetBTFingerprint
-from rdkit.Chem.Pharm2D import Generate, Gobbi_Pharm2D
+from rdkit.Chem import AllChem  # type: ignore
+from rdkit.DataStructs.cDataStructs import TanimotoSimilarity  # type: ignore
+from rdkit.Chem import Mol  # type: ignore
+from rdkit.Chem.AtomPairs.Sheridan import GetBPFingerprint, GetBTFingerprint  # type: ignore
+from rdkit.Chem.Pharm2D import Generate, Gobbi_Pharm2D  # type: ignore
 
-from rdkit import RDLogger
+from rdkit import RDLogger  # type: ignore
 
 RDLogger.DisableLog("rdApp.*")
 
@@ -384,7 +384,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
         # Replace a random character
         elif random_choice == 2:
-            random_index = random.randint(0, len(chars_selfie)-1)
+            random_index = random.randint(0, len(chars_selfie) - 1)
             random_character = random.choice(alphabet)
             if random_index == 0:
                 selfie_mutated_chars = [random_character] + chars_selfie[
@@ -399,7 +399,7 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
         # Delete a random character
         elif random_choice == 3:
-            random_index = random.randint(0, len(chars_selfie)-1)
+            random_index = random.randint(0, len(chars_selfie) - 1)
             if random_index == 0:
                 selfie_mutated_chars = chars_selfie[random_index + 1 :]
             else:

@@ -26,9 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov build
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Check pre-commit
+      run: pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
     - name: Install
       run: |
         pip install .
     - name: Run Test
       run: |
          pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+         mypy -p exmol --ignore-missing-imports

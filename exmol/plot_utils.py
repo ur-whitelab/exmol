@@ -1,25 +1,23 @@
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker  # type: ignore
 from typing import *
-import xml.etree.ElementTree as ET
-import io
-from matplotlib.patches import Rectangle
-import matplotlib.pyplot as plt
-import numpy as np
-from rdkit.Chem import rdFMCS as MCS
-from rdkit.Chem import MolFromSmiles as smi2mol
-from rdkit.Chem.Draw import MolToImage as mol2img
-import rdkit.Chem
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+import xml.etree.ElementTree as ET  # type: ignore
+import io  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
+import numpy as np  # type: ignore
+from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
+import rdkit.Chem  # type: ignore
+import matplotlib as mpl  # type: ignore
 from .data import *
-import skunk
+import skunk  # type: ignore
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
 
 
 def _extract_loc(e):
-    path = e.attrib['d']
+    path = e.attrib["d"]
     spath = path.split()
     x, y = [], []
     a1, a2 = x, y
@@ -50,10 +48,9 @@ def _descriptor_layout(ds, size):
     ax_dict['A'].axis('off')
 
 
-def insert_svg(exps: List[Example],
-               mol_size: Tuple[int, int] = (200, 200),
-               descriptors: bool = False,
-               mol_fontsize: int = 10) -> str:
+def insert_svg(
+    exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize: int = 10
+) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
@@ -88,7 +85,7 @@ def trim(im):
     :param im: PIL image
     :return: PIL image
     """
-    from PIL import Image, ImageChops
+    from PIL import Image, ImageChops  # type: ignore
 
     # https://stackoverflow.com/a/10616717
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
@@ -112,12 +109,11 @@ def _image_scatter(x, y, imgs, subtitles, colors, ax, offset):
     bbs = []
     for i, (x0, y0, im, t, c) in enumerate(zip(x, y, imgs, subtitles, colors)):
         # TODO Figure out how to put this back
-        #im = trim(im)
+        # im = trim(im)
         img_data = np.asarray(im)
-        img_box = skunk.ImageBox(f'rdkit-img-{i}', img_data)
+        img_box = skunk.ImageBox(f"rdkit-img-{i}", img_data)
         title_box = TextArea(t)
-        packed = VPacker(children=[img_box, title_box],
-                         pad=0, sep=4, align="center")
+        packed = VPacker(children=[img_box, title_box], pad=0, sep=4, align="center")
         bb = AnnotationBbox(
             packed,
             (x0, y0),
@@ -165,8 +161,7 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
                     options=dos,
                     highlightAtoms=aidx,
                     highlightBonds=bidx,
-                    highlightColor=modify_color if len(
-                        bidx) > 0 else delete_color,
+                    highlightColor=modify_color if len(bidx) > 0 else delete_color,
                 )
             )
         else:
@@ -177,10 +172,12 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
                     options=dos,
                     highlightAtoms=aidx,
                     highlightBonds=bidx,
-                    highlightAtomColors={k: modify_color for k in aidx} if len(
-                        bidx) > 0 else {k: delete_color for k in aidx},
-                    highlightBondColors={k: modify_color for k in bidx} if len(
-                        bidx) > 0 else {k: delete_color for k in bidx},
+                    highlightAtomColors={k: modify_color for k in aidx}
+                    if len(bidx) > 0
+                    else {k: delete_color for k in aidx},
+                    highlightBondColors={k: modify_color for k in bidx}
+                    if len(bidx) > 0
+                    else {k: delete_color for k in bidx},
                 )
             )
 
@@ -199,7 +196,7 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
 def _cleanup_rdkit_svgs(svgs):
     for i in range(len(svgs)):
         # simple approach
-        svgs[i] = svgs[i].replace('stroke-width:2.0px;', '')
+        svgs[i] = svgs[i].replace("stroke-width:2.0px;", "")
     return svgs
 
 
