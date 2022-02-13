@@ -49,7 +49,8 @@ def _descriptor_layout(ds, size):
 
 
 def insert_svg(
-    exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize: int = 10
+    exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize:
+    int = 10, descriptors = False
 ) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
