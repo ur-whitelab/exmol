@@ -470,7 +470,9 @@ def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     y = np.array([e.yhat for e in examples]).reshape(
         len(examples)).astype(float)
     # sqrt to weights for lstq equation
-    w = np.sqrt([e.similarity for e in examples])
+    # w = np.sqrt([e.similarity for e in examples])
+    w = np.array([1/(1 + (1/(e.similarity + 0.000001) - 1)**5)
+                  for e in examples])
     # remove bias
     y -= np.mean(y)
     # compute least squares fit
