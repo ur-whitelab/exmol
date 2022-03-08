@@ -131,7 +131,7 @@ This repo uses pre-commit, so after cloning run `pip install -r requirements.txt
 Please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
 
 ```bibtex
-@Article{D1SC05259D,
+@Article{wellawatte_seshadri_white_2021,
 author ="Wellawatte, Geemi P. and Seshadri, Aditi and White, Andrew D.",
 title  ="Model agnostic generation of counterfactual explanations for molecules",
 journal  ="Chem. Sci.",
