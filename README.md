@@ -128,16 +128,17 @@ This repo uses pre-commit, so after cloning run `pip install -r requirements.txt
 
 ## Citation
 
-Please cite [Wellawatte et al.](https://chemrxiv.org/engage/chemrxiv/article-details/6115baf04cb4797dc42df605)
+Please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
 
 ```bibtex
- @article{wellawatte_seshadri_white_2021,
- place={Cambridge},
- title={Model agnostic generation of counterfactual explanations for molecules},
- DOI={10.33774/chemrxiv-2021-4qkg8},
- journal={ChemRxiv},
- publisher={Cambridge Open Engage},
- author={Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D},
- year={2021}}
+@Article{D1SC05259D,
+author ="Wellawatte, Geemi P. and Seshadri, Aditi and White, Andrew D.",
+title  ="Model agnostic generation of counterfactual explanations for molecules",
+journal  ="Chem. Sci.",
+year  ="2022",
+pages  ="-",
+publisher  ="The Royal Society of Chemistry",
+doi  ="10.1039/D1SC05259D",
+url  ="http://dx.doi.org/10.1039/D1SC05259D",
+}
 ```
-This content is a preprint and has not been peer-reviewed.
