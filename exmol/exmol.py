@@ -60,6 +60,8 @@ def get_descriptors(examples: List[Example],
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
+    import os
+    from rdkit.Chem import MACCSkeys
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
     if descriptor_type == 'Classic':
@@ -473,14 +475,14 @@ def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     # w = np.sqrt([e.similarity for e in examples])
     w = np.array([1/(1 + (1/(e.similarity + 0.000001) - 1)**5)
                   for e in examples])
+    # create a diagonal matrix of w
+    N = x_mat.shape[0]
+    diag_w = np.zeros((N, N)) 
+    np.fill_diagonal(diag_w, w)
     # remove bias
     y -= np.mean(y)
     # compute least squares fit
-    # we add a little noise to condition for perfectly correlated descriptors
-    noisey_x_mat = (x_mat +
-                    np.random.uniform(-1e-4, 1e-4,
-                                      size=x_mat.shape)) * w[:, np.newaxis]
-    xtinv = np.linalg.inv(noisey_x_mat.T @ noisey_x_mat)
+    xtinv = np.linalg.pinv((x_mat.T @ diag_w @ x_mat ))
     beta = xtinv @ x_mat.T @ (y * w)
     # compute tstats for each example as a difference from base
     for e in examples:
