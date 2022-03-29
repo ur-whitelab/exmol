@@ -83,6 +83,8 @@ def test_sample():
     explanation = exmol.sample_space("CCCC", model, batched=False)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
+    # do it without progress bar
+    exmol.sample_space("CCCC", model, batched=False, quiet=True)
 
 
 def test_sample_preset():

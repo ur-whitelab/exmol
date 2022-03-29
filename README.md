@@ -117,6 +117,10 @@ with open('myplot.svg', 'w') as f:
 
 This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 
+## Quiet Progress Bars
+
+If `exmol` is being too loud, add `quiet = True` to `sample_space` arguments.
+
 ## API and Docs
 
 [Read API here](https://ur-whitelab.github.io/exmol/api.html). You should also read the paper (see below) for a more exact
