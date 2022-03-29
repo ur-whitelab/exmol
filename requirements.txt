@@ -2,4 +2,4 @@ pre-commit
 mypy
 pytest
 pytest-cov
-click==8.0.4
+click
