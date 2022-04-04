@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v1.0.1 (2022-4-4)
+-------------------
+* Added quiet mode
+
 v1.0.0 (2022-1-21)
 -------------------
 * Switched to SELFIES v2.0 release, which has a different token list
