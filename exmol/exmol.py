@@ -457,22 +457,19 @@ def _select_examples(cond, examples, nmols):
 
 
 def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
-    # TODO: return something more useful
-    try:
-        # try last, since base may have had descriptors
-        M = len(examples[-1].descriptors)
-    except TypeError:
-        # descriptors need to be calculated
-        examples = get_descriptors(examples, descriptor_type)
-        M = len(examples[-1].descriptors.descriptors)
+    """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
+    :doc: `index`)
 
+    :param examples: Output from :func: `sample_space`
+    :param descriptor_type: Desired descriptors, choose from `Classic` or `MACCS`  
+    """
+    examples = get_descriptors(examples, descriptor_type)
     x_mat = np.array([list(e.descriptors.descriptors)
                       for e in examples]).reshape(len(examples), -1)
     # remove zero variance columns
     y = np.array([e.yhat for e in examples]).reshape(
         len(examples)).astype(float)
-    # sqrt to weights for lstq equation
-    # w = np.sqrt([e.similarity for e in examples])
+    # weighted tanimoto similarities
     w = np.array([1/(1 + (1/(e.similarity + 0.000001) - 1)**5)
                   for e in examples])
     # create a diagonal matrix of w
