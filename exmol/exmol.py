@@ -2,12 +2,17 @@ from typing import *
 
 import itertools
 import math
+from xml.sax.handler import feature_external_ges
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
+from matplotlib.patches import Rectangle, FancyBboxPatch  # type: ignore
+from matplotlib.offsetbox import AnnotationBbox  # type: ignore
 import matplotlib as mpl  # type: ignore
 import selfies as sf  # type: ignore
 import tqdm  # type: ignore
+import textwrap  # type: ignore
+import skunk  # type: ignore
 
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
@@ -41,19 +46,26 @@ def _make_calculator():
     from mordred import HydrogenBond, Polarizability
     from mordred import SLogP, AcidBase, BertzCT, Aromatic, BondCount
     from mordred import Calculator
+
     c = Calculator()
     c.register([HydrogenBond.HBondDonor, HydrogenBond.HBondAcceptor])
-    c.register([AcidBase.AcidicGroupCount, AcidBase.BasicGroupCount,
-                Aromatic.AromaticBondsCount])
-    c.register([SLogP.SLogP, Polarizability.APol,  BertzCT.BertzCT])
-    c.register([BondCount.BondCount(type='double'),
-                BondCount.BondCount(type='aromatic')])
+    c.register(
+        [
+            AcidBase.AcidicGroupCount,
+            AcidBase.BasicGroupCount,
+            Aromatic.AromaticBondsCount,
+        ]
+    )
+    c.register([SLogP.SLogP, Polarizability.APol, BertzCT.BertzCT])
+    c.register(
+        [BondCount.BondCount(type="double"), BondCount.BondCount(type="aromatic")]
+    )
     return c
 
 
-def get_descriptors(examples: List[Example], 
-                    descriptor_type: str = 'MACCS',
-                    mols: List[Any] = None) -> List[Example]:
+def get_descriptors(
+    examples: List[Example], descriptor_type: str = "MACCS", mols: List[Any] = None
+) -> List[Example]:
     """Returns set of descriptors for passed examples
 
     :param examples: List of example
@@ -62,9 +74,10 @@ def get_descriptors(examples: List[Example],
     """
     import os
     from rdkit.Chem import MACCSkeys
+
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
-    if descriptor_type == 'Classic':
+    if descriptor_type == "Classic":
         global _calculator
         if _calculator is None:
             _calculator = _make_calculator()
@@ -72,23 +85,31 @@ def get_descriptors(examples: List[Example],
         for e, c in zip(examples, _calculator.map(mols, quiet=True)):
             descriptors = tuple(v for v in c.values())
             descriptor_names = names
-            e.descriptors = Descriptors(descriptors=descriptors, 
-                                        descriptor_names=descriptor_names)
+            e.descriptors = Descriptors(
+                descriptors=descriptors, descriptor_names=descriptor_names
+            )
         return examples
-    elif descriptor_type == 'MACCS':
-        names = tuple([line.strip().split('\t')[-1]
-                      for line 
-                      in list(open(os.path.join(os.path.dirname(__file__),
-                                                'MACCSkeys.txt')))[1:]])
+    elif descriptor_type == "MACCS":
+        names = tuple(
+            [
+                line.strip().split("\t")[-1]
+                for line in list(
+                    open(os.path.join(os.path.dirname(__file__), "MACCSkeys.txt"))
+                )[1:]
+            ]
+        )
         for e, m in zip(examples, mols):
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
             descriptors = tuple(int(i) for i in fps)
             descriptor_names = names
-            e.descriptors = Descriptors(descriptors=descriptors, 
-                                        descriptor_names=descriptor_names)
+            e.descriptors = Descriptors(
+                descriptors=descriptors, descriptor_names=descriptor_names
+            )
         return examples
     else:
-        raise ValueError('Invalid descriptor string. Valid descriptor strings are \'Classic\' and \'MACCS\'.')
+        raise ValueError(
+            "Invalid descriptor string. Valid descriptor strings are 'Classic' and 'MACCS'."
+        )
 
 
 def get_basic_alphabet() -> Set[str]:
@@ -463,25 +484,32 @@ def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     :doc: `index`)
 
     :param examples: Output from :func: `sample_space`
-    :param descriptor_type: Desired descriptors, choose from `Classic` or `MACCS`  
+    :param descriptor_type: Desired descriptors, choose from `Classic` or `MACCS`
     """
     examples = get_descriptors(examples, descriptor_type)
-    x_mat = np.array([list(e.descriptors.descriptors)
-                      for e in examples]).reshape(len(examples), -1)
-    # remove zero variance columns
-    y = np.array([e.yhat for e in examples]).reshape(
-        len(examples)).astype(float)
     # weighted tanimoto similarities
-    w = np.array([1/(1 + (1/(e.similarity + 0.000001) - 1)**5)
-                  for e in examples])
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
+    # Only keep nonzero weights
+    non_zero = w > 10 ** (-6)
+    nonzero_w = w[non_zero]
     # create a diagonal matrix of w
-    N = x_mat.shape[0]
-    diag_w = np.zeros((N, N)) 
-    np.fill_diagonal(diag_w, w)
+    N = nonzero_w.shape[0]
+    diag_w = np.zeros((N, N))
+    np.fill_diagonal(diag_w, nonzero_w)
+    # get feature matrix
+    x_mat = np.array([list(e.descriptors.descriptors) for e in examples])[
+        non_zero
+    ].reshape(N, -1)
+    # remove zero variance columns
+    y = (
+        np.array([e.yhat for e in examples])
+        .reshape(len(examples))[non_zero]
+        .astype(float)
+    )
     # remove bias
     y -= np.mean(y)
     # compute least squares fit
-    xtinv = np.linalg.pinv((x_mat.T @ diag_w @ x_mat ))
+    xtinv = np.linalg.pinv((x_mat.T @ diag_w @ x_mat))
     beta = xtinv @ x_mat.T @ (y * w)
     # compute tstats for each example as a difference from base
     for e in examples:
@@ -575,7 +603,7 @@ def plot_space(
     :param cartoon: do cartoon outline on points?
     :param rasterized: raster the scatter?
     """
-    imgs = _mol_images(exps, mol_size, mol_fontsize)#, True)
+    imgs = _mol_images(exps, mol_size, mol_fontsize)  # , True)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
@@ -689,3 +717,135 @@ def plot_cf(
         axs[j].axis("off")
         axs[j].set_facecolor("white")
     plt.tight_layout()
+
+
+def plot_descriptors(
+    space: List[Example],
+    space_tstats: List[float],
+    desc_type: str,
+    fig: Any = None,
+    figure_kwargs: Dict = None,
+    output_file: str = None,
+):
+    """Plot descriptor attributions from given set of Examples are space_tstats
+
+    :param exps: Output from :func:`sample_space`
+    :param space_tstats: t-statistics output from :func:`lime_explain`
+    :param desc_type: Descriptor type to plot, either 'Classic' or 'MACCS'
+    :param fig: Figure to plot on to
+    :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
+    :param output_file: Output file name to save the plot
+    """
+
+    if fig is None:
+        if figure_kwargs is None:
+            figure_kwargs = (
+                {"figsize": (5, 5)} if desc_type == "Classic" else {"figsize": (8, 5)}
+            )
+        fig, ax = plt.subplots(nrows=1, ncols=1, dpi=180, **figure_kwargs)
+
+    # find important descriptors
+    d_importance = {
+        a: [b, i]
+        for i, a, b in zip(
+            np.arange(len(space[0].descriptors.descriptors)),
+            space[0].descriptors.descriptor_names,
+            space_tstats,
+        )
+        if not np.isnan(b)
+    }
+    t = [a[0] for a in list(d_importance.values())][:5]
+    key_ids = [a[1] for a in list(d_importance.values())][:5]
+    keys = [a for a in list(d_importance.keys())]
+
+    # set colors
+    colors = []
+    for ti in t:
+        if ti < 0:
+            colors.append("#F06060")
+        if ti > 0:
+            colors.append("#1BBC9B")
+    # plot the bars
+    bar1 = ax.barh(range(len(t)), t, color=colors, height=0.75)
+    new_patches = []
+    for patch in reversed(ax.patches):
+        bb = patch.get_bbox()
+        color = patch.get_facecolor()
+        p_bbox = FancyBboxPatch(
+            (bb.xmin, bb.ymin),
+            abs(bb.width),
+            abs(bb.height),
+            boxstyle="round,pad=-0.040,rounding_size=0.015",
+            ec="none",
+            fc=color,
+            mutation_aspect=4,
+        )
+        patch.remove()
+        new_patches.append(p_bbox)
+    for patch in new_patches:
+        ax.add_patch(patch)
+
+    # annotate patches with text desciption
+    count = 0
+    sk_dict = {}
+    for rect, ti, k in zip(bar1, t, keys):
+        y = rect.get_y() + rect.get_height() / 2.0
+        if len(k) > 60:
+            k = textwrap.fill(k, 25)
+        elif len(k) > 25:
+            k = textwrap.fill(k, 20)
+        if ti < 0:
+            x = 0.25
+            skx = np.max(np.absolute(t)) + 2
+            box_x = 0.98
+            ax.text(x, y, k, ha="left", va="center", wrap=True, fontsize=12)
+        else:
+            x = -0.25
+            skx = -np.max(np.absolute(t)) - 2
+            box_x = 0.02
+            ax.text(x, y, k, ha="right", va="center", wrap=True, fontsize=12)
+        # add SMARTS annotation where applicable
+        if desc_type == "MACCS":
+            box = skunk.Box(130, 50, f"sk{count}")
+            ab = AnnotationBbox(
+                box,
+                xy=(skx, count),
+                xybox=(box_x, (5 - count) * 0.2 - 0.1),  # Invert axis
+                xycoords="data",
+                boxcoords="axes fraction",
+                bboxprops=dict(lw=0.5),
+            )
+
+            ax.add_artist(ab)
+            sk_dict[f"sk{count}"] = f"keys/{key_ids[count]}.svg"
+        count += 1
+    ax.axvline(x=0, color="grey", linewidth=0.5)
+    # calculate significant T
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in space])
+    effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    T = ss.t.ppf(0.975, df=effective_n)
+    # plot T
+    ax.axvline(x=T, color="#f5ad4c", linewidth=0.75, linestyle="--", zorder=0)
+    ax.axvline(x=-T, color="#f5ad4c", linewidth=0.75, linestyle="--", zorder=0)
+    # set axis
+    ax.set_yticks([])
+    ax.invert_yaxis()
+    ax.set_xlabel("Descriptor t-statistics", fontsize=12)
+    ax.set_title(f"{desc_type} descriptors", fontsize=12)
+    # inset SMARTS svg images for MACCS descriptors
+    if desc_type == "MACCS":
+        xlim = np.max(np.absolute(t)) + 5
+        ax.set_xlim(-xlim, xlim)
+        svg = skunk.insert(sk_dict)
+        plt.tight_layout()
+        if output_file is None:
+            output_file = f"{desc_type}.svg"
+        with open(output_file, "w") as f:
+            f.write(svg)
+    else:
+        xlim = max(np.max(np.absolute(t)), T + 1)
+        ax.set_xlim(-xlim, xlim)
+        plt.tight_layout()
+        if output_file is None:
+            output_file = f"{desc_type}.svg"
+        plt.savefig(output_file, dpi=180, bbox_inches="tight")
