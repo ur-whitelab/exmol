@@ -299,6 +299,7 @@ def sample_space(
     method_kwargs: Dict = None,
     num_samples: int = None,
     stoned_kwargs: Dict = None,
+    quiet: bool = False,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -313,6 +314,7 @@ def sample_space(
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
+    :param quiet: If True, will not print progress bar
     :return: List of generated :obj:`Example`
     """
     batched_f = f
@@ -361,7 +363,7 @@ def sample_space(
             num_samples = 150
         method_kwargs["num_samples"] = num_samples
 
-    pbar = tqdm.tqdm(total=num_samples)
+    pbar = tqdm.tqdm(total=num_samples, disable=quiet)
 
     # STONED
     if preset.startswith("chem"):
