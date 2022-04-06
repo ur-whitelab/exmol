@@ -17,6 +17,7 @@ import skunk  # type: ignore
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
 from sklearn.decomposition import PCA  # type: ignore
+import scipy.stats as ss  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
