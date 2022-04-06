@@ -511,7 +511,7 @@ def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
     y -= np.mean(y)
     # compute least squares fit
     xtinv = np.linalg.pinv((x_mat.T @ diag_w @ x_mat))
-    beta = xtinv @ x_mat.T @ (y * w)
+    beta = xtinv @ x_mat.T @ (y * nonzero_w)
     # compute tstats for each example as a difference from base
     for e in examples:
         e.descriptors.tstats = e.descriptors.descriptors * beta
