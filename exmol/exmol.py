@@ -755,6 +755,9 @@ def plot_descriptors(
         )
         if not np.isnan(b)
     }
+    d_importance = dict(sorted(d_importance.items(),
+                    key=lambda item: abs(item[1][0]),
+                    reverse=True))
     t = [a[0] for a in list(d_importance.values())][:5]
     key_ids = [a[1] for a in list(d_importance.values())][:5]
     keys = [a for a in list(d_importance.keys())]
