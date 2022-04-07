@@ -34,47 +34,56 @@ def _descriptor_layout(ds, size):
     # Somehow SVG uses 72 dpi no matter what.
     # Add a bit of margin
     fig = plt.figure(
-        figsize=(size[0] / 72 * 1.1, size[0] / 72 * 1.1), constrained_layout=True)
-    ax_dict = fig.subplot_mosaic('BBAAA')
+        figsize=(size[0] / 72 * 1.1, size[0] / 72 * 1.1), constrained_layout=True
+    )
+    ax_dict = fig.subplot_mosaic("BBAAA")
     r = Rectangle((0, 0), 1, 1)
-    ax_dict['A'].add_patch(r)
-    r.set_gid('mol-holder')
+    ax_dict["A"].add_patch(r)
+    r.set_gid("mol-holder")
     # ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
     cmap = plt.get_cmap("gist_rainbow", 50)
     colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    ax_dict['B'].axvline(x=0, color='grey', linewidth=0.5)
-    ax_dict['B'].barh(range(len(ds)), ds, color=colors)
-    ax_dict['B'].set_yticks([])
-    ax_dict['A'].axis('off')
+    ax_dict["B"].axvline(x=0, color="grey", linewidth=0.5)
+    ax_dict["B"].barh(range(len(ds)), ds, color=colors)
+    ax_dict["B"].set_yticks([])
+    ax_dict["A"].axis("off")
 
 
 def insert_svg(
-    exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize:
-    int = 10, descriptors = False
+    exps: List[Example],
+    mol_size: Tuple[int, int] = (200, 200),
+    mol_fontsize: int = 10,
+    descriptors=False,
 ) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
     :param mol_size: If mol_size was specified, it needs to be re-specified here
-    :param descriptors: Should descriptors be plotted? 
+    :param descriptors: Should descriptors be plotted?
     :return: SVG string that can be saved or displayed in juypter notebook
     """
     size = mol_size
     if descriptors:
-        mol_size = (int(mol_size[0] * 3/4), mol_size[1])
-    mol_svgs = _mol_images(exps, mol_size, mol_fontsize, True)
+        mol_size = (int(mol_size[0] * 3 / 4), mol_size[1])
+    mol_svgs = _mol_images(exps, mol_size, mol_fontsize)
     svg = skunk.pltsvg(bbox_inches="tight")
     if descriptors:
         for i in range(len(mol_svgs)):
             ms = mol_svgs[i]
-            ds = {a:b for a,b in zip(list(exps[i].descriptors.descriptor_names),
-                list(exps[i].descriptors.tstats)) if abs(b) >= 2.96}
+            ds = {
+                a: b
+                for a, b in zip(
+                    list(exps[i].descriptors.descriptor_names),
+                    list(exps[i].descriptors.tstats),
+                )
+                if abs(b) >= 2.96
+            }
             _descriptor_layout(ds.values(), size)
             rsvg = skunk.pltsvg()
-            mol_svgs[i] = skunk._rewrite_svg(rsvg, {'mol-holder': ms})
+            mol_svgs[i] = skunk._rewrite_svg(rsvg, {"mol-holder": ms})
 
     scale = 1
-    rewrites = {f'rdkit-img-{i}': v for i, v in enumerate(mol_svgs)}
+    rewrites = {f"rdkit-img-{i}": v for i, v in enumerate(mol_svgs)}
     return skunk.insert(rewrites, svg=svg)
 
 
@@ -251,11 +260,11 @@ def plot_space_by_fit(
     cartoon: bool = False,
     rasterized: bool = False,
 ):
-    """Plot chemical space around example by LIME fit and annotate given examples. 
+    """Plot chemical space around example by LIME fit and annotate given examples.
     Adapted from :func:`plot_space`.
     :param examples: Large list of :obj:Example which make-up points
     :param exps: Small list of :obj:Example which will be annotated
-    :param beta: beta output from :func:`lime_explain` 
+    :param beta: beta output from :func:`lime_explain`
     :param mol_size: size of rdkit molecule rendering, in pixles
     :param mol_fontsize: minimum font size passed to rdkit
     :param offset: offset annotations to allow colorbar or other elements to fit into plot.
@@ -270,14 +279,15 @@ def plot_space_by_fit(
     base_color = "gray"
     if ax is None:
         ax = plt.figure(**figure_kwargs).gca()
-    
+
     yhat = [e.yhat for e in examples]
     yhat -= np.mean(yhat)
-    x_mat = np.array([list(e.descriptors.descriptors)
-                        for e in examples]).reshape(len(examples), -1)
+    x_mat = np.array([list(e.descriptors.descriptors) for e in examples]).reshape(
+        len(examples), -1
+    )
     y = x_mat @ beta
     # use resids as colors
-    colors = (yhat - y)**2
+    colors = (yhat - y) ** 2
     normalizer = plt.Normalize(min(colors), max(colors))
     cmap = "PuBu_r"
 
@@ -299,17 +309,17 @@ def plot_space_by_fit(
         )
     else:
         im = ax.scatter(
-                space_x,
-                space_y,
-                40,
-                c=normalizer(colors),
-                cmap=cmap,
-                edgecolors="grey",
-                linewidth=0.25
-            )
-    ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box')
+            space_x,
+            space_y,
+            40,
+            c=normalizer(colors),
+            cmap=cmap,
+            edgecolors="grey",
+            linewidth=0.25,
+        )
+    ax.set_aspect(1.0 / ax.get_data_ratio(), adjustable="box")
     cbar = plt.colorbar(im, orientation="horizontal", aspect=35, pad=0.05)
-    cbar.set_label('squared error')
+    cbar.set_label("squared error")
 
     # now plot cfs/annotated points
     ax.scatter(
@@ -334,4 +344,3 @@ def plot_space_by_fit(
     _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
     ax.axis("off")
     ax.set_aspect("auto")
-    
