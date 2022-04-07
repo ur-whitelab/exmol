@@ -692,7 +692,7 @@ def plot_cf(
     :param nrows: number of rows to draw in grid
     :param ncols: number of columns to draw in grid
     """
-    imgs = _mol_images(exps, mol_size, mol_fontsize, True)
+    imgs = _mol_images(exps, mol_size, mol_fontsize)
     if nrows is not None:
         R = nrows
     else:
@@ -755,9 +755,9 @@ def plot_descriptors(
         )
         if not np.isnan(b)
     }
-    d_importance = dict(sorted(d_importance.items(),
-                    key=lambda item: abs(item[1][0]),
-                    reverse=True))
+    d_importance = dict(
+        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
+    )
     t = [a[0] for a in list(d_importance.values())][:5]
     key_ids = [a[1] for a in list(d_importance.values())][:5]
     keys = [a for a in list(d_importance.keys())]

@@ -46,16 +46,3 @@ def test_insert_svg_grid():
     svg = exmol.insert_svg(exps)
     with open("test-cf.svg", "w") as f:
         f.write(svg)
-
-
-def test_insert_svg_grid_d():
-    def model(s, se):
-        return int("N" in s)
-
-    samples = exmol.sample_space(
-        "O=C(COCCCCCCCCCC)CC(C)C1CCCC1C2=CC=CC(F)=C2", model, num_samples=50, batched=False)
-    exps = exmol.cf_explain(samples, 3)
-    exmol.plot_cf(exps)
-    svg = exmol.insert_svg(exps, descriptors=True)
-    with open("test-d.svg", "w") as f:
-        f.write(svg)

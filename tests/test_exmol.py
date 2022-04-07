@@ -208,16 +208,18 @@ def test_compare_img():
 def test_get_descriptors():
     def model(s, se):
         return int("N" in s)
+
     samples = exmol.sample_space("CCCC", model, batched=False)
-    exmol.get_descriptors(samples, 'Classic')
+    exmol.get_descriptors(samples, "Classic")
     assert samples[0].descriptors.descriptors is not None
 
 
 def test_limed():
     def model(s, se):
         return int("N" in s)
+
     samples = exmol.sample_space("CCCC", model, batched=False)
-    exmol.lime_explain(samples, descriptor_type='Classic')
+    exmol.lime_explain(samples, descriptor_type="Classic")
 
 
 def test_corrupt_smiles():

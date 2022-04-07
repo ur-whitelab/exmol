@@ -30,59 +30,20 @@ def _extract_loc(e):
     return min(x), min(y), max(x) - min(x), max(y) - min(y)
 
 
-def _descriptor_layout(ds, size):
-    # Somehow SVG uses 72 dpi no matter what.
-    # Add a bit of margin
-    fig = plt.figure(
-        figsize=(size[0] / 72 * 1.1, size[0] / 72 * 1.1), constrained_layout=True
-    )
-    ax_dict = fig.subplot_mosaic("BBAAA")
-    r = Rectangle((0, 0), 1, 1)
-    ax_dict["A"].add_patch(r)
-    r.set_gid("mol-holder")
-    # ax_dict['B'].plot([0, -4, 13], [0, 10, 50])
-    cmap = plt.get_cmap("gist_rainbow", 50)
-    colors = [mpl.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
-    ax_dict["B"].axvline(x=0, color="grey", linewidth=0.5)
-    ax_dict["B"].barh(range(len(ds)), ds, color=colors)
-    ax_dict["B"].set_yticks([])
-    ax_dict["A"].axis("off")
-
-
 def insert_svg(
     exps: List[Example],
     mol_size: Tuple[int, int] = (200, 200),
     mol_fontsize: int = 10,
-    descriptors=False,
 ) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
     :param exps: The molecules for which images should be replaced. Typically just counterfactuals or some small set
     :param mol_size: If mol_size was specified, it needs to be re-specified here
-    :param descriptors: Should descriptors be plotted?
     :return: SVG string that can be saved or displayed in juypter notebook
     """
     size = mol_size
-    if descriptors:
-        mol_size = (int(mol_size[0] * 3 / 4), mol_size[1])
-    mol_svgs = _mol_images(exps, mol_size, mol_fontsize)
+    mol_svgs = _mol_images(exps, mol_size, mol_fontsize, True)
     svg = skunk.pltsvg(bbox_inches="tight")
-    if descriptors:
-        for i in range(len(mol_svgs)):
-            ms = mol_svgs[i]
-            ds = {
-                a: b
-                for a, b in zip(
-                    list(exps[i].descriptors.descriptor_names),
-                    list(exps[i].descriptors.tstats),
-                )
-                if abs(b) >= 2.96
-            }
-            _descriptor_layout(ds.values(), size)
-            rsvg = skunk.pltsvg()
-            mol_svgs[i] = skunk._rewrite_svg(rsvg, {"mol-holder": ms})
-
-    scale = 1
     rewrites = {f"rdkit-img-{i}": v for i, v in enumerate(mol_svgs)}
     return skunk.insert(rewrites, svg=svg)
 
