@@ -19,6 +19,7 @@ from sklearn.cluster import DBSCAN  # type: ignore
 from sklearn.decomposition import PCA  # type: ignore
 import scipy.stats as ss  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem import MolFromSmarts  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
@@ -43,25 +44,177 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     return np.array(dist).reshape(len(mols), len(mols))
 
 
-def _make_calculator():
-    from mordred import HydrogenBond, Polarizability
-    from mordred import SLogP, AcidBase, BertzCT, Aromatic, BondCount
-    from mordred import Calculator
+def _calculate_rdkit_descriptors(mol):
+    from rdkit.ML.Descriptors import MoleculeDescriptors
 
-    c = Calculator()
-    c.register([HydrogenBond.HBondDonor, HydrogenBond.HBondAcceptor])
-    c.register(
-        [
-            AcidBase.AcidicGroupCount,
-            AcidBase.BasicGroupCount,
-            Aromatic.AromaticBondsCount,
+    dlist = [
+        "NumHDonors",
+        "NumHAcceptors",
+        "MolLogP",
+        "BertzCT",
+        "RingCount",
+        "NumRotatableBonds",
+    ]  # , 'NumHeteroatoms']
+    c = MoleculeDescriptors.MolecularDescriptorCalculator(dlist)
+    d = c.CalcDescriptors(mol)
+
+    def calc_aromatic_bonds(mol):
+        return sum(1 for b in mol.GetBonds() if b.GetIsAromatic())
+
+    def _create_smarts(SMARTS):
+        s = ",".join("$(" + s + ")" for s in SMARTS)
+        _mol = MolFromSmarts("[" + s + "]")
+        return _mol
+
+    def calc_acid_groups(mol):
+        acid_smarts = (
+            "[O;H1]-[C,S,P]=O",
+            "[*;-;!$(*~[*;+])]",
+            "[NH](S(=O)=O)C(F)(F)F",
+            "n1nnnc1",
+        )
+        pat = _create_smarts(acid_smarts)
+        return len(mol.GetSubstructMatches(pat))
+
+    def calc_basic_groups(mol):
+        basic_smarts = (
+            "[NH2]-[CX4]",
+            "[NH](-[CX4])-[CX4]",
+            "N(-[CX4])(-[CX4])-[CX4]",
+            "[*;+;!$(*~[*;-])]",
+            "N=C-N",
+            "N-C=N",
+        )
+        pat = _create_smarts(basic_smarts)
+        return len(mol.GetSubstructMatches(pat))
+
+    def calc_apol(mol, includeImplicitHs=True):
+        # atomic polarizabilities available here:
+        # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
+        atomPols = [
+            0,
+            0.666793,
+            0.204956,
+            24.3,
+            5.6,
+            3.03,
+            1.76,
+            1.1,
+            0.802,
+            0.557,
+            0.3956,
+            23.6,
+            10.6,
+            6.8,
+            5.38,
+            3.63,
+            2.9,
+            2.18,
+            1.6411,
+            43.4,
+            22.8,
+            17.8,
+            14.6,
+            12.4,
+            11.6,
+            9.4,
+            8.4,
+            7.5,
+            6.8,
+            6.1,
+            7.1,
+            8.12,
+            6.07,
+            4.31,
+            3.77,
+            3.05,
+            2.4844,
+            47.3,
+            27.6,
+            22.7,
+            17.9,
+            15.7,
+            12.8,
+            11.4,
+            9.6,
+            8.6,
+            4.8,
+            7.2,
+            7.2,
+            10.2,
+            7.7,
+            6.6,
+            5.5,
+            5.35,
+            4.044,
+            59.6,
+            39.7,
+            31.1,
+            29.6,
+            28.2,
+            31.4,
+            30.1,
+            28.8,
+            27.7,
+            23.5,
+            25.5,
+            24.5,
+            23.6,
+            22.7,
+            21.8,
+            21,
+            21.9,
+            16.2,
+            13.1,
+            11.1,
+            9.7,
+            8.5,
+            7.6,
+            6.5,
+            5.8,
+            5.7,
+            7.6,
+            6.8,
+            7.4,
+            6.8,
+            6,
+            5.3,
+            48.7,
+            38.3,
+            32.1,
+            32.1,
+            25.4,
+            27.4,
+            24.8,
+            24.5,
+            23.3,
+            23,
+            22.7,
+            20.5,
+            19.7,
+            23.8,
+            18.2,
+            17.5,
         ]
+        res = 0.0
+        for atom in mol.GetAtoms():
+            anum = atom.GetAtomicNum()
+            if anum <= len(atomPols):
+                apol = atomPols[anum]
+                if includeImplicitHs:
+                    apol += atomPols[1] * atom.GetTotalNumHs(includeNeighbors=False)
+                res += apol
+            else:
+                raise ValueError(f"atomic number {anum} not found")
+        return res
+
+    d = d + (
+        calc_aromatic_bonds(mol),
+        calc_acid_groups(mol),
+        calc_basic_groups(mol),
+        calc_apol(mol),
     )
-    c.register([SLogP.SLogP, Polarizability.APol, BertzCT.BertzCT])
-    c.register(
-        [BondCount.BondCount(type="double"), BondCount.BondCount(type="aromatic")]
-    )
-    return c
+    return d
 
 
 def get_descriptors(
@@ -79,12 +232,22 @@ def get_descriptors(
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
     if descriptor_type == "Classic":
-        global _calculator
-        if _calculator is None:
-            _calculator = _make_calculator()
-        names = tuple(d.description() for d in _calculator.descriptors)
-        for e, c in zip(examples, _calculator.map(mols, quiet=True)):
-            descriptors = tuple(v for v in c.values())
+        names = tuple(
+            [
+                "number of hydrogen bond donor",
+                "number of hydrogen bond acceptor",
+                "Wildman-Crippen LogP",
+                "Bertz CT",
+                "ring count",
+                "number of rotatable bonds",
+                "aromatic bonds count",
+                "acidic group count",
+                "basic group count",
+                "atomic polarizability",
+            ]
+        )
+        for e, m in zip(examples, mols):
+            descriptors = _calculate_rdkit_descriptors(m)
             descriptor_names = names
             e.descriptors = Descriptors(
                 descriptors=descriptors, descriptor_names=descriptor_names
