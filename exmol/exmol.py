@@ -91,118 +91,17 @@ def _calculate_rdkit_descriptors(mol):
     def calc_apol(mol, includeImplicitHs=True):
         # atomic polarizabilities available here:
         # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
-        atomPols = [
-            0,
-            0.666793,
-            0.204956,
-            24.3,
-            5.6,
-            3.03,
-            1.76,
-            1.1,
-            0.802,
-            0.557,
-            0.3956,
-            23.6,
-            10.6,
-            6.8,
-            5.38,
-            3.63,
-            2.9,
-            2.18,
-            1.6411,
-            43.4,
-            22.8,
-            17.8,
-            14.6,
-            12.4,
-            11.6,
-            9.4,
-            8.4,
-            7.5,
-            6.8,
-            6.1,
-            7.1,
-            8.12,
-            6.07,
-            4.31,
-            3.77,
-            3.05,
-            2.4844,
-            47.3,
-            27.6,
-            22.7,
-            17.9,
-            15.7,
-            12.8,
-            11.4,
-            9.6,
-            8.6,
-            4.8,
-            7.2,
-            7.2,
-            10.2,
-            7.7,
-            6.6,
-            5.5,
-            5.35,
-            4.044,
-            59.6,
-            39.7,
-            31.1,
-            29.6,
-            28.2,
-            31.4,
-            30.1,
-            28.8,
-            27.7,
-            23.5,
-            25.5,
-            24.5,
-            23.6,
-            22.7,
-            21.8,
-            21,
-            21.9,
-            16.2,
-            13.1,
-            11.1,
-            9.7,
-            8.5,
-            7.6,
-            6.5,
-            5.8,
-            5.7,
-            7.6,
-            6.8,
-            7.4,
-            6.8,
-            6,
-            5.3,
-            48.7,
-            38.3,
-            32.1,
-            32.1,
-            25.4,
-            27.4,
-            24.8,
-            24.5,
-            23.3,
-            23,
-            22.7,
-            20.5,
-            19.7,
-            23.8,
-            18.2,
-            17.5,
-        ]
+        import os
+
+        with open(os.path.join(os.path.dirname(__file__), "atom_pols.txt")) as f:
+            atom_pols = [float(x) for x in next(f).split(",")]
         res = 0.0
         for atom in mol.GetAtoms():
             anum = atom.GetAtomicNum()
-            if anum <= len(atomPols):
-                apol = atomPols[anum]
+            if anum <= len(atom_pols):
+                apol = atom_pols[anum]
                 if includeImplicitHs:
-                    apol += atomPols[1] * atom.GetTotalNumHs(includeNeighbors=False)
+                    apol += atom_pols[1] * atom.GetTotalNumHs(includeNeighbors=False)
                 res += apol
             else:
                 raise ValueError(f"atomic number {anum} not found")
@@ -643,7 +542,9 @@ def _select_examples(cond, examples, nmols):
     return list(filter(cond, result))
 
 
-def lime_explain(examples: List[Example], descriptor_type: str) -> np.ndarray:
+def lime_explain(
+    examples: List[Example], descriptor_type: str
+) -> Tuple[np.ndarray, np.ndarray]:
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
 
