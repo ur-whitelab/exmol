@@ -127,8 +127,8 @@ def get_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
-    from importlib_resources import files  # type: ignore
-    import exmol.lime_data  # type: ignore
+    from importlib_resources import files, as_file
+    import exmol.lime_data
     from rdkit.Chem import MACCSkeys  # type: ignore
 
     if mols is None:
@@ -157,16 +157,8 @@ def get_descriptors(
         return examples
     elif descriptor_type == "MACCS":
         mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-        with open(mk, "r") as f:
+        with open(as_file(mk), "r") as f:
             names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
-        # names = tuple(
-        #     [
-        #         line.strip().split("\t")[-1]
-        #         for line in list(
-        #             open(files(exmol.lime_data).joinpath("MACCSkeys.txt"), "r+")
-        #         )[1:]
-        #     ]
-        # )
         for e, m in zip(examples, mols):
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
             descriptors = tuple(int(i) for i in fps)
@@ -807,7 +799,7 @@ def plot_descriptors(
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     """
-    from importlib_resources import files
+    from importlib_resources import files, as_file
     import exmol.lime_data
     import pickle  # type: ignore
 
@@ -895,7 +887,7 @@ def plot_descriptors(
 
             ax.add_artist(ab)
             mk = files(exmol.lime_data).joinpath("keys.pb")
-            with open(mk, "rb") as f:
+            with open(as_file(mk), "rb") as f:
                 svgs = pickle.load(f)
             sk_dict[f"sk{count}"] = svgs[ki]
         count += 1
