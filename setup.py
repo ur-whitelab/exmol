@@ -16,7 +16,7 @@ setup(
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
     packages=["exmol", "exmol.stoned"],
-    package_data={"exmol": ["lime_data/*"]},
+    package_data={"exmol": ["lime_data/*.txt", "lime_data/*.pb"]},
     install_requires=[
         "selfies >= 2.0.0",
         "numpy",
