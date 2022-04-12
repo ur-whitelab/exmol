@@ -15,7 +15,7 @@ setup(
     author_email="andrew.white@rochester.edu",
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
-    packages=["exmol", "exmol.stoned"],
+    packages=["exmol", "exmol.stoned", "exmol.lime_data"],
     install_requires=[
         "selfies >= 2.0.0",
         "numpy",
