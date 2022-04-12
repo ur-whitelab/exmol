@@ -45,7 +45,7 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
 
 
 def _calculate_rdkit_descriptors(mol):
-    from rdkit.ML.Descriptors import MoleculeDescriptors
+    from rdkit.ML.Descriptors import MoleculeDescriptors  # type: ignore
 
     dlist = [
         "NumHDonors",
@@ -91,8 +91,8 @@ def _calculate_rdkit_descriptors(mol):
     def calc_apol(mol, includeImplicitHs=True):
         # atomic polarizabilities available here:
         # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
-        from importlib_resources import files
-        import exmol.lime_data
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
 
         ap = files(exmol.lime_data).joinpath("atom_pols.txt")
         with open(ap, "r") as f:
@@ -127,9 +127,9 @@ def get_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
-    from importlib_resources import files
-    import exmol.lime_data
-    from rdkit.Chem import MACCSkeys
+    from importlib_resources import files  # type: ignore
+    import exmol.lime_data  # type: ignore
+    from rdkit.Chem import MACCSkeys  # type: ignore
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
@@ -156,14 +156,17 @@ def get_descriptors(
             )
         return examples
     elif descriptor_type == "MACCS":
-        names = tuple(
-            [
-                line.strip().split("\t")[-1]
-                for line in list(
-                    open(files(exmol.lime_data).joinpath("MACCSkeys.txt"), "r")
-                )[1:]
-            ]
-        )
+        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
+        with open(mk, "r") as f:
+            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
+        # names = tuple(
+        #     [
+        #         line.strip().split("\t")[-1]
+        #         for line in list(
+        #             open(files(exmol.lime_data).joinpath("MACCSkeys.txt"), "r+")
+        #         )[1:]
+        #     ]
+        # )
         for e, m in zip(examples, mols):
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
             descriptors = tuple(int(i) for i in fps)
@@ -806,6 +809,7 @@ def plot_descriptors(
     """
     from importlib_resources import files
     import exmol.lime_data
+    import pickle  # type: ignore
 
     if fig is None:
         if figure_kwargs is None:
@@ -861,7 +865,7 @@ def plot_descriptors(
     # annotate patches with text desciption
     count = 0
     sk_dict = {}
-    for rect, ti, k in zip(bar1, t, keys):
+    for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         y = rect.get_y() + rect.get_height() / 2.0
         if len(k) > 60:
             k = textwrap.fill(k, 25)
@@ -890,8 +894,10 @@ def plot_descriptors(
             )
 
             ax.add_artist(ab)
-            svgs = files(exmol.lime_data).joinpath("keys.pb")
-            sk_dict[f"sk{count}"] = svgs[count]
+            mk = files(exmol.lime_data).joinpath("keys.pb")
+            with open(mk, "rb") as f:
+                svgs = pickle.load(f)
+            sk_dict[f"sk{count}"] = svgs[ki]
         count += 1
     ax.axvline(x=0, color="grey", linewidth=0.5)
     # calculate significant T
