@@ -91,9 +91,11 @@ def _calculate_rdkit_descriptors(mol):
     def calc_apol(mol, includeImplicitHs=True):
         # atomic polarizabilities available here:
         # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
-        import os
+        from importlib_resources import files
+        import exmol.lime_data
 
-        with open(os.path.join(os.path.dirname(__file__), "atom_pols.txt")) as f:
+        ap = files(exmol.lime_data).joinpath("atom_pols.txt")
+        with open(ap, "r") as f:
             atom_pols = [float(x) for x in next(f).split(",")]
         res = 0.0
         for atom in mol.GetAtoms():
@@ -125,7 +127,8 @@ def get_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
-    import os
+    from importlib_resources import files
+    import exmol.lime_data
     from rdkit.Chem import MACCSkeys
 
     if mols is None:
@@ -157,7 +160,7 @@ def get_descriptors(
             [
                 line.strip().split("\t")[-1]
                 for line in list(
-                    open(os.path.join(os.path.dirname(__file__), "MACCSkeys.txt"))
+                    open(files(exmol.lime_data).joinpath("MACCSkeys.txt"))
                 )[1:]
             ]
         )
@@ -801,6 +804,8 @@ def plot_descriptors(
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     """
+    from importlib_resources import files
+    import exmol.lime_data
 
     if fig is None:
         if figure_kwargs is None:
@@ -885,7 +890,8 @@ def plot_descriptors(
             )
 
             ax.add_artist(ab)
-            sk_dict[f"sk{count}"] = f"keys/{key_ids[count]}.svg"
+            svgs = files(exmol.lime_data).joinpath("keys.pb")
+            sk_dict[f"sk{count}"] = svgs[count]
         count += 1
     ax.axvline(x=0, color="grey", linewidth=0.5)
     # calculate significant T
