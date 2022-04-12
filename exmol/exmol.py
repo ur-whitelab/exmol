@@ -160,7 +160,7 @@ def get_descriptors(
             [
                 line.strip().split("\t")[-1]
                 for line in list(
-                    open(files(exmol.lime_data).joinpath("MACCSkeys.txt"))
+                    open(files(exmol.lime_data).joinpath("MACCSkeys.txt"), "r")
                 )[1:]
             ]
         )
