@@ -36,9 +36,9 @@ class Example:
     #: Index of cluster, can be -1 for no cluster
     cluster: int = 0
     #: Label for this example
-    label: Optional[str] = None
+    label: str = None  # type: ignore
     #: Descriptors for this example
-    descriptors: Optional[Descriptors] = None
+    descriptors: Descriptors = None  # type: ignore
 
     # to make it look nicer
     def __str__(self):
