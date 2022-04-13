@@ -127,7 +127,7 @@ def get_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic' and 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     """
-    from importlib_resources import files, as_file
+    from importlib_resources import files
     import exmol.lime_data
     from rdkit.Chem import MACCSkeys  # type: ignore
 
@@ -157,7 +157,7 @@ def get_descriptors(
         return examples
     elif descriptor_type == "MACCS":
         mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-        with open(as_file(mk), "r") as f:
+        with open(str(mk), "r") as f:
             names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
         for e, m in zip(examples, mols):
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
@@ -785,7 +785,7 @@ def plot_cf(
 def plot_descriptors(
     space: List[Example],
     space_tstats: List[float],
-    desc_type: str,
+    descriptor_type: str,
     fig: Any = None,
     figure_kwargs: Dict = None,
     output_file: str = None,
@@ -794,19 +794,21 @@ def plot_descriptors(
 
     :param exps: Output from :func:`sample_space`
     :param space_tstats: t-statistics output from :func:`lime_explain`
-    :param desc_type: Descriptor type to plot, either 'Classic' or 'MACCS'
+    :param descriptor_type: Descriptor type to plot, either 'Classic' or 'MACCS'
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     """
-    from importlib_resources import files, as_file
+    from importlib_resources import files
     import exmol.lime_data
     import pickle  # type: ignore
 
     if fig is None:
         if figure_kwargs is None:
             figure_kwargs = (
-                {"figsize": (5, 5)} if desc_type == "Classic" else {"figsize": (8, 5)}
+                {"figsize": (5, 5)}
+                if descriptor_type == "Classic"
+                else {"figsize": (8, 5)}
             )
         fig, ax = plt.subplots(nrows=1, ncols=1, dpi=180, **figure_kwargs)
 
@@ -860,7 +862,7 @@ def plot_descriptors(
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         y = rect.get_y() + rect.get_height() / 2.0
         if len(k) > 60:
-            k = textwrap.fill(k, 25)
+            k = textwrap.fill(k, 20)
         elif len(k) > 25:
             k = textwrap.fill(k, 20)
         if ti < 0:
@@ -874,7 +876,7 @@ def plot_descriptors(
             box_x = 0.02
             ax.text(x, y, k, ha="right", va="center", wrap=True, fontsize=12)
         # add SMARTS annotation where applicable
-        if desc_type == "MACCS":
+        if descriptor_type == "MACCS":
             box = skunk.Box(130, 50, f"sk{count}")
             ab = AnnotationBbox(
                 box,
@@ -887,7 +889,7 @@ def plot_descriptors(
 
             ax.add_artist(ab)
             mk = files(exmol.lime_data).joinpath("keys.pb")
-            with open(as_file(mk), "rb") as f:
+            with open(str(mk), "rb") as f:
                 svgs = pickle.load(f)
             sk_dict[f"sk{count}"] = svgs[ki]
         count += 1
@@ -903,15 +905,15 @@ def plot_descriptors(
     ax.set_yticks([])
     ax.invert_yaxis()
     ax.set_xlabel("Descriptor t-statistics", fontsize=12)
-    ax.set_title(f"{desc_type} descriptors", fontsize=12)
+    ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
-    if desc_type == "MACCS":
+    if descriptor_type == "MACCS":
         xlim = np.max(np.absolute(t)) + 5
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
         plt.tight_layout()
         if output_file is None:
-            output_file = f"{desc_type}.svg"
+            output_file = f"{descriptor_type}.svg"
         with open(output_file, "w") as f:
             f.write(svg)
     else:
@@ -919,5 +921,5 @@ def plot_descriptors(
         ax.set_xlim(-xlim, xlim)
         plt.tight_layout()
         if output_file is None:
-            output_file = f"{desc_type}.svg"
+            output_file = f"{descriptor_type}.svg"
         plt.savefig(output_file, dpi=180, bbox_inches="tight")

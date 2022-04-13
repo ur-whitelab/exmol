@@ -26,6 +26,14 @@ In addition to having a changed prediction, a molecular counterfactual must be s
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
+## Descriptor Attribution
+This package also implements Model Agnostic Descriptor Attribution for molecules using LIME.
+Descriptor attributions can explain a prediction by computing QSARs for molecular structure properties independent of features used for model predictions. Here is an example of descriptor attribution:
+
+<img alt="descriptor demo" src="LIME/descriptor.png" width="800">
+
+The descriptor t-statistics show which chemical properties or substructures influence properety prediction for the pictured molecule. LIME is a perturbation based method and the descriptor attributions depend on the perturbed chemical space created around the molecule of interest.
+
 ## Usage
 
 Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class.
@@ -82,6 +90,27 @@ print(cfs[1])
 'label': 'Counterfactual 1'
 }
 ```
+
+We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to supply the `descriptor_type` to get attributions. You can select between `Classic` Rdkit descriptors or `MACCS` fingerprint descriptors.
+
+```py
+tstats, beta = exmol.lime_explain(samples, descriptor_type='MACCS')
+exmol.plot_descriptors(samples, tstats, descriptor_type='MACCS')
+```
+<img alt="maccs descriptors" src="LIME/MACCS.svg" width="400">
+
+You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients `beta` need to be passed in as an argument.
+
+```py
+exmol.plot_utils.plot_space_by_fit(
+    samples,
+    [samples[0]],
+    beta=beta,
+    mol_size=(300, 250),
+    figure_kwargs={'figsize': (7,5)},
+)
+```
+<img alt="chemical space by fit" src="LIME/space_by_fit.png" width="500">
 
 ## Chemical Space
 
