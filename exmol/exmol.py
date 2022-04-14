@@ -897,7 +897,7 @@ def plot_descriptors(
             box_x = 0.02
             ax.text(x, y, k, ha="right", va="center", wrap=True, fontsize=12)
         # add SMARTS annotation where applicable
-        if descriptor_type == "MACCS" or "ECFP":
+        if descriptor_type == "MACCS" or descriptor_type == "ECFP":
             box = skunk.Box(130, 50, f"sk{count}")
             ab = AnnotationBbox(
                 box,
@@ -938,7 +938,7 @@ def plot_descriptors(
     ax.set_xlabel("Descriptor t-statistics", fontsize=12)
     ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
-    if descriptor_type == "MACCS" or "ECFP":
+    if descriptor_type == "MACCS" or descriptor_type == "ECFP":
         xlim = np.max(np.absolute(t)) + 5
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
@@ -947,7 +947,7 @@ def plot_descriptors(
             output_file = f"{descriptor_type}.svg"
         with open(output_file, "w") as f:
             f.write(svg)
-    else:
+    elif descriptor_type == "Classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
         ax.set_xlim(-xlim, xlim)
         plt.tight_layout()
