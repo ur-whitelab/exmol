@@ -178,8 +178,6 @@ def get_descriptors(
                 descriptors=descriptors, descriptor_names=descriptor_names
             )
         return examples
-        # assert len(examples[0].descriptors.descriptors) == len(examples[100].descriptors.descriptors)
-        # assert np.all(examples[0].descriptors.descriptors == np.ones(len(examples[0].descriptors.descriptors)))
     else:
         raise ValueError(
             "Invalid descriptor string. Valid descriptor strings are 'Classic' and 'MACCS'."
