@@ -166,12 +166,12 @@ def get_descriptors(
         return examples
     elif descriptor_type == "ECFP":
         # get reference
-        bi = {}
+        bi = {}  # type: Dict[Any, Any]
         ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-        descriptor_names = list(bi.keys())
+        descriptor_names = tuple(bi.keys())
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
-            b = {}
+            b = {}  # type: Dict[Any, Any]
             temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
             descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
             e.descriptors = Descriptors(
@@ -878,7 +878,7 @@ def plot_descriptors(
             svgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
-        bi = {}
+        bi = {}  # type: Dict[Any, Any]
         m = smi2mol(space[0].smiles)
         fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
