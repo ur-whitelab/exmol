@@ -21,16 +21,14 @@ import scipy.stats as ss  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem import MolFromSmarts  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
-from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
+from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
+from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
 
 
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter
 from .data import *
-
-_calculator = None
 
 
 def _fp_dist_matrix(smiles, fp_type, _pbar):
@@ -129,7 +127,6 @@ def get_descriptors(
     """
     from importlib_resources import files
     import exmol.lime_data
-    from rdkit.Chem import MACCSkeys  # type: ignore
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
@@ -167,6 +164,22 @@ def get_descriptors(
                 descriptors=descriptors, descriptor_names=descriptor_names
             )
         return examples
+    elif descriptor_type == "ECFP":
+        # get reference
+        bi = {}
+        ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+        descriptor_names = list(bi.keys())
+        for e, m in zip(examples, mols):
+            # Now compare to reference and get other fp vectors
+            b = {}
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            e.descriptors = Descriptors(
+                descriptors=descriptors, descriptor_names=descriptor_names
+            )
+        return examples
+        # assert len(examples[0].descriptors.descriptors) == len(examples[100].descriptors.descriptors)
+        # assert np.all(examples[0].descriptors.descriptors == np.ones(len(examples[0].descriptors.descriptors)))
     else:
         raise ValueError(
             "Invalid descriptor string. Valid descriptor strings are 'Classic' and 'MACCS'."
@@ -856,15 +869,23 @@ def plot_descriptors(
     for patch in new_patches:
         ax.add_patch(patch)
 
-    # annotate patches with text desciption
     count = 0
-    sk_dict = {}
+    sk_dict, svgs = {}, {}
+    if descriptor_type == "MACCS":
+        # Load svg images
+        mk = files(exmol.lime_data).joinpath("keys.pb")
+        with open(str(mk), "rb") as f:
+            svgs = pickle.load(f)
+    if descriptor_type == "ECFP":
+        # get reference for ECFP
+        bi = {}
+        m = smi2mol(space[0].smiles)
+        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
+        # annotate patches with text desciption
         y = rect.get_y() + rect.get_height() / 2.0
-        if len(k) > 60:
-            k = textwrap.fill(k, 20)
-        elif len(k) > 25:
-            k = textwrap.fill(k, 20)
+        k = textwrap.fill(str(k), 25)
         if ti < 0:
             x = 0.25
             skx = np.max(np.absolute(t)) + 2
@@ -876,7 +897,7 @@ def plot_descriptors(
             box_x = 0.02
             ax.text(x, y, k, ha="right", va="center", wrap=True, fontsize=12)
         # add SMARTS annotation where applicable
-        if descriptor_type == "MACCS":
+        if descriptor_type == "MACCS" or "ECFP":
             box = skunk.Box(130, 50, f"sk{count}")
             ab = AnnotationBbox(
                 box,
@@ -888,10 +909,11 @@ def plot_descriptors(
             )
 
             ax.add_artist(ab)
-            mk = files(exmol.lime_data).joinpath("keys.pb")
-            with open(str(mk), "rb") as f:
-                svgs = pickle.load(f)
-            sk_dict[f"sk{count}"] = svgs[ki]
+            if descriptor_type == "MACCS":
+                sk_dict[f"sk{count}"] = svgs[ki]
+            if descriptor_type == "ECFP":
+                svg = DrawMorganBit(m, int(k), bi, useSVG=True)
+                sk_dict[f"sk{count}"] = svg.data
         count += 1
     ax.axvline(x=0, color="grey", linewidth=0.5)
     # calculate significant T
@@ -907,7 +929,7 @@ def plot_descriptors(
     ax.set_xlabel("Descriptor t-statistics", fontsize=12)
     ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
-    if descriptor_type == "MACCS":
+    if descriptor_type == "MACCS" or "ECFP":
         xlim = np.max(np.absolute(t)) + 5
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)

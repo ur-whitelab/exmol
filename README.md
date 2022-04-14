@@ -91,7 +91,7 @@ print(cfs[1])
 }
 ```
 
-We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to supply the `descriptor_type` to get attributions. You can select between `Classic` Rdkit descriptors or `MACCS` fingerprint descriptors.
+We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to supply the `descriptor_type` to get attributions. You can select from `Classic` Rdkit descriptors, `MACCS` fingerprint descriptors, `ECFP` substructure descriptors.
 
 ```py
 tstats, beta = exmol.lime_explain(samples, descriptor_type='MACCS')
