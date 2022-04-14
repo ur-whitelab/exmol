@@ -912,7 +912,16 @@ def plot_descriptors(
             if descriptor_type == "MACCS":
                 sk_dict[f"sk{count}"] = svgs[ki]
             if descriptor_type == "ECFP":
-                svg = DrawMorganBit(m, int(k), bi, useSVG=True)
+                svg = DrawMorganBit(
+                    m,
+                    int(k),
+                    bi,
+                    useSVG=True,
+                    centerColor=None,
+                    aromaticColor=None,
+                    ringColor=None,
+                    extraColor=(0.8, 0.8, 0.8),
+                )
                 sk_dict[f"sk{count}"] = svg.data
         count += 1
     ax.axvline(x=0, color="grey", linewidth=0.5)
