@@ -886,14 +886,38 @@ def plot_descriptors(
         k = textwrap.fill(str(k), 25)
         if ti < 0:
             x = 0.25
-            skx = np.max(np.absolute(t)) + 2
+            skx = (
+                np.max(np.absolute(t)) + 2
+                if descriptor_type == "MACCS"
+                else np.max(np.absolute(t))
+            )
             box_x = 0.98
-            ax.text(x, y, k, ha="left", va="center", wrap=True, fontsize=12)
+            ax.text(
+                x,
+                y,
+                " " if descriptor_type == "ECFP" else k,
+                ha="left",
+                va="center",
+                wrap=True,
+                fontsize=12,
+            )
         else:
             x = -0.25
-            skx = -np.max(np.absolute(t)) - 2
+            skx = (
+                -np.max(np.absolute(t)) - 2
+                if descriptor_type == "MACCS"
+                else np.max(np.absolute(t))
+            )
             box_x = 0.02
-            ax.text(x, y, k, ha="right", va="center", wrap=True, fontsize=12)
+            ax.text(
+                x,
+                y,
+                " " if descriptor_type == "ECFP" else k,
+                ha="right",
+                va="center",
+                wrap=True,
+                fontsize=12,
+            )
         # add SMARTS annotation where applicable
         if descriptor_type == "MACCS" or descriptor_type == "ECFP":
             box = skunk.Box(130, 50, f"sk{count}")
@@ -914,6 +938,7 @@ def plot_descriptors(
                     m,
                     int(k),
                     bi,
+                    mol_size=(300, 200),
                     useSVG=True,
                     centerColor=None,
                     aromaticColor=None,
@@ -945,6 +970,7 @@ def plot_descriptors(
             output_file = f"{descriptor_type}.svg"
         with open(output_file, "w") as f:
             f.write(svg)
+        return svg
     elif descriptor_type == "Classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
         ax.set_xlim(-xlim, xlim)

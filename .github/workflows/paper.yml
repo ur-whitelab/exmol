@@ -24,8 +24,13 @@ jobs:
     - name: Install
       run: |
         pip install .
-    - name: Install paper depends
+    - name: Install paper1 depends
       run: |
-        pip install -r paper/requirements.txt
-    - name: Run paper experiments
-      run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper/*.ipynb" --to notebook --output-dir='temp' --clear-output
+        pip install -r paper1_CFs/requirements.txt
+    - name: Run paper1 experiments
+      run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper1_CFs/*.ipynb" --to notebook --output-dir='temp' --clear-output
+    - name: Install paper2 depends
+      run: |
+        pip install -r paper2_LIME/requirements.txt
+    - name: Run paper2 experiments
+      run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper2_LIME/*.ipynb" --to notebook --output-dir='temp' --clear-output
