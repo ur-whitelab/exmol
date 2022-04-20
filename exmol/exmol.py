@@ -583,7 +583,10 @@ def lime_explain(
     # remove bias
     y -= np.mean(y)
     # compute least squares fit
-    xtinv = np.linalg.pinv((x_mat.T @ diag_w @ x_mat))
+    xtinv = np.linalg.pinv(
+        (x_mat.T @ diag_w @ x_mat)
+        + 0.001 * np.identity(len(examples[0].descriptors.descriptors))
+    )
     beta = xtinv @ x_mat.T @ (y * nonzero_w)
     # compute tstats for each example as a difference from base
     for e in examples:
@@ -938,8 +941,7 @@ def plot_descriptors(
                     m,
                     int(k),
                     bi,
-                    mol_size=(300, 200),
-                    useSVG=True,
+                    molSize=(300, 200),
                     centerColor=None,
                     aromaticColor=None,
                     ringColor=None,
