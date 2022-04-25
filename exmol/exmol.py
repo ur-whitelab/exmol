@@ -946,6 +946,7 @@ def plot_descriptors(
                     aromaticColor=None,
                     ringColor=None,
                     extraColor=(0.8, 0.8, 0.8),
+                    useSVG=True,
                 )
                 sk_dict[f"sk{count}"] = svg.data
         count += 1
