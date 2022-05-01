@@ -234,8 +234,10 @@ def run_custom(
 def sample_space(
     origin_smiles: str,
     f: Union[
+        Callable[[str, str], List[float]],
+        Callable[[str], List[float]],
         Callable[[List[str], List[str]], List[float]],
-        Callable[[List[str], List[str]], List[float]],
+        Callable[[List[str]], List[float]],
     ],
     batched: bool = True,
     preset: str = "medium",
@@ -244,6 +246,7 @@ def sample_space(
     num_samples: int = None,
     stoned_kwargs: Dict = None,
     quiet: bool = False,
+    selfies: bool = False,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -251,7 +254,7 @@ def sample_space(
     set to 3,000 by default if using STONED and 150 if using ``chemed``.
 
     :param origin_smiles: starting SMILES
-    :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
+    :param f: A function which takes in SMILES or SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample commerically available compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
@@ -259,13 +262,29 @@ def sample_space(
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :param quiet: If True, will not print progress bar
+    :param selfies: If True, will use SELFIES instead of SMILES for `f`
     :return: List of generated :obj:`Example`
     """
-    batched_f = f
+
+    wrapped_f = f
+
+    # if f only takes in 1 arg, wrap it in a function that takes in 2
+    if f.__code__.co_argcount == 1:
+        if selfies:
+
+            def wrapped_f(sm, sf):
+                return f(sf)
+
+        else:
+
+            def wrapped_f(sm, sf):
+                return f(sm)
+
+    batched_f = wrapped_f
     if not batched:
 
         def batched_f(sm, se):
-            return np.array([f(smi, sei) for smi, sei in zip(sm, se)])
+            return np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)])
 
     origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:

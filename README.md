@@ -16,7 +16,7 @@ pip install exmol
 ## Counterfactual Generation
 
 Our package implements the Model Agnostic Counterfactual Compounds with STONED to generate counterfactuals.
-A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
+A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an example of a counterfactual:
 
 > This package is not popular. If the package had a logo, it would be popular.
 
@@ -40,11 +40,11 @@ import exmol
 # mol of interest
 base = 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O'
 
-samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
+samples = exmol.sample_space(base, my_model, batched=False)
 ```
 
-Here we use a `lambda` to wrap our function and indicate our function can only take one SMILES string, not a list of them with `batched=False`.
-Now we select counterfactuals from that space and plot them.
+Our model (`my_model`) should be a function that takes in one SMILES string. We use `batched=False` to indicate `my_model` cannot handle a batch of SMILES, just one at a time.
+Now we select counterfactuals from that space and plot them. If your model takes SELFIES, just pass `selfies=True` to `sample_space`.
 
 ```py
 cfs = exmol.cf_explain(samples)
