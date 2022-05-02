@@ -15,8 +15,8 @@ from sklearn.decomposition import PCA  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit import DataStructs  # type: ignore
 
 
 from . import stoned
@@ -28,11 +28,9 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
     fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
-    # 1 - Ts because we want distance
-    dist = list(
-        1 - stoned.TanimotoSimilarity(x, y) for x, y in itertools.product(fp, repeat=2)
-    )
-    return np.array(dist).reshape(len(mols), len(mols))
+    M = np.array([DataStructs.BulkTanimotoSimilarity(f, fp) for f in fp])
+    # 1 - similarity because we want distance
+    return 1 - M
 
 
 def get_basic_alphabet() -> Set[str]:
@@ -130,11 +128,8 @@ def run_stoned(
     return canon_smi_ls, canon_smi_ls_scores
 
 
-FIFTEEN_MINUTES = 900
-
-
 @sleep_and_retry
-@limits(calls=50, period=FIFTEEN_MINUTES)
+@limits(calls=2, period=30)
 def run_chemed(
     origin_smiles: str,
     num_samples: int,
