@@ -246,7 +246,7 @@ def sample_space(
     num_samples: int = None,
     stoned_kwargs: Dict = None,
     quiet: bool = False,
-    selfies: bool = False,
+    use_selfies: bool = False,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -262,7 +262,7 @@ def sample_space(
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :param quiet: If True, will not print progress bar
-    :param selfies: If True, will use SELFIES instead of SMILES for `f`
+    :param use_selfies: If True, will use SELFIES instead of SMILES for `f`
     :return: List of generated :obj:`Example`
     """
 
@@ -270,7 +270,7 @@ def sample_space(
 
     # if f only takes in 1 arg, wrap it in a function that takes in 2
     if f.__code__.co_argcount == 1:
-        if selfies:
+        if use_selfies:
 
             def wrapped_f(sm, sf):
                 return f(sf)
@@ -280,7 +280,7 @@ def sample_space(
             def wrapped_f(sm, sf):
                 return f(sm)
 
-    batched_f = wrapped_f
+    batched_f: Any = wrapped_f
     if not batched:
 
         def batched_f(sm, se):

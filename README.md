@@ -28,11 +28,7 @@ The counterfactual shows that if the carboxylic acid were an ester, the molecule
 
 ## Usage
 
-Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class.
-To generate counterfactuals, we need to wrap our function so that it can take both SMILES and SELFIES, but
-it only needs to use one.
-
-We first expand chemical space around the prediction of interest
+Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class. We first expand chemical space around the prediction of interest
 
 ```py
 import exmol
@@ -44,7 +40,7 @@ samples = exmol.sample_space(base, my_model, batched=False)
 ```
 
 Our model (`my_model`) should be a function that takes in one SMILES string. We use `batched=False` to indicate `my_model` cannot handle a batch of SMILES, just one at a time.
-Now we select counterfactuals from that space and plot them. If your model takes SELFIES, just pass `selfies=True` to `sample_space`.
+Now we select counterfactuals from that space and plot them. If your model takes SELFIES, just pass `use_selfies=True` to `sample_space`.
 
 ```py
 cfs = exmol.cf_explain(samples)

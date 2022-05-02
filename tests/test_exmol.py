@@ -92,8 +92,8 @@ def test_sample_f():
         return int("N" in s)
 
     # try both SMILES and SELFIES
-    exmol.sample_space("CCCC", model, batched=False, selfies=True)
-    exmol.sample_space("CCCC", model, batched=False, selfies=False)
+    exmol.sample_space("CCCC", model, batched=False, use_selfies=True)
+    exmol.sample_space("CCCC", model, batched=False, use_selfies=False)
 
 
 def test_sample_preset():
