@@ -6,6 +6,8 @@
   <title>Python Module Index &mdash; exmol  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,6 +16,11 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -41,6 +48,10 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
 </ul>
 
         </div>
@@ -108,7 +119,9 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.</p>
+    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">Last updated on True.
+      </span></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

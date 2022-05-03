@@ -1,0 +1,471 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# MMACE Paper: Graph Neural Network for HIV Inhibition"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": [
+     "hide-input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "# import os\n",
+    "# os.environ[\"CUDA_VISIBLE_DEVICES\"] = \"2\"\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "import matplotlib as mpl\n",
+    "import numpy as np\n",
+    "import tensorflow as tf\n",
+    "import selfies as sf\n",
+    "import exmol\n",
+    "import skunk\n",
+    "import warnings\n",
+    "from rdkit import Chem\n",
+    "from rdkit.Chem.Draw import rdDepictor\n",
+    "\n",
+    "rdDepictor.SetPreferCoordGen(True)\n",
+    "from rdkit.Chem.Draw import IPythonConsole\n",
+    "\n",
+    "IPythonConsole.ipython_useSVG = True\n",
+    "sns.set_context(\"notebook\")\n",
+    "sns.set_style(\n",
+    "    \"dark\",\n",
+    "    {\n",
+    "        \"xtick.bottom\": True,\n",
+    "        \"ytick.left\": True,\n",
+    "        \"xtick.color\": \"#666666\",\n",
+    "        \"ytick.color\": \"#666666\",\n",
+    "        \"axes.edgecolor\": \"#666666\",\n",
+    "        \"axes.linewidth\": 0.8,\n",
+    "        \"figure.dpi\": 300,\n",
+    "    },\n",
+    ")\n",
+    "color_cycle = [\"#1BBC9B\", \"#F06060\", \"#F3B562\", \"#6e5687\", \"#5C4B51\"]\n",
+    "mpl.rcParams[\"axes.prop_cycle\"] = mpl.cycler(color=color_cycle)\n",
+    "np.random.seed(0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# shuffle rows and sample fom HIV dataset\n",
+    "hivdata = pd.read_csv(\"HIV.csv\")\n",
+    "# REDUCED Data FOR CI\n",
+    "hivdata = hivdata.sample(frac=0.1).reset_index(drop=True)\n",
+    "hivdata.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def gen_smiles2graph(sml):\n",
+    "    \"\"\"Argument for the RD2NX function should be a valid SMILES sequence\n",
+    "    returns: the graph\n",
+    "    \"\"\"\n",
+    "    m, smi_canon, status = exmol.stoned.sanitize_smiles(sml)\n",
+    "    # m = Chem.MolFromSmiles(smi_canon)\n",
+    "    m = Chem.AddHs(m)\n",
+    "    order_string = {\n",
+    "        Chem.rdchem.BondType.SINGLE: 1,\n",
+    "        Chem.rdchem.BondType.DOUBLE: 2,\n",
+    "        Chem.rdchem.BondType.TRIPLE: 3,\n",
+    "        Chem.rdchem.BondType.AROMATIC: 4,\n",
+    "    }\n",
+    "    N = len(list(m.GetAtoms()))\n",
+    "    # nodes = np.zeros((N,100))\n",
+    "    nodes = np.zeros((440, 100))\n",
+    "    for i in m.GetAtoms():\n",
+    "        nodes[i.GetIdx(), i.GetAtomicNum()] = 1\n",
+    "\n",
+    "    # adj = np.zeros((N,N))\n",
+    "    adj = np.zeros((440, 440))\n",
+    "    for j in m.GetBonds():\n",
+    "        u = min(j.GetBeginAtomIdx(), j.GetEndAtomIdx())\n",
+    "        v = max(j.GetBeginAtomIdx(), j.GetEndAtomIdx())\n",
+    "        order = j.GetBondType()\n",
+    "        if order in order_string:\n",
+    "            order = order_string[order]\n",
+    "        else:\n",
+    "            raise Warning(\"Ignoring bond order\" + order)\n",
+    "        adj[u, v] = 1\n",
+    "        adj[v, u] = 1\n",
+    "    adj += np.eye(440)\n",
+    "    return nodes, adj"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class GCNLayer(tf.keras.layers.Layer):\n",
+    "    \"\"\"Implementation of GCN as layer\"\"\"\n",
+    "\n",
+    "    def __init__(self, activation=None, **kwargs):\n",
+    "        # constructor, which just calls super constructor\n",
+    "        # and turns requested activation into a callable function\n",
+    "        super(GCNLayer, self).__init__(**kwargs)\n",
+    "        self.activation = tf.keras.activations.get(activation)\n",
+    "\n",
+    "    def build(self, input_shape):\n",
+    "        # create trainable weights\n",
+    "        node_shape, adj_shape = input_shape\n",
+    "        self.w = self.add_weight(shape=(node_shape[2], node_shape[2]), name=\"w\")\n",
+    "\n",
+    "    def call(self, inputs):\n",
+    "        # split input into nodes, adj\n",
+    "        nodes, adj = inputs\n",
+    "        # compute degree\n",
+    "        degree = tf.reduce_sum(adj, axis=-1)\n",
+    "        # GCN equation\n",
+    "        new_nodes = tf.einsum(\"bi,bij,bjk,kl->bil\", 1 / degree, adj, nodes, self.w)\n",
+    "        out = self.activation(new_nodes)\n",
+    "        return out, adj"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class GRLayer(tf.keras.layers.Layer):\n",
+    "    \"\"\"Reduction layer: A GNN layer that computes average over all node features\"\"\"\n",
+    "\n",
+    "    def __init__(self, name=\"GRLayer\", **kwargs):\n",
+    "        super(GRLayer, self).__init__(name=name, **kwargs)\n",
+    "\n",
+    "    def call(self, inputs):\n",
+    "        nodes, adj = inputs\n",
+    "        reduction = tf.reduce_mean(nodes, axis=1)\n",
+    "        return reduction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ninput = tf.keras.Input(\n",
+    "    (\n",
+    "        None,\n",
+    "        100,\n",
+    "    )\n",
+    ")\n",
+    "ainput = tf.keras.Input(\n",
+    "    (\n",
+    "        None,\n",
+    "        None,\n",
+    "    )\n",
+    ")\n",
+    "# GCN block\n",
+    "x = GCNLayer(\"relu\")([ninput, ainput])\n",
+    "x = GCNLayer(\"relu\")(x)\n",
+    "x = GCNLayer(\"relu\")(x)\n",
+    "x = GCNLayer(\"relu\")(x)\n",
+    "# reduce to graph features\n",
+    "x = GRLayer()(x)\n",
+    "# standard layers\n",
+    "x = tf.keras.layers.Dense(256)(x)\n",
+    "x = tf.keras.layers.Dense(1, activation=\"sigmoid\")(x)\n",
+    "gcnmodel = tf.keras.Model(inputs=(ninput, ainput), outputs=x)\n",
+    "gcnmodel.compile(\n",
+    "    \"adam\",\n",
+    "    loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),\n",
+    "    metrics=[\"accuracy\"],\n",
+    ")\n",
+    "gcnmodel.summary()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def gen_data():\n",
+    "    for i in range(len(hivdata)):\n",
+    "        graph = gen_smiles2graph(hivdata.smiles[i])\n",
+    "        activity = hivdata.HIV_active[i]\n",
+    "        yield graph, activity\n",
+    "\n",
+    "\n",
+    "data = tf.data.Dataset.from_generator(\n",
+    "    gen_data,\n",
+    "    output_types=((tf.float32, tf.float32), tf.float32),\n",
+    "    output_shapes=(\n",
+    "        (tf.TensorShape([None, 100]), tf.TensorShape([None, None])),\n",
+    "        tf.TensorShape([]),\n",
+    "    ),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "N = len(hivdata)\n",
+    "split = int(0.1 * N)\n",
+    "test_data = data.take(split)\n",
+    "nontest = data.skip(split)\n",
+    "val_data, train_data = nontest.take(split), nontest.skip(split).shuffle(1000)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class_weight = {0: 1.0, 1: 30.0}  # to account for class imbalance\n",
+    "result = gcnmodel.fit(\n",
+    "    train_data.batch(128),\n",
+    "    validation_data=val_data.batch(128),\n",
+    "    epochs=30,\n",
+    "    verbose=0,\n",
+    "    class_weight=class_weight,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))\n",
+    "ax1.plot(result.history[\"loss\"], label=\"training\")\n",
+    "ax1.plot(result.history[\"val_loss\"], label=\"validation\")\n",
+    "ax1.legend()\n",
+    "ax1.set_xlabel(\"Epoch\")\n",
+    "ax1.set_ylabel(\"Loss\")\n",
+    "\n",
+    "ax2.plot(result.history[\"accuracy\"], label=\"training\")\n",
+    "ax2.plot(result.history[\"val_accuracy\"], label=\"validation\")\n",
+    "ax2.legend()\n",
+    "ax2.set_xlabel(\"Epoch\")\n",
+    "ax2.set_ylabel(\"Accuracy\")\n",
+    "fig.tight_layout()\n",
+    "fig.savefig(\"gnn-loss-acc.png\", dpi=180)\n",
+    "fig.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.metrics import roc_curve\n",
+    "from sklearn.metrics import auc\n",
+    "\n",
+    "prediction = []\n",
+    "test_y = []\n",
+    "\n",
+    "for x, y in test_data.as_numpy_iterator():\n",
+    "    yhat = gcnmodel((x[0][np.newaxis, ...], x[1][np.newaxis, ...]))\n",
+    "    prediction.append(yhat.numpy())\n",
+    "    test_y.append(y)\n",
+    "\n",
+    "prediction = np.array(prediction).flatten()\n",
+    "test_y = np.array(test_y)\n",
+    "\n",
+    "fpr_keras, tpr_keras, thresholds_keras = roc_curve(test_y, prediction)\n",
+    "auc_keras = auc(fpr_keras, tpr_keras)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.figure(figsize=(6, 4), dpi=100)\n",
+    "plt.plot(fpr_keras, tpr_keras, label=\"AUC = {:.3f}\".format(auc_keras))\n",
+    "plt.plot([0, 1], [0, 1], linestyle=\"--\")\n",
+    "plt.xlabel(\"True Positive Rate\")\n",
+    "plt.ylabel(\"False Positive Rate\")\n",
+    "plt.legend()\n",
+    "plt.savefig(\"gnn-roc.png\", dpi=300)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## CF explanation\n",
+    "The following example find CFs for a given molecule where the HIV activity is zero."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def predictor_function(smiles, selfies):\n",
+    "    # print('inut:',smiles)\n",
+    "    labels = []\n",
+    "    for sml in smiles:\n",
+    "        nodes, adj_mat = gen_smiles2graph(sml)\n",
+    "        pred = gcnmodel((nodes[np.newaxis, ...], adj_mat[np.newaxis, ...])).numpy()\n",
+    "        labels.append(pred)\n",
+    "\n",
+    "    labels = np.array(labels).flatten()\n",
+    "    bin_labels = np.where(labels > 0.5, np.ones(len(labels)), np.zeros(len(labels)))\n",
+    "    target_act = np.zeros(len(labels))\n",
+    "    return abs(bin_labels - target_act).astype(bool)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "basic = exmol.get_basic_alphabet()\n",
+    "stoned_kwargs = {\"num_samples\": 1500, \"alphabet\": basic, \"max_mutations\": 2}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "example_base = \"C=CCN(CC=C)C(=O)Nc1ccc(C(=O)NN=Cc2cccc(OC)c2OC)cc1\"\n",
+    "space = exmol.sample_space(\n",
+    "    example_base,\n",
+    "    predictor_function,\n",
+    "    stoned_kwargs={\"num_samples\": 1500, \"alphabet\": basic, \"max_mutations\": 2},\n",
+    "    quiet=True,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "exps = exmol.cf_explain(space)\n",
+    "fkw = {\"figsize\": (8, 6)}\n",
+    "mpl.rc(\"axes\", titlesize=12)\n",
+    "exmol.plot_cf(exps, figure_kwargs=fkw, mol_size=(450, 400), nrows=1)\n",
+    "plt.savefig(\"gnn-simple.png\", dpi=180)\n",
+    "svg = exmol.insert_svg(exps, mol_fontsize=16)\n",
+    "with open(\"gnn-simple.svg\", \"w\") as f:\n",
+    "    f.write(svg)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "font = {\"family\": \"normal\", \"weight\": \"normal\", \"size\": 22}\n",
+    "exmol.plot_space(\n",
+    "    space,\n",
+    "    exps,\n",
+    "    figure_kwargs=fkw,\n",
+    "    mol_size=(300, 200),\n",
+    "    offset=0,\n",
+    "    cartoon=True,\n",
+    "    rasterized=True,\n",
+    ")\n",
+    "plt.scatter([], [], label=\"Counterfactual\", s=150, color=plt.get_cmap(\"viridis\")(1.0))\n",
+    "plt.scatter([], [], label=\"Same Class\", s=150, color=plt.get_cmap(\"viridis\")(0.0))\n",
+    "plt.legend(fontsize=22)\n",
+    "plt.tight_layout()\n",
+    "svg = exmol.insert_svg(exps, mol_fontsize=16)\n",
+    "with open(\"gnn-space.svg\", \"w\") as f:\n",
+    "    f.write(svg)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "exps = exmol.cf_explain(space, nmols=19)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fkw = {\"figsize\": (12, 10)}\n",
+    "mpl.rc(\"axes\", titlesize=10)\n",
+    "exmol.plot_cf(\n",
+    "    exps, figure_kwargs=fkw, mol_size=(450, 400), mol_fontsize=26, nrows=4, ncols=5\n",
+    ")\n",
+    "plt.savefig(\"gnn-simple-20.png\", bbox_inches=\"tight\", dpi=300)\n",
+    "svg = exmol.insert_svg(exps, mol_fontsize=14)\n",
+    "with open(\"gnn-simple-20.svg\", \"w\") as f:\n",
+    "    f.write(svg)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fkw = {\"figsize\": (8, 6)}\n",
+    "font = {\"family\": \"normal\", \"weight\": \"normal\", \"size\": 22}\n",
+    "\n",
+    "exmol.plot_space(space, exps, figure_kwargs=fkw, mol_size=(350, 300), mol_fontsize=22)\n",
+    "plt.scatter([], [], label=\"Same Label\", s=150, color=plt.get_cmap(\"viridis\")(1.0))\n",
+    "plt.scatter([], [], label=\"Counterfactual\", s=150, color=plt.get_cmap(\"viridis\")(0.0))\n",
+    "plt.legend(fontsize=22)\n",
+    "plt.savefig(\"gnn-space.png\", bbox_inches=\"tight\", dpi=180)"
+   ]
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Tags",
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.11"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
