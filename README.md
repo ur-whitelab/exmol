@@ -79,6 +79,10 @@ print(cfs[1])
 }
 ```
 
+## Further Examples
+
+You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://https://ur-whitelab.github.io/exmol/toc.html).
+
 ## Chemical Space
 
 When calling `exmol.sample_space` you can pass `preset=<preset>`, which can be
