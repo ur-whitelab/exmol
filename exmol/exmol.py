@@ -984,6 +984,10 @@ def plot_descriptors(
     ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
     if descriptor_type == "MACCS" or descriptor_type == "ECFP":
+        if descriptor_type == "MACCS":
+            print(
+                "SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)"
+            )
         xlim = np.max(np.absolute(t)) + 5
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)

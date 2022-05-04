@@ -22,7 +22,7 @@ A counterfactual can explain a prediction by showing what would have to change i
 
 In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:
 
-<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/counterfactual.png" width="400">
+<img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/counterfactual.png" width="400">
 
 The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.
 
@@ -30,7 +30,7 @@ The counterfactual shows that if the carboxylic acid were an ester, the molecule
 This package also implements Model Agnostic Descriptor Attribution for molecules using LIME.
 Descriptor attributions can explain a prediction by computing QSARs for molecular structure properties independent of features used for model predictions. Here is an example of descriptor attribution:
 
-<img alt="descriptor demo" src="LIME/descriptor.png" width="800">
+<img alt="descriptor demo" src="paper2_LIME/descriptor.png" width="800">
 
 The descriptor t-statistics show which chemical properties or substructures influence properety prediction for the pictured molecule. LIME is a perturbation based method and the descriptor attributions depend on the perturbed chemical space created around the molecule of interest.
 
@@ -54,7 +54,7 @@ cfs = exmol.cf_explain(samples)
 exmol.plot_cf(cfs)
 ```
 
-<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-simple.png" width="500">
+<img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-simple.png" width="500">
 
 We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity (Tanimoto of ECFP4) with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
@@ -63,7 +63,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 cfs = exmol.cf_explain(samples)
 exmol.plot_space(samples, cfs)
 ```
-<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-space.png" width="600">
+<img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-space.png" width="600">
 
 Each counterfactual is a Python `dataclass` with information allowing it to be used in your own analysis:
 
@@ -92,7 +92,7 @@ We can use the same chemical space to get descriptor attributions for the molecu
 tstats, beta = exmol.lime_explain(samples, descriptor_type='MACCS')
 exmol.plot_descriptors(samples, tstats, descriptor_type='MACCS')
 ```
-<img alt="maccs descriptors" src="LIME/MACCS.svg" width="400">
+<img alt="maccs descriptors" src="paper2_LIME/MACCS.svg" width="400">
 
 You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients `beta` need to be passed in as an argument.
 
@@ -105,7 +105,7 @@ exmol.plot_utils.plot_space_by_fit(
     figure_kwargs={'figsize': (7,5)},
 )
 ```
-<img alt="chemical space by fit" src="LIME/space_by_fit.png" width="500">
+<img alt="chemical space by fit" src="paper2_LIME/space_by_fit.png" width="500">
 
 ## Further Examples
 
