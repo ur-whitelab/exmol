@@ -25,6 +25,7 @@ jobs:
         pip install . && pip install -r docs/requirements.txt
     - name: Sphinx build
       run: |
+        cp -R paper* docs/source
         cd docs && make html
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3

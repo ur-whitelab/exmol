@@ -23,7 +23,9 @@ from rdkit.Chem import MolFromSmarts  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
+from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit import DataStructs  # type: ignore
 
 
 from . import stoned
@@ -35,11 +37,9 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
     fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
-    # 1 - Ts because we want distance
-    dist = list(
-        1 - stoned.TanimotoSimilarity(x, y) for x, y in itertools.product(fp, repeat=2)
-    )
-    return np.array(dist).reshape(len(mols), len(mols))
+    M = np.array([DataStructs.BulkTanimotoSimilarity(f, fp) for f in fp])
+    # 1 - similarity because we want distance
+    return 1 - M
 
 
 def _calculate_rdkit_descriptors(mol):
@@ -282,11 +282,8 @@ def run_stoned(
     return canon_smi_ls, canon_smi_ls_scores
 
 
-FIFTEEN_MINUTES = 900
-
-
 @sleep_and_retry
-@limits(calls=50, period=FIFTEEN_MINUTES)
+@limits(calls=2, period=30)
 def run_chemed(
     origin_smiles: str,
     num_samples: int,
@@ -386,8 +383,10 @@ def run_custom(
 def sample_space(
     origin_smiles: str,
     f: Union[
+        Callable[[str, str], List[float]],
+        Callable[[str], List[float]],
         Callable[[List[str], List[str]], List[float]],
-        Callable[[List[str], List[str]], List[float]],
+        Callable[[List[str]], List[float]],
     ],
     batched: bool = True,
     preset: str = "medium",
@@ -396,6 +395,7 @@ def sample_space(
     num_samples: int = None,
     stoned_kwargs: Dict = None,
     quiet: bool = False,
+    use_selfies: bool = False,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -403,7 +403,7 @@ def sample_space(
     set to 3,000 by default if using STONED and 150 if using ``chemed``.
 
     :param origin_smiles: starting SMILES
-    :param f: A function which takes in SMILES and SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
+    :param f: A function which takes in SMILES or SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
     :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample commerically available compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
@@ -411,13 +411,29 @@ def sample_space(
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :param quiet: If True, will not print progress bar
+    :param use_selfies: If True, will use SELFIES instead of SMILES for `f`
     :return: List of generated :obj:`Example`
     """
-    batched_f = f
+
+    wrapped_f = f
+
+    # if f only takes in 1 arg, wrap it in a function that takes in 2
+    if f.__code__.co_argcount == 1:
+        if use_selfies:
+
+            def wrapped_f(sm, sf):
+                return f(sf)
+
+        else:
+
+            def wrapped_f(sm, sf):
+                return f(sm)
+
+    batched_f: Any = wrapped_f
     if not batched:
 
         def batched_f(sm, se):
-            return np.array([f(smi, sei) for smi, sei in zip(sm, se)])
+            return np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)])
 
     origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:

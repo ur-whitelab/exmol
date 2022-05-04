@@ -16,7 +16,7 @@ pip install exmol
 ## Counterfactual Generation
 
 Our package implements the Model Agnostic Counterfactual Compounds with STONED to generate counterfactuals.
-A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an eample of a counterfactual:
+A counterfactual can explain a prediction by showing what would have to change in the molecule to change its predicted class. Here is an example of a counterfactual:
 
 > This package is not popular. If the package had a logo, it would be popular.
 
@@ -36,11 +36,7 @@ The descriptor t-statistics show which chemical properties or substructures infl
 
 ## Usage
 
-Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class.
-To generate counterfactuals, we need to wrap our function so that it can take both SMILES and SELFIES, but
-it only needs to use one.
-
-We first expand chemical space around the prediction of interest
+Let's assume you have a deep learning model `my_model(s)` that takes in one SMILES string and outputs a predicted binary class. We first expand chemical space around the prediction of interest
 
 ```py
 import exmol
@@ -48,11 +44,10 @@ import exmol
 # mol of interest
 base = 'Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O'
 
-samples = exmol.sample_space(base, lambda smi, sel: my_model(smi), batched=False)
+samples = exmol.sample_space(base, my_model, batched=False)
 ```
 
-Here we use a `lambda` to wrap our function and indicate our function can only take one SMILES string, not a list of them with `batched=False`.
-Now we select counterfactuals from that space and plot them.
+We uses `batched=False` to indicate `my_model` cannot handle a batch of SMILES, just one at a time.  If your model takes SELFIES, just pass `use_selfies=True` to `sample_space`. Now we select counterfactuals from that space and plot them.
 
 ```py
 cfs = exmol.cf_explain(samples)
@@ -61,7 +56,7 @@ exmol.plot_cf(cfs)
 
 <img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-simple.png" width="500">
 
-We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity with the base molecule.
+We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix -- the similarity (Tanimoto of ECFP4) with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.
 
 ```py
@@ -112,6 +107,10 @@ exmol.plot_utils.plot_space_by_fit(
 ```
 <img alt="chemical space by fit" src="LIME/space_by_fit.png" width="500">
 
+## Further Examples
+
+You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://https://ur-whitelab.github.io/exmol/toc.html).
+
 ## Chemical Space
 
 When calling `exmol.sample_space` you can pass `preset=<preset>`, which can be
@@ -120,8 +119,8 @@ one of the following:
 * `'narrow'`: Only one change to molecular structure, reduced set of possible bonds/elements
 * `'medium'`: Default. One or two changes to molecular structure, reduced set of possible bonds/elements
 * `'wide'`: One through five changes to molecular structure, large set of possible bonds/elements
-* `'chemed'`: A restrictive set where only pubchem molecules are considered.
-* `'custom'`: A restrictive set where only molecules provided by the "data" key are considered.
+* `'chemed'`: A restricted set where only pubchem molecules are considered.
+* `'custom'`: A restricted set where only molecules provided by the "data" key are considered.
 
 You can also pass `num_samples` as a "request" for number of samples. You will typically end up with less due to
 degenerate molecules. See API for complete description.
@@ -146,7 +145,7 @@ with open('myplot.svg', 'w') as f:
 
 This is done with the [skunk🦨 library](https://github.com/whitead/skunk).
 
-## Quiet Progress Bars
+## Disable Progress Bars
 
 If `exmol` is being too loud, add `quiet = True` to `sample_space` arguments.
 
