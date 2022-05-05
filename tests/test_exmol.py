@@ -229,6 +229,9 @@ def test_limed():
 
     samples = exmol.sample_space("CCCC", model, batched=False)
     exmol.lime_explain(samples, descriptor_type="Classic")
+    exmol.lime_explain(samples, descriptor_type="MACCS")
+    exmol.lime_explain(samples, descriptor_type="ECFP")
+    exmol.lime_explain(samples, descriptor_type="ECFP", beta=True)
 
 
 def test_corrupt_smiles():
