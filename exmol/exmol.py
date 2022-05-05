@@ -586,6 +586,7 @@ def lime_explain(
 
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
+    :return_beta: Whether or not the function should return regression coefficient values
     """
     # add descriptors
     examples = add_descriptors(examples, descriptor_type)
