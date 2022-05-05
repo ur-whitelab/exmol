@@ -49,7 +49,7 @@ def _calculate_rdkit_descriptors(mol):
         "NumHDonors",
         "NumHAcceptors",
         "MolLogP",
-        "BertzCT",
+        "NumHeteroatoms",
         "RingCount",
         "NumRotatableBonds",
     ]  # , 'NumHeteroatoms']
@@ -137,7 +137,7 @@ def add_descriptors(
                 "number of hydrogen bond donor",
                 "number of hydrogen bond acceptor",
                 "Wildman-Crippen LogP",
-                "Bertz CT",
+                "number of heteroatoms",
                 "ring count",
                 "number of rotatable bonds",
                 "aromatic bonds count",
