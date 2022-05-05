@@ -89,8 +89,8 @@ print(cfs[1])
 We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to supply the `descriptor_type` to get attributions. You can select from `Classic` Rdkit descriptors, `MACCS` fingerprint descriptors, `ECFP` substructure descriptors. If you'd like to use regression coefficients for analysis, specify `return_beta=True`. The descriptor t-statistics are stored in `descriptors.tstats` attribute for the base molecule and can be accessed using `space_tstats = space[0].descriptors.tstats`.
 
 ```py
-beta = exmol.lime_explain(samples, descriptor_type='MACCS', return_beta=True)
-exmol.plot_descriptors(samples, descriptor_type='MACCS')
+beta = exmol.lime_explain(samples, descriptor_type='ECFP', return_beta=True)
+exmol.plot_descriptors(samples, descriptor_type='ECFP')
 ```
 <img alt="ecfp descriptors" src="paper2_LIME/ECFP.svg" width="400">
 
