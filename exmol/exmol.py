@@ -150,7 +150,9 @@ def add_descriptors(
             descriptors = _calculate_rdkit_descriptors(m)
             descriptor_names = names
             e.descriptors = Descriptors(
-                descriptors=descriptors, descriptor_names=descriptor_names
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
             )
         return examples
     elif descriptor_type == "MACCS":
@@ -162,7 +164,9 @@ def add_descriptors(
             descriptors = tuple(int(i) for i in fps)
             descriptor_names = names
             e.descriptors = Descriptors(
-                descriptors=descriptors, descriptor_names=descriptor_names
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
             )
         return examples
     elif descriptor_type == "ECFP":
@@ -176,7 +180,9 @@ def add_descriptors(
             temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
             descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
             e.descriptors = Descriptors(
-                descriptors=descriptors, descriptor_names=descriptor_names
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
             )
         return examples
     else:
@@ -571,14 +577,17 @@ def _select_examples(cond, examples, nmols):
 
 
 def lime_explain(
-    examples: List[Example], descriptor_type: str
-) -> Tuple[np.ndarray, np.ndarray]:
+    examples: List[Example],
+    descriptor_type: str,
+    return_beta: bool = True,
+):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
 
     :param examples: Output from :func: `sample_space`
-    :param descriptor_type: Desired descriptors, choose from 'Classi, ``'ECFP' 'MACCS'
+    :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     """
+    # add descriptors
     examples = add_descriptors(examples, descriptor_type)
     # weighted tanimoto similarities
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
@@ -607,9 +616,6 @@ def lime_explain(
         + 0.001 * np.identity(len(examples[0].descriptors.descriptors))
     )
     beta = xtinv @ x_mat.T @ (y * nonzero_w)
-    # compute tstats for each example as a difference from base
-    for e in examples:
-        e.descriptors.tstats = e.descriptors.descriptors * beta
     # compute standard error in beta
     yhat = x_mat @ beta
     resids = yhat - y
@@ -618,8 +624,13 @@ def lime_explain(
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
     tstat = beta * np.sqrt(1 / np.diag(se2_beta))
-    # Return tstats of the space and beta (feature weights) which are the fits
-    return tstat, beta
+    # Set tstats for base, to be used later
+    examples[0].descriptors.tstats = tstat
+    # Return beta (feature weights) which are the fits if asked for
+    if return_beta:
+        return beta
+    else:
+        return None
 
 
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
@@ -817,7 +828,6 @@ def plot_cf(
 
 def plot_descriptors(
     space: List[Example],
-    space_tstats: List[float],
     descriptor_type: str,
     fig: Any = None,
     figure_kwargs: Dict = None,
@@ -836,6 +846,7 @@ def plot_descriptors(
     import exmol.lime_data
     import pickle  # type: ignore
 
+    space_tstats = list(space[0].descriptors.tstats)
     if fig is None:
         if figure_kwargs is None:
             figure_kwargs = (

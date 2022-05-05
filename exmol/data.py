@@ -7,9 +7,11 @@ import numpy as np  # type: ignore
 class Descriptors:
     """Molecular descriptors"""
 
-    #: Descriptor names
+    #: Descriptor type
+    descriptor_type: str
+    #: Descriptor values
     descriptors: tuple
-    # Descriptor value
+    # Descriptor name
     descriptor_names: tuple
     # t_stats for each molecule
     tstats: tuple = ()
