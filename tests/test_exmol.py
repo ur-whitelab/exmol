@@ -231,7 +231,7 @@ def test_limed():
     exmol.lime_explain(samples, descriptor_type="Classic")
     exmol.lime_explain(samples, descriptor_type="MACCS")
     exmol.lime_explain(samples, descriptor_type="ECFP")
-    exmol.lime_explain(samples, descriptor_type="ECFP", beta=True)
+    exmol.lime_explain(samples, descriptor_type="ECFP", return_beta=True)
 
 
 def test_corrupt_smiles():
