@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build and train a Random Forest model &mdash; exmol  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../toc.html" class="icon icon-home"> exmol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solubility-RNN.html">LIME explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solubility-RNN.html#plot-wls-fit-and-show-which-descriptors-matter-for-an-instance">Plot WLS Fit and show which descriptors matter for an instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solubility-RNN.html#robustness-to-incomplete-sampling">Robustness to incomplete sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solubility-RNN.html#effect-of-mutation-number-alphabet-and-size-of-chemical-space">Effect of mutation number, alphabet and size of chemical space</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../toc.html">exmol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Build and train a Random Forest model</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com///blob/paper2_LIME/RF-lime.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import seaborn as sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">IPythonConsole</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">mordred</span><span class="o">,</span> <span class="nn">mordred.descriptors</span>
+<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">HydrogenBond</span><span class="p">,</span> <span class="n">Polarizability</span>
+<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">SLogP</span><span class="p">,</span> <span class="n">AcidBase</span><span class="p">,</span> <span class="n">BertzCT</span><span class="p">,</span> <span class="n">Aromatic</span><span class="p">,</span> <span class="n">BondCount</span><span class="p">,</span> <span class="n">AtomCount</span>
+<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">Calculator</span>
+
+<span class="kn">import</span> <span class="nn">exmol</span> <span class="k">as</span> <span class="nn">exmol</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">plot_roc_curve</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+<span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">IPythonConsole</span><span class="o">.</span><span class="n">ipython_useSVG</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1"># sns.set_context(&#39;notebook&#39;)</span>
+<span class="c1"># sns.set_style(&#39;dark&#39;,  {&#39;xtick.bottom&#39;:True, &#39;ytick.left&#39;:True, &#39;xtick.color&#39;: &#39;#666666&#39;, &#39;ytick.color&#39;: &#39;#666666&#39;,</span>
+<span class="c1">#                         &#39;axes.edgecolor&#39;: &#39;#666666&#39;, &#39;axes.linewidth&#39;:     0.8 , &#39;figure.dpi&#39;: 300})</span>
+<span class="n">color_cycle</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F06060&quot;</span><span class="p">,</span> <span class="s2">&quot;#1BBC9B&quot;</span><span class="p">,</span> <span class="s2">&quot;#F3B562&quot;</span><span class="p">,</span> <span class="s2">&quot;#6e5687&quot;</span><span class="p">,</span> <span class="s2">&quot;#5C4B51&quot;</span><span class="p">]</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.prop_cycle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_cycle</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">soldata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s2">&quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;</span>
+<span class="p">)</span>
+<span class="n">features_start_at</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;MolWt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="build-and-train-a-random-forest-model">
+<h1>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this headline"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make object that can compute descriptors</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">Calculator</span><span class="p">()</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">([</span><span class="n">HydrogenBond</span><span class="o">.</span><span class="n">HBondDonor</span><span class="p">,</span> <span class="n">HydrogenBond</span><span class="o">.</span><span class="n">HBondAcceptor</span><span class="p">])</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">AcidBase</span><span class="o">.</span><span class="n">AcidicGroupCount</span><span class="p">,</span> <span class="n">AcidBase</span><span class="o">.</span><span class="n">BasicGroupCount</span><span class="p">,</span> <span class="n">Aromatic</span><span class="o">.</span><span class="n">AromaticBondsCount</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">([</span><span class="n">SLogP</span><span class="o">.</span><span class="n">SLogP</span><span class="p">,</span> <span class="n">Polarizability</span><span class="o">.</span><span class="n">APol</span><span class="p">])</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">BondCount</span><span class="o">.</span><span class="n">BondCount</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">),</span>
+        <span class="n">BondCount</span><span class="o">.</span><span class="n">BondCount</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;aromatic&quot;</span><span class="p">),</span>
+        <span class="n">AtomCount</span><span class="o">.</span><span class="n">AtomCount</span><span class="p">(</span><span class="s2">&quot;Hetero&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># make subsample from pandas df</span>
+<span class="n">molecules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">]</span>
+
+<span class="n">raw_features</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">calc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+    <span class="n">raw_features</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">description</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">calc</span><span class="o">.</span><span class="n">descriptors</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># feature_names = soldata.columns[features_start_at:]</span>
+<span class="c1"># raw_features = soldata[feature_names]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">soldata</span><span class="p">[</span><span class="s2">&quot;Solubility&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">):</span>
+    <span class="n">fm</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">feature_convert</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">-=</span> <span class="n">fm</span>
+        <span class="n">f</span> <span class="o">/=</span> <span class="n">fs</span>
+        <span class="k">return</span> <span class="n">f</span>
+
+    <span class="n">features</span> <span class="o">=</span> <span class="n">feature_convert</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
+
+    <span class="c1"># we have some nans in features, likely because std was 0</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">features_select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>  <span class="c1"># np.all(np.isfinite(features), axis=0)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:,</span> <span class="n">features_select</span><span class="p">]</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="n">feature_names</span><span class="p">[</span><span class="n">features_select</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">features</span><span class="p">,</span> <span class="n">names</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(9982, 3) [&#39;Wildman-Crippen LogP&#39; &#39;number of hydrogen bond donor&#39;
+ &#39;basic group count&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+    <span class="nb">max</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="nb">min</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;correlation = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+    <span class="nb">max</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="nb">min</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
+    <span class="sa">f</span><span class="s2">&quot;loss = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_test</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;RF-ROC.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5ce36c854fff008b8d89f90fb8a57e56a4c5cda5e21f8e7c97581b5c318698a4.png" src="../_images/5ce36c854fff008b8d89f90fb8a57e56a4c5cda5e21f8e7c97581b5c318698a4.png" />
+</div>
+</div>
+</section>
+<section id="compute-descriptor-attributions">
+<h1>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this headline"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+    <span class="n">molecules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">labels</span>
+
+
+<span class="n">labels</span> <span class="o">=</span> <span class="n">model_eval</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smi</span> <span class="o">=</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">[</span><span class="mi">1500</span><span class="p">]</span>
+<span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
+    <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
+    <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">model_eval</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:   0%|          | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 1000/2000 [00:01&lt;00:01, 518.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 1000/2000 [00:01&lt;00:01, 518.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 2000/2000 [00:04&lt;00:00, 480.38it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 2000/2000 [00:04&lt;00:00, 480.38it/s]        
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 2000/2000 [00:06&lt;00:00, 480.38it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1709 [00:00&lt;?, ?it/s]            
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1709 [00:00&lt;?, ?it/s]              
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  20%|█▉        | 339.0/1709 [00:00&lt;00:00, 3385.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  40%|███▉      | 680.0/1709 [00:00&lt;00:00, 3398.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  74%|███████▎  | 1258.5/1709 [00:00&lt;00:00, 4486.57it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1709.0/1709 [00:05&lt;00:00, 4486.57it/s] 
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1709.0/1709 [00:05&lt;00:00, 4486.57it/s]        
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1709.0/1709 [00:05&lt;00:00, 328.00it/s] 
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mol</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">[</span><span class="mi">1500</span><span class="p">])</span>
+<span class="n">mol</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><?xml version='1.0' encoding='iso-8859-1'?>
+<svg version='1.1' baseProfile='full'
+              xmlns='http://www.w3.org/2000/svg'
+                      xmlns:rdkit='http://www.rdkit.org/xml'
+                      xmlns:xlink='http://www.w3.org/1999/xlink'
+                  xml:space='preserve'
+width='450px' height='150px' viewBox='0 0 450 150'>
+<!-- END OF HEADER -->
+<rect style='opacity:1.0;fill:#FFFFFF;stroke:none' width='450.0' height='150.0' x='0.0' y='0.0'> </rect>
+<path class='bond-0 atom-0 atom-1' d='M 317.8,134.2 L 315.7,130.7' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-0 atom-0 atom-1' d='M 315.7,130.7 L 313.7,127.2' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-1 atom-2' d='M 312.1,117.0 L 314.1,113.5' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-1 atom-2' d='M 314.1,113.5 L 316.2,110.0' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-1 atom-2' d='M 315.1,118.7 L 317.1,115.2' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-1 atom-1 atom-2' d='M 317.1,115.2 L 319.1,111.7' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-2 atom-1 atom-3' d='M 307.2,122.5 L 299.6,122.5' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-2 atom-1 atom-3' d='M 299.6,122.5 L 291.9,122.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-3 atom-3 atom-4' d='M 291.9,122.5 L 282.3,106.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-3 atom-3 atom-4' d='M 287.5,121.8 L 280.8,110.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-4 atom-4 atom-5' d='M 282.3,106.1 L 263.3,106.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-5 atom-5 atom-6' d='M 263.3,106.1 L 253.8,122.7' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-5 atom-5 atom-6' d='M 264.8,110.3 L 258.2,121.9' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-6 atom-6 atom-7' d='M 253.8,122.7 L 246.4,122.7' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-6 atom-6 atom-7' d='M 246.4,122.7 L 239.1,122.7' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-7 atom-7 atom-8' d='M 232.0,118.0 L 230.0,114.5' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-7 atom-7 atom-8' d='M 230.0,114.5 L 227.9,110.9' style='fill:none;fill-rule:evenodd;stroke:#FF7F00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-8 atom-8 atom-9' d='M 221.0,102.4 L 219.0,99.0' style='fill:none;fill-rule:evenodd;stroke:#FF7F00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-8 atom-8 atom-9' d='M 219.0,99.0 L 217.0,95.5' style='fill:none;fill-rule:evenodd;stroke:#CCCC00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-8 atom-8 atom-9' d='M 223.9,100.7 L 221.9,97.2' style='fill:none;fill-rule:evenodd;stroke:#FF7F00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-8 atom-8 atom-9' d='M 221.9,97.2 L 219.9,93.8' style='fill:none;fill-rule:evenodd;stroke:#CCCC00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-9 atom-8 atom-10' d='M 228.4,104.4 L 232.9,101.8' style='fill:none;fill-rule:evenodd;stroke:#FF7F00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-9 atom-8 atom-10' d='M 232.9,101.8 L 237.3,99.2' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-10 atom-10 atom-11' d='M 241.6,91.9 L 241.6,84.8' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-10 atom-10 atom-11' d='M 241.6,84.8 L 241.6,77.6' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-11 atom-11 atom-12' d='M 241.6,77.6 L 225.1,68.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-11 atom-11 atom-12' d='M 240.8,73.2 L 229.3,66.6' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-12 atom-12 atom-13' d='M 225.1,68.1 L 225.0,49.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-13 atom-13 atom-14' d='M 225.0,49.1 L 241.5,39.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-13 atom-13 atom-14' d='M 229.2,50.6 L 240.7,43.9' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-14 atom-14 atom-15' d='M 241.5,39.5 L 258.0,49.0' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-15 atom-15 atom-16' d='M 258.0,49.0 L 258.1,68.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-15 atom-15 atom-16' d='M 254.6,51.9 L 254.6,65.2' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-16 atom-14 atom-17' d='M 241.5,39.5 L 241.5,32.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-16 atom-14 atom-17' d='M 241.5,32.3 L 241.4,25.2' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-17 atom-17 atom-18' d='M 249.6,15.8 L 251.6,14.6' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-17 atom-17 atom-18' d='M 251.6,14.6 L 253.6,13.4' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-18 atom-17 atom-19' d='M 236.9,19.8 L 232.6,17.4' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-18 atom-17 atom-19' d='M 232.6,17.4 L 228.4,15.0' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-18 atom-17 atom-19' d='M 238.6,16.9 L 234.3,14.4' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-18 atom-17 atom-19' d='M 234.3,14.4 L 230.1,12.0' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-19 atom-8 atom-20' d='M 222.0,108.1 L 217.5,110.7' style='fill:none;fill-rule:evenodd;stroke:#FF7F00;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-19 atom-8 atom-20' d='M 217.5,110.7 L 213.1,113.3' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-20 atom-20 atom-21' d='M 204.4,113.3 L 198.3,109.8' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-20 atom-20 atom-21' d='M 198.3,109.8 L 192.2,106.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-21 atom-21 atom-22' d='M 192.2,106.3 L 175.7,115.9' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-21 atom-21 atom-22' d='M 188.0,104.8 L 176.5,111.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-22 atom-22 atom-23' d='M 175.7,115.9 L 159.2,106.4' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-23 atom-23 atom-24' d='M 159.2,106.4 L 159.1,87.4' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-23 atom-23 atom-24' d='M 162.6,103.6 L 162.6,90.2' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-24 atom-24 atom-25' d='M 159.1,87.4 L 175.6,77.8' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-25 atom-25 atom-26' d='M 175.6,77.8 L 192.1,87.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-25 atom-25 atom-26' d='M 176.4,82.2 L 187.9,88.8' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-26 atom-24 atom-27' d='M 159.1,87.4 L 152.7,83.7' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-26 atom-24 atom-27' d='M 152.7,83.7 L 146.3,80.0' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-27 atom-27 atom-28' d='M 138.9,80.0 L 135.5,82.1' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-27 atom-27 atom-28' d='M 135.5,82.1 L 132.0,84.1' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-28 atom-27 atom-29' d='M 140.9,73.2 L 140.9,68.5' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-28 atom-27 atom-29' d='M 140.9,68.5 L 140.9,63.7' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-28 atom-27 atom-29' d='M 144.3,73.2 L 144.3,68.5' style='fill:none;fill-rule:evenodd;stroke:#0000FF;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-28 atom-27 atom-29' d='M 144.3,68.5 L 144.3,63.7' style='fill:none;fill-rule:evenodd;stroke:#FF0000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-29 atom-6 atom-30' d='M 253.8,122.7 L 263.4,139.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-30 atom-30 atom-31' d='M 263.4,139.1 L 282.4,139.1' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-30 atom-30 atom-31' d='M 266.2,135.7 L 279.5,135.7' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-31 atom-31 atom-3' d='M 282.4,139.1 L 291.9,122.5' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-32 atom-16 atom-11' d='M 258.1,68.1 L 241.6,77.6' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='bond-33 atom-26 atom-21' d='M 192.1,87.3 L 192.2,106.3' style='fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.0px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' />
+<path class='atom-0' d='M 316.8 139.0
+Q 316.8 137.0, 317.8 136.0
+Q 318.7 134.9, 320.5 134.9
+Q 322.3 134.9, 323.3 136.0
+Q 324.2 137.0, 324.2 139.0
+Q 324.2 141.0, 323.3 142.1
+Q 322.3 143.2, 320.5 143.2
+Q 318.7 143.2, 317.8 142.1
+Q 316.8 141.0, 316.8 139.0
+M 320.5 142.3
+Q 321.7 142.3, 322.4 141.4
+Q 323.1 140.6, 323.1 139.0
+Q 323.1 137.4, 322.4 136.6
+Q 321.7 135.8, 320.5 135.8
+Q 319.3 135.8, 318.6 136.6
+Q 317.9 137.4, 317.9 139.0
+Q 317.9 140.6, 318.6 141.4
+Q 319.3 142.3, 320.5 142.3
+' fill='#FF0000'/>
+<path class='atom-0' d='M 324.8 136.2
+L 327.6 136.2
+L 327.6 136.8
+L 324.8 136.8
+L 324.8 136.2
+' fill='#FF0000'/>
+<path class='atom-1' d='M 309.2 118.4
+L 311.8 122.7
+Q 312.1 123.2, 312.5 123.9
+Q 312.9 124.7, 312.9 124.7
+L 312.9 118.4
+L 314.0 118.4
+L 314.0 126.5
+L 312.9 126.5
+L 310.1 121.9
+Q 309.7 121.3, 309.4 120.7
+Q 309.0 120.0, 308.9 119.9
+L 308.9 126.5
+L 307.9 126.5
+L 307.9 118.4
+L 309.2 118.4
+' fill='#0000FF'/>
+<path class='atom-1' d='M 315.0 119.9
+L 316.4 119.9
+L 316.4 118.4
+L 317.0 118.4
+L 317.0 119.9
+L 318.5 119.9
+L 318.5 120.5
+L 317.0 120.5
+L 317.0 122.0
+L 316.4 122.0
+L 316.4 120.5
+L 315.0 120.5
+L 315.0 119.9
+' fill='#0000FF'/>
+<path class='atom-2' d='M 316.7 106.0
+Q 316.7 104.1, 317.7 103.0
+Q 318.6 101.9, 320.4 101.9
+Q 322.2 101.9, 323.2 103.0
+Q 324.1 104.1, 324.1 106.0
+Q 324.1 108.0, 323.2 109.1
+Q 322.2 110.2, 320.4 110.2
+Q 318.6 110.2, 317.7 109.1
+Q 316.7 108.0, 316.7 106.0
+M 320.4 109.3
+Q 321.7 109.3, 322.3 108.5
+Q 323.0 107.6, 323.0 106.0
+Q 323.0 104.4, 322.3 103.6
+Q 321.7 102.8, 320.4 102.8
+Q 319.2 102.8, 318.5 103.6
+Q 317.8 104.4, 317.8 106.0
+Q 317.8 107.6, 318.5 108.5
+Q 319.2 109.3, 320.4 109.3
+' fill='#FF0000'/>
+<path class='atom-7' d='M 231.0 122.7
+Q 231.0 120.8, 232.0 119.7
+Q 233.0 118.6, 234.8 118.6
+Q 236.5 118.6, 237.5 119.7
+Q 238.5 120.8, 238.5 122.7
+Q 238.5 124.7, 237.5 125.8
+Q 236.5 126.9, 234.8 126.9
+Q 233.0 126.9, 232.0 125.8
+Q 231.0 124.7, 231.0 122.7
+M 234.8 126.0
+Q 236.0 126.0, 236.6 125.2
+Q 237.3 124.4, 237.3 122.7
+Q 237.3 121.1, 236.6 120.3
+Q 236.0 119.5, 234.8 119.5
+Q 233.5 119.5, 232.8 120.3
+Q 232.2 121.1, 232.2 122.7
+Q 232.2 124.4, 232.8 125.2
+Q 233.5 126.0, 234.8 126.0
+' fill='#FF0000'/>
+<path class='atom-8' d='M 225.0 102.2
+Q 226.4 102.2, 227.1 102.8
+Q 227.8 103.4, 227.8 104.6
+Q 227.8 105.7, 227.0 106.3
+Q 226.3 107.0, 225.0 107.0
+L 223.7 107.0
+L 223.7 110.3
+L 222.6 110.3
+L 222.6 102.2
+L 225.0 102.2
+M 225.0 106.0
+Q 225.8 106.0, 226.2 105.7
+Q 226.6 105.3, 226.6 104.6
+Q 226.6 103.9, 226.2 103.5
+Q 225.8 103.1, 225.0 103.1
+L 223.7 103.1
+L 223.7 106.0
+L 225.0 106.0
+' fill='#FF7F00'/>
+<path class='atom-9' d='M 213.3 92.5
+Q 213.4 92.6, 213.8 92.7
+Q 214.2 92.9, 214.6 93.0
+Q 215.0 93.1, 215.4 93.1
+Q 216.2 93.1, 216.6 92.7
+Q 217.1 92.4, 217.1 91.7
+Q 217.1 91.3, 216.8 91.0
+Q 216.6 90.7, 216.3 90.6
+Q 215.9 90.4, 215.4 90.2
+Q 214.7 90.0, 214.2 89.8
+Q 213.8 89.6, 213.5 89.2
+Q 213.2 88.7, 213.2 88.0
+Q 213.2 87.0, 213.9 86.4
+Q 214.6 85.7, 215.9 85.7
+Q 216.9 85.7, 217.9 86.2
+L 217.7 87.1
+Q 216.7 86.7, 216.0 86.7
+Q 215.2 86.7, 214.8 87.0
+Q 214.3 87.3, 214.3 87.9
+Q 214.3 88.3, 214.5 88.6
+Q 214.8 88.8, 215.1 89.0
+Q 215.4 89.1, 216.0 89.3
+Q 216.7 89.5, 217.1 89.8
+Q 217.6 90.0, 217.9 90.5
+Q 218.2 90.9, 218.2 91.7
+Q 218.2 92.8, 217.5 93.4
+Q 216.7 94.0, 215.5 94.0
+Q 214.7 94.0, 214.2 93.9
+Q 213.7 93.7, 213.0 93.5
+L 213.3 92.5
+' fill='#CCCC00'/>
+<path class='atom-10' d='M 237.9 96.7
+Q 237.9 94.7, 238.9 93.7
+Q 239.9 92.6, 241.7 92.6
+Q 243.4 92.6, 244.4 93.7
+Q 245.4 94.7, 245.4 96.7
+Q 245.4 98.7, 244.4 99.8
+Q 243.4 100.9, 241.7 100.9
+Q 239.9 100.9, 238.9 99.8
+Q 237.9 98.7, 237.9 96.7
+M 241.7 100.0
+Q 242.9 100.0, 243.5 99.1
+Q 244.2 98.3, 244.2 96.7
+Q 244.2 95.1, 243.5 94.3
+Q 242.9 93.5, 241.7 93.5
+Q 240.4 93.5, 239.7 94.3
+Q 239.1 95.1, 239.1 96.7
+Q 239.1 98.3, 239.7 99.1
+Q 240.4 100.0, 241.7 100.0
+' fill='#FF0000'/>
+<path class='atom-17' d='M 239.6 16.4
+L 242.3 20.7
+Q 242.6 21.1, 243.0 21.9
+Q 243.4 22.7, 243.4 22.7
+L 243.4 16.4
+L 244.5 16.4
+L 244.5 24.5
+L 243.4 24.5
+L 240.5 19.8
+Q 240.2 19.3, 239.9 18.7
+Q 239.5 18.0, 239.4 17.8
+L 239.4 24.5
+L 238.4 24.5
+L 238.4 16.4
+L 239.6 16.4
+' fill='#0000FF'/>
+<path class='atom-17' d='M 245.5 17.9
+L 246.9 17.9
+L 246.9 16.4
+L 247.5 16.4
+L 247.5 17.9
+L 249.0 17.9
+L 249.0 18.4
+L 247.5 18.4
+L 247.5 19.9
+L 246.9 19.9
+L 246.9 18.4
+L 245.5 18.4
+L 245.5 17.9
+' fill='#0000FF'/>
+<path class='atom-18' d='M 254.2 10.9
+Q 254.2 9.0, 255.1 7.9
+Q 256.1 6.8, 257.9 6.8
+Q 259.7 6.8, 260.7 7.9
+Q 261.6 9.0, 261.6 10.9
+Q 261.6 12.9, 260.6 14.0
+Q 259.7 15.1, 257.9 15.1
+Q 256.1 15.1, 255.1 14.0
+Q 254.2 12.9, 254.2 10.9
+M 257.9 14.2
+Q 259.1 14.2, 259.8 13.4
+Q 260.5 12.6, 260.5 10.9
+Q 260.5 9.3, 259.8 8.5
+Q 259.1 7.7, 257.9 7.7
+Q 256.7 7.7, 256.0 8.5
+Q 255.3 9.3, 255.3 10.9
+Q 255.3 12.6, 256.0 13.4
+Q 256.7 14.2, 257.9 14.2
+' fill='#FF0000'/>
+<path class='atom-18' d='M 262.2 8.1
+L 265.0 8.1
+L 265.0 8.7
+L 262.2 8.7
+L 262.2 8.1
+' fill='#FF0000'/>
+<path class='atom-19' d='M 221.2 11.0
+Q 221.2 9.1, 222.2 8.0
+Q 223.1 6.9, 224.9 6.9
+Q 226.7 6.9, 227.7 8.0
+Q 228.6 9.1, 228.6 11.0
+Q 228.6 13.0, 227.7 14.1
+Q 226.7 15.2, 224.9 15.2
+Q 223.1 15.2, 222.2 14.1
+Q 221.2 13.0, 221.2 11.0
+M 224.9 14.3
+Q 226.1 14.3, 226.8 13.5
+Q 227.5 12.6, 227.5 11.0
+Q 227.5 9.4, 226.8 8.6
+Q 226.1 7.8, 224.9 7.8
+Q 223.7 7.8, 223.0 8.6
+Q 222.3 9.4, 222.3 11.0
+Q 222.3 12.7, 223.0 13.5
+Q 223.7 14.3, 224.9 14.3
+' fill='#FF0000'/>
+<path class='atom-20' d='M 205.0 115.8
+Q 205.0 113.9, 206.0 112.8
+Q 206.9 111.7, 208.7 111.7
+Q 210.5 111.7, 211.5 112.8
+Q 212.4 113.9, 212.4 115.8
+Q 212.4 117.8, 211.5 118.9
+Q 210.5 120.0, 208.7 120.0
+Q 206.9 120.0, 206.0 118.9
+Q 205.0 117.8, 205.0 115.8
+M 208.7 119.1
+Q 209.9 119.1, 210.6 118.3
+Q 211.3 117.5, 211.3 115.8
+Q 211.3 114.2, 210.6 113.4
+Q 209.9 112.6, 208.7 112.6
+Q 207.5 112.6, 206.8 113.4
+Q 206.1 114.2, 206.1 115.8
+Q 206.1 117.5, 206.8 118.3
+Q 207.5 119.1, 208.7 119.1
+' fill='#FF0000'/>
+<path class='atom-27' d='M 140.8 73.9
+L 143.5 78.1
+Q 143.7 78.6, 144.2 79.3
+Q 144.6 80.1, 144.6 80.1
+L 144.6 73.9
+L 145.7 73.9
+L 145.7 81.9
+L 144.6 81.9
+L 141.7 77.3
+Q 141.4 76.7, 141.0 76.1
+Q 140.7 75.5, 140.6 75.3
+L 140.6 81.9
+L 139.5 81.9
+L 139.5 73.9
+L 140.8 73.9
+' fill='#0000FF'/>
+<path class='atom-27' d='M 146.6 75.3
+L 148.1 75.3
+L 148.1 73.8
+L 148.7 73.8
+L 148.7 75.3
+L 150.2 75.3
+L 150.2 75.9
+L 148.7 75.9
+L 148.7 77.4
+L 148.1 77.4
+L 148.1 75.9
+L 146.6 75.9
+L 146.6 75.3
+' fill='#0000FF'/>
+<path class='atom-28' d='M 122.4 87.5
+Q 122.4 85.5, 123.4 84.5
+Q 124.4 83.4, 126.1 83.4
+Q 127.9 83.4, 128.9 84.5
+Q 129.9 85.5, 129.9 87.5
+Q 129.9 89.5, 128.9 90.6
+Q 127.9 91.7, 126.1 91.7
+Q 124.4 91.7, 123.4 90.6
+Q 122.4 89.5, 122.4 87.5
+M 126.1 90.8
+Q 127.4 90.8, 128.0 89.9
+Q 128.7 89.1, 128.7 87.5
+Q 128.7 85.9, 128.0 85.1
+Q 127.4 84.3, 126.1 84.3
+Q 124.9 84.3, 124.2 85.1
+Q 123.6 85.9, 123.6 87.5
+Q 123.6 89.1, 124.2 89.9
+Q 124.9 90.8, 126.1 90.8
+' fill='#FF0000'/>
+<path class='atom-28' d='M 130.4 84.7
+L 133.2 84.7
+L 133.2 85.3
+L 130.4 85.3
+L 130.4 84.7
+' fill='#FF0000'/>
+<path class='atom-29' d='M 138.9 58.9
+Q 138.9 56.9, 139.8 55.8
+Q 140.8 54.8, 142.6 54.8
+Q 144.4 54.8, 145.3 55.8
+Q 146.3 56.9, 146.3 58.9
+Q 146.3 60.8, 145.3 62.0
+Q 144.3 63.1, 142.6 63.1
+Q 140.8 63.1, 139.8 62.0
+Q 138.9 60.9, 138.9 58.9
+M 142.6 62.2
+Q 143.8 62.2, 144.5 61.3
+Q 145.1 60.5, 145.1 58.9
+Q 145.1 57.3, 144.5 56.5
+Q 143.8 55.7, 142.6 55.7
+Q 141.3 55.7, 140.7 56.5
+Q 140.0 57.3, 140.0 58.9
+Q 140.0 60.5, 140.7 61.3
+Q 141.3 62.2, 142.6 62.2
+' fill='#FF0000'/>
+</svg>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_feature_importance</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
+    <span class="n">feature_importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)}</span>
+    <span class="n">feature_importance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="nb">sorted</span><span class="p">(</span><span class="n">feature_importance</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># Fitted space important features</span>
+    <span class="k">return</span> <span class="n">feature_importance</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">descriptor_type</span> <span class="o">=</span> <span class="s2">&quot;Classic&quot;</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">descriptor_type</span><span class="p">)</span>
+<span class="n">wls_attr</span> <span class="o">=</span> <span class="n">calc_feature_importance</span><span class="p">(</span>
+    <span class="nb">list</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">tstats</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">wls_attr</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;atomic polarizability&#39;: -1.9997795051813345,
+ &#39;number of hydrogen bond acceptor&#39;: 1.8262609056273575,
+ &#39;number of rotatable bonds&#39;: 1.6758581339721454,
+ &#39;number of hydrogen bond donor&#39;: 1.4384204012294342,
+ &#39;ring count&#39;: 0.9539665931132666,
+ &#39;number of heteroatoms&#39;: -0.8494379662784565,
+ &#39;aromatic bonds count&#39;: 0.8138619926171078,
+ &#39;acidic group count&#39;: -0.18148895054393863,
+ &#39;Wildman-Crippen LogP&#39;: -0.16875227257271513,
+ &#39;basic group count&#39;: 0.015579181716279672}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="do-we-recover-training-features">
+<h1>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this headline"></a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">wls_attr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">xaxis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">x_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;purple&quot;</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+<span class="n">rf_imp</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)}</span>
+<span class="n">rf_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">rf_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">rf_imp</span><span class="p">:</span>
+        <span class="n">rf_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">rf_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rf_imp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+<span class="n">width</span> <span class="o">=</span> <span class="p">[</span><span class="n">wls_attr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F06060&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;#1BBC9B&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">width</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">xaxis</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;WLS&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Feature t-statistics&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_colors</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_ticklabels</span><span class="p">())]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Random Forest Regression&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&#39;baseline.svg&#39;, bbox_inches=&#39;tight&#39;, dpi=180)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
+</pre></div>
+</div>
+<img alt="../_images/48723395e667a8209e3120916493b89897a3f54931a9c1712dcc83259bc1261f.png" src="../_images/48723395e667a8209e3120916493b89897a3f54931a9c1712dcc83259bc1261f.png" />
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">Last updated on True.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

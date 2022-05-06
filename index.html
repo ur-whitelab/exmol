@@ -48,6 +48,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#counterfactual-generation">Counterfactual Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#descriptor-attribution">Descriptor Attribution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#further-examples">Further Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#chemical-space">Chemical Space</a></li>
@@ -60,10 +61,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html">LIME explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#plot-wls-fit-and-show-which-descriptors-matter-for-an-instance">Plot WLS Fit and show which descriptors matter for an instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#robustness-to-incomplete-sampling">Robustness to incomplete sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#effect-of-mutation-number-alphabet-and-size-of-chemical-space">Effect of mutation number, alphabet and size of chemical space</a></li>
 </ul>
 
         </div>
@@ -111,8 +116,15 @@ A counterfactual can explain a prediction by showing what would have to change i
 <div><p>This package is not popular. If the package had a logo, it would be popular.</p>
 </div></blockquote>
 <p>In addition to having a changed prediction, a molecular counterfactual must be similar to its base molecule as much as possible. Here is an example of a molecular counterfactual:</p>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/counterfactual.png"><img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/counterfactual.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/counterfactual.png"><img alt="counterfactual demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/counterfactual.png" style="width: 400px;" /></a>
 <p>The counterfactual shows that if the carboxylic acid were an ester, the molecule would be active. It is up to the user to translate this set of structures into a meaningful sentence.</p>
+</section>
+<section id="descriptor-attribution">
+<h2>Descriptor Attribution<a class="headerlink" href="#descriptor-attribution" title="Permalink to this headline"></a></h2>
+<p>This package also implements Model Agnostic Descriptor Attribution for molecules using LIME.
+Descriptor attributions can explain a prediction by computing QSARs for molecular structure properties independent of features used for model predictions. Here is an example of descriptor attribution:</p>
+<a class="reference internal image-reference" href="_images/descriptor.png"><img alt="descriptor demo" src="_images/descriptor.png" style="width: 800px;" /></a>
+<p>The descriptor t-statistics show which chemical properties or substructures influence properety prediction for the pictured molecule. LIME is a perturbation based method and the descriptor attributions depend on the perturbed chemical space created around the molecule of interest.</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
@@ -130,14 +142,14 @@ A counterfactual can explain a prediction by showing what would have to change i
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span><span class="n">cfs</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-simple.png"><img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-simple.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-simple.png"><img alt="set of counterfactuals" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-simple.png" style="width: 500px;" /></a>
 <p>We can also plot the space around the counterfactual. This is computed via PCA of the affinity matrix – the similarity (Tanimoto of ECFP4) with the base molecule.
 Due to how similarity is calculated, the base is going to be the farthest from all other molecules. Thus your base should fall on the left (or right) extreme of your plot.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">cfs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">cf_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_space</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">cfs</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-space.png"><img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper/svg_figs/rf-space.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-space.png"><img alt="chemical space" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper1_CFs/svg_figs/rf-space.png" style="width: 600px;" /></a>
 <p>Each counterfactual is a Python <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> with information allowing it to be used in your own analysis:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cfs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
@@ -157,6 +169,23 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>We can use the same chemical space to get descriptor attributions for the molecule. Along with <code class="docutils literal notranslate"><span class="pre">samples</span></code>, we also need to supply the <code class="docutils literal notranslate"><span class="pre">descriptor_type</span></code> to get attributions. You can select from <code class="docutils literal notranslate"><span class="pre">Classic</span></code> Rdkit descriptors, <code class="docutils literal notranslate"><span class="pre">MACCS</span></code> fingerprint descriptors, <code class="docutils literal notranslate"><span class="pre">ECFP</span></code> substructure descriptors. If you’d like to use regression coefficients for analysis, specify <code class="docutils literal notranslate"><span class="pre">return_beta=True</span></code>. The descriptor t-statistics are stored in <code class="docutils literal notranslate"><span class="pre">descriptors.tstats</span></code> attribute for the base molecule and can be accessed using <code class="docutils literal notranslate"><span class="pre">space_tstats</span> <span class="pre">=</span> <span class="pre">space[0].descriptors.tstats</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s1">&#39;ECFP&#39;</span><span class="p">,</span> <span class="n">return_beta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s1">&#39;ECFP&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/ECFP.svg"><img alt="ecfp descriptors" src="_images/ECFP.svg" width="400" /></a>
+<p>You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients <code class="docutils literal notranslate"><span class="pre">beta</span></code> need to be passed in as an argument.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_space_by_fit</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">samples</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+    <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span>
+    <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span>
+    <span class="n">figure_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">)},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/space_by_fit.png"><img alt="chemical space by fit" src="_images/space_by_fit.png" style="width: 500px;" /></a>
 </section>
 <section id="further-examples">
 <h2>Further Examples<a class="headerlink" href="#further-examples" title="Permalink to this headline"></a></h2>

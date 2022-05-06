@@ -45,10 +45,14 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paper/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper1_CFs/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html">LIME explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#plot-wls-fit-and-show-which-descriptors-matter-for-an-instance">Plot WLS Fit and show which descriptors matter for an instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#robustness-to-incomplete-sampling">Robustness to incomplete sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paper2_LIME/Solubility-RNN.html#effect-of-mutation-number-alphabet-and-size-of-chemical-space">Effect of mutation number, alphabet and size of chemical space</a></li>
 </ul>
 
         </div>
@@ -79,7 +83,9 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#C"><strong>C</strong></a>
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -92,6 +98,14 @@
  | <a href="#Y"><strong>Y</strong></a>
  
 </div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#exmol.exmol.add_descriptors">add_descriptors() (in module exmol.exmol)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -101,6 +115,26 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#exmol.data.Example.cluster">cluster (Example attribute)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#exmol.data.Descriptors.descriptor_names">descriptor_names (Descriptors attribute)</a>
+</li>
+      <li><a href="api.html#exmol.data.Descriptors.descriptor_type">descriptor_type (Descriptors attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#exmol.data.Descriptors">Descriptors (class in exmol.data)</a>
+</li>
+      <li><a href="api.html#exmol.data.Descriptors.descriptors">descriptors (Descriptors attribute)</a>
+
+      <ul>
+        <li><a href="api.html#exmol.data.Example.descriptors">(Example attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -163,6 +197,10 @@
       <li><a href="api.html#exmol.data.Example.label">label (Example attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#exmol.exmol.lime_explain">lime_explain() (in module exmol.exmol)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
@@ -191,9 +229,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#exmol.exmol.plot_cf">plot_cf() (in module exmol.exmol)</a>
 </li>
+      <li><a href="api.html#exmol.exmol.plot_descriptors">plot_descriptors() (in module exmol.exmol)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#exmol.exmol.plot_space">plot_space() (in module exmol.exmol)</a>
+</li>
+      <li><a href="api.html#exmol.plot_utils.plot_space_by_fit">plot_space_by_fit() (in module exmol.plot_utils)</a>
 </li>
       <li><a href="api.html#exmol.data.Example.position">position (Example attribute)</a>
 </li>
@@ -236,6 +278,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#exmol.plot_utils.trim">trim() (in module exmol.plot_utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#exmol.data.Descriptors.tstats">tstats (Descriptors attribute)</a>
 </li>
   </ul></td>
 </tr></table>
