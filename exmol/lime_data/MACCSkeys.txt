@@ -144,8 +144,8 @@ KeyID	SMARTS	KeyDescription
 142	[#7]	Are there multiple N atoms?
 143	*@*!@[#8]	Is there an atom bonded to another atom by a ring bond and bonded to O by a chain bond?
 144	*!:*:*!:*	Is there an atom at an aromatic/non-aromatic boundary?
-145	*1~*~*~*~*~*~1	Are there more than one 6M ring?
-146	[#8]	Are there more than two O?
+145	*1~*~*~*~*~*~1	Is there more than one 6M ring?
+146	[#8]	Are there more than two O atoms?
 147	[$(*~[CH2]~[CH2]~*),$([R]1@[CH2;R]@[CH2;R]1)]	Are there two CH2 groups bonded by a single bond?
 148	*~[!#6;!#1](~*)~*	Is there an atom bonded to at least three neighbors, at least one of which is a heteroatom?
 149	[C;H3,H4]	Is there multiple methyl groups?
@@ -158,7 +158,7 @@ KeyID	SMARTS	KeyDescription
 156	[#7]~*(~*)~*	Is there an atom bonded to an N and two other atoms?
 157	[#6]-[#8]	Is a C-O single bond?
 158	[#6]-[#7]	Is a C-N single bond?
-159	[#8]	Are there multiple O atoms?
+159	[#8]	Is there more than one O atom?
 160	[C;H3,H4]	Is there a methyl group?
 161	[#7]	Is there an N?
 162	a	Is there an Aromatic atom?
