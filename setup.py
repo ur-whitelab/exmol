@@ -16,6 +16,7 @@ setup(
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
     packages=["exmol", "exmol.stoned"],
+    package_data={"exmol": ["lime_data/*.txt", "lime_data/*.pb"]},
     install_requires=[
         "selfies >= 2.0.0",
         "numpy",
@@ -25,6 +26,7 @@ setup(
         "rdkit-pypi",
         "scikit-learn",
         "skunk >= 0.4.0",
+        "importlib-resources==5.6.0",
     ],
     test_suite="tests",
     long_description=long_description,

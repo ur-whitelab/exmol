@@ -1,5 +1,10 @@
 Change Log
 ==========
+v2.0.0 (2022-4-22)
+-------------------
+* Added surrogate model explanation method
+* Added support for attributing ECFP, MACCS fingerprints, rdkit descriptors and plotting them
+* Example notebooks for new method
 
 
 v1.1.0 (2022-5-2)

@@ -214,6 +214,26 @@ def test_compare_img():
     assert len(r) > 0
 
 
+def test_add_descriptors():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space("CCCC", model, batched=False)
+    exmol.add_descriptors(samples, "Classic")
+    assert samples[0].descriptors.descriptors is not None
+
+
+def test_limed():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space("CCCC", model, batched=False)
+    exmol.lime_explain(samples, descriptor_type="Classic")
+    exmol.lime_explain(samples, descriptor_type="MACCS")
+    exmol.lime_explain(samples, descriptor_type="ECFP")
+    exmol.lime_explain(samples, descriptor_type="ECFP", return_beta=True)
+
+
 def test_corrupt_smiles():
     def model(s, se):
         return int("N" in s)

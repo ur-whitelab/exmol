@@ -1,0 +1,167 @@
+KeyID	SMARTS	KeyDescription
+0	?	Dummy key
+1	?	Is it an ISOTOPE?
+2	[#104]	Is there an Eelement 104 (Rf)?
+3	[#32,#33,#34,#50,#51,#52,#82,#83,#84]	Is there an element from group IVa,Va,VIa Rows 4-6?
+4	[Ac,Th,Pa,U,Np,Pu,Am,Cm,Bk,Cf,Es,Fm,Md,No,Lr]	Is there an actinide?
+5	[Sc,Ti,Y,Zr,Hf]	Is there an element from group IIIB,IVB (Sc...)?
+6	[La,Ce,Pr,Nd,Pm,Sm,Eu,Gd,Tb,Dy,Ho,Er,Tm,Yb,Lu]	Is there a Lanthanide?
+7	[V,Cr,Mn,Nb,Mo,Tc,Ta,W,Re]	Is there an element from group VB,VIB,VIIB?
+8	[!#6;!#1]1~*~*~*~1	Is there a heteroatom in a 4M ring?
+9	[Fe,Co,Ni,Ru,Rh,Pd,Os,Ir,Pt]	Is there an element from group VIII (Fe...)?
+10	[Be,Mg,Ca,Sr,Ba,Ra]	Is there an element from group IIa (Alkaline earth)?
+11	*1~*~*~*~1	Is there a 4M Ring?
+12	[Cu,Zn,Ag,Cd,Au,Hg]	Is there an element from Group IB,IIB (Cu..)?
+13	[#8]~[#7](~[#6])~[#6]	Is there a nitrone or aminoxyl group?
+14	[#16]-[#16]	Is there a disulfide bond?
+15	[#8]~[#6](~[#8])~[#8]	Is there an orthoester or carbonate ester?
+16	[!#6;!#1]1~*~*~1	Is there a heteroatom in a 3M ring?
+17	[#6]#[#6]	Is there an alkyne group?
+18	[#5,#13,#31,#49,#81]	Is there an element from group IIIA (B...)?
+19	*1~*~*~*~*~*~*~1	Is there a 7M Ring?
+20	[#14]	Is there an Si?
+21	[#6]=[#6](~[!#6;!#1])~[!#6;!#1]	Is there an alkene C bonded to two heteroatoms?
+22	*1~*~*~1	Is there a 3M Ring?
+23	[#7]~[#6](~[#8])~[#8]	Is there a carbamate group?
+24	[#7]-[#8]	Is there an N-O single bond?
+25	[#7]~[#6](~[#7])~[#7]	Is there a methanetriamine or guanidine group?
+26	[#6]=;@[#6](@*)@*	Is there an alkene C in a ring that is bonded to two other neighbors by a ring bond?
+27	[I]	Is there an I?
+28	[!#6;!#1]~[CH2]~[!#6;!#1]	Is there a methylene group bonded to two heteroatoms?
+29	[#15]	Is there a P?
+30	[#6]~[!#6;!#1](~[#6])(~[#6])~*	Is there a heteroatom bonded to at least four neighbors, three of which are C?
+31	[!#6;!#1]~[F,Cl,Br,I]	Is there a heteroatom bonded to a halogen?
+32	[#6]~[#16]~[#7]	Is there a S-C-N bond?
+33	[#7]~[#16]	Is there an N-S bond?
+34	[CH2]=*	Is there a CH2 group involved in a double bond?
+35	[Li,Na,K,Rb,Cs,Fr]	Is there an element from group IA (Alkali Metal)?
+36	[#16R]	Is there an S-heterocycle?
+37	[#7]~[#6](~[#8])~[#7]	Is there a carbamide group?
+38	[#7]~[#6](~[#6])~[#7]	Is there a aminal or acetamidine group?
+39	[#8]~[#16](~[#8])~[#8]	Is there a sulfonate or sulfite group?
+40	[#16]-[#8]	Is there an S-O single bond?
+41	[#6]#[#7]	Is there a cyano group?
+42	F	Is there a F?
+43	[!#6;!#1;!H0]~*~[!#6;!#1;!H0]	Is there an atom with two heteroatom neighbors that are bonded to H?
+44	[!#1;!#6;!#7;!#8;!#9;!#14;!#15;!#16;!#17;!#35;!#53]	Is there an atom other than H, C, N, O, Si, P, S, Cl, Br, I?
+45	[#6]=[#6]~[#7]	Is there an enamine group?
+46	Br	Is there a Br?
+47	[#16]~*~[#7]	Is there an atom bonded to both S and N?
+48	[#8]~[!#6;!#1](~[#8])(~[#8])	Is there a heteroatom bonded to three O?
+49	[!+0]	Is there a charged atom/group?
+50	[#6]=[#6](~[#6])~[#6]	Is there a tertiary C involved in a double bond?
+51	[#6]~[#16]~[#8]	Is there a sulfinyl, sulfonyl, sulfino or sulfo group?
+52	[#7]~[#7]	Is there an N-N bond?
+53	[!#6;!#1;!H0]~*~*~*~[!#6;!#1;!H0]	Are there two heteroatoms, both attached to at least one H and seperated by any 4 bonds?
+54	[!#6;!#1;!H0]~*~*~[!#6;!#1;!H0]	Are there two heteroatoms, both attached to at least one H and seperated by any 3 bonds?
+55	[#8]~[#16]~[#8]	Is there a sulfonyl or sulfino or sulfur dioxide group?
+56	[#8]~[#7](~[#8])~[#6]	Is there a nitro group?
+57	[#8R]	Is there an O-Heterocycle?
+58	[!#6;!#1]~[#16]~[!#6;!#1]	Is there an S bonded to two heteroatoms?
+59	[#16]!:*:*	Is there an atom bonded to S by a non-aromatic ring bond and bonded to another atom aromatically?
+60	[#16]=[#8]	Is there an S=O double bond?
+61	*~[#16](~*)~*	Is there an S bonded to at least three neighbors?
+62	*@*!@*@*	Is there an atom at a ring/chain boundary? When a comparison is done with another atom the path passes through the chain bond.
+63	[#7]=[#8]	Is there an N=O, nitroso group?
+64	*@*!@[#16]	Is there an atom bonded to another atom by an aromatic bond and bonded to an S by a non-aromatic bond?
+65	c:n	Is there an aromatic bond between an aromatic C and aromatic N?
+66	[#6]~[#6](~[#6])(~[#6])~*	Is there a tertiary C?
+67	[!#6;!#1]~[#16]	Is there a heteroatom bonded to S?
+68	[!#6;!#1;!H0]~[!#6;!#1;!H0]	Are there two heteroatoms bonded to at least one H neighbor and bonded to each other?
+69	[!#6;!#1]~[!#6;!#1;!H0]	Is there a heteroatom bonded to another heteroatom that has at least one H neighbor?
+70	[!#6;!#1]~[#7]~[!#6;!#1]	Is there an N bonded to two heteroatoms?
+71	[#7]~[#8]	Is there an N-O single bond?
+72	[#8]~*~*~[#8]	Is there an O seperated from another O by any 3 bonds?
+73	[#16]=*	Is there an S involved in a double bond?
+74	[CH3]~*~[CH3]	Is there an atom bonded to two methyl groups?
+75	*!@[#7]@*	Is there an N bonded to one atom with a ring bond and another atom with a non-ring bond?
+76	[#6]=[#6](~*)~*	Is there a C involved in one alkene bond?
+77	[#7]~*~[#7]	Is there an atom bonded to two N neighbors?
+78	[#6]=[#7]	Is there a C=N double bond?
+79	[#7]~*~*~[#7]	Is there an N separated from another N by any three bonds?
+80	[#7]~*~*~*~[#7]	Is there an N separated from another N by any four bonds?
+81	[#16]~*(~*)~*	Is there an atom bonded to three other atoms, one of which is an S?
+82	*~[CH2]~[!#6;!#1;!H0]	Is there a CH2 group bonded to another atom and a heteroatom that is bonded to at least one H?
+83	[!#6;!#1]1~*~*~*~*~1	Is there a heteroatom in a 5M ring?
+84	[NH2]	Is there an amine (NH2) group?
+85	[#6]~[#7](~[#6])~[#6]	Is there a tertiary amine?
+86	[C;H2,H3][!#6;!#1][C;H2,H3]	Is there a heteroatom bonded to at least two CH2 carbons?
+87	[F,Cl,Br,I]!@*@*	Is there a halogen at a chain/ring boundary?
+88	[#16]	Is there an S?
+89	[#8]~*~*~*~[#8]	Is there an O separated from another O by any 4 bonds?
+90	[$([!#6;!#1;!H0]~*~*~[CH2]~*),$([!#6;!#1;!H0;R]1@[R]@[R]@[CH2;R]1),$([!#6;!#1;!H0]~[R]1@[R]@[CH2;R]1)]	Is there a heteroatom separated from a CH2 group by any 3 bonds?
+91	[$([!#6;!#1;!H0]~*~*~*~[CH2]~*),$([!#6;!#1;!H0;R]1@[R]@[R]@[R]@[CH2;R]1),$([!#6;!#1;!H0]~[R]1@[R]@[R]@[CH2;R]1),$([!#6;!#1;!H0]~*~[R]1@[R]@[CH2;R]1)]	Is there a heteroatom separated from a CH2 group by any 4 bonds?
+92	[#8]~[#6](~[#7])~[#6]	Is there a carboxamide group?
+93	[!#6;!#1]~[CH3]	Is there a heteroatom bonded to a methyl C?
+94	[!#6;!#1]~[#7]	Is there a heteroatom bonded to an N?
+95	[#7]~*~*~[#8]	Is there an N seperated from an O by any 3 bonds?
+96	*1~*~*~*~*~1	Is there a 5M ring?
+97	[#7]~*~*~*~[#8]	Is there an N seperated from an O by any 4 bonds?
+98	[!#6;!#1]1~*~*~*~*~*~1	Is there a heteroatom in a 6M ring?
+99	[#6]=[#6]	Is there an alkene bond?
+100	*~[CH2]~[#7]	Is there a aminomethyl group (-CH2N-)?
+101	[$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1),$([R]@1@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]@[R]1)]	Is there a 8M - 14M Ring ?
+102	[!#6;!#1]~[#8]	Is there a heteroatom bonded to an O by a single or double bond?
+103	Cl	Is there a Cl atom?
+104	[!#6;!#1;!H0]~*~[CH2]~*	Is there a heteroatom separated from a CH2 group by any two bonds?
+105	*@*(@*)@*	Is there an atom with more than two ring bonds?
+106	[!#6;!#1]~*(~[!#6;!#1])~[!#6;!#1]	Is there an atom with at least three heteroatom neighbors?
+107	[F,Cl,Br,I]~*(~*)~*	Is there an atom bonded to 3 other atoms, one of which is a halogen?
+108	[CH3]~*~*~*~[CH2]~*	Is there a CH3 group separated from a CH2 group by any four bonds?
+109	*~[CH2]~[#8]	Is there an oxymethylene group (-CH2O-)?
+110	[#7]~[#6]~[#8]	Is there a C bonded to O and N?
+111	[#7]~*~[CH2]~*	Is there an N separated from a CH2 group by any two bonds?
+112	*~*(~*)(~*)~*	Is there an atom with at least four neighbors?
+113	[#8]!:*:*	Is there an atom bonded to O by a non-aromatic bond and bonded to another atom aromatically?
+114	[CH3]~[CH2]~*	Is there an atom bonded to a CH3CH2- group?
+115	[CH3]~*~[CH2]~*	Is there a CH3 group separated from a CH2 group by any two bonds?
+116	[$([CH3]~*~*~[CH2]~*),$([CH3]~*1~*~[CH2]1)]	Is there a CH3 group separated from a CH2 group by any three bonds?
+117	[#7]~*~[#8]	Is there an N separated from O by any two bonds?
+118	[$(*~[CH2]~[CH2]~*),$(*1~[CH2]~[CH2]1)]	Are there multiple fragments containing ethylene groups?
+119	[#7]=*	Is there an N involved in a double bond?
+120	[!#6;R]	Are there multiple heterocyclic atoms?
+121	[#7;R]	Is there an N-heterocycle?
+122	*~[#7](~*)~*	Is there an atom with at least 2 bonded neighbors, one of which is nitrogen?
+123	[#8]~[#6]~[#8]	Is there a C bonded to two O atoms?
+124	[!#6;!#1]~[!#6;!#1]	Are there two heteroatoms bonded to each other?
+125	?	Are there multiple aromatic rings?
+126	*!@[#8]!@*	Is there an O with at least two chain bonds?
+127	*@*!@[#8]	Are there multiple atoms bonded aromatically to another atom and also bonded to an O by a non-ring bond?
+128	[$(*~[CH2]~*~*~*~[CH2]~*),$([R]1@[CH2;R]@[R]@[R]@[R]@[CH2;R]1),$(*~[CH2]~[R]1@[R]@[R]@[CH2;R]1),$(*~[CH2]~*~[R]1@[R]@[CH2;R]1)]	Are there two CH2 groups separated by any four bonds?
+129	[$(*~[CH2]~*~*~[CH2]~*),$([R]1@[CH2]@[R]@[R]@[CH2;R]1),$(*~[CH2]~[R]1@[R]@[CH2;R]1)]	Are there two CH2 groups separated by any three bonds?
+130	[!#6;!#1]~[!#6;!#1]	Are there multiple heteroatoms bonded to at least one heteroatom neighbor?
+131	[!#6;!#1;!H0]	Are there multiple heteroatoms bonded to at least one H atom?
+132	[#8]~*~[CH2]~*	Is there a CH2 group separated from O by any two bonds?
+133	*@*!@[#7]	Is there an atom bonded to another atom by a ring bond and bonded to N by a chain bond?
+134	[F,Cl,Br,I]	Is there a halogen?
+135	[#7]!:*:*	Is there an atom bonded to N by a non-aromatic ring bond and bonded to another atom aromatically?
+136	[#8]=*	Are there multiple O atoms involved in double bonds?
+137	[!C;!c;R]	Is there a heterocycle?
+138	[!#6;!#1]~[CH2]~*	Is there more than one CH2 group that is bonded to two neighbors, one of which is a heteroatom?
+139	[O;!H0]	Is there a hydroxy oxygen (OH)?
+140	[#8]	Are there more than three O atoms?
+141	[CH3]	Are there more than two methyl groups?
+142	[#7]	Are there multiple N atoms?
+143	*@*!@[#8]	Is there an atom bonded to another atom by a ring bond and bonded to O by a chain bond?
+144	*!:*:*!:*	Is there an atom at an aromatic/non-aromatic boundary?
+145	*1~*~*~*~*~*~1	Is there more than one 6M ring?
+146	[#8]	Are there more than two O atoms?
+147	[$(*~[CH2]~[CH2]~*),$([R]1@[CH2;R]@[CH2;R]1)]	Are there two CH2 groups bonded by a single bond?
+148	*~[!#6;!#1](~*)~*	Is there an atom bonded to at least three neighbors, at least one of which is a heteroatom?
+149	[C;H3,H4]	Is there multiple methyl groups?
+150	*!@*@*!@*	Is there an atom at a ring/chain boundary?
+151	[#7;!H0]	Is there an N bonded to at least one H?
+152	[#8]~[#6](~[#6])~[#6]	Is there an O bonded to a secondary C?
+153	[!#6;!#1]~[CH2]~*	Is there a CH2 group bonded to two neighbors, at least one of which is a heteroatom?
+154	[#6]=[#8]	Is there a C=O double bond?
+155	*!@[CH2]!@*	Is there a CH2 group bonded to two neighbors by non-ring bonds?
+156	[#7]~*(~*)~*	Is there an atom bonded to an N and two other atoms?
+157	[#6]-[#8]	Is a C-O single bond?
+158	[#6]-[#7]	Is a C-N single bond?
+159	[#8]	Is there more than one O atom?
+160	[C;H3,H4]	Is there a methyl group?
+161	[#7]	Is there an N?
+162	a	Is there an Aromatic atom?
+163	*1~*~*~*~*~*~1	Is there a 6M Ring?
+164	[#8]	Is there an O?
+165	[R]	Is there an atom in a ring?

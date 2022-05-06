@@ -8,7 +8,9 @@ exmol
     index.md
     changelog.rst
     api.rst
-    paper/Schematic.ipynb
-    paper/RF.ipynb
-    paper/GNN.ipynb
-    paper/Solubility-RNN.ipynb
+    paper1_CFs/Schematic.ipynb
+    paper1_CFs/RF.ipynb
+    paper1_CFs/GNN.ipynb
+    paper1_CFs/Solubility-RNN.ipynb
+    paper2_LIME/Solubility-RNN.ipynb
+    paper2_LIME/RF-LIME.ipynb

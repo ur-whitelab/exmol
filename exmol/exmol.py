@@ -2,18 +2,27 @@ from typing import *
 
 import itertools
 import math
+from xml.sax.handler import feature_external_ges
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
+from matplotlib.patches import Rectangle, FancyBboxPatch  # type: ignore
+from matplotlib.offsetbox import AnnotationBbox  # type: ignore
 import matplotlib as mpl  # type: ignore
 import selfies as sf  # type: ignore
 import tqdm  # type: ignore
+import textwrap  # type: ignore
+import skunk  # type: ignore
 
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
 from sklearn.decomposition import PCA  # type: ignore
+import scipy.stats as ss  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
+from rdkit.Chem import MolFromSmarts  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
+from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
+from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
 from rdkit import DataStructs  # type: ignore
@@ -33,10 +42,162 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     return 1 - M
 
 
+def _calculate_rdkit_descriptors(mol):
+    from rdkit.ML.Descriptors import MoleculeDescriptors  # type: ignore
+
+    dlist = [
+        "NumHDonors",
+        "NumHAcceptors",
+        "MolLogP",
+        "NumHeteroatoms",
+        "RingCount",
+        "NumRotatableBonds",
+    ]  # , 'NumHeteroatoms']
+    c = MoleculeDescriptors.MolecularDescriptorCalculator(dlist)
+    d = c.CalcDescriptors(mol)
+
+    def calc_aromatic_bonds(mol):
+        return sum(1 for b in mol.GetBonds() if b.GetIsAromatic())
+
+    def _create_smarts(SMARTS):
+        s = ",".join("$(" + s + ")" for s in SMARTS)
+        _mol = MolFromSmarts("[" + s + "]")
+        return _mol
+
+    def calc_acid_groups(mol):
+        acid_smarts = (
+            "[O;H1]-[C,S,P]=O",
+            "[*;-;!$(*~[*;+])]",
+            "[NH](S(=O)=O)C(F)(F)F",
+            "n1nnnc1",
+        )
+        pat = _create_smarts(acid_smarts)
+        return len(mol.GetSubstructMatches(pat))
+
+    def calc_basic_groups(mol):
+        basic_smarts = (
+            "[NH2]-[CX4]",
+            "[NH](-[CX4])-[CX4]",
+            "N(-[CX4])(-[CX4])-[CX4]",
+            "[*;+;!$(*~[*;-])]",
+            "N=C-N",
+            "N-C=N",
+        )
+        pat = _create_smarts(basic_smarts)
+        return len(mol.GetSubstructMatches(pat))
+
+    def calc_apol(mol, includeImplicitHs=True):
+        # atomic polarizabilities available here:
+        # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
+
+        ap = files(exmol.lime_data).joinpath("atom_pols.txt")
+        with open(ap, "r") as f:
+            atom_pols = [float(x) for x in next(f).split(",")]
+        res = 0.0
+        for atom in mol.GetAtoms():
+            anum = atom.GetAtomicNum()
+            if anum <= len(atom_pols):
+                apol = atom_pols[anum]
+                if includeImplicitHs:
+                    apol += atom_pols[1] * atom.GetTotalNumHs(includeNeighbors=False)
+                res += apol
+            else:
+                raise ValueError(f"atomic number {anum} not found")
+        return res
+
+    d = d + (
+        calc_aromatic_bonds(mol),
+        calc_acid_groups(mol),
+        calc_basic_groups(mol),
+        calc_apol(mol),
+    )
+    return d
+
+
+def add_descriptors(
+    examples: List[Example], descriptor_type: str = "MACCS", mols: List[Any] = None
+) -> List[Example]:
+    """Add descriptors to passed examples
+
+    :param examples: List of example
+    :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
+    :param mols: Can be used if you already have rdkit Mols computed.
+    :return: List of examples with added descriptors
+    """
+    from importlib_resources import files
+    import exmol.lime_data
+
+    if mols is None:
+        mols = [smi2mol(m.smiles) for m in examples]
+    if descriptor_type == "Classic":
+        names = tuple(
+            [
+                "number of hydrogen bond donor",
+                "number of hydrogen bond acceptor",
+                "Wildman-Crippen LogP",
+                "number of heteroatoms",
+                "ring count",
+                "number of rotatable bonds",
+                "aromatic bonds count",
+                "acidic group count",
+                "basic group count",
+                "atomic polarizability",
+            ]
+        )
+        for e, m in zip(examples, mols):
+            descriptors = _calculate_rdkit_descriptors(m)
+            descriptor_names = names
+            e.descriptors = Descriptors(
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+    elif descriptor_type == "MACCS":
+        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
+        with open(str(mk), "r") as f:
+            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
+        for e, m in zip(examples, mols):
+            # rdkit sets fps[0] to 0 and starts keys at 1!
+            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
+            descriptors = tuple(int(i) for i in fps)
+            descriptor_names = names
+            e.descriptors = Descriptors(
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+    elif descriptor_type == "ECFP":
+        # get reference
+        bi = {}  # type: Dict[Any, Any]
+        ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+        descriptor_names = tuple(bi.keys())
+        for e, m in zip(examples, mols):
+            # Now compare to reference and get other fp vectors
+            b = {}  # type: Dict[Any, Any]
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            e.descriptors = Descriptors(
+                descriptor_type=descriptor_type,
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+    else:
+        raise ValueError(
+            "Invalid descriptor string. Valid descriptor strings are 'Classic', 'ECFP', or 'MACCS'."
+        )
+
+
 def get_basic_alphabet() -> Set[str]:
     """Returns set of interpretable SELFIES tokens
 
     Generated by removing P and most ionization states from :func:`selfies.get_semantic_robust_alphabet`
+
+    :return: Set of interpretable SELFIES tokens
     """
     a = sf.get_semantic_robust_alphabet()
     # remove cations/anions except oxygen anion
@@ -416,6 +577,64 @@ def _select_examples(cond, examples, nmols):
     return list(filter(cond, result))
 
 
+def lime_explain(
+    examples: List[Example],
+    descriptor_type: str,
+    return_beta: bool = True,
+):
+    """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
+    :doc: `index`)
+
+    :param examples: Output from :func: `sample_space`
+    :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
+    :return_beta: Whether or not the function should return regression coefficient values
+    """
+    # add descriptors
+    examples = add_descriptors(examples, descriptor_type)
+    # weighted tanimoto similarities
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
+    # Only keep nonzero weights
+    non_zero = w > 10 ** (-6)
+    nonzero_w = w[non_zero]
+    # create a diagonal matrix of w
+    N = nonzero_w.shape[0]
+    diag_w = np.zeros((N, N))
+    np.fill_diagonal(diag_w, nonzero_w)
+    # get feature matrix
+    x_mat = np.array([list(e.descriptors.descriptors) for e in examples])[
+        non_zero
+    ].reshape(N, -1)
+    # remove zero variance columns
+    y = (
+        np.array([e.yhat for e in examples])
+        .reshape(len(examples))[non_zero]
+        .astype(float)
+    )
+    # remove bias
+    y -= np.mean(y)
+    # compute least squares fit
+    xtinv = np.linalg.pinv(
+        (x_mat.T @ diag_w @ x_mat)
+        + 0.001 * np.identity(len(examples[0].descriptors.descriptors))
+    )
+    beta = xtinv @ x_mat.T @ (y * nonzero_w)
+    # compute standard error in beta
+    yhat = x_mat @ beta
+    resids = yhat - y
+    SSR = np.sum(resids**2)
+    se2_epsilon = SSR / (len(examples) - len(beta))
+    se2_beta = se2_epsilon * xtinv
+    # now compute t-statistic for existence of coefficients
+    tstat = beta * np.sqrt(1 / np.diag(se2_beta))
+    # Set tstats for base, to be used later
+    examples[0].descriptors.tstats = tstat
+    # Return beta (feature weights) which are the fits if asked for
+    if return_beta:
+        return beta
+    else:
+        return None
+
+
 def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
 
@@ -493,7 +712,7 @@ def plot_space(
     :param cartoon: do cartoon outline on points?
     :param rasterized: raster the scatter?
     """
-    imgs = _mol_images(exps, mol_size, mol_fontsize)
+    imgs = _mol_images(exps, mol_size, mol_fontsize)  # , True)
     if figure_kwargs is None:
         figure_kwargs = {"figsize": (12, 8)}
     base_color = "gray"
@@ -506,6 +725,7 @@ def plot_space(
             return x
 
         cmap = "Accent"
+
     else:
         colors = cast(Any, [e.yhat for e in examples])
         normalizer = plt.Normalize(min(colors), max(colors))
@@ -606,3 +826,194 @@ def plot_cf(
         axs[j].axis("off")
         axs[j].set_facecolor("white")
     plt.tight_layout()
+
+
+def plot_descriptors(
+    space: List[Example],
+    descriptor_type: str,
+    fig: Any = None,
+    figure_kwargs: Dict = None,
+    output_file: str = None,
+):
+    """Plot descriptor attributions from given set of Examples are space_tstats
+
+    :param exps: Output from :func:`sample_space`
+    :param space_tstats: t-statistics output from :func:`lime_explain`
+    :param descriptor_type: Descriptor type to plot, either 'Classic' or 'MACCS'
+    :param fig: Figure to plot on to
+    :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
+    :param output_file: Output file name to save the plot
+    """
+    from importlib_resources import files
+    import exmol.lime_data
+    import pickle  # type: ignore
+
+    space_tstats = list(space[0].descriptors.tstats)
+    if fig is None:
+        if figure_kwargs is None:
+            figure_kwargs = (
+                {"figsize": (5, 5)}
+                if descriptor_type == "Classic"
+                else {"figsize": (8, 5)}
+            )
+        fig, ax = plt.subplots(nrows=1, ncols=1, dpi=180, **figure_kwargs)
+
+    # find important descriptors
+    d_importance = {
+        a: [b, i]
+        for i, a, b in zip(
+            np.arange(len(space[0].descriptors.descriptors)),
+            space[0].descriptors.descriptor_names,
+            space_tstats,
+        )
+        if not np.isnan(b)
+    }
+    d_importance = dict(
+        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
+    )
+    t = [a[0] for a in list(d_importance.values())][:5]
+    key_ids = [a[1] for a in list(d_importance.values())][:5]
+    keys = [a for a in list(d_importance.keys())]
+
+    # set colors
+    colors = []
+    for ti in t:
+        if ti < 0:
+            colors.append("#F06060")
+        if ti > 0:
+            colors.append("#1BBC9B")
+    # plot the bars
+    bar1 = ax.barh(range(len(t)), t, color=colors, height=0.75)
+    new_patches = []
+    for patch in reversed(ax.patches):
+        bb = patch.get_bbox()
+        color = patch.get_facecolor()
+        p_bbox = FancyBboxPatch(
+            (bb.xmin, bb.ymin),
+            abs(bb.width),
+            abs(bb.height),
+            boxstyle="round,pad=-0.040,rounding_size=0.015",
+            ec="none",
+            fc=color,
+            mutation_aspect=4,
+        )
+        patch.remove()
+        new_patches.append(p_bbox)
+    for patch in new_patches:
+        ax.add_patch(patch)
+
+    count = 0
+    sk_dict, svgs = {}, {}
+    if descriptor_type == "MACCS":
+        # Load svg images
+        mk = files(exmol.lime_data).joinpath("keys.pb")
+        with open(str(mk), "rb") as f:
+            svgs = pickle.load(f)
+    if descriptor_type == "ECFP":
+        # get reference for ECFP
+        bi = {}  # type: Dict[Any, Any]
+        m = smi2mol(space[0].smiles)
+        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+
+    for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
+        # annotate patches with text desciption
+        y = rect.get_y() + rect.get_height() / 2.0
+        k = textwrap.fill(str(k), 25)
+        if ti < 0:
+            x = 0.25
+            skx = (
+                np.max(np.absolute(t)) + 2
+                if descriptor_type == "MACCS"
+                else np.max(np.absolute(t))
+            )
+            box_x = 0.98
+            ax.text(
+                x,
+                y,
+                " " if descriptor_type == "ECFP" else k,
+                ha="left",
+                va="center",
+                wrap=True,
+                fontsize=12,
+            )
+        else:
+            x = -0.25
+            skx = (
+                -np.max(np.absolute(t)) - 2
+                if descriptor_type == "MACCS"
+                else np.max(np.absolute(t))
+            )
+            box_x = 0.02
+            ax.text(
+                x,
+                y,
+                " " if descriptor_type == "ECFP" else k,
+                ha="right",
+                va="center",
+                wrap=True,
+                fontsize=12,
+            )
+        # add SMARTS annotation where applicable
+        if descriptor_type == "MACCS" or descriptor_type == "ECFP":
+            box = skunk.Box(130, 50, f"sk{count}")
+            ab = AnnotationBbox(
+                box,
+                xy=(skx, count),
+                xybox=(box_x, (5 - count) * 0.2 - 0.1),  # Invert axis
+                xycoords="data",
+                boxcoords="axes fraction",
+                bboxprops=dict(lw=0.5),
+            )
+
+            ax.add_artist(ab)
+            if descriptor_type == "MACCS":
+                sk_dict[f"sk{count}"] = svgs[ki]
+            if descriptor_type == "ECFP":
+                svg = DrawMorganBit(
+                    m,
+                    int(k),
+                    bi,
+                    molSize=(300, 200),
+                    centerColor=None,
+                    aromaticColor=None,
+                    ringColor=None,
+                    extraColor=(0.8, 0.8, 0.8),
+                    useSVG=True,
+                )
+                sk_dict[f"sk{count}"] = svg.data
+        count += 1
+    ax.axvline(x=0, color="grey", linewidth=0.5)
+    # calculate significant T
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in space])
+    effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    T = ss.t.ppf(0.975, df=effective_n)
+    # plot T
+    ax.axvline(x=T, color="#f5ad4c", linewidth=0.75, linestyle="--", zorder=0)
+    ax.axvline(x=-T, color="#f5ad4c", linewidth=0.75, linestyle="--", zorder=0)
+    # set axis
+    ax.set_yticks([])
+    ax.invert_yaxis()
+    ax.set_xlabel("Descriptor t-statistics", fontsize=12)
+    ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
+    # inset SMARTS svg images for MACCS descriptors
+    if descriptor_type == "MACCS" or descriptor_type == "ECFP":
+        if descriptor_type == "MACCS":
+            print(
+                "SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)"
+            )
+        xlim = np.max(np.absolute(t)) + 5
+        ax.set_xlim(-xlim, xlim)
+        svg = skunk.insert(sk_dict)
+        plt.tight_layout()
+        if output_file is None:
+            output_file = f"{descriptor_type}.svg"
+        with open(output_file, "w") as f:
+            f.write(svg)
+        return svg
+    elif descriptor_type == "Classic":
+        xlim = max(np.max(np.absolute(t)), T + 1)
+        ax.set_xlim(-xlim, xlim)
+        plt.tight_layout()
+        if output_file is None:
+            output_file = f"{descriptor_type}.svg"
+        plt.savefig(output_file, dpi=180, bbox_inches="tight")

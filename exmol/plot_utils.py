@@ -31,7 +31,9 @@ def _extract_loc(e):
 
 
 def insert_svg(
-    exps: List[Example], mol_size: Tuple[int, int] = (200, 200), mol_fontsize: int = 10
+    exps: List[Example],
+    mol_size: Tuple[int, int] = (200, 200),
+    mol_fontsize: int = 10,
 ) -> str:
     """Replace rasterized image files with SVG versions of molecules
 
@@ -150,9 +152,10 @@ def _mol_images(exps, mol_size, fontsize, svg=False):
                 )
             )
 
-    rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
-        ms[0], ms[1], acceptFailure=True
-    )
+    if len(ms) > 1:
+        rdkit.Chem.AllChem.GenerateDepictionMatching2DStructure(
+            ms[0], ms[1], acceptFailure=True
+        )
     if svg:
         imgs.insert(0, _mol2svg(ms[0], size=mol_size, options=dos))
         imgs = _cleanup_rdkit_svgs(imgs)
@@ -204,3 +207,101 @@ def moldiff(template, query) -> Tuple[List[int], List[int]]:
             inv_match.append(qi)
 
     return inv_match, bond_match
+
+
+def plot_space_by_fit(
+    examples: List[Example],
+    exps: List[Example],
+    beta: List,
+    mol_size: Tuple[int, int] = (200, 200),
+    mol_fontsize: int = 8,
+    offset: int = 0,
+    ax: Any = None,
+    figure_kwargs: Dict = None,
+    cartoon: bool = False,
+    rasterized: bool = False,
+):
+    """Plot chemical space around example by LIME fit and annotate given examples.
+    Adapted from :func:`plot_space`.
+    :param examples: Large list of :obj:Example which make-up points
+    :param exps: Small list of :obj:Example which will be annotated
+    :param beta: beta output from :func:`lime_explain`
+    :param mol_size: size of rdkit molecule rendering, in pixles
+    :param mol_fontsize: minimum font size passed to rdkit
+    :param offset: offset annotations to allow colorbar or other elements to fit into plot.
+    :param ax: axis onto which to plot
+    :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
+    :param cartoon: do cartoon outline on points?
+    :param rasterized: raster the scatter?
+    """
+    imgs = _mol_images(exps, mol_size, mol_fontsize)
+    if figure_kwargs is None:
+        figure_kwargs = {"figsize": (12, 8)}
+    base_color = "gray"
+    if ax is None:
+        ax = plt.figure(**figure_kwargs).gca()
+
+    yhat = [e.yhat for e in examples]
+    yhat -= np.mean(yhat)
+    x_mat = np.array([list(e.descriptors.descriptors) for e in examples]).reshape(
+        len(examples), -1
+    )
+    y = x_mat @ beta
+    # use resids as colors
+    colors = (yhat - y) ** 2
+    normalizer = plt.Normalize(min(colors), max(colors))
+    cmap = "PuBu_r"
+
+    space_x = [e.position[0] for e in examples]
+    space_y = [e.position[1] for e in examples]
+    if cartoon:
+        # plot shading, lines, front
+        ax.scatter(space_x, space_y, 50, "0.0", lw=2, rasterized=rasterized)
+        ax.scatter(space_x, space_y, 50, "1.0", lw=0, rasterized=rasterized)
+        ax.scatter(
+            space_x,
+            space_y,
+            50,
+            c=normalizer(colors),
+            cmap=cmap,
+            lw=2,
+            alpha=0.1,
+            rasterized=rasterized,
+        )
+    else:
+        im = ax.scatter(
+            space_x,
+            space_y,
+            40,
+            c=normalizer(colors),
+            cmap=cmap,
+            edgecolors="grey",
+            linewidth=0.25,
+        )
+    ax.set_aspect(1.0 / ax.get_data_ratio(), adjustable="box")
+    cbar = plt.colorbar(im, orientation="horizontal", aspect=35, pad=0.05)
+    cbar.set_label("squared error")
+
+    # now plot cfs/annotated points
+    ax.scatter(
+        [e.position[0] for e in exps],
+        [e.position[1] for e in exps],
+        c=normalizer([e.yhat for e in exps]),
+        cmap=cmap,
+        edgecolors="black",
+    )
+
+    x = [e.position[0] for e in exps]
+    y = [e.position[1] for e in exps]
+    titles = []
+    colors = []
+    for e in exps:
+        if not e.is_origin:
+            titles.append(f"Similarity = {e.similarity:.2f}\nf(x)={e.yhat:.3f}")
+            colors.append(cast(Any, base_color))
+        else:
+            titles.append(f"Base \nf(x)={e.yhat:.3f}")
+            colors.append(cast(Any, base_color))
+    _image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
+    ax.axis("off")
+    ax.set_aspect("auto")

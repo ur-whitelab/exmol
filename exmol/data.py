@@ -4,6 +4,20 @@ import numpy as np  # type: ignore
 
 
 @dataclass
+class Descriptors:
+    """Molecular descriptors"""
+
+    #: Descriptor type
+    descriptor_type: str
+    #: Descriptor values
+    descriptors: tuple
+    # Descriptor name
+    descriptor_names: tuple
+    # t_stats for each molecule
+    tstats: tuple = ()
+
+
+@dataclass
 class Example:
     """Example of a molecule"""
 
@@ -24,7 +38,9 @@ class Example:
     #: Index of cluster, can be -1 for no cluster
     cluster: int = 0
     #: Label for this example
-    label: Optional[str] = None
+    label: str = None  # type: ignore
+    #: Descriptors for this example
+    descriptors: Descriptors = None  # type: ignore
 
     # to make it look nicer
     def __str__(self):
