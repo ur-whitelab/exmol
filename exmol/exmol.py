@@ -160,6 +160,7 @@ def add_descriptors(
         with open(str(mk), "r") as f:
             names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
         for e, m in zip(examples, mols):
+            # rdkit sets fps[0] to 0 and starts keys at 1!
             fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
             descriptors = tuple(int(i) for i in fps)
             descriptor_names = names
