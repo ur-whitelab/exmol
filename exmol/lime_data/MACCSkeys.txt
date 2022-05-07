@@ -61,7 +61,7 @@ KeyID	SMARTS	KeyDescription
 59	[#16]!:*:*	Is there an atom bonded to S by a non-aromatic ring bond and bonded to another atom aromatically?
 60	[#16]=[#8]	Is there an S=O double bond?
 61	*~[#16](~*)~*	Is there an S bonded to at least three neighbors?
-62	*@*!@*@*	Is there an atom at a ring/chain boundary? When a comparison is done with another atom the path passes through the chain bond.
+62	*@*!@*@*	Is there an atom at a ring/chain boundary? The path passes through the chain bond.
 63	[#7]=[#8]	Is there an N=O, nitroso group?
 64	*@*!@[#16]	Is there an atom bonded to another atom by an aromatic bond and bonded to an S by a non-aromatic bond?
 65	c:n	Is there an aromatic bond between an aromatic C and aromatic N?
@@ -105,7 +105,7 @@ KeyID	SMARTS	KeyDescription
 103	Cl	Is there a Cl atom?
 104	[!#6;!#1;!H0]~*~[CH2]~*	Is there a heteroatom separated from a CH2 group by any two bonds?
 105	*@*(@*)@*	Is there an atom with more than two ring bonds?
-106	[!#6;!#1]~*(~[!#6;!#1])~[!#6;!#1]	Is there an atom with at least three heteroatom neighbors?
+106	[!#6;!#1]~*(~[!#6;!#1])~[!#6;!#1]	Is there an atom with three heteroatom neighbors?
 107	[F,Cl,Br,I]~*(~*)~*	Is there an atom bonded to 3 other atoms, one of which is a halogen?
 108	[CH3]~*~*~*~[CH2]~*	Is there a CH3 group separated from a CH2 group by any four bonds?
 109	*~[CH2]~[#8]	Is there an oxymethylene group (-CH2O-)?
@@ -147,9 +147,9 @@ KeyID	SMARTS	KeyDescription
 145	*1~*~*~*~*~*~1	Is there more than one 6M ring?
 146	[#8]	Are there more than two O atoms?
 147	[$(*~[CH2]~[CH2]~*),$([R]1@[CH2;R]@[CH2;R]1)]	Are there two CH2 groups bonded by a single bond?
-148	*~[!#6;!#1](~*)~*	Is there an atom bonded to at least three neighbors, at least one of which is a heteroatom?
+148	*~[!#6;!#1](~*)~*	Is there a heteroatom bonded to at least three neighbors?
 149	[C;H3,H4]	Is there multiple methyl groups?
-150	*!@*@*!@*	Is there an atom at a ring/chain boundary?
+150	*!@*@*!@*	Is there an atom at a ring/chain boundary? The path passes through the ring bond.
 151	[#7;!H0]	Is there an N bonded to at least one H?
 152	[#8]~[#6](~[#6])~[#6]	Is there an O bonded to a secondary C?
 153	[!#6;!#1]~[CH2]~*	Is there a CH2 group bonded to two neighbors, at least one of which is a heteroatom?

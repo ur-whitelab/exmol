@@ -834,6 +834,7 @@ def plot_descriptors(
     fig: Any = None,
     figure_kwargs: Dict = None,
     output_file: str = None,
+    title: str = None,
 ):
     """Plot descriptor attributions from given set of Examples are space_tstats
 
@@ -843,6 +844,7 @@ def plot_descriptors(
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
+    :param title: Title for the plot
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -918,7 +920,7 @@ def plot_descriptors(
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         # annotate patches with text desciption
         y = rect.get_y() + rect.get_height() / 2.0
-        k = textwrap.fill(str(k), 25)
+        k = textwrap.fill(str(k), 20)
         if ti < 0:
             x = 0.25
             skx = (
@@ -994,14 +996,17 @@ def plot_descriptors(
     ax.set_yticks([])
     ax.invert_yaxis()
     ax.set_xlabel("Descriptor t-statistics", fontsize=12)
-    ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
+    if title is None:
+        ax.set_title(f"{descriptor_type} descriptors", fontsize=12)
+    else:
+        ax.set_title(f"{title}", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
     if descriptor_type == "MACCS" or descriptor_type == "ECFP":
         if descriptor_type == "MACCS":
             print(
                 "SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)"
             )
-        xlim = np.max(np.absolute(t)) + 5
+        xlim = np.max(np.absolute(t)) + 6
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
         plt.tight_layout()
