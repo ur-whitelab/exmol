@@ -123,7 +123,7 @@ A counterfactual can explain a prediction by showing what would have to change i
 <h2>Descriptor Attribution<a class="headerlink" href="#descriptor-attribution" title="Permalink to this headline"></a></h2>
 <p>This package also implements Model Agnostic Descriptor Attribution for molecules using LIME.
 Descriptor attributions can explain a prediction by computing QSARs for molecular structure properties independent of features used for model predictions. Here is an example of descriptor attribution:</p>
-<a class="reference internal image-reference" href="_images/descriptor.png"><img alt="descriptor demo" src="_images/descriptor.png" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/descriptor.png"><img alt="descriptor demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/descriptor.png" style="width: 800px;" /></a>
 <p>The descriptor t-statistics show which chemical properties or substructures influence properety prediction for the pictured molecule. LIME is a perturbation based method and the descriptor attributions depend on the perturbed chemical space created around the molecule of interest.</p>
 </section>
 <section id="usage">
@@ -174,7 +174,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s1">&#39;ECFP&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/ECFP.svg"><img alt="ecfp descriptors" src="_images/ECFP.svg" width="400" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg"><img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400" /></a>
 <p>You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients <code class="docutils literal notranslate"><span class="pre">beta</span></code> need to be passed in as an argument.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_space_by_fit</span><span class="p">(</span>
     <span class="n">samples</span><span class="p">,</span>
@@ -185,7 +185,7 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 <span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/space_by_fit.png"><img alt="chemical space by fit" src="_images/space_by_fit.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png"><img alt="chemical space by fit" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png" style="width: 500px;" /></a>
 </section>
 <section id="further-examples">
 <h2>Further Examples<a class="headerlink" href="#further-examples" title="Permalink to this headline"></a></h2>
