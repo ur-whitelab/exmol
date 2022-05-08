@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="LIME explanations" href="../paper2_LIME/Solubility-RNN.html" />
+    <link rel="next" title="LIME paper: Recurrent Neural Network for Solubility Prediciton" href="../paper2_LIME/Solubility-RNN.html" />
     <link rel="prev" title="MMACE Paper: Graph Neural Network for HIV Inhibition" href="GNN.html" /> 
 </head>
 
@@ -56,10 +56,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#figure-showing-effect-of-mutation-number-and-alphabet">Figure showing effect of mutation number and Alphabet</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html">LIME explanations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#plot-wls-fit-and-show-which-descriptors-matter-for-an-instance">Plot WLS Fit and show which descriptors matter for an instance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#robustness-to-incomplete-sampling">Robustness to incomplete sampling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#effect-of-mutation-number-alphabet-and-size-of-chemical-space">Effect of mutation number, alphabet and size of chemical space</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html">LIME paper: Recurrent Neural Network for Solubility Prediciton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/RF-lime.html">LIME paper: Random Forest for Solubility Prediciton</a></li>
 </ul>
 
         </div>
@@ -78,7 +76,7 @@
       <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
       <li>MMACE Paper: Recurrent Neural Network for Predicting Solubility</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com///blob/paper1_CFs/Solubility-RNN.ipynb" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper1_CFs/Solubility-RNN.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -128,8 +126,8 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 16:27:17.944850: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
-2022-05-08 16:27:17.944884: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 18:31:56.588528: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
+2022-05-08 18:31:56.588565: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
 </pre></div>
 </div>
 </div>
@@ -371,7 +369,7 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [16, 67, 5, 16, 16, 16, 45, 16, 7, 67, 16, 56, 16, 56, 5, 16, 60, 16, 5, 16, 60, 56, 18, 63]
+selfies2ints: [88, 82, 29, 88, 88, 88, 60, 88, 39, 82, 88, 37, 88, 37, 29, 88, 12, 88, 29, 88, 12, 37, 18, 45]
 ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
 </pre></div>
 </div>
@@ -427,10 +425,10 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 16:27:21.920337: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
-2022-05-08 16:27:21.920368: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
-2022-05-08 16:27:21.920388: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az90-458): /proc/driver/nvidia/version does not exist
-2022-05-08 16:27:21.920695: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 18:32:00.519125: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
+2022-05-08 18:32:00.519182: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
+2022-05-08 18:32:00.519208: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az139-229): /proc/driver/nvidia/version does not exist
+2022-05-08 18:32:00.519562: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -532,7 +530,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/130165b317dde8a6391f768713fdfb1ad6e1267832b2b57c5577a077aee84b87.png" src="../_images/130165b317dde8a6391f768713fdfb1ad6e1267832b2b57c5577a077aee84b87.png" />
+<img alt="../_images/ac9f386baaf10ee58b37b341663ccc562263b046a65386c9d3e12104c783ed8b.png" src="../_images/ac9f386baaf10ee58b37b341663ccc562263b046a65386c9d3e12104c783ed8b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -557,7 +555,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9f1abf07e7afc5042ac0cb6551e48a7a2d780e87c125e356996063645d36e324.png" src="../_images/9f1abf07e7afc5042ac0cb6551e48a7a2d780e87c125e356996063645d36e324.png" />
+<img alt="../_images/0f983e511658d43c177e45b98c62809f3f491775ab6987633970be43a46aa6eb.png" src="../_images/0f983e511658d43c177e45b98c62809f3f491775ab6987633970be43a46aa6eb.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -584,7 +582,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.25717044,        nan])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.21530516,        nan])
 </pre></div>
 </div>
 </div>
@@ -616,7 +614,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6534760db90651bae2eae69cfbb2bb31b4edaa04f5441a9ee9e326f33143b268.png" src="../_images/6534760db90651bae2eae69cfbb2bb31b4edaa04f5441a9ee9e326f33143b268.png" />
+<img alt="../_images/2be96faaf6841568bdf720189a31f796a9fcd578bab5dbec8485523609458cab.png" src="../_images/2be96faaf6841568bdf720189a31f796a9fcd578bab5dbec8485523609458cab.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -641,7 +639,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5d83926ee147e528d6bb9a1018d70cc9cc9f32e71243de923f42cd318532201e.png" src="../_images/5d83926ee147e528d6bb9a1018d70cc9cc9f32e71243de923f42cd318532201e.png" />
+<img alt="../_images/bce5715b7000c7ec37bd69d3e8bb34f837929eda106173621c364bb758a47879.png" src="../_images/bce5715b7000c7ec37bd69d3e8bb34f837929eda106173621c364bb758a47879.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -671,7 +669,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/24ab99a9c3f1fa62d64b8e0b5fc4f733a9df4039a7222d164c480afa88e48ff9.png" src="../_images/24ab99a9c3f1fa62d64b8e0b5fc4f733a9df4039a7222d164c480afa88e48ff9.png" />
+<img alt="../_images/eb3bed056e1343ec6be3fdf7d997e72afe3f0b05567d8a00442c39410b64328b.png" src="../_images/eb3bed056e1343ec6be3fdf7d997e72afe3f0b05567d8a00442c39410b64328b.png" />
 </div>
 </div>
 </section>
@@ -716,7 +714,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b57a4d504ee0d79d581f8f50c08b890c986b7fc1cc126d7363b788911d5dbe2a.png" src="../_images/b57a4d504ee0d79d581f8f50c08b890c986b7fc1cc126d7363b788911d5dbe2a.png" />
+<img alt="../_images/998a6211aa41ca2c4c4b71b0163a74cfd09378557a7d7ccd99720cf005c74217.png" src="../_images/998a6211aa41ca2c4c4b71b0163a74cfd09378557a7d7ccd99720cf005c74217.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -732,7 +730,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/789fc11a350fbfbe3fd303925e6907d3697a3d6bce307063c400d06db0b244bf.png" src="../_images/789fc11a350fbfbe3fd303925e6907d3697a3d6bce307063c400d06db0b244bf.png" />
+<img alt="../_images/dc099355ebf5b07db315bf693a42d226369c8c6b5437a4941ee47abcbba2bd26.png" src="../_images/dc099355ebf5b07db315bf693a42d226369c8c6b5437a4941ee47abcbba2bd26.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -767,79 +765,37 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:   0%|          | 0/1250 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 840.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 660.49it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 840.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 660.49it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:01&lt;00:00, 705.08it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:02&lt;00:00, 592.06it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:01&lt;00:00, 705.08it/s]        
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:02&lt;00:00, 592.06it/s]        
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:02&lt;00:00, 705.08it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:03&lt;00:00, 592.06it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1079 [00:00&lt;?, ?it/s]            
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1052 [00:00&lt;?, ?it/s]            
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1079 [00:00&lt;?, ?it/s]              
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1052 [00:00&lt;?, ?it/s]              
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  51%|█████▏    | 553.0/1079 [00:00&lt;00:00, 5528.46it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  39%|███▊      | 406.0/1052 [00:00&lt;00:00, 4056.19it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1079.0/1079 [00:01&lt;00:00, 5528.46it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1052.0/1052 [00:01&lt;00:00, 4056.19it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1079.0/1079 [00:01&lt;00:00, 5528.46it/s]        
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1052.0/1052 [00:01&lt;00:00, 4056.19it/s]        
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1079.0/1079 [00:01&lt;00:00, 561.17it/s] 
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/1250 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:   0%|          | 0/1250 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 726.89it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 726.89it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:01&lt;00:00, 618.33it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:01&lt;00:00, 618.33it/s]        
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:02&lt;00:00, 618.33it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1067 [00:00&lt;?, ?it/s]            
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1067 [00:00&lt;?, ?it/s]              
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  51%|█████     | 539.0/1067 [00:00&lt;00:00, 5388.72it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1067.0/1067 [00:01&lt;00:00, 5388.72it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1067.0/1067 [00:01&lt;00:00, 5388.72it/s]        
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1067.0/1067 [00:01&lt;00:00, 567.02it/s] 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1052.0/1052 [00:01&lt;00:00, 630.18it/s] 
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -851,37 +807,79 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:   0%|          | 0/1250 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 843.86it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 662.61it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 843.86it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 662.61it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:01&lt;00:00, 775.02it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:02&lt;00:00, 554.96it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:01&lt;00:00, 775.02it/s]        
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:02&lt;00:00, 554.96it/s]        
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:02&lt;00:00, 775.02it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:03&lt;00:00, 554.96it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1039 [00:00&lt;?, ?it/s]            
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1061 [00:00&lt;?, ?it/s]            
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1039 [00:00&lt;?, ?it/s]              
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1061 [00:00&lt;?, ?it/s]              
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  59%|█████▉    | 610.5/1039 [00:00&lt;00:00, 6103.01it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  39%|███▉      | 419.0/1061 [00:00&lt;00:00, 4186.97it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1039.0/1039 [00:01&lt;00:00, 6103.01it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1061.0/1061 [00:01&lt;00:00, 4186.97it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1039.0/1039 [00:01&lt;00:00, 6103.01it/s]        
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1061.0/1061 [00:01&lt;00:00, 4186.97it/s]        
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1039.0/1039 [00:01&lt;00:00, 615.05it/s] 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1061.0/1061 [00:01&lt;00:00, 588.00it/s] 
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/1250 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:   0%|          | 0/1250 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 1:  50%|█████     | 625/1250 [00:00&lt;00:00, 703.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2:  50%|█████     | 625/1250 [00:00&lt;00:00, 703.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Mutations: 2: 100%|██████████| 1250/1250 [00:01&lt;00:00, 649.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥌STONED🥌 Done: 100%|██████████| 1250/1250 [00:01&lt;00:00, 649.22it/s]        
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀: 100%|██████████| 1250/1250 [00:02&lt;00:00, 649.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>😀Calling your model function😀:   0%|          | 0/1044 [00:00&lt;?, ?it/s]            
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:   0%|          | 0/1044 [00:00&lt;?, ?it/s]              
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🔭Projecting...🔭:  42%|████▏     | 437.5/1044 [00:00&lt;00:00, 4373.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🥰Finishing up🥰: 100%|██████████| 1044.0/1044 [00:01&lt;00:00, 4373.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1044.0/1044 [00:01&lt;00:00, 4373.70it/s]        
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>🤘Done🤘: 100%|██████████| 1044.0/1044 [00:01&lt;00:00, 642.25it/s] 
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -899,7 +897,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c63adb2a0a1cb5cb8e3211e7ecd89dcd3748364e73b97163584f60dd3b92dadf.png" src="../_images/c63adb2a0a1cb5cb8e3211e7ecd89dcd3748364e73b97163584f60dd3b92dadf.png" />
+<img alt="../_images/52bf5975d56547a0156cfa1531c2cbcaad50cc0c9748d1aa852e6cfb4de992d8.png" src="../_images/52bf5975d56547a0156cfa1531c2cbcaad50cc0c9748d1aa852e6cfb4de992d8.png" />
 </div>
 </div>
 </section>
@@ -910,7 +908,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="GNN.html" class="btn btn-neutral float-left" title="MMACE Paper: Graph Neural Network for HIV Inhibition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../paper2_LIME/Solubility-RNN.html" class="btn btn-neutral float-right" title="LIME explanations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../paper2_LIME/Solubility-RNN.html" class="btn btn-neutral float-right" title="LIME paper: Recurrent Neural Network for Solubility Prediciton" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -55,10 +55,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html">LIME explanations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#plot-wls-fit-and-show-which-descriptors-matter-for-an-instance">Plot WLS Fit and show which descriptors matter for an instance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#robustness-to-incomplete-sampling">Robustness to incomplete sampling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html#effect-of-mutation-number-alphabet-and-size-of-chemical-space">Effect of mutation number, alphabet and size of chemical space</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html">LIME paper: Recurrent Neural Network for Solubility Prediciton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/RF-lime.html">LIME paper: Random Forest for Solubility Prediciton</a></li>
 </ul>
 
         </div>
@@ -77,7 +75,7 @@
       <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
       <li>MMACE Paper: Graph Neural Network for HIV Inhibition</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com///blob/paper1_CFs/GNN.ipynb" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper1_CFs/GNN.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -128,8 +126,8 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 15:26:58.010451: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
-2022-05-08 15:26:58.010481: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 16:56:08.273976: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
+2022-05-08 16:56:08.274070: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
 </pre></div>
 </div>
 </div>
@@ -433,10 +431,10 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>__________________________________________________________________________________________________
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 15:26:59.840192: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
-2022-05-08 15:26:59.840221: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
-2022-05-08 15:26:59.840245: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az90-458): /proc/driver/nvidia/version does not exist
-2022-05-08 15:26:59.840440: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-05-08 16:56:10.567206: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.12/x64/lib
+2022-05-08 16:56:10.567258: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
+2022-05-08 16:56:10.567289: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az139-229): /proc/driver/nvidia/version does not exist
+2022-05-08 16:56:10.567505: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -509,7 +507,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1630e0aeab1b34427eff442d2b80a0a0f7886248aed3b3b9e78f87724398dbb6.png" src="../_images/1630e0aeab1b34427eff442d2b80a0a0f7886248aed3b3b9e78f87724398dbb6.png" />
+<img alt="../_images/814adbdd9921c70e3ef57ac10010b428ac535b0317f30b7ec0a2a7109d20ab71.png" src="../_images/814adbdd9921c70e3ef57ac10010b428ac535b0317f30b7ec0a2a7109d20ab71.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -548,7 +546,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8c5ea6a6f347a28de5af80263fca97e89080a02a01a34d23632663aff7b46058.png" src="../_images/8c5ea6a6f347a28de5af80263fca97e89080a02a01a34d23632663aff7b46058.png" />
+<img alt="../_images/25d9ea17f6c5313f97be30af99b0bf901278d13ba6e3c85a579a5442fd3ecb32.png" src="../_images/25d9ea17f6c5313f97be30af99b0bf901278d13ba6e3c85a579a5442fd3ecb32.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -607,7 +605,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d2d6f5d68ce70923fd26d41539be34b8232b505945a75708e0c0f324de29514f.png" src="../_images/d2d6f5d68ce70923fd26d41539be34b8232b505945a75708e0c0f324de29514f.png" />
+<img alt="../_images/3dc252f59d1814f043fa71ad4250254c73c77e6d319c63ced6525a6097b1171a.png" src="../_images/3dc252f59d1814f043fa71ad4250254c73c77e6d319c63ced6525a6097b1171a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -633,7 +631,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9dc5bc109149f2b07c0b5110a0102f5ceecf97b212987af9927a7146a2d92eea.png" src="../_images/9dc5bc109149f2b07c0b5110a0102f5ceecf97b212987af9927a7146a2d92eea.png" />
+<img alt="../_images/f8c5c5359856582399e1407b31db005b2e5d1f8169d1430767097eca45e75cf1.png" src="../_images/f8c5c5359856582399e1407b31db005b2e5d1f8169d1430767097eca45e75cf1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -658,7 +656,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ef852ae4deac034ca8430fded945841c970fe191cd878c3fbad4feeb1b31ebb8.png" src="../_images/ef852ae4deac034ca8430fded945841c970fe191cd878c3fbad4feeb1b31ebb8.png" />
+<img alt="../_images/d2898060100f8d040b2cc02376a21828c4c5dca73cefe47668e9f5aef2267723.png" src="../_images/d2898060100f8d040b2cc02376a21828c4c5dca73cefe47668e9f5aef2267723.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -675,7 +673,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e1cb7eac68eb622d806cde252952809ad6af2a6840d0d3625d68dd6b18a6c2ef.png" src="../_images/e1cb7eac68eb622d806cde252952809ad6af2a6840d0d3625d68dd6b18a6c2ef.png" />
+<img alt="../_images/96ed4552a81b7e0cdc21f22c62a4715668ee86a8113dbc49f7876934f21a7183.png" src="../_images/96ed4552a81b7e0cdc21f22c62a4715668ee86a8113dbc49f7876934f21a7183.png" />
 </div>
 </div>
 </section>
