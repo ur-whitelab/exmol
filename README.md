@@ -160,7 +160,7 @@ This repo uses pre-commit, so after cloning run `pip install -r requirements.txt
 
 ## Citation
 
-Please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
+For the counterfactual work, please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
 
 ```bibtex
 @Article{wellawatte_seshadri_white_2021,
@@ -172,5 +172,20 @@ pages  ="-",
 publisher  ="The Royal Society of Chemistry",
 doi  ="10.1039/D1SC05259D",
 url  ="http://dx.doi.org/10.1039/D1SC05259D",
+}
+```
+
+For the descriptor explanations, please cite [Gandhi et. al.](https://doi.org/10.26434/chemrxiv-2022-v5p6m)
+
+```bibtex
+@Article{gandhi_white_2022, 
+place = "Cambridge", 
+title = "Explaining structure-activity relationships using locally faithful surrogate models", 
+DOI = "10.26434/chemrxiv-2022-v5p6m", 
+url = "https://doi.org/10.26434/chemrxiv-2022-v5p6m"
+journal = "ChemRxiv", 
+publisher = "Cambridge Open Engage", 
+author = "Gandhi, Heta A. and White, Andrew D.", 
+year = "2022"
 }
 ```

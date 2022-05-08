@@ -13,4 +13,4 @@ exmol
     paper1_CFs/GNN.ipynb
     paper1_CFs/Solubility-RNN.ipynb
     paper2_LIME/Solubility-RNN.ipynb
-    paper2_LIME/RF-LIME.ipynb
+    paper2_LIME/RF-lime.ipynb
