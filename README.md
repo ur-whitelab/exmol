@@ -175,7 +175,7 @@ url  ="http://dx.doi.org/10.1039/D1SC05259D",
 }
 ```
 
-For the descriptor explanations, please cite [Gandhi et. al.](https://doi.org/10.26434/chemrxiv-2022-v5p6m)
+For the descriptor explanations, please cite [Gandhi et. al.](https://doi.org/10.26434/chemrxiv-2022-v5p6m-v2)
 
 ```bibtex
 @Article{gandhi_white_2022,
