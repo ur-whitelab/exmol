@@ -30,7 +30,7 @@ The counterfactual shows that if the carboxylic acid were an ester, the molecule
 This package also implements Model Agnostic Descriptor Attribution for molecules using LIME.
 Descriptor attributions can explain a prediction by computing QSARs for molecular structure properties independent of features used for model predictions. Here is an example of descriptor attribution:
 
-<img alt="descriptor demo" src="paper2_LIME/descriptor.png" width="800">
+<img alt="descriptor demo" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/descriptor.png" width="800">
 
 The descriptor t-statistics show which chemical properties or substructures influence properety prediction for the pictured molecule. LIME is a perturbation based method and the descriptor attributions depend on the perturbed chemical space created around the molecule of interest.
 
@@ -92,7 +92,7 @@ We can use the same chemical space to get descriptor attributions for the molecu
 beta = exmol.lime_explain(samples, descriptor_type='ECFP', return_beta=True)
 exmol.plot_descriptors(samples, descriptor_type='ECFP')
 ```
-<img alt="ecfp descriptors" src="paper2_LIME/ECFP.svg" width="400">
+<img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400">
 
 You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients `beta` need to be passed in as an argument.
 
@@ -105,7 +105,7 @@ exmol.plot_utils.plot_space_by_fit(
     figure_kwargs={'figsize': (7,5)},
 )
 ```
-<img alt="chemical space by fit" src="paper2_LIME/space_by_fit.png" width="500">
+<img alt="chemical space by fit" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png" width="500">
 
 ## Further Examples
 
@@ -160,7 +160,7 @@ This repo uses pre-commit, so after cloning run `pip install -r requirements.txt
 
 ## Citation
 
-Please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
+For the counterfactual work, please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
 
 ```bibtex
 @Article{wellawatte_seshadri_white_2021,
@@ -172,5 +172,20 @@ pages  ="-",
 publisher  ="The Royal Society of Chemistry",
 doi  ="10.1039/D1SC05259D",
 url  ="http://dx.doi.org/10.1039/D1SC05259D",
+}
+```
+
+For the descriptor explanations, please cite [Gandhi et. al.](https://doi.org/10.26434/chemrxiv-2022-v5p6m-v2)
+
+```bibtex
+@Article{gandhi_white_2022,
+place = "Cambridge",
+title = "Explaining structure-activity relationships using locally faithful surrogate models",
+DOI = "10.26434/chemrxiv-2022-v5p6m",
+url = "https://doi.org/10.26434/chemrxiv-2022-v5p6m"
+journal = "ChemRxiv",
+publisher = "Cambridge Open Engage",
+author = "Gandhi, Heta A. and White, Andrew D.",
+year = "2022"
 }
 ```

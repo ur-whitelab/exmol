@@ -57,6 +57,9 @@ exclude_patterns = []
 html_theme = "sphinx_rtd_theme"
 html_context = {
     "display_github": True,  # Add 'Edit on Github' link instead of 'View page source'
+    "github_user": "ur-whitelab",
+    "github_repo": "exmol",
+    "github_version": "main/docs/source/",
     "last_updated": True,
     "commit": False,
 }
