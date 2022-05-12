@@ -109,7 +109,7 @@ exmol.plot_utils.plot_space_by_fit(
 
 ## Further Examples
 
-You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://https://ur-whitelab.github.io/exmol/toc.html).
+You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://ur-whitelab.github.io/exmol/toc.html).
 
 ## Chemical Space
 
