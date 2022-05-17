@@ -207,6 +207,7 @@
 # 2. Minimized imports
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
+# 5. Added more randomization to smiles
 
 import selfies  # type: ignore
 import random
@@ -225,21 +226,40 @@ from rdkit import RDLogger  # type: ignore
 RDLogger.DisableLog("rdApp.*")
 
 
-def randomize_smiles(mol):
-    """Returns a random (dearomatized) SMILES given an rdkit mol object of a molecule.
-    Parameters:
-    mol (rdkit.Chem.rdchem.Mol) :  RdKit mol object (None if invalid smile string smi)
-
-    Returns:
-    mol (rdkit.Chem.rdchem.Mol) : RdKit mol object  (None if invalid smile string smi)
+def randomize_smiles(mol, random_type=None, isomericSmiles=True):
     """
-    if not mol:
-        return None
-
-    Chem.Kekulize(mol)
-    return mol2smi(
-        mol, canonical=False, doRandom=True, isomericSmiles=False, kekuleSmiles=True
-    )
+    From: https://github.com/rxn4chemistry/rxn_yields
+    From: https://github.com/undeadpixel/reinvent-randomized and https://github.com/GLambard/SMILES-X
+    Returns a random SMILES given a SMILES of a molecule.
+    :param mol: A Mol object
+    :param random_type: The type (unrestricted, restricted, rotated) of randomization performed.
+    :return : A random SMILES string of the same molecule or None if the molecule is invalid.
+    """
+    if random_type is None:
+        random_type = random.choice(["unrestricted", "restricted", "rotated"])
+    if random_type == "unrestricted":
+        return Chem.MolToSmiles(
+            mol, canonical=False, doRandom=True, isomericSmiles=isomericSmiles
+        )
+    elif random_type == "restricted":
+        new_atom_order = list(range(mol.GetNumAtoms()))
+        random.shuffle(new_atom_order)
+        random_mol = Chem.RenumberAtoms(mol, newOrder=new_atom_order)
+        return Chem.MolToSmiles(
+            random_mol, canonical=False, isomericSmiles=isomericSmiles
+        )
+    elif random_type == "rotated":
+        n_atoms = mol.GetNumAtoms()
+        rotation_index = random.randint(0, n_atoms - 1)
+        atoms = list(range(n_atoms))
+        new_atoms_order = (
+            atoms[rotation_index % len(atoms) :] + atoms[: rotation_index % len(atoms)]
+        )
+        rotated_mol = Chem.RenumberAtoms(mol, new_atoms_order)
+        return Chem.MolToSmiles(
+            rotated_mol, canonical=False, isomericSmiles=isomericSmiles
+        )
+    raise ValueError("Type '{}' is not valid".format(random_type))
 
 
 def sanitize_smiles(smi):
