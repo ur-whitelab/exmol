@@ -1009,7 +1009,7 @@ def plot_descriptors(
             if descriptor_type == "MACCS":
                 sk_dict[f"sk{count}"] = svgs[ki]
             if descriptor_type == "ECFP":
-                if type(bi[int(k)]) is tuple:
+                if multiple_bases:
                     m = bi[int(k)][0]
                     b = bi[int(k)][2]
                 else:
