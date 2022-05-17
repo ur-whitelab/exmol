@@ -117,7 +117,10 @@ def _calculate_rdkit_descriptors(mol):
 
 
 def add_descriptors(
-    examples: List[Example], descriptor_type: str = "MACCS", mols: List[Any] = None
+    examples: List[Example],
+    descriptor_type: str = "MACCS",
+    mols: List[Any] = None,
+    fixed_length=False,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -125,6 +128,7 @@ def add_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     :return: List of examples with added descriptors
+    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -173,13 +177,26 @@ def add_descriptors(
     elif descriptor_type == "ECFP":
         # get reference
         bi = {}  # type: Dict[Any, Any]
-        ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-        descriptor_names = tuple(bi.keys())
+        if fixed_length:
+            descriptors = AllChem.GetMorganFingerprintAsBitVect(
+                mols[0], 3, nBits=1024, bitInfo=bi
+            )
+            descriptor_names = tuple(np.arange(1024))
+        else:
+            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+            descriptor_names = tuple(bi.keys())
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
             b = {}  # type: Dict[Any, Any]
-            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            if fixed_length:
+                temp_fp = AllChem.GetMorganFingerprintAsBitVect(
+                    m, 3, nBits=1024, bitInfo=b
+                )
+            else:
+                temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+                descriptors = tuple(
+                    [1 if x in b.keys() else 0 for x in descriptor_names]
+                )
             e.descriptors = Descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
@@ -581,6 +598,7 @@ def lime_explain(
     examples: List[Example],
     descriptor_type: str,
     return_beta: bool = True,
+    fixed_length: bool = False,
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
@@ -588,9 +606,10 @@ def lime_explain(
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
+    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
     """
     # add descriptors
-    examples = add_descriptors(examples, descriptor_type)
+    examples = add_descriptors(examples, descriptor_type, fixed_length=fixed_length)
     # weighted tanimoto similarities
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     # Only keep nonzero weights
@@ -835,6 +854,7 @@ def plot_descriptors(
     figure_kwargs: Dict = None,
     output_file: str = None,
     title: str = None,
+    fixed_length: bool = None,
 ):
     """Plot descriptor attributions from given set of Examples are space_tstats
 
@@ -845,6 +865,7 @@ def plot_descriptors(
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     :param title: Title for the plot
+    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -915,7 +936,10 @@ def plot_descriptors(
         # get reference for ECFP
         bi = {}  # type: Dict[Any, Any]
         m = smi2mol(space[0].smiles)
-        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+        if fixed_length:
+            fp = AllChem.GetMorganFingerprintAsBitVect(m, 3, nBits=1024, bitInfo=bi)
+        else:
+            fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         # annotate patches with text desciption
