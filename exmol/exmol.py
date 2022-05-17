@@ -116,11 +116,26 @@ def _calculate_rdkit_descriptors(mol):
     return d
 
 
+def _get_joint_ecfp_descriptors(examples):
+    """Create a union of ECFP bits from all base molecules"""
+    # get reference
+    bases = [smi2mol(e.smiles) for e in examples if e.is_origin]
+    ecfp_old = []
+    for m in bases:
+        # Get bitinfo and create a union
+        b = {}  # type: Dict[Any, Any]
+        temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+        ecfp_joint = list(set(ecfp_old) | set(list(b.keys())))
+        ecfp_old = ecfp_joint
+
+    return ecfp_joint
+
+
 def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
     mols: List[Any] = None,
-    fixed_length=False,
+    multiple_bases=False,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -128,7 +143,7 @@ def add_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     :return: List of examples with added descriptors
-    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
+    :param multiple_bases: Consider multiple bases for plotting
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -176,27 +191,18 @@ def add_descriptors(
         return examples
     elif descriptor_type == "ECFP":
         # get reference
-        bi = {}  # type: Dict[Any, Any]
-        if fixed_length:
-            descriptors = AllChem.GetMorganFingerprintAsBitVect(
-                mols[0], 3, nBits=1024, bitInfo=bi
-            )
-            descriptor_names = tuple(np.arange(1024))
+        if multiple_bases:
+            # Get a union of ecfps for all bases
+            descriptor_names = _get_joint_ecfp_descriptors(examples)
         else:
+            bi = {}  # type: Dict[Any, Any]
             ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
             descriptor_names = tuple(bi.keys())
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
             b = {}  # type: Dict[Any, Any]
-            if fixed_length:
-                temp_fp = AllChem.GetMorganFingerprintAsBitVect(
-                    m, 3, nBits=1024, bitInfo=b
-                )
-            else:
-                temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-                descriptors = tuple(
-                    [1 if x in b.keys() else 0 for x in descriptor_names]
-                )
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
             e.descriptors = Descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
@@ -598,7 +604,7 @@ def lime_explain(
     examples: List[Example],
     descriptor_type: str,
     return_beta: bool = True,
-    fixed_length: bool = False,
+    multiple_bases: bool = False,
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
@@ -606,10 +612,10 @@ def lime_explain(
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
-    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
+    :param multiple_bases: Consider multiple bases for plotting
     """
     # add descriptors
-    examples = add_descriptors(examples, descriptor_type, fixed_length=fixed_length)
+    examples = add_descriptors(examples, descriptor_type, multiple_bases=multiple_bases)
     # weighted tanimoto similarities
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     # Only keep nonzero weights
@@ -854,7 +860,7 @@ def plot_descriptors(
     figure_kwargs: Dict = None,
     output_file: str = None,
     title: str = None,
-    fixed_length: bool = None,
+    multiple_bases: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples are space_tstats
 
@@ -865,7 +871,7 @@ def plot_descriptors(
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     :param title: Title for the plot
-    :param fixed_length: Whether to use fixed length vectors for ECFP descriptors
+    :param multiple_bases: Consider multiple bases for plotting ECFP descriptors
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -934,11 +940,23 @@ def plot_descriptors(
             svgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
-        bi = {}  # type: Dict[Any, Any]
-        m = smi2mol(space[0].smiles)
-        if fixed_length:
-            fp = AllChem.GetMorganFingerprintAsBitVect(m, 3, nBits=1024, bitInfo=bi)
+        if multiple_bases:
+            bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
+            # TODO: get a bi thats dict of dicts by mols
+            bi = {}
+            for b in bases:
+                bit_info = {}
+                fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
+                for bit in bit_info:
+                    if bit not in bi:
+                        bi[bit] = (b, bit, bit_info)
+            for k in keys:
+                assert k in list(bi.keys())
+                print(f"{k} present")
+
         else:
+            bi = {}  # type: Dict[Any, Any]
+            m = smi2mol(space[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
@@ -995,10 +1013,15 @@ def plot_descriptors(
             if descriptor_type == "MACCS":
                 sk_dict[f"sk{count}"] = svgs[ki]
             if descriptor_type == "ECFP":
+                if type(bi[int(k)]) is tuple:
+                    m = bi[int(k)][0]
+                    b = bi[int(k)][2]
+                else:
+                    b = bi
                 svg = DrawMorganBit(
                     m,
                     int(k),
-                    bi,
+                    b,
                     molSize=(300, 200),
                     centerColor=None,
                     aromaticColor=None,
