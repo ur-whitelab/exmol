@@ -950,10 +950,6 @@ def plot_descriptors(
                 for bit in bit_info:
                     if bit not in bi:
                         bi[bit] = (b, bit, bit_info)
-            for k in keys:
-                assert k in list(bi.keys())
-                print(f"{k} present")
-
         else:
             bi = {}  # type: Dict[Any, Any]
             m = smi2mol(space[0].smiles)
