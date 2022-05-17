@@ -943,15 +943,15 @@ def plot_descriptors(
         if multiple_bases:
             bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
             # TODO: get a bi thats dict of dicts by mols
-            bi = {}
+            bi = {}  # type: Dict[Any, Any]
             for b in bases:
-                bit_info = {}
+                bit_info = {}  # type: Dict[Any, Any]
                 fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
                 for bit in bit_info:
                     if bit not in bi:
                         bi[bit] = (b, bit, bit_info)
         else:
-            bi = {}  # type: Dict[Any, Any]
+            bi = {}
             m = smi2mol(space[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
