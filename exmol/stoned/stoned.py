@@ -207,6 +207,7 @@
 # 2. Minimized imports
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
+# 5. Removed need/use of canonical smiles
 
 import selfies  # type: ignore
 import random
@@ -250,16 +251,15 @@ def sanitize_smiles(smi):
 
     Returns:
     mol (rdkit.Chem.rdchem.Mol) : RdKit mol object                          (None if invalid smile string smi)
-    smi_canon (string)          : Canonicalized smile representation of smi (None if invalid smile string smi)
+    smi_canon (string)          : Isomeric smile representation of smi (None if invalid smile string smi)
     conversion_successful (bool): True/False to indicate if conversion was  successful
     """
     try:
         mol = smi2mol(smi, sanitize=True)
-        smi_canon = mol2smi(mol, isomericSmiles=False, canonical=True)
-        check = smi2mol(smi_canon)
-        if check is None:
+        smi = mol2smi(mol)
+        if mol is None:
             return None, None, False
-        return (mol, smi_canon, True)
+        return (mol, smi, True)
     except Exception as e:
         return (None, None, False)
 
@@ -358,7 +358,6 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
 
     Returns:
     selfie_mutated    (string)  : Mutated SELFIE string
-    smiles_canon      (string)  : canonical smile of mutated SELFIE string
     """
     valid = False
     fail_counter = 0
@@ -413,15 +412,15 @@ def mutate_selfie(selfie, max_molecules_len, alphabet, write_fail_cases=False):
         sf = "".join(x for x in chars_selfie)
 
         smiles = selfies.decoder(selfie_mutated)
-        mol, smiles_canon, done = sanitize_smiles(smiles)
-        if len(selfie_mutated_chars) > max_molecules_len or smiles_canon == "":
+        _, smiles, done = sanitize_smiles(smiles)
+        if len(selfie_mutated_chars) > max_molecules_len or smiles == "":
             done = False
         if done:
             valid = True
         else:
             valid = False
 
-    return (selfie_mutated, smiles_canon)
+    return selfie_mutated
 
 
 def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
@@ -442,9 +441,7 @@ def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
             str_chars = get_selfie_chars(str_)
             max_molecules_len = len(str_chars) + num_mutations
 
-            selfie_mutated, smiles_canon = mutate_selfie(
-                str_, max_molecules_len, alphabet
-            )
+            selfie_mutated = mutate_selfie(str_, max_molecules_len, alphabet)
             selfie_ls_mut_ls.append(selfie_mutated)
 
         selfies_ls = selfie_ls_mut_ls.copy()

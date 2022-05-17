@@ -26,7 +26,13 @@ def test_randomize_smiles():
 def test_sanitize_smiles():
     si = "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC"
     result = exmol.stoned.sanitize_smiles(si)
-    assert result[1] is not None
+    assert result[2]
+
+
+def test_sanitize_smiles_chiral():
+    si = "CC1=CC[C@@H](CC1)C(=C)C"
+    result = exmol.stoned.sanitize_smiles(si)
+    assert "@" in result[1]
 
 
 # TODO let STONED people write these when they finish their repo
