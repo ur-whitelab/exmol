@@ -26,7 +26,13 @@ def test_randomize_smiles():
 def test_sanitize_smiles():
     si = "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC"
     result = exmol.stoned.sanitize_smiles(si)
-    assert result[1] is not None
+    assert result[2]
+
+
+def test_sanitize_smiles_chiral():
+    si = "CC1=CC[C@@H](CC1)C(=C)C"
+    result = exmol.stoned.sanitize_smiles(si)
+    assert "@" in result[1]
 
 
 # TODO let STONED people write these when they finish their repo
@@ -48,6 +54,122 @@ def test_run_stoned():
     # Can get duplicates
     assert len(result[0]) >= 0
     assert abs(len(result[0]) - 12) <= 1
+
+
+def test_kekulize_bug():
+    problem_alphabet = {
+        "[#Branch1]",
+        "[#Branch2]",
+        "[#C]",
+        "[#N]",
+        "[-/Ring1]",
+        "[/C]",
+        "[/N]",
+        "[=Branch1]",
+        "[=Branch2]",
+        "[=C]",
+        "[=Cd]",
+        "[=Co]",
+        "[=Cr]",
+        "[=Fe]",
+        "[=Mn]",
+        "[=Mo]",
+        "[=N+1]",
+        "[=N]",
+        "[=O+1]",
+        "[=O]",
+        "[=P]",
+        "[=Pb]",
+        "[=Ring1]",
+        "[=S]",
+        "[=Se]",
+        "[=Zn]",
+        "[B]",
+        "[Ba+2]",
+        "[Bi+3]",
+        "[Br-1]",
+        "[Br]",
+        "[Branch1]",
+        "[Branch2]",
+        "[C+1]",
+        "[C@@H1]",
+        "[C@@]",
+        "[C@H1]",
+        "[C@]",
+        "[C]",
+        "[Ca+2]",
+        "[Cd+2]",
+        "[Cl-1]",
+        "[ClH0]",
+        "[Cl]",
+        "[Co+2]",
+        "[Cr+3]",
+        "[Cr]",
+        "[Cu+2]",
+        "[Cu]",
+        "[F-1]",
+        "[F]",
+        "[Fe]",
+        "[H+1]",
+        "[H-1]",
+        "[Hg+1]",
+        "[Hg]",
+        "[I-1]",
+        "[I]",
+        "[K+1]",
+        "[La]",
+        "[Li+1]",
+        "[Lu+3]",
+        "[Mg+2]",
+        "[Mn+2]",
+        "[Mn+3]",
+        "[Mn]",
+        "[Mo]",
+        "[N+1]",
+        "[N-1]",
+        "[NH1+1]",
+        "[NH1]",
+        "[NH4+1]",
+        "[N]",
+        "[Na+1]",
+        "[Na]",
+        "[O-1]",
+        "[O-2]",
+        "[O]",
+        "[P+1]",
+        "[P]",
+        "[Pb]",
+        "[Re]",
+        "[Ring1]",
+        "[Ring2]",
+        "[S-1]",
+        "[S]",
+        "[Sb]",
+        "[Se]",
+        "[SiH1]",
+        "[Si]",
+        "[Sn]",
+        "[Sr+2]",
+        "[V]",
+        "[Y+3]",
+        "[Zn+2]",
+        "[Zn]",
+        "[Zr+2]",
+        "[Zr]",
+        "[\\C]",
+        "[\\I]",
+        "[\\N]",
+        "[\\O]",
+    }
+    result = exmol.run_stoned(
+        "CCOC(=O)c1ccc(cc1)N=CN(C)c2ccccc2",
+        num_samples=2500 // 2,
+        max_mutations=2,
+        alphabet=problem_alphabet,
+        return_selfies=True,
+    )
+    # try to decode them all
+    list([sf.decoder(s) for s in result[0]])
 
 
 def test_run_chemed():
