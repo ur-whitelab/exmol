@@ -207,7 +207,6 @@
 # 2. Minimized imports
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
-# 5. Removed need/use of canonical smiles
 
 import selfies  # type: ignore
 import random
@@ -247,11 +246,12 @@ def sanitize_smiles(smi, canonical=False):
     """Return a canonical smile representation of smi
 
     Parameters:
-    smi (string) : smile string to be canonicalized
+    smi (string) : smile string to be sanitized
+    canonical (bool) : whether or note to also canonicalize
 
     Returns:
     mol (rdkit.Chem.rdchem.Mol) : RdKit mol object                          (None if invalid smile string smi)
-    smi_canon (string)          : Isomeric smile representation of smi (None if invalid smile string smi)
+    smi (string)          : Possibly canonical SMILES representation of smi (None if invalid smile string smi)
     conversion_successful (bool): True/False to indicate if conversion was  successful
     """
     try:
