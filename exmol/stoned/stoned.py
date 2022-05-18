@@ -243,7 +243,7 @@ def randomize_smiles(mol):
     )
 
 
-def sanitize_smiles(smi):
+def sanitize_smiles(smi, canonical=False):
     """Return a canonical smile representation of smi
 
     Parameters:
@@ -256,7 +256,7 @@ def sanitize_smiles(smi):
     """
     try:
         mol = smi2mol(smi, sanitize=True)
-        smi = mol2smi(mol)
+        smi = mol2smi(mol, canonical=canonical, kekuleSmiles=True)
         if mol is None:
             return None, None, False
         return (mol, smi, True)
