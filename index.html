@@ -184,10 +184,6 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png"><img alt="chemical space by fit" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png" style="width: 500px;" /></a>
-<p>It is also possible to get global attributions for multiple base molecules. For this, the user should create a space around each instance of interest and concatenate these spaces. Then use this joint space to do lime explanations:</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">joint_space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s1">&#39;ECFP&#39;</span><span class="p">,</span> <span class="n">return_beta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multiple_bases</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
 </section>
 <section id="further-examples">
 <h2>Further Examples<a class="headerlink" href="#further-examples" title="Permalink to this headline"></a></h2>
