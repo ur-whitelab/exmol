@@ -120,14 +120,12 @@ def _get_joint_ecfp_descriptors(examples):
     """Create a union of ECFP bits from all base molecules"""
     # get reference
     bases = [smi2mol(e.smiles) for e in examples if e.is_origin]
-    ecfp_old = []
+    ecfp_joint = set([])
     for m in bases:
         # Get bitinfo and create a union
         b = {}  # type: Dict[Any, Any]
         temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-        ecfp_joint = list(set(ecfp_old) | set(list(b.keys())))
-        ecfp_old = ecfp_joint
-
+        ecfp_joint |= set(b.keys())
     return ecfp_joint
 
 
@@ -942,7 +940,6 @@ def plot_descriptors(
         # get reference for ECFP
         if multiple_bases:
             bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
-            # TODO: get a bi thats dict of dicts by mols
             bi = {}  # type: Dict[Any, Any]
             for b in bases:
                 bit_info = {}  # type: Dict[Any, Any]
