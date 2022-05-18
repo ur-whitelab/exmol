@@ -1,8 +1,6 @@
 from typing import *
 
-import itertools
 import math
-from xml.sax.handler import feature_external_ges
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
@@ -25,7 +23,7 @@ from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
-from rdkit import DataStructs  # type: ignore
+from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
 from . import stoned
@@ -37,7 +35,7 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
     fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
-    M = np.array([DataStructs.BulkTanimotoSimilarity(f, fp) for f in fp])
+    M = np.array([BulkTanimotoSimilarity(f, fp) for f in fp])
     # 1 - similarity because we want distance
     return 1 - M
 
@@ -237,23 +235,25 @@ def get_basic_alphabet() -> Set[str]:
 
 
 def run_stoned(
-    s: str,
+    start_smiles: str,
     fp_type: str = "ECFP4",
     num_samples: int = 2000,
     max_mutations: int = 2,
     min_mutations: int = 1,
     alphabet: Union[List[str], Set[str]] = None,
+    return_selfies: bool = False,
     _pbar: Any = None,
-) -> Tuple[List[str], List[float]]:
+) -> Union[Tuple[List[str], List[float]], Tuple[List[str], List[str], List[float]]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
 
-    :param s: SMILES string to start from
+    :param start_smiles: SMILES string to start from
     :param fp_type: Fingerprint type
     :param num_samples: Number of total molecules to generate
     :param max_mutations: Maximum number of mutations
     :param min_mutations: Minimum number of mutations
     :param alphabet: Alphabet to use for mutations, typically from :func:`get_basic_alphabet()`
-    :return: SMILES and SCORES generated
+    :param return_selfies: If SELFIES should be returned as well
+    :return: SELFIES, SMILES, and SCORES generated or SMILES and SCORES generated
     """
     if alphabet is None:
         alphabet = list(sf.get_semantic_robust_alphabet())
@@ -261,13 +261,14 @@ def run_stoned(
         alphabet = list(alphabet)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
 
-    mol = smi2mol(s)
-    if mol == None:
+    start_mol = smi2mol(start_smiles)
+    if start_mol == None:
         raise Exception("Invalid starting structure encountered")
 
     # want it so after sampling have num_samples
     randomized_smile_orderings = [
-        stoned.randomize_smiles(mol) for _ in range(num_samples // len(num_mutation_ls))
+        stoned.randomize_smiles(smi2mol(start_smiles))
+        for _ in range(num_samples // len(num_mutation_ls))
     ]
 
     # Convert all the molecules to SELFIES
@@ -289,25 +290,36 @@ def run_stoned(
         if _pbar:
             _pbar.update(len(smiles_back))
 
-    # Work on:  all_smiles_collect
+    if _pbar:
+        _pbar.set_description(f"🥌STONED🥌 Filtering")
+
+    # filter out duplicates
+    all_mols = [smi2mol(s) for s in all_smiles_collect]
+    all_canon = [mol2smi(m, canonical=True) if m else None for m in all_mols]
+    seen = set()
+    to_keep = [False for _ in all_canon]
+    for i in range(len(all_canon)):
+        if all_canon[i] and all_canon[i] not in seen:
+            to_keep[i] = True
+            seen.add(all_canon[i])
+
+    # now do filter
+    filter_mols = [m for i, m in enumerate(all_mols) if to_keep[i]]
+    filter_selfies = [s for i, s in enumerate(all_selfies_collect) if to_keep[i]]
+    filter_smiles = [s for i, s in enumerate(all_smiles_collect) if to_keep[i]]
+
+    # compute similarity scores
+    base_fp = stoned.get_fingerprint(start_mol, fp_type=fp_type)
+    fps = [stoned.get_fingerprint(m, fp_type) for m in filter_mols]
+    scores = BulkTanimotoSimilarity(base_fp, fps)  # type: List[float]
+
     if _pbar:
         _pbar.set_description(f"🥌STONED🥌 Done")
-    canon_smi_ls = []
-    for item in all_smiles_collect:
-        mol, smi_canon, did_convert = stoned.sanitize_smiles(item)
-        if mol == None or smi_canon == "" or did_convert == False:
-            raise Exception("Invalid smiles string found")
-        canon_smi_ls.append(smi_canon)
 
-    # remove redundant/non-unique/duplicates
-    # in a way to keep the selfies
-    canon_smi_ls = list(set(canon_smi_ls))
-
-    canon_smi_ls_scores = stoned.get_fp_scores(
-        canon_smi_ls, target_smi=s, fp_type=fp_type
-    )
-    # NOTE Do not think of returning selfies. They have duplicates
-    return canon_smi_ls, canon_smi_ls_scores
+    if return_selfies:
+        return filter_selfies, filter_smiles, scores
+    else:
+        return filter_smiles, scores
 
 
 @sleep_and_retry
@@ -363,7 +375,7 @@ def run_chemed(
         if m is None:
             continue
         fp = stoned.get_fingerprint(m, fp_type)
-        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        scores.append(TanimotoSimilarity(fp0, fp))
         if _pbar:
             _pbar.update()
     return smiles, scores
@@ -402,7 +414,7 @@ def run_custom(
             continue
         smiles.append(mol2smi(m))
         fp = stoned.get_fingerprint(m, fp_type)
-        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        scores.append(TanimotoSimilarity(fp0, fp))
         if _pbar:
             _pbar.update()
     return smiles, scores
@@ -508,13 +520,17 @@ def sample_space(
     # STONED
     if preset.startswith("chem"):
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
+        selfies = [sf.encoder(s) for s in smiles]
     elif preset == "custom":
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
+        selfies = [sf.encoder(s) for s in smiles]
     else:
-        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
-    selfies = [sf.encoder(s) for s in smiles]
+        result = run_stoned(
+            origin_smiles, _pbar=pbar, return_selfies=True, **method_kwargs
+        )
+        selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
 
     pbar.set_description("😀Calling your model function😀")
     fxn_values = batched_f(smiles, selfies)
@@ -557,7 +573,7 @@ def sample_space(
     for e in exps:  # type: ignore
         e.position = proj_dmat[e.index, :]  # type: ignore
 
-    # do clustering everwhere (maybe do counter/same separately?)
+    # do clustering everywhere (maybe do counter/same separately?)
     # clustering = AgglomerativeClustering(
     #    n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
     # Just do it on projected so it looks prettier.
