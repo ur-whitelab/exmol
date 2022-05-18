@@ -236,10 +236,7 @@ def randomize_smiles(mol):
     if not mol:
         return None
 
-    Chem.Kekulize(mol)
-    return mol2smi(
-        mol, canonical=False, doRandom=True, isomericSmiles=False, kekuleSmiles=True
-    )
+    return mol2smi(mol, canonical=False, doRandom=True, isomericSmiles=True)
 
 
 def sanitize_smiles(smi, canonical=False):
