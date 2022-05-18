@@ -1,6 +1,11 @@
 Change Log
 ==========
-v2.0.0 (2022-4-22)
+v2.0.0 (TBD)
+------------
+* Made it possible to use multiple base molecules for ECFP descriptors
+
+
+v2.0.0-dev (2022-4-22)
 -------------------
 * Added surrogate model explanation method
 * Added support for attributing ECFP, MACCS fingerprints, rdkit descriptors and plotting them
