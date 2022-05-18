@@ -222,9 +222,7 @@ def run_stoned(
     alphabet: Union[List[str], Set[str]] = None,
     return_selfies: bool = False,
     _pbar: Any = None,
-) -> Union[
-    Tuple[List[str], List[str], List[float]], Tuple[List[str], List[str], List[float]]
-]:
+) -> Union[Tuple[List[str], List[float]], Tuple[List[str], List[str], List[float]]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
 
     :param start_smiles: SMILES string to start from
@@ -292,7 +290,7 @@ def run_stoned(
     # compute similarity scores
     base_fp = stoned.get_fingerprint(start_mol, fp_type=fp_type)
     fps = [stoned.get_fingerprint(m, fp_type) for m in filter_mols]
-    scores = BulkTanimotoSimilarity(base_fp, fps)
+    scores = BulkTanimotoSimilarity(base_fp, fps)  # type: List[float]
 
     if _pbar:
         _pbar.set_description(f"🥌STONED🥌 Done")
@@ -508,9 +506,10 @@ def sample_space(
         )
         selfies = [sf.encoder(s) for s in smiles]
     else:
-        selfies, smiles, scores = run_stoned(
+        result = run_stoned(
             origin_smiles, _pbar=pbar, return_selfies=True, **method_kwargs
         )
+        selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
 
     pbar.set_description("😀Calling your model function😀")
     fxn_values = batched_f(smiles, selfies)
