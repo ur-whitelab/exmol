@@ -451,7 +451,7 @@
     "for l, a in alphs.items():\n",
     "    stoned_kwargs = {\"num_samples\": 2500 // 2, \"alphabet\": a, \"max_mutations\": 2}\n",
     "    space = exmol.sample_space(\n",
-    "        soldata.SMILES[4], predictor_function, stoned_kwargs=stoned_kwargs\n",
+    "        soldata.SMILES[4], predictor_function, stoned_kwargs=stoned_kwargs, quiet=True\n",
     "    )\n",
     "    e = exmol.rcf_explain(space, nmols=2)\n",
     "    if len(exps) == 0:\n",

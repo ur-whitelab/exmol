@@ -1,10 +1,12 @@
 Change Log
 ==========
-v2.0.0 (2022-4-22)
+
+v2.0.0 (TBD)
 -------------------
 * Added surrogate model explanation method
 * Added support for attributing ECFP, MACCS fingerprints, rdkit descriptors and plotting them
 * Example notebooks for new method
+* Fixed chirality stripping in sanitize
 
 
 v1.1.0 (2022-5-2)
