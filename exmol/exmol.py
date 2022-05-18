@@ -120,7 +120,7 @@ def _get_joint_ecfp_descriptors(examples):
     """Create a union of ECFP bits from all base molecules"""
     # get reference
     bases = [smi2mol(e.smiles) for e in examples if e.is_origin]
-    ecfp_joint = set([])
+    ecfp_joint = set()
     for m in bases:
         # Get bitinfo and create a union
         b = {}  # type: Dict[Any, Any]
