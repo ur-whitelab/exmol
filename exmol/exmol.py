@@ -1,9 +1,6 @@
 from typing import *
 
-import itertools
 import math
-from xml.etree.ElementTree import canonicalize
-from xml.sax.handler import feature_external_ges
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
