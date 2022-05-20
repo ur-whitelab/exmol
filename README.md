@@ -107,6 +107,12 @@ exmol.plot_utils.plot_space_by_fit(
 ```
 <img alt="chemical space by fit" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/space_by_fit.png" width="500">
 
+It is also possible to get global attributions for multiple base molecules. For this, the user should create a space around each instance of interest and concatenate these spaces. Then use this joint space to do lime explanations:
+
+```py
+beta = exmol.lime_explain(joint_space, descriptor_type='ECFP', return_beta=True, multiple_bases=True)
+```
+
 ## Further Examples
 
 You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://ur-whitelab.github.io/exmol/toc.html).

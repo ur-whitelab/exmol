@@ -1,8 +1,6 @@
 from typing import *
 
-import itertools
 import math
-from xml.sax.handler import feature_external_ges
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
@@ -25,7 +23,7 @@ from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
-from rdkit import DataStructs  # type: ignore
+from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
 from . import stoned
@@ -37,7 +35,7 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
     fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
-    M = np.array([DataStructs.BulkTanimotoSimilarity(f, fp) for f in fp])
+    M = np.array([BulkTanimotoSimilarity(f, fp) for f in fp])
     # 1 - similarity because we want distance
     return 1 - M
 
@@ -116,8 +114,24 @@ def _calculate_rdkit_descriptors(mol):
     return d
 
 
+def _get_joint_ecfp_descriptors(examples):
+    """Create a union of ECFP bits from all base molecules"""
+    # get reference
+    bases = [smi2mol(e.smiles) for e in examples if e.is_origin]
+    ecfp_joint = set()
+    for m in bases:
+        # Get bitinfo and create a union
+        b = {}  # type: Dict[Any, Any]
+        temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+        ecfp_joint |= set(b.keys())
+    return ecfp_joint
+
+
 def add_descriptors(
-    examples: List[Example], descriptor_type: str = "MACCS", mols: List[Any] = None
+    examples: List[Example],
+    descriptor_type: str = "MACCS",
+    mols: List[Any] = None,
+    multiple_bases=False,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -125,6 +139,7 @@ def add_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     :return: List of examples with added descriptors
+    :param multiple_bases: Consider multiple bases for plotting
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -172,9 +187,13 @@ def add_descriptors(
         return examples
     elif descriptor_type == "ECFP":
         # get reference
-        bi = {}  # type: Dict[Any, Any]
-        ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-        descriptor_names = tuple(bi.keys())
+        if multiple_bases:
+            # Get a union of ecfps for all bases
+            descriptor_names = _get_joint_ecfp_descriptors(examples)
+        else:
+            bi = {}  # type: Dict[Any, Any]
+            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+            descriptor_names = tuple(bi.keys())
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
             b = {}  # type: Dict[Any, Any]
@@ -216,23 +235,25 @@ def get_basic_alphabet() -> Set[str]:
 
 
 def run_stoned(
-    s: str,
+    start_smiles: str,
     fp_type: str = "ECFP4",
     num_samples: int = 2000,
     max_mutations: int = 2,
     min_mutations: int = 1,
     alphabet: Union[List[str], Set[str]] = None,
+    return_selfies: bool = False,
     _pbar: Any = None,
-) -> Tuple[List[str], List[float]]:
+) -> Union[Tuple[List[str], List[float]], Tuple[List[str], List[str], List[float]]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
 
-    :param s: SMILES string to start from
+    :param start_smiles: SMILES string to start from
     :param fp_type: Fingerprint type
     :param num_samples: Number of total molecules to generate
     :param max_mutations: Maximum number of mutations
     :param min_mutations: Minimum number of mutations
     :param alphabet: Alphabet to use for mutations, typically from :func:`get_basic_alphabet()`
-    :return: SMILES and SCORES generated
+    :param return_selfies: If SELFIES should be returned as well
+    :return: SELFIES, SMILES, and SCORES generated or SMILES and SCORES generated
     """
     if alphabet is None:
         alphabet = list(sf.get_semantic_robust_alphabet())
@@ -240,13 +261,14 @@ def run_stoned(
         alphabet = list(alphabet)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
 
-    mol = smi2mol(s)
-    if mol == None:
+    start_mol = smi2mol(start_smiles)
+    if start_mol == None:
         raise Exception("Invalid starting structure encountered")
 
     # want it so after sampling have num_samples
     randomized_smile_orderings = [
-        stoned.randomize_smiles(mol) for _ in range(num_samples // len(num_mutation_ls))
+        stoned.randomize_smiles(smi2mol(start_smiles))
+        for _ in range(num_samples // len(num_mutation_ls))
     ]
 
     # Convert all the molecules to SELFIES
@@ -268,25 +290,36 @@ def run_stoned(
         if _pbar:
             _pbar.update(len(smiles_back))
 
-    # Work on:  all_smiles_collect
+    if _pbar:
+        _pbar.set_description(f"🥌STONED🥌 Filtering")
+
+    # filter out duplicates
+    all_mols = [smi2mol(s) for s in all_smiles_collect]
+    all_canon = [mol2smi(m, canonical=True) if m else None for m in all_mols]
+    seen = set()
+    to_keep = [False for _ in all_canon]
+    for i in range(len(all_canon)):
+        if all_canon[i] and all_canon[i] not in seen:
+            to_keep[i] = True
+            seen.add(all_canon[i])
+
+    # now do filter
+    filter_mols = [m for i, m in enumerate(all_mols) if to_keep[i]]
+    filter_selfies = [s for i, s in enumerate(all_selfies_collect) if to_keep[i]]
+    filter_smiles = [s for i, s in enumerate(all_smiles_collect) if to_keep[i]]
+
+    # compute similarity scores
+    base_fp = stoned.get_fingerprint(start_mol, fp_type=fp_type)
+    fps = [stoned.get_fingerprint(m, fp_type) for m in filter_mols]
+    scores = BulkTanimotoSimilarity(base_fp, fps)  # type: List[float]
+
     if _pbar:
         _pbar.set_description(f"🥌STONED🥌 Done")
-    canon_smi_ls = []
-    for item in all_smiles_collect:
-        mol, smi_canon, did_convert = stoned.sanitize_smiles(item)
-        if mol == None or smi_canon == "" or did_convert == False:
-            raise Exception("Invalid smiles string found")
-        canon_smi_ls.append(smi_canon)
 
-    # remove redundant/non-unique/duplicates
-    # in a way to keep the selfies
-    canon_smi_ls = list(set(canon_smi_ls))
-
-    canon_smi_ls_scores = stoned.get_fp_scores(
-        canon_smi_ls, target_smi=s, fp_type=fp_type
-    )
-    # NOTE Do not think of returning selfies. They have duplicates
-    return canon_smi_ls, canon_smi_ls_scores
+    if return_selfies:
+        return filter_selfies, filter_smiles, scores
+    else:
+        return filter_smiles, scores
 
 
 @sleep_and_retry
@@ -342,7 +375,7 @@ def run_chemed(
         if m is None:
             continue
         fp = stoned.get_fingerprint(m, fp_type)
-        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        scores.append(TanimotoSimilarity(fp0, fp))
         if _pbar:
             _pbar.update()
     return smiles, scores
@@ -381,7 +414,7 @@ def run_custom(
             continue
         smiles.append(mol2smi(m))
         fp = stoned.get_fingerprint(m, fp_type)
-        scores.append(stoned.TanimotoSimilarity(fp0, fp))
+        scores.append(TanimotoSimilarity(fp0, fp))
         if _pbar:
             _pbar.update()
     return smiles, scores
@@ -487,13 +520,17 @@ def sample_space(
     # STONED
     if preset.startswith("chem"):
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
+        selfies = [sf.encoder(s) for s in smiles]
     elif preset == "custom":
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
+        selfies = [sf.encoder(s) for s in smiles]
     else:
-        smiles, scores = run_stoned(origin_smiles, _pbar=pbar, **method_kwargs)
-    selfies = [sf.encoder(s) for s in smiles]
+        result = run_stoned(
+            origin_smiles, _pbar=pbar, return_selfies=True, **method_kwargs
+        )
+        selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
 
     pbar.set_description("😀Calling your model function😀")
     fxn_values = batched_f(smiles, selfies)
@@ -536,7 +573,7 @@ def sample_space(
     for e in exps:  # type: ignore
         e.position = proj_dmat[e.index, :]  # type: ignore
 
-    # do clustering everwhere (maybe do counter/same separately?)
+    # do clustering everywhere (maybe do counter/same separately?)
     # clustering = AgglomerativeClustering(
     #    n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
     # Just do it on projected so it looks prettier.
@@ -581,6 +618,7 @@ def lime_explain(
     examples: List[Example],
     descriptor_type: str,
     return_beta: bool = True,
+    multiple_bases: bool = False,
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
@@ -588,9 +626,10 @@ def lime_explain(
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
+    :param multiple_bases: Consider multiple bases for plotting
     """
     # add descriptors
-    examples = add_descriptors(examples, descriptor_type)
+    examples = add_descriptors(examples, descriptor_type, multiple_bases=multiple_bases)
     # weighted tanimoto similarities
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     # Only keep nonzero weights
@@ -835,6 +874,7 @@ def plot_descriptors(
     figure_kwargs: Dict = None,
     output_file: str = None,
     title: str = None,
+    multiple_bases: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples are space_tstats
 
@@ -845,6 +885,7 @@ def plot_descriptors(
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     :param title: Title for the plot
+    :param multiple_bases: Consider multiple bases for plotting ECFP descriptors
     """
     from importlib_resources import files
     import exmol.lime_data
@@ -913,9 +954,19 @@ def plot_descriptors(
             svgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
-        bi = {}  # type: Dict[Any, Any]
-        m = smi2mol(space[0].smiles)
-        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+        if multiple_bases:
+            bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
+            bi = {}  # type: Dict[Any, Any]
+            for b in bases:
+                bit_info = {}  # type: Dict[Any, Any]
+                fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
+                for bit in bit_info:
+                    if bit not in bi:
+                        bi[bit] = (b, bit, bit_info)
+        else:
+            bi = {}
+            m = smi2mol(space[0].smiles)
+            fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         # annotate patches with text desciption
@@ -971,10 +1022,15 @@ def plot_descriptors(
             if descriptor_type == "MACCS":
                 sk_dict[f"sk{count}"] = svgs[ki]
             if descriptor_type == "ECFP":
+                if multiple_bases:
+                    m = bi[int(k)][0]
+                    b = bi[int(k)][2]
+                else:
+                    b = bi
                 svg = DrawMorganBit(
                     m,
                     int(k),
-                    bi,
+                    b,
                     molSize=(300, 200),
                     centerColor=None,
                     aromaticColor=None,
