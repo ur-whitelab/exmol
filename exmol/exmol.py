@@ -1,5 +1,5 @@
 from typing import *
-
+import io
 import math
 import requests  # type: ignore
 import numpy as np
@@ -946,27 +946,17 @@ def plot_descriptors(
         ax.add_patch(patch)
 
     count = 0
-    sk_dict, svgs = {}, {}
+    sk_dict, key_imgs = {}, {}
     if descriptor_type == "MACCS":
-        # Load svg images
+        # Load svg/png images
         mk = files(exmol.lime_data).joinpath("keys.pb")
         with open(str(mk), "rb") as f:
-            svgs = pickle.load(f)
+            key_imgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
-        if multiple_bases:
-            bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
-            bi = {}  # type: Dict[Any, Any]
-            for b in bases:
-                bit_info = {}  # type: Dict[Any, Any]
-                fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
-                for bit in bit_info:
-                    if bit not in bi:
-                        bi[bit] = (b, bit, bit_info)
-        else:
-            bi = {}
-            m = smi2mol(space[0].smiles)
-            fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+        bi = {}  # type: Dict[Any, Any]
+        m = smi2mol(space[0].smiles)
+        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         # annotate patches with text desciption
@@ -1008,7 +998,11 @@ def plot_descriptors(
             )
         # add SMARTS annotation where applicable
         if descriptor_type == "MACCS" or descriptor_type == "ECFP":
-            box = skunk.Box(130, 50, f"sk{count}")
+            if descriptor_type == "MACCS":
+                key_img = plt.imread(io.BytesIO(key_imgs[ki]["png"]))
+                box = skunk.ImageBox(f"sk{count}", key_img)
+            else:
+                box = skunk.Box(150, 30, f"sk{count}")
             ab = AnnotationBbox(
                 box,
                 xy=(skx, count),
@@ -1020,17 +1014,12 @@ def plot_descriptors(
 
             ax.add_artist(ab)
             if descriptor_type == "MACCS":
-                sk_dict[f"sk{count}"] = svgs[ki]
+                sk_dict[f"sk{count}"] = key_imgs[ki]["svg"]
             if descriptor_type == "ECFP":
-                if multiple_bases:
-                    m = bi[int(k)][0]
-                    b = bi[int(k)][2]
-                else:
-                    b = bi
                 svg = DrawMorganBit(
                     m,
                     int(k),
-                    b,
+                    bi,
                     molSize=(300, 200),
                     centerColor=None,
                     aromaticColor=None,
