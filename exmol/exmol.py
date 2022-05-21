@@ -1000,7 +1000,7 @@ def plot_descriptors(
         if descriptor_type == "MACCS" or descriptor_type == "ECFP":
             if descriptor_type == "MACCS":
                 key_img = plt.imread(io.BytesIO(key_imgs[ki]["png"]))
-                box = skunk.ImageBox(f"sk{count}", key_img)
+                box = skunk.ImageBox(f"sk{count}", key_img, zoom=0.5)
             else:
                 box = skunk.Box(150, 30, f"sk{count}")
             ab = AnnotationBbox(
