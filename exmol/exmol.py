@@ -436,7 +436,7 @@ def sample_space(
     stoned_kwargs: Dict = None,
     quiet: bool = False,
     use_selfies: bool = False,
-    sanitize_smiles: bool = False,
+    sanitize_smiles: bool = True,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
