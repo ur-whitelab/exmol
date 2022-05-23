@@ -236,7 +236,9 @@ def randomize_smiles(mol):
     if not mol:
         return None
 
-    return mol2smi(mol, canonical=False, doRandom=True, isomericSmiles=True)
+    return mol2smi(
+        mol, canonical=False, doRandom=True, isomericSmiles=True, kekuleSmiles=True
+    )
 
 
 def sanitize_smiles(smi, canonical=False):
