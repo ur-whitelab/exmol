@@ -954,9 +954,19 @@ def plot_descriptors(
             key_imgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
-        bi = {}  # type: Dict[Any, Any]
-        m = smi2mol(space[0].smiles)
-        fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
+        if multiple_bases:
+            bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
+            bi = {}  # type: Dict[Any, Any]
+            for b in bases:
+                bit_info = {}  # type: Dict[Any, Any]
+                fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
+                for bit in bit_info:
+                    if bit not in bi:
+                        bi[bit] = (b, bit, bit_info)
+        else:
+            bi = {}
+            m = smi2mol(space[0].smiles)
+            fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
         # annotate patches with text desciption
@@ -1000,7 +1010,7 @@ def plot_descriptors(
         if descriptor_type == "MACCS" or descriptor_type == "ECFP":
             if descriptor_type == "MACCS":
                 key_img = plt.imread(io.BytesIO(key_imgs[ki]["png"]))
-                box = skunk.ImageBox(f"sk{count}", key_img, zoom=0.5)
+                box = skunk.ImageBox(f"sk{count}", key_img, zoom=1)
             else:
                 box = skunk.Box(150, 30, f"sk{count}")
             ab = AnnotationBbox(
