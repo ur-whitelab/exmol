@@ -443,6 +443,7 @@ def sample_space(
     stoned_kwargs: Dict = None,
     quiet: bool = False,
     use_selfies: bool = False,
+    sanitize_smiles: bool = True,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -459,6 +460,7 @@ def sample_space(
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :param quiet: If True, will not print progress bar
     :param use_selfies: If True, will use SELFIES instead of SMILES for `f`
+    :param sanitize_smiles: If True, will sanitize all SMILES
     :return: List of generated :obj:`Example`
     """
 
@@ -482,7 +484,8 @@ def sample_space(
         def batched_f(sm, se):
             return np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)])
 
-    origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
+    if sanitize_smiles:
+        origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
     smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
@@ -540,6 +543,8 @@ def sample_space(
         selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
 
     pbar.set_description("😀Calling your model function😀")
+    if sanitize_smiles:
+        smiles = [stoned.sanitize_smiles(s)[1] for s in smiles]
     fxn_values = batched_f(smiles, selfies)
 
     # pack them into data structure with filtering out identical
