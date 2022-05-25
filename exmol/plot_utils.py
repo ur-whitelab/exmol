@@ -212,6 +212,9 @@ def moldiff(template, query) -> Tuple[List[int], List[int]]:
 
 
 def similarity_map_using_tstats(example: Example):
+    """Create similarity map for example molecule using descriptor t-statistics.
+    Only works for ECFP descriptors
+    """
     assert (
         example.descriptors.descriptor_type == "ECFP"
     ), "Similarity maps can only be drawn for ECFP descriptors"
@@ -256,6 +259,7 @@ def plot_space_by_fit(
 ):
     """Plot chemical space around example by LIME fit and annotate given examples.
     Adapted from :func:`plot_space`.
+
     :param examples: Large list of :obj:Example which make-up points
     :param exps: Small list of :obj:Example which will be annotated
     :param beta: beta output from :func:`lime_explain`
