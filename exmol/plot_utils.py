@@ -226,10 +226,10 @@ def similarity_map_using_tstats(example: Example):
     tstat_dict = dict(
         sorted(tstat_dict.items(), key=lambda item: abs(item[1]), reverse=True)
     )
-    bi = {}
+    bi = {}  # type: Dict[Any, Any]
     fp = AllChem.GetMorganFingerprint(mol, 3, bitInfo=bi)
     # Get contributions for atoms
-    contribs = {atom: [] for atom in range(mol.GetNumAtoms())}
+    contribs = {atom: [] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
     for b in bi:
         for tup in bi[b]:
             contribs[tup[0]].append(tstat_dict[b])
