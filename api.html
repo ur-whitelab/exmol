@@ -472,33 +472,31 @@ set to 3,000 by default if using STONED and 150 if using <code class="docutils l
 <dt class="sig sig-object py" id="exmol.plot_utils.plot_space_by_fit">
 <span class="sig-name descname"><span class="pre">plot_space_by_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(200,</span> <span class="pre">200)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cartoon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.plot_utils.plot_space_by_fit" title="Permalink to this definition"></a></dt>
 <dd><p>Plot chemical space around example by LIME fit and annotate given examples.
-Adapted from <code class="xref py py-func docutils literal notranslate"><span class="pre">plot_space()</span></code>.
-:type examples: <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]
-:param examples: Large list of :obj:Example which make-up points
-:type exps: <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]
-:param exps: Small list of :obj:Example which will be annotated
-:type beta: <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>
-:param beta: beta output from <code class="xref py py-func docutils literal notranslate"><span class="pre">lime_explain()</span></code>
-:type mol_size: <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]
-:param mol_size: size of rdkit molecule rendering, in pixles
-:type mol_fontsize: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>
-:param mol_fontsize: minimum font size passed to rdkit
-:type offset: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>
-:param offset: offset annotations to allow colorbar or other elements to fit into plot.
-:type ax: <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]
-:param ax: axis onto which to plot
-:type figure_kwargs: <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]
-:param figure_kwargs: kwargs to pass to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="(in Matplotlib v3.5.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt.figure</span></code></a>
-:type cartoon: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>
-:param cartoon: do cartoon outline on points?
-:type rasterized: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>
-:param rasterized: raster the scatter?</p>
+Adapted from <code class="xref py py-func docutils literal notranslate"><span class="pre">plot_space()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Large list of :obj:Example which make-up points</p></li>
+<li><p><strong>exps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Small list of :obj:Example which will be annotated</p></li>
+<li><p><strong>beta</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>) – beta output from <code class="xref py py-func docutils literal notranslate"><span class="pre">lime_explain()</span></code></p></li>
+<li><p><strong>mol_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – size of rdkit molecule rendering, in pixles</p></li>
+<li><p><strong>mol_fontsize</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – minimum font size passed to rdkit</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – offset annotations to allow colorbar or other elements to fit into plot.</p></li>
+<li><p><strong>ax</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – axis onto which to plot</p></li>
+<li><p><strong>figure_kwargs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]) – kwargs to pass to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="(in Matplotlib v3.5.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plt.figure</span></code></a></p></li>
+<li><p><strong>cartoon</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – do cartoon outline on points?</p></li>
+<li><p><strong>rasterized</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – raster the scatter?</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.plot_utils.similarity_map_using_tstats">
 <span class="sig-name descname"><span class="pre">similarity_map_using_tstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.plot_utils.similarity_map_using_tstats" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create similarity map for example molecule using descriptor t-statistics.
+Only works for ECFP descriptors</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.plot_utils.trim">
