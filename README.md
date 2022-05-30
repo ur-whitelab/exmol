@@ -94,6 +94,14 @@ exmol.plot_descriptors(samples, descriptor_type='ECFP')
 ```
 <img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400">
 
+You can use a more typical atom attribution plot as well, although note that some information is lost in this representation.
+
+```py
+exmol.plot_utils.similarity_map_using_tstats(space[0])
+```
+<img alt="molecule attribution by coloring each atom" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/mol-attr.png">
+
+
 You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients `beta` need to be passed in as an argument.
 
 ```py
