@@ -173,6 +173,11 @@ Due to how similarity is calculated, the base is going to be the farthest from a
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg"><img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400" /></a>
+<p>You can use a more typical atom attribution plot as well, although note that some information is lost in this representation.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">similarity_map_using_tstats</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="molecule attribution by coloring each atom" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/mol-attr.png" />
 <p>You can also plot the chemical space colored by fit to see how well the regression fits the original model. To plot by fit, regression coefficients <code class="docutils literal notranslate"><span class="pre">beta</span></code> need to be passed in as an argument.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_space_by_fit</span><span class="p">(</span>
     <span class="n">samples</span><span class="p">,</span>
