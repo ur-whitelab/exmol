@@ -1,6 +1,6 @@
 Change Log
 ==========
-v2.0.0 (2022-5-31)
+v2.0.0 (TBD)
 ------------
 * Added surrogate model explanation method
 * Added support for attributing ECFP, MACCS fingerprints, rdkit descriptors and plotting them
