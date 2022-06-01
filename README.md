@@ -5,7 +5,6 @@
 [![PyPI version](https://badge.fury.io/py/exmol.svg)](https://badge.fury.io/py/exmol)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-- [Explaining why that molecule](#explaining-why-that-molecule)
 - [Install](#install)
 - [Counterfactual Generation](#counterfactual-generation)
 - [Descriptor Attribution](#descriptor-attribution)
