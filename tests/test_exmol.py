@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from exmol.exmol import lime_explain
 import selfies as sf
 import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
@@ -225,6 +226,26 @@ def test_sample_preset():
     explanation = exmol.sample_space("CCCC", model, preset="narrow", batched=False)
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
+
+
+def test_sample_multiple_bases():
+    def model(s, se):
+        return int("N" in s)
+
+    s1 = exmol.sample_space("CCCC", model, preset="narrow", batched=False)
+    s2 = exmol.sample_space("COC", model, preset="narrow", batched=False)
+    all_s = s1 + s2
+    betas = exmol.lime_explain(all_s, descriptor_type="ECFP", return_beta=True)
+    exmol.plot_descriptors(all_s, "ECFP")
+
+    # check if it inferred correctly
+    assert np.allclose(
+        betas,
+        exmol.lime_explain(
+            all_s, descriptor_type="ECFP", return_beta=True, multiple_bases=True
+        ),
+    )
+    exmol.plot_descriptors(all_s, "ECFP", multiple_bases=True)
 
 
 def test_performance():

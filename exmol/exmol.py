@@ -1,5 +1,5 @@
 from typing import *
-
+import io
 import math
 import requests  # type: ignore
 import numpy as np
@@ -38,6 +38,10 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
     M = np.array([BulkTanimotoSimilarity(f, fp) for f in fp])
     # 1 - similarity because we want distance
     return 1 - M
+
+
+def _check_multiple_bases(examples):
+    return sum([e.is_origin for e in examples]) > 1
 
 
 def _calculate_rdkit_descriptors(mol):
@@ -131,7 +135,7 @@ def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
     mols: List[Any] = None,
-    multiple_bases=False,
+    multiple_bases: Optional[bool] = None,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -139,10 +143,13 @@ def add_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     :return: List of examples with added descriptors
-    :param multiple_bases: Consider multiple bases for plotting
+    :param multiple_bases: Consider multiple bases for plotting (default: infer from examples)
     """
     from importlib_resources import files
     import exmol.lime_data
+
+    if multiple_bases is None:
+        multiple_bases = _check_multiple_bases(examples)
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
@@ -256,7 +263,7 @@ def run_stoned(
     :return: SELFIES, SMILES, and SCORES generated or SMILES and SCORES generated
     """
     if alphabet is None:
-        alphabet = list(sf.get_semantic_robust_alphabet())
+        alphabet = get_basic_alphabet()
     if type(alphabet) == set:
         alphabet = list(alphabet)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
@@ -436,6 +443,7 @@ def sample_space(
     stoned_kwargs: Dict = None,
     quiet: bool = False,
     use_selfies: bool = False,
+    sanitize_smiles: bool = True,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
 
@@ -452,6 +460,7 @@ def sample_space(
     :param stoned_kwargs: Backwards compatible alias for `methods_kwargs`
     :param quiet: If True, will not print progress bar
     :param use_selfies: If True, will use SELFIES instead of SMILES for `f`
+    :param sanitize_smiles: If True, will sanitize all SMILES
     :return: List of generated :obj:`Example`
     """
 
@@ -475,7 +484,8 @@ def sample_space(
         def batched_f(sm, se):
             return np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)])
 
-    origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
+    if sanitize_smiles:
+        origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
     smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
@@ -533,6 +543,8 @@ def sample_space(
         selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
 
     pbar.set_description("😀Calling your model function😀")
+    if sanitize_smiles:
+        smiles = [stoned.sanitize_smiles(s)[1] for s in smiles]
     fxn_values = batched_f(smiles, selfies)
 
     # pack them into data structure with filtering out identical
@@ -618,7 +630,7 @@ def lime_explain(
     examples: List[Example],
     descriptor_type: str,
     return_beta: bool = True,
-    multiple_bases: bool = False,
+    multiple_bases: Optional[bool] = None,
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
@@ -626,8 +638,11 @@ def lime_explain(
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
-    :param multiple_bases: Consider multiple bases for plotting
+    :param multiple_bases: Consider multiple bases for explanation (default: infer from examples)
     """
+    if multiple_bases is None:
+        multiple_bases = _check_multiple_bases(examples)
+
     # add descriptors
     examples = add_descriptors(examples, descriptor_type, multiple_bases=multiple_bases)
     # weighted tanimoto similarities
@@ -868,30 +883,33 @@ def plot_cf(
 
 
 def plot_descriptors(
-    space: List[Example],
+    examples: List[Example],
     descriptor_type: str,
     fig: Any = None,
     figure_kwargs: Dict = None,
     output_file: str = None,
     title: str = None,
-    multiple_bases: bool = False,
+    multiple_bases: Optional[bool] = None,
 ):
-    """Plot descriptor attributions from given set of Examples are space_tstats
+    """Plot descriptor attributions from given set of Examples.
 
-    :param exps: Output from :func:`sample_space`
-    :param space_tstats: t-statistics output from :func:`lime_explain`
+    :param examples: Output from :func:`sample_space`
     :param descriptor_type: Descriptor type to plot, either 'Classic' or 'MACCS'
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param output_file: Output file name to save the plot
     :param title: Title for the plot
-    :param multiple_bases: Consider multiple bases for plotting ECFP descriptors
+    :param multiple_bases: Consider multiple bases for explanation (default: infer from examples)
     """
+
     from importlib_resources import files
     import exmol.lime_data
     import pickle  # type: ignore
 
-    space_tstats = list(space[0].descriptors.tstats)
+    if multiple_bases is None:
+        multiple_bases = _check_multiple_bases(examples)
+
+    space_tstats = list(examples[0].descriptors.tstats)
     if fig is None:
         if figure_kwargs is None:
             figure_kwargs = (
@@ -905,8 +923,8 @@ def plot_descriptors(
     d_importance = {
         a: [b, i]
         for i, a, b in zip(
-            np.arange(len(space[0].descriptors.descriptors)),
-            space[0].descriptors.descriptor_names,
+            np.arange(len(examples[0].descriptors.descriptors)),
+            examples[0].descriptors.descriptor_names,
             space_tstats,
         )
         if not np.isnan(b)
@@ -946,16 +964,16 @@ def plot_descriptors(
         ax.add_patch(patch)
 
     count = 0
-    sk_dict, svgs = {}, {}
+    sk_dict, key_imgs = {}, {}
     if descriptor_type == "MACCS":
-        # Load svg images
+        # Load svg/png images
         mk = files(exmol.lime_data).joinpath("keys.pb")
         with open(str(mk), "rb") as f:
-            svgs = pickle.load(f)
+            key_imgs = pickle.load(f)
     if descriptor_type == "ECFP":
         # get reference for ECFP
         if multiple_bases:
-            bases = [smi2mol(e.smiles) for e in space if e.is_origin == True]
+            bases = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
             bi = {}  # type: Dict[Any, Any]
             for b in bases:
                 bit_info = {}  # type: Dict[Any, Any]
@@ -965,7 +983,7 @@ def plot_descriptors(
                         bi[bit] = (b, bit, bit_info)
         else:
             bi = {}
-            m = smi2mol(space[0].smiles)
+            m = smi2mol(examples[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
 
     for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
@@ -1008,7 +1026,11 @@ def plot_descriptors(
             )
         # add SMARTS annotation where applicable
         if descriptor_type == "MACCS" or descriptor_type == "ECFP":
-            box = skunk.Box(130, 50, f"sk{count}")
+            if descriptor_type == "MACCS":
+                key_img = plt.imread(io.BytesIO(key_imgs[ki]["png"]))
+                box = skunk.ImageBox(f"sk{count}", key_img, zoom=1)
+            else:
+                box = skunk.Box(130, 50, f"sk{count}")
             ab = AnnotationBbox(
                 box,
                 xy=(skx, count),
@@ -1020,7 +1042,7 @@ def plot_descriptors(
 
             ax.add_artist(ab)
             if descriptor_type == "MACCS":
-                sk_dict[f"sk{count}"] = svgs[ki]
+                sk_dict[f"sk{count}"] = key_imgs[ki]["svg"]
             if descriptor_type == "ECFP":
                 if multiple_bases:
                     m = bi[int(k)][0]
@@ -1038,11 +1060,16 @@ def plot_descriptors(
                     extraColor=(0.8, 0.8, 0.8),
                     useSVG=True,
                 )
-                sk_dict[f"sk{count}"] = svg.data
+                # TODO: Why?
+                try:
+                    svgdata = svg.data
+                except AttributeError:
+                    svgdata = svg
+                sk_dict[f"sk{count}"] = svgdata
         count += 1
     ax.axvline(x=0, color="grey", linewidth=0.5)
     # calculate significant T
-    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in space])
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     T = ss.t.ppf(0.975, df=effective_n)
     # plot T

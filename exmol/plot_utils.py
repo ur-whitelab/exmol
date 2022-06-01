@@ -7,6 +7,8 @@ import numpy as np  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
+from rdkit.Chem import AllChem  # type: ignore
+from rdkit.Chem.Draw import SimilarityMaps  # type:ignore
 import rdkit.Chem  # type: ignore
 import matplotlib as mpl  # type: ignore
 from .data import *
@@ -209,6 +211,40 @@ def moldiff(template, query) -> Tuple[List[int], List[int]]:
     return inv_match, bond_match
 
 
+def similarity_map_using_tstats(example: Example):
+    """Create similarity map for example molecule using descriptor t-statistics.
+    Only works for ECFP descriptors
+    """
+    assert (
+        example.descriptors.descriptor_type == "ECFP"
+    ), "Similarity maps can only be drawn for ECFP descriptors"
+    # get necessary info for mol
+    mol = smi2mol(example.smiles)
+    tstat_dict = {
+        a: b
+        for a, b in zip(
+            example.descriptors.descriptor_names, example.descriptors.tstats
+        )
+    }
+    tstat_dict = dict(
+        sorted(tstat_dict.items(), key=lambda item: abs(item[1]), reverse=True)
+    )
+    bi = {}  # type: Dict[Any, Any]
+    fp = AllChem.GetMorganFingerprint(mol, 3, bitInfo=bi)
+    # Get contributions for atoms
+    contribs = {atom: [] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
+    for b in bi:
+        for tup in bi[b]:
+            contribs[tup[0]].append(tstat_dict[b])
+    weights = [max(contribs[a], key=abs) for a in range(mol.GetNumAtoms())]
+    # threshold significance of 0.1 --> t >= |1.645|
+    weights = [b if abs(b) >= 1.645 else 0 for b in weights]
+    # Draw the similarity map
+    fig = SimilarityMaps.GetSimilarityMapFromWeights(mol, weights, contourLines=10)
+    plt.savefig("atom_contribs.svg", dpi=180, bbox_inches="tight")
+    return weights
+
+
 def plot_space_by_fit(
     examples: List[Example],
     exps: List[Example],
@@ -223,6 +259,7 @@ def plot_space_by_fit(
 ):
     """Plot chemical space around example by LIME fit and annotate given examples.
     Adapted from :func:`plot_space`.
+
     :param examples: Large list of :obj:Example which make-up points
     :param exps: Small list of :obj:Example which will be annotated
     :param beta: beta output from :func:`lime_explain`
