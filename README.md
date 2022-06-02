@@ -103,7 +103,7 @@ We can use the same chemical space to get descriptor attributions for the molecu
 
 ```py
 beta = exmol.lime_explain(samples, descriptor_type='ECFP', return_beta=True)
-exmol.plot_descriptors(samples, descriptor_type='ECFP', output_file='ecfp.svg')
+exmol.plot_descriptors(samples, output_file='ecfp.svg')
 ```
 <img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400">
 

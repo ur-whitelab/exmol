@@ -885,7 +885,6 @@ def plot_cf(
 def plot_descriptors(
     examples: List[Example],
     output_file: str,
-    descriptor_type: str = None,
     fig: Any = None,
     figure_kwargs: Dict = None,
     title: str = None,
@@ -896,7 +895,6 @@ def plot_descriptors(
 
     :param examples: Output from :func:`sample_space`
     :param output_file: Output file name to save the plot
-    :param descriptor_type: Descriptor type to plot, either 'Classic', 'MACCS' or 'ECFP'. If not provided, this is infered from examples.
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param title: Title for the plot
@@ -908,11 +906,8 @@ def plot_descriptors(
     import exmol.lime_data
     import pickle  # type: ignore
 
-    if descriptor_type == None:
-        # infer from examples
-        descriptor_type = examples[0].descriptors.descriptor_type
-    else:
-        descriptor_type = descriptor_type.lower()
+    # infer descriptor_type from examples
+    descriptor_type = examples[0].descriptors.descriptor_type
 
     if multiple_bases is None:
         multiple_bases = _check_multiple_bases(examples)
