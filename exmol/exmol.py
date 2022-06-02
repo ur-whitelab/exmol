@@ -913,7 +913,10 @@ def plot_descriptors(
         multiple_bases = _check_multiple_bases(examples)
 
     if output_file is None:
-        raise ValueError("No filename provided to save plots")
+        if descriptor_type == "ecfp":
+            raise ValueError("No filename provided to save the plot")
+        else:
+            output_file = f"{descriptor_type}.svg"
 
     space_tstats = list(examples[0].descriptors.tstats)
     if fig is None:
