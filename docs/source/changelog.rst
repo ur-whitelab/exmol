@@ -1,6 +1,12 @@
 Change Log
 ==========
-v2.0.0 (TBD)
+
+v2.0.1 (2022-5-31)
+------------
+* Made default `run_stoned` argument use basic instead of semantically robust alphabet, as
+    claimed in documentation
+
+v2.0.0 (2022-5-31)
 ------------
 * Added surrogate model explanation method
 * Added support for attributing ECFP, MACCS fingerprints, rdkit descriptors and plotting them

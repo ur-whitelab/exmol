@@ -263,7 +263,7 @@ def run_stoned(
     :return: SELFIES, SMILES, and SCORES generated or SMILES and SCORES generated
     """
     if alphabet is None:
-        alphabet = list(sf.get_semantic_robust_alphabet())
+        alphabet = get_basic_alphabet()
     if type(alphabet) == set:
         alphabet = list(alphabet)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
