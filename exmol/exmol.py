@@ -1100,7 +1100,7 @@ def plot_descriptors(
         svg = skunk.insert(sk_dict)
         plt.tight_layout()
         if descriptor_type == "ecfp":
-            with open(output_file, "w") as f:
+            with open(output_file, "w") as f:  # type: ignore
                 f.write(svg)
         if return_svg:
             return svg
