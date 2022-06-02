@@ -216,7 +216,7 @@ def similarity_map_using_tstats(example: Example):
     Only works for ECFP descriptors
     """
     assert (
-        example.descriptors.descriptor_type == "ECFP"
+        example.descriptors.descriptor_type.lower() == "ecfp"
     ), "Similarity maps can only be drawn for ECFP descriptors"
     # get necessary info for mol
     mol = smi2mol(example.smiles)

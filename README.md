@@ -99,18 +99,18 @@ print(cfs[1])
 }
 ```
 
-We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to supply the `descriptor_type` to get attributions. You can select from `Classic` Rdkit descriptors, `MACCS` fingerprint descriptors, `ECFP` substructure descriptors. If you'd like to use regression coefficients for analysis, specify `return_beta=True`. The descriptor t-statistics are stored in `descriptors.tstats` attribute for the base molecule and can be accessed using `space_tstats = space[0].descriptors.tstats`.
+We can use the same chemical space to get descriptor attributions for the molecule. Along with `samples`, we also need to specify the `descriptor_type` to get attributions. You can select from `Classic` Rdkit descriptors, `MACCS` fingerprint descriptors, `ECFP` substructure descriptors. The default `descriptor_type` is `MACCS`. If you'd like to use regression coefficients for analysis, specify `return_beta=True`. The descriptor t-statistics are stored in `descriptors.tstats` attribute for the base molecule and can be accessed using `space_tstats = space[0].descriptors.tstats`. `plot_descriptors` saves a plot as shown below in the `output_file`.
 
 ```py
 beta = exmol.lime_explain(samples, descriptor_type='ECFP', return_beta=True)
-exmol.plot_descriptors(samples, descriptor_type='ECFP')
+exmol.plot_descriptors(samples, descriptor_type='ECFP', output_file='ecfp.svg')
 ```
 <img alt="ecfp descriptors" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/ECFP.svg" width="400">
 
 You can use a more typical atom attribution plot as well, although note that some information is lost in this representation.
 
 ```py
-exmol.plot_utils.similarity_map_using_tstats(space[0])
+exmol.plot_utils.similarity_map_using_tstats(samples[0])
 ```
 <img alt="molecule attribution by coloring each atom" src="https://raw.githubusercontent.com/ur-whitelab/exmol/main/paper2_LIME/mol-attr.png">
 
