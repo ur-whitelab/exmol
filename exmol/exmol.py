@@ -884,7 +884,7 @@ def plot_cf(
 
 def plot_descriptors(
     examples: List[Example],
-    output_file: str,
+    output_file: str = None,
     fig: Any = None,
     figure_kwargs: Dict = None,
     title: str = None,
@@ -894,7 +894,7 @@ def plot_descriptors(
     """Plot descriptor attributions from given set of Examples.
 
     :param examples: Output from :func:`sample_space`
-    :param output_file: Output file name to save the plot
+    :param output_file: Output file name to save the plot, only saves for ECFP descriptors
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param title: Title for the plot
@@ -912,11 +912,8 @@ def plot_descriptors(
     if multiple_bases is None:
         multiple_bases = _check_multiple_bases(examples)
 
-    if output_file is None:
-        if descriptor_type == "ecfp":
-            raise ValueError("No filename provided to save the plot")
-        else:
-            output_file = f"{descriptor_type}.svg"
+    if output_file is None and descriptor_type == "ecfp":
+        raise ValueError("No filename provided to save the plot")
 
     space_tstats = list(examples[0].descriptors.tstats)
     if fig is None:
@@ -1102,12 +1099,12 @@ def plot_descriptors(
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
         plt.tight_layout()
-        with open(output_file, "w") as f:
-            f.write(svg)
+        if descriptor_type == "ecfp":
+            with open(output_file, "w") as f:
+                f.write(svg)
         if return_svg:
             return svg
     elif descriptor_type == "classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
         ax.set_xlim(-xlim, xlim)
         plt.tight_layout()
-        plt.savefig(output_file, dpi=180, bbox_inches="tight")
