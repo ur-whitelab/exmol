@@ -894,7 +894,7 @@ def plot_descriptors(
     """Plot descriptor attributions from given set of Examples.
 
     :param examples: Output from :func:`sample_space`
-    :param output_file: Output file name to save the plot, only saves for ECFP descriptors
+    :param output_file: Output file name to save the plot - optional except for ECFP
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param title: Title for the plot
@@ -1098,8 +1098,8 @@ def plot_descriptors(
         xlim = np.max(np.absolute(t)) + 6
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
-        plt.tight_layout()
-        if descriptor_type == "ecfp":
+        if output_file is not None:
+            plt.tight_layout()
             with open(output_file, "w") as f:  # type: ignore
                 f.write(svg)
         if return_svg:
@@ -1107,4 +1107,6 @@ def plot_descriptors(
     elif descriptor_type == "classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
         ax.set_xlim(-xlim, xlim)
-        plt.tight_layout()
+        if output_file is not None:
+            plt.tight_layout()
+            plt.savefig(output_file, dpi=180, bbox_inches="tight")
