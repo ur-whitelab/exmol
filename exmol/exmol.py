@@ -1,3 +1,4 @@
+from tkinter.messagebox import RETRY
 from typing import *
 import io
 import math
@@ -889,7 +890,7 @@ def plot_descriptors(
     figure_kwargs: Dict = None,
     title: str = None,
     multiple_bases: Optional[bool] = None,
-    return_svg: bool = True,
+    return_svg: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples.
 
@@ -907,12 +908,12 @@ def plot_descriptors(
     import pickle  # type: ignore
 
     # infer descriptor_type from examples
-    descriptor_type = examples[0].descriptors.descriptor_type
+    descriptor_type = examples[0].descriptors.descriptor_type.lower()
 
     if multiple_bases is None:
         multiple_bases = _check_multiple_bases(examples)
 
-    if output_file is None and descriptor_type == "ecfp":
+    if output_file is None and descriptor_type == "ecfp" and not return_svg:
         raise ValueError("No filename provided to save the plot")
 
     space_tstats = list(examples[0].descriptors.tstats)
