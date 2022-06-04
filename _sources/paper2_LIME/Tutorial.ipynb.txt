@@ -1,0 +1,211 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "268aa5bd",
+   "metadata": {},
+   "source": [
+    "## Tutorial\n",
+    "\n",
+    "We'll show here how to explain molecular property prediction tasks without access to the gradients or any properties of a molecule. To set-up this activity, we need a black box model. We'll use something simple here -- the model is classifier that says if a molecule as an alcohol (1) or not (0). Let's implement this model first"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6c4df8f8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from rdkit import Chem\n",
+    "from rdkit.Chem.Draw import IPythonConsole\n",
+    "\n",
+    "# set-up rdkit drawing preferences\n",
+    "IPythonConsole.ipython_useSVG = True\n",
+    "IPythonConsole.drawOptions.drawMolsSameScale = False\n",
+    "\n",
+    "\n",
+    "def model(smiles):\n",
+    "    mol = Chem.MolFromSmiles(smiles)\n",
+    "    match = mol.GetSubstructMatches(Chem.MolFromSmarts(\"[O;!H0]\"))\n",
+    "    return 1 if match else 0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3db1a8b9",
+   "metadata": {},
+   "source": [
+    "Let's now try it out on some molecules"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b159d717",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "smi = \"CCCCCCO\"\n",
+    "print(\"f(s)\", model(smi))\n",
+    "Chem.MolFromSmiles(smi)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e43dfad4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "smi = \"OCCCCCCO\"\n",
+    "print(\"f(s)\", model(smi))\n",
+    "Chem.MolFromSmiles(smi)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "755e9d8b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "smi = \"c1ccccc1\"\n",
+    "print(\"f(s)\", model(smi))\n",
+    "Chem.MolFromSmiles(smi)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "98567bf6",
+   "metadata": {},
+   "source": [
+    "### Counterfacutal explanations\n",
+    "\n",
+    "Let's now explain the model - pretending we don't know how it works - using counterfactuals"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "04ff227e",
+   "metadata": {
+    "tags": [
+     "remove-output"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "import exmol\n",
+    "\n",
+    "instance = \"CCCCCCO\"\n",
+    "space = exmol.sample_space(instance, model, batched=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9c4438b3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfs = exmol.cf_explain(space, 1)\n",
+    "exmol.plot_cf(cfs)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "07be4df9",
+   "metadata": {},
+   "source": [
+    "We can see that removing the alcohol is the smallest change to affect the prediction of this molecule. Let's see the space and look at where these counterfactuals are."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "41349ccc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "exmol.plot_space(space, cfs)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4ee39b33",
+   "metadata": {},
+   "source": [
+    "### Explain using substructures\n",
+    "\n",
+    "Now we'll try to explain our model using substructures."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ed252205",
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "exmol.lime_explain(space)\n",
+    "exmol.plot_descriptors(space)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c406b957",
+   "metadata": {},
+   "source": [
+    "This seems like a pretty clear explanation. Let's take a look at using substructures that are present in the molecule"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0326fc65",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import skunk\n",
+    "\n",
+    "exmol.lime_explain(space, descriptor_type=\"ECFP\")\n",
+    "svg = exmol.plot_descriptors(space, return_svg=True)\n",
+    "skunk.display(svg)\n",
+    "exmol.plot_utils.similarity_map_using_tstats(space[0])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2834e1bc",
+   "metadata": {},
+   "source": [
+    "We can see that most of the model is explained from the presence of the alcohol group - as expected"
+   ]
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Tags",
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
