@@ -1161,11 +1161,15 @@ def get_text_explanations(
             break
         patt = MolFromSmarts(desc_smarts[k])
         match = "Yes. " if len(mol.GetSubstructMatch(patt)) > 0 else "No. "
+        if abs(v[0]) > 4:
+            imp = "Very Important\n"
+        elif abs(v[0]) >= T:
+            imp = "Important\n"
+        else:
+            imp = "Weakly important\n"
         if v[0] > 0:
-            imp = "Important\n" if v[0] >= T else "Weakly important\n"
             positive_exp += f"{k} " + match + imp
-        elif v[0] < 0:
-            imp = "Important\n" if v[0] <= -T else "Weakly important\n"
+        else:
             negative_exp += f"{k} " + match + imp
 
     return positive_exp + negative_exp
