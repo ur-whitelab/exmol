@@ -1,3 +1,4 @@
+from tkinter.messagebox import RETRY
 from typing import *
 import io
 import math
@@ -153,7 +154,7 @@ def add_descriptors(
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
-    if descriptor_type == "Classic":
+    if descriptor_type.lower() == "classic":
         names = tuple(
             [
                 "number of hydrogen bond donor",
@@ -177,7 +178,7 @@ def add_descriptors(
                 descriptor_names=descriptor_names,
             )
         return examples
-    elif descriptor_type == "MACCS":
+    elif descriptor_type.lower() == "maccs":
         mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
         with open(str(mk), "r") as f:
             names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
@@ -192,7 +193,7 @@ def add_descriptors(
                 descriptor_names=descriptor_names,
             )
         return examples
-    elif descriptor_type == "ECFP":
+    elif descriptor_type.lower() == "ecfp":
         # get reference
         if multiple_bases:
             # Get a union of ecfps for all bases
@@ -628,7 +629,7 @@ def _select_examples(cond, examples, nmols):
 
 def lime_explain(
     examples: List[Example],
-    descriptor_type: str,
+    descriptor_type: str = "MACCS",
     return_beta: bool = True,
     multiple_bases: Optional[bool] = None,
 ):
@@ -884,37 +885,43 @@ def plot_cf(
 
 def plot_descriptors(
     examples: List[Example],
-    descriptor_type: str,
+    output_file: str = None,
     fig: Any = None,
     figure_kwargs: Dict = None,
-    output_file: str = None,
     title: str = None,
     multiple_bases: Optional[bool] = None,
+    return_svg: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples.
 
     :param examples: Output from :func:`sample_space`
-    :param descriptor_type: Descriptor type to plot, either 'Classic' or 'MACCS'
+    :param output_file: Output file name to save the plot - optional except for ECFP
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
-    :param output_file: Output file name to save the plot
     :param title: Title for the plot
     :param multiple_bases: Consider multiple bases for explanation (default: infer from examples)
+    :param return_svg: Whether to return svg for plot
     """
 
     from importlib_resources import files
     import exmol.lime_data
     import pickle  # type: ignore
 
+    # infer descriptor_type from examples
+    descriptor_type = examples[0].descriptors.descriptor_type.lower()
+
     if multiple_bases is None:
         multiple_bases = _check_multiple_bases(examples)
+
+    if output_file is None and descriptor_type == "ecfp" and not return_svg:
+        raise ValueError("No filename provided to save the plot")
 
     space_tstats = list(examples[0].descriptors.tstats)
     if fig is None:
         if figure_kwargs is None:
             figure_kwargs = (
                 {"figsize": (5, 5)}
-                if descriptor_type == "Classic"
+                if descriptor_type.lower() == "classic"
                 else {"figsize": (8, 5)}
             )
         fig, ax = plt.subplots(nrows=1, ncols=1, dpi=180, **figure_kwargs)
@@ -965,12 +972,12 @@ def plot_descriptors(
 
     count = 0
     sk_dict, key_imgs = {}, {}
-    if descriptor_type == "MACCS":
+    if descriptor_type == "maccs":
         # Load svg/png images
         mk = files(exmol.lime_data).joinpath("keys.pb")
         with open(str(mk), "rb") as f:
             key_imgs = pickle.load(f)
-    if descriptor_type == "ECFP":
+    if descriptor_type == "ecfp":
         # get reference for ECFP
         if multiple_bases:
             bases = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
@@ -994,14 +1001,14 @@ def plot_descriptors(
             x = 0.25
             skx = (
                 np.max(np.absolute(t)) + 2
-                if descriptor_type == "MACCS"
+                if descriptor_type == "maccs"
                 else np.max(np.absolute(t))
             )
             box_x = 0.98
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ECFP" else k,
+                " " if descriptor_type == "ecfp" else k,
                 ha="left",
                 va="center",
                 wrap=True,
@@ -1011,22 +1018,22 @@ def plot_descriptors(
             x = -0.25
             skx = (
                 -np.max(np.absolute(t)) - 2
-                if descriptor_type == "MACCS"
+                if descriptor_type == "maccs"
                 else np.max(np.absolute(t))
             )
             box_x = 0.02
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ECFP" else k,
+                " " if descriptor_type == "ecfp" else k,
                 ha="right",
                 va="center",
                 wrap=True,
                 fontsize=12,
             )
         # add SMARTS annotation where applicable
-        if descriptor_type == "MACCS" or descriptor_type == "ECFP":
-            if descriptor_type == "MACCS":
+        if descriptor_type == "maccs" or descriptor_type == "ecfp":
+            if descriptor_type == "maccs":
                 key_img = plt.imread(io.BytesIO(key_imgs[ki]["png"]))
                 box = skunk.ImageBox(f"sk{count}", key_img, zoom=1)
             else:
@@ -1041,9 +1048,9 @@ def plot_descriptors(
             )
 
             ax.add_artist(ab)
-            if descriptor_type == "MACCS":
+            if descriptor_type == "maccs":
                 sk_dict[f"sk{count}"] = key_imgs[ki]["svg"]
-            if descriptor_type == "ECFP":
+            if descriptor_type == "ecfp":
                 if multiple_bases:
                     m = bi[int(k)][0]
                     b = bi[int(k)][2]
@@ -1084,24 +1091,23 @@ def plot_descriptors(
     else:
         ax.set_title(f"{title}", fontsize=12)
     # inset SMARTS svg images for MACCS descriptors
-    if descriptor_type == "MACCS" or descriptor_type == "ECFP":
-        if descriptor_type == "MACCS":
+    if descriptor_type == "maccs" or descriptor_type == "ecfp":
+        if descriptor_type == "maccs":
             print(
                 "SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)"
             )
         xlim = np.max(np.absolute(t)) + 6
         ax.set_xlim(-xlim, xlim)
         svg = skunk.insert(sk_dict)
-        plt.tight_layout()
-        if output_file is None:
-            output_file = f"{descriptor_type}.svg"
-        with open(output_file, "w") as f:
-            f.write(svg)
-        return svg
-    elif descriptor_type == "Classic":
+        if output_file is not None:
+            plt.tight_layout()
+            with open(output_file, "w") as f:  # type: ignore
+                f.write(svg)
+        if return_svg:
+            return svg
+    elif descriptor_type == "classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
         ax.set_xlim(-xlim, xlim)
-        plt.tight_layout()
-        if output_file is None:
-            output_file = f"{descriptor_type}.svg"
-        plt.savefig(output_file, dpi=180, bbox_inches="tight")
+        if output_file is not None:
+            plt.tight_layout()
+            plt.savefig(output_file, dpi=180, bbox_inches="tight")

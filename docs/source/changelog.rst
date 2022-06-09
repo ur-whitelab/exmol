@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+v2.1.1 (2022-6-03)
+------------
+* Fixed plotting bug in `plot_descriptors`
+
+v2.1.0 (2022-6-03)
+------------
+* `plot_descriptors` will no longer save to file without filename
+
 v2.0.1 (2022-5-31)
 ------------
 * Made default `run_stoned` argument use basic instead of semantically robust alphabet, as
