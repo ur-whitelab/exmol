@@ -23,7 +23,7 @@ setup(
         "requests",
         "tqdm",
         "ratelimit",
-        "rdkit-pypi",
+        "rdkit",
         "scikit-learn",
         "skunk >= 0.4.0",
         "importlib-resources==5.6.0",
