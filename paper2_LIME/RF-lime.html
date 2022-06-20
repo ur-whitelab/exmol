@@ -16,6 +16,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script>let toggleHintShow = 'Click to show';</script>
         <script>let toggleHintHide = 'Click to hide';</script>
@@ -87,9 +88,9 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="lime-paper-random-forest-for-solubility-prediciton">
-<h1>LIME paper: Random Forest for Solubility Prediciton<a class="headerlink" href="#lime-paper-random-forest-for-solubility-prediciton" title="Permalink to this headline"></a></h1>
+<h1>LIME paper: Random Forest for Solubility Prediciton<a class="headerlink" href="#lime-paper-random-forest-for-solubility-prediciton" title="Permalink to this heading"></a></h1>
 <section id="import-packages">
-<h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this headline"></a></h2>
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -129,7 +130,7 @@
 </div>
 </section>
 <section id="build-and-train-a-random-forest-model">
-<h2>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this headline"></a></h2>
+<h2>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make object that can compute descriptors</span>
@@ -240,7 +241,7 @@
 </div>
 </section>
 <section id="compute-descriptor-attributions">
-<h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this headline"></a></h2>
+<h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
@@ -294,23 +295,23 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;number of hydrogen bond donor&#39;: -1.8503567523822109,
- &#39;Wildman-Crippen LogP&#39;: -0.8922755879690571,
- &#39;number of hydrogen bond acceptor&#39;: 0.766471558010281,
- &#39;acidic group count&#39;: -0.6200658580218238,
- &#39;basic group count&#39;: 0.49301939744410483,
- &#39;aromatic bonds count&#39;: 0.42796890921011754,
- &#39;atomic polarizability&#39;: -0.28785764485919585,
- &#39;ring count&#39;: 0.25824168994488955,
- &#39;number of heteroatoms&#39;: -0.05628383659364121,
- &#39;number of rotatable bonds&#39;: 0.006986608017600504}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;number of heteroatoms&#39;: 1.4276589307525815,
+ &#39;Wildman-Crippen LogP&#39;: 1.2765133285487147,
+ &#39;acidic group count&#39;: 1.167982258090511,
+ &#39;number of hydrogen bond acceptor&#39;: -1.091803358370554,
+ &#39;basic group count&#39;: -0.9085787494247195,
+ &#39;atomic polarizability&#39;: -0.8920361361511031,
+ &#39;ring count&#39;: 0.6253498591917381,
+ &#39;aromatic bonds count&#39;: -0.5568484137532115,
+ &#39;number of hydrogen bond donor&#39;: -0.07475648484689501,
+ &#39;number of rotatable bonds&#39;: -0.03625838739769576}
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="do-we-recover-training-features">
-<h2>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this headline"></a></h2>
+<h2>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">wls_attr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -344,7 +345,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
 </pre></div>
 </div>
-<img alt="../_images/018ab3cf51e3a516e4a721ff56c0641e25e42c40171be38622256461d46c0891.png" src="../_images/018ab3cf51e3a516e4a721ff56c0641e25e42c40171be38622256461d46c0891.png" />
+<img alt="../_images/bcf49007b2ff3092056f26188dceb996b5b256d95c797c6da0b5956c4f3bf7fb.png" src="../_images/bcf49007b2ff3092056f26188dceb996b5b256d95c797c6da0b5956c4f3bf7fb.png" />
 </div>
 </div>
 </section>
