@@ -134,6 +134,8 @@ It is also possible to get global attributions for multiple base molecules. For 
 beta = exmol.lime_explain(joint_space, descriptor_type='ECFP', return_beta=True, multiple_bases=True)
 ```
 
+`lime_explain()` uses a linear surrogate model for descriptor explanations. You can also use a custom surrogate model instead of a linear model. To do so, just add desired descriptors to the chemical space using `exmol.add_descriptors(samples, descriptor_type)` and then use a custom model on samples to get explanations.
+
 ## Further Examples
 
 You can find more examples by looking at the exact code used to generate all figures from our paper [in the docs webpage](https://ur-whitelab.github.io/exmol/toc.html).
