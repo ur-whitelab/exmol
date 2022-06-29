@@ -278,7 +278,7 @@ def plot_space_by_fit(
     if ax is None:
         ax = plt.figure(**figure_kwargs).gca()
 
-    yhat = [e.yhat for e in examples]
+    yhat = np.array([e.yhat for e in examples])
     yhat -= np.mean(yhat)
     x_mat = np.array([list(e.descriptors.descriptors) for e in examples]).reshape(
         len(examples), -1
