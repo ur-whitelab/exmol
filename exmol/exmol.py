@@ -1111,3 +1111,65 @@ def plot_descriptors(
         if output_file is not None:
             plt.tight_layout()
             plt.savefig(output_file, dpi=180, bbox_inches="tight")
+
+
+def get_text_explanations(
+    examples: List[Example],
+):
+    """Take an example and convert t-statistics into text explanations"""
+    from importlib_resources import files
+    import exmol.lime_data
+
+    print(examples[0].descriptors.descriptor_type.lower())
+    if examples[0].descriptors.descriptor_type.lower() != "maccs":
+        raise ValueError("Text explaantions only work for MACCS descriptors")
+
+    # Take t-statistics, rank them
+    tstats = list(examples[0].descriptors.tstats)
+    d_importance = {
+        a: [b, i]
+        for i, a, b in zip(
+            np.arange(len(examples[0].descriptors.descriptors)),
+            examples[0].descriptors.descriptor_names,
+            tstats,
+        )
+        if not np.isnan(b)
+    }
+    d_importance = dict(
+        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
+    )
+
+    # get significance value - if >significance, then important else weakly important?
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
+    effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    T = ss.t.ppf(0.975, df=effective_n)
+
+    # get a substructure match!! Is it in the molecule?
+    mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
+    with open(str(mk), "r") as f:
+        desc_smarts = {
+            x.strip().split("\t")[-1]: x.strip().split("\t")[-2]
+            for x in f.readlines()[1:]
+        }
+    mol = smi2mol(examples[0].smiles)
+
+    # text explanation
+    positive_exp = "Postive feeatures:\n"
+    negative_exp = "Negative_features:\n"
+    for i, (k, v) in enumerate(zip(d_importance.keys(), d_importance.values())):
+        if i == 5:
+            break
+        patt = MolFromSmarts(desc_smarts[k])
+        match = "Yes. " if len(mol.GetSubstructMatch(patt)) > 0 else "No. "
+        if abs(v[0]) > 4:
+            imp = "Very Important\n"
+        elif abs(v[0]) >= T:
+            imp = "Important\n"
+        else:
+            imp = "Weakly important\n"
+        if v[0] > 0:
+            positive_exp += f"{k} " + match + imp
+        else:
+            negative_exp += f"{k} " + match + imp
+
+    return positive_exp + negative_exp
