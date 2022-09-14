@@ -1154,8 +1154,8 @@ def get_text_explanations(
     mol = smi2mol(examples[0].smiles)
 
     # text explanation
-    positive_exp = "Postive feeatures:\n"
-    negative_exp = "Negative_features:\n"
+    positive_exp = "Positive features:\n"
+    negative_exp = "Negative features:\n"
     for i, (k, v) in enumerate(zip(d_importance.keys(), d_importance.values())):
         if i == 5:
             break
