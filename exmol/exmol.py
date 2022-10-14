@@ -237,6 +237,12 @@ def get_basic_alphabet() -> Set[str]:
     # remove [P],[#P],[=P]
     to_remove.extend(["[P]", "[#P]", "[=P]"])
 
+    # remove [B],[#B],[=B]
+    to_remove.extend(["[B]", "[#B]", "[=B]"])
+    
+    # remove [I],[F],[Cl], [Br]
+    to_remove.extend(["[I]", "[F]", "[Cl]", "[Br]"])
+    
     a -= set(to_remove)
     a.add("[O-1]")
     return a
