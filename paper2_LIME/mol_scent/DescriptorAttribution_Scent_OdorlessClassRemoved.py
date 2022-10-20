@@ -511,6 +511,7 @@ def get_text_explanations(examples):
         if i == 5:
             break
 
+        Match = False
         if k.lower() == "are there multiple aromatic rings?":
             match = multiple_aromatic_rings(mol)
         else:
