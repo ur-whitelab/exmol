@@ -1113,6 +1113,20 @@ def plot_descriptors(
             plt.savefig(output_file, dpi=180, bbox_inches="tight")
 
 
+def check_multiple_aromatic_rings(mol):
+    ri = mol.GetRingInfo()
+    count = 0
+    for bondRing in ri.BondRings():
+        flag = True
+        for id in bondRing:
+            if not mol.GetBondWithIdx(id).GetIsAromatic():
+                flag = False
+                continue
+        if flag:
+            count += 1
+    return True if count > 1 else False
+
+
 def get_text_explanations(
     examples: List[Example],
 ):
@@ -1157,19 +1171,31 @@ def get_text_explanations(
     positive_exp = "Positive features:\n"
     negative_exp = "Negative features:\n"
     for i, (k, v) in enumerate(zip(d_importance.keys(), d_importance.values())):
+
         if i == 5:
             break
-        patt = MolFromSmarts(desc_smarts[k])
-        match = "Yes. " if len(mol.GetSubstructMatch(patt)) > 0 else "No. "
-        if abs(v[0]) > 4:
-            imp = "Very Important\n"
-        elif abs(v[0]) >= T:
-            imp = "Important\n"
+
+        match=False
+        if k.lower() == "are there multiple aromatic rings?":
+            match = check_multiple_aromatic_rings(mol)
         else:
-            imp = "Weakly important\n"
-        if v[0] > 0:
-            positive_exp += f"{k} " + match + imp
+            patt = MolFromSmarts(desc_smarts[k])
+            if len(mol.GetSubstructMatch(patt)) > 0:
+                match = True
+
+        if match:
+            if abs(v[0]) > 4:
+                imp = "Very Important\n"
+            elif abs(v[0]) >= T:
+                imp = "Important\n"
+            else:
+                continue
+            if v[0] > 0:
+                positive_exp += f"{k} " + "Yes. " + imp
+            else:
+                negative_exp += f"{k} " + "Yes. " + imp
         else:
-            negative_exp += f"{k} " + match + imp
+            continue
 
     return positive_exp + negative_exp
+
