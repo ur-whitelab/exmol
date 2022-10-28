@@ -1220,7 +1220,7 @@ def text_explain(
 
     # need to get base molecule for naming
     base_mol = smi2mol(examples[0].smiles)
-    bi = {}
+    bi = {}  # type: Dict[Any, Any]
     AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bi)
 
     # text explanation
