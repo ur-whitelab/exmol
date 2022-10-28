@@ -377,6 +377,17 @@ def test_limed():
     exmol.lime_explain(samples, descriptor_type="ECFP", return_beta=True)
 
 
+def test_text_explain():
+    def model(s, se):
+        return int("O" in s)
+
+    samples = exmol.sample_space("CCCC", model, batched=False)
+    exmol.text_explain(samples, "MACCS")
+
+    samples = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
+    exmol.text_explain(samples, "ECFP")
+
+
 def test_corrupt_smiles():
     def model(s, se):
         return int("N" in s)

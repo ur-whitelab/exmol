@@ -23,7 +23,7 @@ from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
@@ -130,6 +130,62 @@ def _get_joint_ecfp_descriptors(examples):
         temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
         ecfp_joint |= set(b.keys())
     return ecfp_joint
+
+
+_SMARTS = None
+
+
+def _bit2atoms(m, bitInfo, key):
+    # get atom id and radius
+    i, r = bitInfo[key][0]  # just take first matching atom
+    # taken from rdkit drawing code
+    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
+
+    # get the atoms for highlighting
+    atoms = set((i,))
+    for b in bitPath:
+        atoms.add(m.GetBondWithIdx(b).GetBeginAtomIdx())
+        atoms.add(m.GetBondWithIdx(b).GetEndAtomIdx())
+    return atoms
+
+
+def _load_smarts(path):
+    smarts = []
+    with open(path) as f:
+        for line in f.readlines():
+            if line[0] == "#":
+                continue
+            i = line.find(":")
+            sm = line[i + 1 :].strip()
+            m = MolFromSmarts(sm)
+            smarts.append((line[:i].strip(), m))
+    return smarts[::-1]
+
+
+def _name_morgan_bit(m, bitInfo, key):
+    global _SMARTS
+    if _SMARTS is None:
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
+
+        sp = files(exmol.lime_data).joinpath("smarts.txt")
+        _SMARTS = _load_smarts(sp)
+    morgan_atoms = _bit2atoms(m, bitInfo, key)
+    if len(morgan_atoms) == 1:
+        # only 1 atom, just return element
+        return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
+    names = []
+    for name, sm in _SMARTS:
+        matches = m.GetSubstructMatches(sm)
+        for match in matches:
+            # check if match is in morgan bit
+            match = set(match)
+            if match.issubset(morgan_atoms):
+                names.append((len(match), name))
+    names.sort()
+    if len(names) == 0:
+        return None
+    return names[-1][1].replace("_", " ")
 
 
 def add_descriptors(
@@ -1127,16 +1183,19 @@ def check_multiple_aromatic_rings(mol):
     return True if count > 1 else False
 
 
-def get_text_explanations(
+def text_explain(
     examples: List[Example],
-):
-    """Take an example and convert t-statistics into text explanations"""
-    from importlib_resources import files
-    import exmol.lime_data
+    descriptor_type: str = "maccs",
+) -> str:
+    """Take an example and convert t-statistics into text explanations
 
-    print(examples[0].descriptors.descriptor_type.lower())
-    if examples[0].descriptors.descriptor_type.lower() != "maccs":
-        raise ValueError("Text explaantions only work for MACCS descriptors")
+    :param examples: Output from :func:`sample_space`
+    :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
+    """
+
+    # populate lime explanation
+    if examples[0].descriptors is None:
+        lime_explain(examples, descriptor_type=descriptor_type)
 
     # Take t-statistics, rank them
     tstats = list(examples[0].descriptors.tstats)
@@ -1147,55 +1206,47 @@ def get_text_explanations(
             examples[0].descriptors.descriptor_names,
             tstats,
         )
-        if not np.isnan(b)
+        # don't want NANs and want a match in base
+        if not np.isnan(b) and examples[0].descriptors.descriptors[i] != 0
     }
+
     d_importance = dict(
         sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
     )
-
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     T = ss.t.ppf(0.975, df=effective_n)
 
-    # get a substructure match!! Is it in the molecule?
-    mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-    with open(str(mk), "r") as f:
-        desc_smarts = {
-            x.strip().split("\t")[-1]: x.strip().split("\t")[-2]
-            for x in f.readlines()[1:]
-        }
-    mol = smi2mol(examples[0].smiles)
+    # need to get base molecule for naming
+    base_mol = smi2mol(examples[0].smiles)
+    bi = {}
+    AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bi)
 
     # text explanation
     positive_exp = "Positive features:\n"
     negative_exp = "Negative features:\n"
-    for i, (k, v) in enumerate(zip(d_importance.keys(), d_importance.values())):
+    success = 0
+    for i, (k, v) in enumerate(d_importance.items()):
 
-        if i == 5:
+        if success == 5:
             break
-
-        match=False
-        if k.lower() == "are there multiple aromatic rings?":
-            match = check_multiple_aromatic_rings(mol)
-        else:
-            patt = MolFromSmarts(desc_smarts[k])
-            if len(mol.GetSubstructMatch(patt)) > 0:
-                match = True
-
-        if match:
-            if abs(v[0]) > 4:
-                imp = "Very Important\n"
-            elif abs(v[0]) >= T:
-                imp = "Important\n"
-            else:
+        name = k
+        if descriptor_type == "ECFP":
+            # convert names
+            morgan_key = examples[0].descriptors.descriptor_names[v[1]]
+            name = _name_morgan_bit(base_mol, bi, morgan_key)
+            if name is None:
                 continue
-            if v[0] > 0:
-                positive_exp += f"{k} " + "Yes. " + imp
-            else:
-                negative_exp += f"{k} " + "Yes. " + imp
+        if abs(v[0]) > 4:
+            imp = "Very Important\n"
+        elif abs(v[0]) >= T:
+            imp = "Important\n"
         else:
-            continue
-
+            imp = "Weakly Important\n"
+        if v[0] > 0:
+            positive_exp += f"{name} " + "Yes. " + imp
+        else:
+            negative_exp += f"{name} " + "Yes. " + imp
+        success += 1
     return positive_exp + negative_exp
-
