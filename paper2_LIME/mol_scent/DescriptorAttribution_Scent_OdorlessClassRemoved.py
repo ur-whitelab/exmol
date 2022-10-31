@@ -465,77 +465,6 @@ def multiple_aromatic_rings(mol):
     return True if count > 1 else False
 
 
-def get_text_explanations(examples):
-    """Take an example and convert t-statistics into text explanations"""
-    from importlib_resources import files
-    import exmol.lime_data
-
-    print(examples[0].descriptors.descriptor_type.lower())
-    if examples[0].descriptors.descriptor_type.lower() != "maccs":
-        raise ValueError("Text explaantions only work for MACCS descriptors")
-
-    # Take t-statistics, rank them
-    tstats = list(examples[0].descriptors.tstats)
-    d_importance = {
-        a: [b, i]
-        for i, a, b in zip(
-            np.arange(len(examples[0].descriptors.descriptors)),
-            examples[0].descriptors.descriptor_names,
-            tstats,
-        )
-        if not np.isnan(b)
-    }
-    d_importance = dict(
-        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
-    )
-
-    # get significance value - if >significance, then important else weakly important?
-    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
-    effective_n = np.sum(w) ** 2 / np.sum(w**2)
-    T = ss.t.ppf(0.975, df=effective_n)
-
-    # get a substructure match!! Is it in the molecule?
-    mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-    with open(str(mk), "r") as f:
-        desc_smarts = {
-            x.strip().split("\t")[-1]: x.strip().split("\t")[-2]
-            for x in f.readlines()[1:]
-        }
-    mol = MolFromSmiles(examples[0].smiles)
-
-    # text explanation
-    positive_exp = "Positive features:\n"
-    negative_exp = "Negative features:\n"
-    for i, (k, v) in enumerate(zip(d_importance.keys(), d_importance.values())):
-
-        if i == 5:
-            break
-
-        Match = False
-        if k.lower() == "are there multiple aromatic rings?":
-            match = multiple_aromatic_rings(mol)
-        else:
-            patt = MolFromSmarts(desc_smarts[k])
-            if len(mol.GetSubstructMatch(patt)) > 0:
-                match = True
-
-        if match:
-            if abs(v[0]) > 4:
-                imp = "Very Important\n"
-            elif abs(v[0]) >= T:
-                imp = "Important\n"
-            else:
-                continue
-            if v[0] > 0:
-                positive_exp += f"{k} " + "Yes. " + imp
-            else:
-                negative_exp += f"{k} " + "Yes. " + imp
-        else:
-            continue
-
-    return positive_exp + negative_exp
-
-
 # Load files with preciously sampled space and labeled with scents
 
 df = pd.read_csv(space_file, usecols=np.arange(1, 11))
@@ -561,8 +490,7 @@ lime_explain(samples, descriptor_type="MACCS")
 exmol.plot_descriptors(samples, output_file=f"plots/{scent}_maccs.svg")
 
 prompt = (
-    get_text_explanations(samples)
-    + f"Explanation: Molecules have {scent} smell because"
+    exmol.text_explain(samples) + f"Explanation: Molecules have {scent} smell because"
 )
 
 with open(f"prompts/{scent}.txt", "w+") as f:
