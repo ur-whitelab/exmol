@@ -24,6 +24,7 @@ from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
@@ -132,6 +133,62 @@ def _get_joint_ecfp_descriptors(examples):
     return ecfp_joint
 
 
+_SMARTS = None
+
+
+def _bit2atoms(m, bitInfo, key):
+    # get atom id and radius
+    i, r = bitInfo[key][0]  # just take first matching atom
+    # taken from rdkit drawing code
+    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
+
+    # get the atoms for highlighting
+    atoms = set((i,))
+    for b in bitPath:
+        atoms.add(m.GetBondWithIdx(b).GetBeginAtomIdx())
+        atoms.add(m.GetBondWithIdx(b).GetEndAtomIdx())
+    return atoms
+
+
+def _load_smarts(path):
+    smarts = []
+    with open(path) as f:
+        for line in f.readlines():
+            if line[0] == "#":
+                continue
+            i = line.find(":")
+            sm = line[i + 1 :].strip()
+            m = MolFromSmarts(sm)
+            smarts.append((line[:i].strip(), m))
+    return smarts[::-1]
+
+
+def _name_morgan_bit(m, bitInfo, key):
+    global _SMARTS
+    if _SMARTS is None:
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
+
+        sp = files(exmol.lime_data).joinpath("smarts.txt")
+        _SMARTS = _load_smarts(sp)
+    morgan_atoms = _bit2atoms(m, bitInfo, key)
+    if len(morgan_atoms) == 1:
+        # only 1 atom, just return element
+        return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
+    names = []
+    for name, sm in _SMARTS:
+        matches = m.GetSubstructMatches(sm)
+        for match in matches:
+            # check if match is in morgan bit
+            match = set(match)
+            if match.issubset(morgan_atoms):
+                names.append((len(match), name))
+    names.sort()
+    if len(names) == 0:
+        return None
+    return names[-1][1].replace("_", " ")
+
+
 def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
@@ -154,6 +211,56 @@ def add_descriptors(
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
+
+    def _maccs_descriptors(examples, mols):
+        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
+        with open(str(mk), "r") as f:
+            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
+        for e, m in zip(examples, mols):
+            # rdkit sets fps[0] to 0 and starts keys at 1!
+            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
+            descriptors = tuple(int(i) for i in fps)
+            descriptor_names = names
+            e.descriptors = Descriptors(
+                descriptor_type="maccs",
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+
+    def _ecfp_descriptors(examples, mols, concat=False):
+        # get reference
+        if multiple_bases:
+            # Get a union of ecfps for all bases
+            descriptor_names = _get_joint_ecfp_descriptors(examples)
+        else:
+            bi = {}  # type: Dict[Any, Any]
+            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+            if concat:
+                descriptor_names = examples[0].descriptors.descriptor_names + tuple(
+                    bi.keys()
+                )
+            else:
+                descriptor_names = tuple(bi.keys())
+        for e, m in zip(examples, mols):
+            # Now compare to reference and get other fp vectors
+            b = {}  # type: Dict[Any, Any]
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+            if concat:
+                descriptors = e.descriptors.descriptors + tuple(
+                    [1 if x in b.keys() else 0 for x in descriptor_names]
+                )
+            else:
+                descriptors = tuple(
+                    [1 if x in b.keys() else 0 for x in descriptor_names]
+                )
+            e.descriptors = Descriptors(
+                descriptor_type="ecfp",
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+
     if descriptor_type.lower() == "classic":
         names = tuple(
             [
@@ -179,39 +286,12 @@ def add_descriptors(
             )
         return examples
     elif descriptor_type.lower() == "maccs":
-        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-        with open(str(mk), "r") as f:
-            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
-        for e, m in zip(examples, mols):
-            # rdkit sets fps[0] to 0 and starts keys at 1!
-            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
-            descriptors = tuple(int(i) for i in fps)
-            descriptor_names = names
-            e.descriptors = Descriptors(
-                descriptor_type=descriptor_type,
-                descriptors=descriptors,
-                descriptor_names=descriptor_names,
-            )
-        return examples
+        return _maccs_descriptors(examples, mols)
     elif descriptor_type.lower() == "ecfp":
-        # get reference
-        if multiple_bases:
-            # Get a union of ecfps for all bases
-            descriptor_names = _get_joint_ecfp_descriptors(examples)
-        else:
-            bi = {}  # type: Dict[Any, Any]
-            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-            descriptor_names = tuple(bi.keys())
-        for e, m in zip(examples, mols):
-            # Now compare to reference and get other fp vectors
-            b = {}  # type: Dict[Any, Any]
-            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
-            e.descriptors = Descriptors(
-                descriptor_type=descriptor_type,
-                descriptors=descriptors,
-                descriptor_names=descriptor_names,
-            )
+        return _ecfp_descriptors(examples, mols)
+    elif descriptor_type.lower() == "combined":
+        examples = _maccs_descriptors(examples, mols)
+        examples = _ecfp_descriptors(examples, mols, concat=True)
         return examples
     else:
         raise ValueError(
@@ -239,11 +319,11 @@ def get_basic_alphabet() -> Set[str]:
 
     # remove [B],[#B],[=B]
     to_remove.extend(["[B]", "[#B]", "[=B]"])
-    
+
     # remove [I],[F],[Cl], [Br]
     to_remove.extend(["[I]", "[F]", "[Cl]", "[Br]"])
-    
     a -= set(to_remove)
+
     a.add("[O-1]")
     return a
 
@@ -1117,3 +1197,86 @@ def plot_descriptors(
         if output_file is not None:
             plt.tight_layout()
             plt.savefig(output_file, dpi=180, bbox_inches="tight")
+
+
+def check_multiple_aromatic_rings(mol):
+    ri = mol.GetRingInfo()
+    count = 0
+    for bondRing in ri.BondRings():
+        flag = True
+        for id in bondRing:
+            if not mol.GetBondWithIdx(id).GetIsAromatic():
+                flag = False
+                continue
+        if flag:
+            count += 1
+    return True if count > 1 else False
+
+
+def text_explain(
+    examples: List[Example],
+    descriptor_type: str = "maccs",
+) -> str:
+    """Take an example and convert t-statistics into text explanations
+
+    :param examples: Output from :func:`sample_space`
+    :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
+    """
+
+    # populate lime explanation
+    if examples[0].descriptors is None:
+        lime_explain(examples, descriptor_type=descriptor_type)
+
+    # Take t-statistics, rank them
+    tstats = list(examples[0].descriptors.tstats)
+    d_importance = {
+        a: [b, i]
+        for i, a, b in zip(
+            np.arange(len(examples[0].descriptors.descriptors)),
+            examples[0].descriptors.descriptor_names,
+            tstats,
+        )
+        # don't want NANs and want a match in base
+        if not np.isnan(b) and examples[0].descriptors.descriptors[i] != 0
+    }
+
+    d_importance = dict(
+        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
+    )
+    # get significance value - if >significance, then important else weakly important?
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
+    effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    T = ss.t.ppf(0.975, df=effective_n)
+
+    # need to get base molecule for naming
+    base_mol = smi2mol(examples[0].smiles)
+    bi = {}  # type: Dict[Any, Any]
+    AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bi)
+
+    # text explanation
+    positive_exp = "Positive features:\n"
+    negative_exp = "Negative features:\n"
+    success = 0
+    for i, (k, v) in enumerate(d_importance.items()):
+
+        if success == 5:
+            break
+        name = k
+        if descriptor_type.lower() == "ecfp" or isinstance(name, int):
+            # convert names
+            morgan_key = examples[0].descriptors.descriptor_names[v[1]]
+            name = _name_morgan_bit(base_mol, bi, morgan_key)
+            if name is None:
+                continue
+        if abs(v[0]) > 4:
+            imp = "Very Important\n"
+        elif abs(v[0]) >= T:
+            imp = "Important\n"
+        else:
+            imp = "Weakly Important\n"
+        if v[0] > 0:
+            positive_exp += f"{name} " + "Yes. " + imp
+        else:
+            negative_exp += f"{name} " + "Yes. " + imp
+        success += 1
+    return positive_exp + negative_exp
