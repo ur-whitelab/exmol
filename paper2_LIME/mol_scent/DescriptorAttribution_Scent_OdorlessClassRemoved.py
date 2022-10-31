@@ -489,6 +489,7 @@ svg = exmol.plot_descriptors(
 lime_explain(samples, descriptor_type="MACCS")
 exmol.plot_descriptors(samples, output_file=f"plots/{scent}_maccs.svg")
 
+lime_explain(samples, descriptor_type="combined")
 prompt = (
     exmol.text_explain(samples) + f"Explanation: Molecules have {scent} smell because"
 )

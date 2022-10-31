@@ -130,7 +130,7 @@ def _get_joint_ecfp_descriptors(examples):
         b = {}  # type: Dict[Any, Any]
         temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
         ecfp_joint |= set(b.keys())
-    return ecfp_joint
+    return tuple(ecfp_joint)
 
 
 _SMARTS = None
@@ -232,7 +232,12 @@ def add_descriptors(
         # get reference
         if multiple_bases:
             # Get a union of ecfps for all bases
-            descriptor_names = _get_joint_ecfp_descriptors(examples)
+            if concat:
+                descriptor_names = examples[
+                    0
+                ].descriptors.descriptor_names + _get_joint_ecfp_descriptors(examples)
+            else:
+                descriptor_names = _get_joint_ecfp_descriptors(examples)
         else:
             bi = {}  # type: Dict[Any, Any]
             ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
@@ -1249,9 +1254,21 @@ def text_explain(
     T = ss.t.ppf(0.975, df=effective_n)
 
     # need to get base molecule for naming
-    base_mol = smi2mol(examples[0].smiles)
-    bi = {}  # type: Dict[Any, Any]
-    AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bi)
+    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
+    if len(base_mol) > 1:
+        multiple_bases = True
+        bi = {}  # type: Dict[Any, Any]
+        for b in base_mol:
+            bit_info = {}  # type: Dict[Any, Any]
+            fp = AllChem.GetMorganFingerprint(b, 3, bitInfo=bit_info)
+            for bit in bit_info:
+                if bit not in bi:
+                    bi[bit] = (b, bit, bit_info)
+    else:
+        multiple_bases = False
+        base_mol = smi2mol(examples[0].smiles)
+        bi = {}  # type: Dict[Any, Any]
+        AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bi)
 
     # text explanation
     positive_exp = "Positive features:\n"
@@ -1264,8 +1281,13 @@ def text_explain(
         name = k
         if descriptor_type.lower() == "ecfp" or isinstance(name, int):
             # convert names
-            morgan_key = examples[0].descriptors.descriptor_names[v[1]]
-            name = _name_morgan_bit(base_mol, bi, morgan_key)
+            if multiple_bases:
+                m = bi[int(k)][0]
+                b = bi[int(k)][2]
+                name = _name_morgan_bit(m, b, k)
+            else:
+                morgan_key = examples[0].descriptors.descriptor_names[v[1]]
+                name = _name_morgan_bit(base_mol, bi, morgan_key)
             if name is None:
                 continue
         if abs(v[0]) > 4:
