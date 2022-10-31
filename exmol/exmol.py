@@ -221,12 +221,12 @@ def add_descriptors(
             descriptors = tuple(int(i) for i in fps)
             descriptor_names = names
             e.descriptors = Descriptors(
-                descriptor_type='maccs',
+                descriptor_type="maccs",
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
             )
         return examples
-    
+
     def _ecfp_descriptors(examples, mols, concat=False):
         # get reference
         if multiple_bases:
@@ -235,8 +235,10 @@ def add_descriptors(
         else:
             bi = {}  # type: Dict[Any, Any]
             ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-            if concat: 
-                descriptor_names = e.descriptors.descriptor_names + tuple(bi.keys())
+            if concat:
+                descriptor_names = examples[0].descriptors.descriptor_names + tuple(
+                    bi.keys()
+                )
             else:
                 descriptor_names = tuple(bi.keys())
         for e, m in zip(examples, mols):
@@ -244,11 +246,15 @@ def add_descriptors(
             b = {}  # type: Dict[Any, Any]
             temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
             if concat:
-                descriptors = e.descriptors.descriptors + tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+                descriptors = e.descriptors.descriptors + tuple(
+                    [1 if x in b.keys() else 0 for x in descriptor_names]
+                )
             else:
-                descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+                descriptors = tuple(
+                    [1 if x in b.keys() else 0 for x in descriptor_names]
+                )
             e.descriptors = Descriptors(
-                descriptor_type='ecfp',
+                descriptor_type="ecfp",
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
             )
@@ -1249,7 +1255,7 @@ def text_explain(
         if success == 5:
             break
         name = k
-        if descriptor_type.lower() == "ecfp":
+        if descriptor_type.lower() == "ecfp" or isinstance(name, int):
             # convert names
             morgan_key = examples[0].descriptors.descriptor_names[v[1]]
             name = _name_morgan_bit(base_mol, bi, morgan_key)
