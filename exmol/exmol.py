@@ -210,6 +210,50 @@ def add_descriptors(
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
+
+    def _maccs_descriptors(examples, mols):
+        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
+        with open(str(mk), "r") as f:
+            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
+        for e, m in zip(examples, mols):
+            # rdkit sets fps[0] to 0 and starts keys at 1!
+            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
+            descriptors = tuple(int(i) for i in fps)
+            descriptor_names = names
+            e.descriptors = Descriptors(
+                descriptor_type='maccs',
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+    
+    def _ecfp_descriptors(examples, mols, concat=False):
+        # get reference
+        if multiple_bases:
+            # Get a union of ecfps for all bases
+            descriptor_names = _get_joint_ecfp_descriptors(examples)
+        else:
+            bi = {}  # type: Dict[Any, Any]
+            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
+            if concat: 
+                descriptor_names = e.descriptors.descriptor_names + tuple(bi.keys())
+            else:
+                descriptor_names = tuple(bi.keys())
+        for e, m in zip(examples, mols):
+            # Now compare to reference and get other fp vectors
+            b = {}  # type: Dict[Any, Any]
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
+            if concat:
+                descriptors = e.descriptors.descriptors + tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            else:
+                descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            e.descriptors = Descriptors(
+                descriptor_type='ecfp',
+                descriptors=descriptors,
+                descriptor_names=descriptor_names,
+            )
+        return examples
+
     if descriptor_type.lower() == "classic":
         names = tuple(
             [
@@ -235,39 +279,12 @@ def add_descriptors(
             )
         return examples
     elif descriptor_type.lower() == "maccs":
-        mk = files(exmol.lime_data).joinpath("MACCSkeys.txt")
-        with open(str(mk), "r") as f:
-            names = tuple([x.strip().split("\t")[-1] for x in f.readlines()[1:]])
-        for e, m in zip(examples, mols):
-            # rdkit sets fps[0] to 0 and starts keys at 1!
-            fps = list(MACCSkeys.GenMACCSKeys(m).ToBitString())
-            descriptors = tuple(int(i) for i in fps)
-            descriptor_names = names
-            e.descriptors = Descriptors(
-                descriptor_type=descriptor_type,
-                descriptors=descriptors,
-                descriptor_names=descriptor_names,
-            )
-        return examples
+        return _maccs_descriptors(examples, mols)
     elif descriptor_type.lower() == "ecfp":
-        # get reference
-        if multiple_bases:
-            # Get a union of ecfps for all bases
-            descriptor_names = _get_joint_ecfp_descriptors(examples)
-        else:
-            bi = {}  # type: Dict[Any, Any]
-            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-            descriptor_names = tuple(bi.keys())
-        for e, m in zip(examples, mols):
-            # Now compare to reference and get other fp vectors
-            b = {}  # type: Dict[Any, Any]
-            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
-            e.descriptors = Descriptors(
-                descriptor_type=descriptor_type,
-                descriptors=descriptors,
-                descriptor_names=descriptor_names,
-            )
+        return _ecfp_descriptors(examples, mols)
+    elif descriptor_type.lower() == "combined":
+        examples = _maccs_descriptors(examples, mols)
+        examples = _ecfp_descriptors(examples, mols, concat=True)
         return examples
     else:
         raise ValueError(
@@ -1232,7 +1249,7 @@ def text_explain(
         if success == 5:
             break
         name = k
-        if descriptor_type == "ECFP":
+        if descriptor_type.lower() == "ecfp":
             # convert names
             morgan_key = examples[0].descriptors.descriptor_names[v[1]]
             name = _name_morgan_bit(base_mol, bi, morgan_key)
