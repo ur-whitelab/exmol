@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v2.2.0 (2022-11-3)
+-------------------
+* Added natural language explanation method
+
 v2.1.1 (2022-6-03)
 ------------
 * Fixed plotting bug in `plot_descriptors`
