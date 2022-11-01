@@ -13,6 +13,8 @@ class Descriptors:
     descriptors: tuple
     # Descriptor name
     descriptor_names: tuple
+    # plotting name
+    plotting_names: tuple = ()
     # t_stats for each molecule
     tstats: tuple = ()
 

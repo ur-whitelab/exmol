@@ -1,4 +1,4 @@
-from tkinter.messagebox import RETRY
+from functools import reduce
 from typing import *
 import io
 import math
@@ -23,7 +23,7 @@ from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem import rdFMCS as MCS  # type: ignore
+from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
@@ -43,6 +43,37 @@ def _fp_dist_matrix(smiles, fp_type, _pbar):
 
 def _check_multiple_bases(examples):
     return sum([e.is_origin for e in examples]) > 1
+
+
+def _ecfp_names(examples):
+    # add names for given descriptor indices
+    multiple_bases = _check_multiple_bases(examples)
+    # need to get base molecule(s) for naming
+    bitInfo = {}  # Type Dict[Any, Any]
+    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
+    if multiple_bases:
+        multiBitInfo = {}  # type: Dict[int, Tuple[Any, int, int]]
+        for b in base_mol:
+            bitInfo = {}
+            AllChem.GetMorganFingerprint(b, 3, bitInfo=bitInfo)
+            for bit in bitInfo:
+                if bit not in multiBitInfo:
+                    multiBitInfo[bit] = (b, bit, {bit: bitInfo[bit]})
+    else:
+        base_mol = smi2mol(examples[0].smiles)
+        bitInfo = {}  # type: Dict[Any, Any]
+        AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bitInfo)
+    result = []  # type: List[str]
+    for i in range(len(examples[0].descriptors.descriptor_names)):
+        k = examples[0].descriptors.descriptor_names[i]
+        if multiple_bases:
+            m = multiBitInfo[k][0]
+            b = multiBitInfo[k][2]
+            name = _name_morgan_bit(m, b, k)
+        else:
+            name = _name_morgan_bit(base_mol, bitInfo, k)
+        result.append(name)
+    return tuple(result)
 
 
 def _calculate_rdkit_descriptors(mol):
@@ -129,14 +160,69 @@ def _get_joint_ecfp_descriptors(examples):
         b = {}  # type: Dict[Any, Any]
         temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
         ecfp_joint |= set(b.keys())
-    return ecfp_joint
+    return list(ecfp_joint)
+
+
+_SMARTS = None
+
+
+def _bit2atoms(m, bitInfo, key):
+    # get atom id and radius
+    i, r = bitInfo[key][0]  # just take first matching atom
+    # taken from rdkit drawing code
+    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
+
+    # get the atoms for highlighting
+    atoms = set((i,))
+    for b in bitPath:
+        atoms.add(m.GetBondWithIdx(b).GetBeginAtomIdx())
+        atoms.add(m.GetBondWithIdx(b).GetEndAtomIdx())
+    return atoms
+
+
+def _load_smarts(path):
+    smarts = []
+    with open(path) as f:
+        for line in f.readlines():
+            if line[0] == "#":
+                continue
+            i = line.find(":")
+            sm = line[i + 1 :].strip()
+            m = MolFromSmarts(sm)
+            smarts.append((line[:i].strip(), m))
+    return smarts[::-1]
+
+
+def _name_morgan_bit(m, bitInfo, key):
+    global _SMARTS
+    if _SMARTS is None:
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
+
+        sp = files(exmol.lime_data).joinpath("smarts.txt")
+        _SMARTS = _load_smarts(sp)
+    morgan_atoms = _bit2atoms(m, bitInfo, key)
+    names = []
+    for name, sm in _SMARTS:
+        matches = m.GetSubstructMatches(sm)
+        for match in matches:
+            # check if match is in morgan bit
+            match = set(match)
+            if match.issubset(morgan_atoms):
+                names.append((len(match), name))
+    names.sort()
+    if len(names) == 0:
+        if len(morgan_atoms) == 1:
+            # only 1 atom, just return element
+            return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
+        return None
+    return names[-1][1].replace("_", " ")
 
 
 def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
     mols: List[Any] = None,
-    multiple_bases: Optional[bool] = None,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -144,13 +230,9 @@ def add_descriptors(
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
     :return: List of examples with added descriptors
-    :param multiple_bases: Consider multiple bases for plotting (default: infer from examples)
     """
     from importlib_resources import files
     import exmol.lime_data
-
-    if multiple_bases is None:
-        multiple_bases = _check_multiple_bases(examples)
 
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
@@ -176,6 +258,7 @@ def add_descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
+                plotting_names=descriptor_names,
             )
         return examples
     elif descriptor_type.lower() == "maccs":
@@ -191,17 +274,11 @@ def add_descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
+                plotting_names=descriptor_names,
             )
         return examples
     elif descriptor_type.lower() == "ecfp":
-        # get reference
-        if multiple_bases:
-            # Get a union of ecfps for all bases
-            descriptor_names = _get_joint_ecfp_descriptors(examples)
-        else:
-            bi = {}  # type: Dict[Any, Any]
-            ref_fp = AllChem.GetMorganFingerprint(mols[0], 3, bitInfo=bi)
-            descriptor_names = tuple(bi.keys())
+        descriptor_names = _get_joint_ecfp_descriptors(examples)
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
             b = {}  # type: Dict[Any, Any]
@@ -212,6 +289,9 @@ def add_descriptors(
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
             )
+        ecfp_names = _ecfp_names(examples)  # type: Tuple[str]
+        for e in examples:
+            e.descriptors.plotting_names = ecfp_names
         return examples
     else:
         raise ValueError(
@@ -631,7 +711,6 @@ def lime_explain(
     examples: List[Example],
     descriptor_type: str = "MACCS",
     return_beta: bool = True,
-    multiple_bases: Optional[bool] = None,
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
@@ -639,13 +718,9 @@ def lime_explain(
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
-    :param multiple_bases: Consider multiple bases for explanation (default: infer from examples)
     """
-    if multiple_bases is None:
-        multiple_bases = _check_multiple_bases(examples)
-
     # add descriptors
-    examples = add_descriptors(examples, descriptor_type, multiple_bases=multiple_bases)
+    examples = add_descriptors(examples, descriptor_type)
     # weighted tanimoto similarities
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     # Only keep nonzero weights
@@ -889,7 +964,6 @@ def plot_descriptors(
     fig: Any = None,
     figure_kwargs: Dict = None,
     title: str = None,
-    multiple_bases: Optional[bool] = None,
     return_svg: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples.
@@ -899,7 +973,6 @@ def plot_descriptors(
     :param fig: Figure to plot on to
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
     :param title: Title for the plot
-    :param multiple_bases: Consider multiple bases for explanation (default: infer from examples)
     :param return_svg: Whether to return svg for plot
     """
 
@@ -910,8 +983,7 @@ def plot_descriptors(
     # infer descriptor_type from examples
     descriptor_type = examples[0].descriptors.descriptor_type.lower()
 
-    if multiple_bases is None:
-        multiple_bases = _check_multiple_bases(examples)
+    multiple_bases = _check_multiple_bases(examples)
 
     if output_file is None and descriptor_type == "ecfp" and not return_svg:
         raise ValueError("No filename provided to save the plot")
@@ -928,11 +1000,13 @@ def plot_descriptors(
 
     # find important descriptors
     d_importance = {
-        a: [b, i]
-        for i, a, b in zip(
-            np.arange(len(examples[0].descriptors.descriptors)),
-            examples[0].descriptors.descriptor_names,
-            space_tstats,
+        a: [b, i, n]
+        for i, (a, b, n) in enumerate(
+            zip(
+                examples[0].descriptors.descriptor_names,
+                space_tstats,
+                examples[0].descriptors.plotting_names,
+            )
         )
         if not np.isnan(b)
     }
@@ -942,6 +1016,7 @@ def plot_descriptors(
     t = [a[0] for a in list(d_importance.values())][:5]
     key_ids = [a[1] for a in list(d_importance.values())][:5]
     keys = [a for a in list(d_importance.keys())]
+    names = [a[2] for a in list(d_importance.values())][:5]
 
     # set colors
     colors = []
@@ -992,11 +1067,10 @@ def plot_descriptors(
             bi = {}
             m = smi2mol(examples[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
-
-    for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
+    for rect, ti, k, ki, n in zip(bar1, t, keys, key_ids, names):
         # annotate patches with text desciption
         y = rect.get_y() + rect.get_height() / 2.0
-        k = textwrap.fill(str(k), 20)
+        n = textwrap.fill(str(n), 20)
         if ti < 0:
             x = 0.25
             skx = (
@@ -1008,7 +1082,7 @@ def plot_descriptors(
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ecfp" else k,
+                n,
                 ha="left",
                 va="center",
                 wrap=True,
@@ -1025,7 +1099,7 @@ def plot_descriptors(
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ecfp" else k,
+                n,
                 ha="right",
                 va="center",
                 wrap=True,
@@ -1104,6 +1178,7 @@ def plot_descriptors(
             with open(output_file, "w") as f:  # type: ignore
                 f.write(svg)
         if return_svg:
+            plt.close()
             return svg
     elif descriptor_type == "classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
@@ -1111,3 +1186,91 @@ def plot_descriptors(
         if output_file is not None:
             plt.tight_layout()
             plt.savefig(output_file, dpi=180, bbox_inches="tight")
+
+
+def check_multiple_aromatic_rings(mol):
+    ri = mol.GetRingInfo()
+    count = 0
+    for bondRing in ri.BondRings():
+        flag = True
+        for id in bondRing:
+            if not mol.GetBondWithIdx(id).GetIsAromatic():
+                flag = False
+                continue
+        if flag:
+            count += 1
+    return True if count > 1 else False
+
+
+def merge_text_explains(*args: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
+    """Merge multiple text explanations into one and sort."""
+    # sort them by T magnitude
+    joint = reduce(lambda x, y: x + y, args)
+    joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
+    # return top ones
+    return joint
+
+
+def text_explain(
+    examples: List[Example],
+    descriptor_type: str = "maccs",
+    count: int = 5,
+) -> List[Tuple[str, float]]:
+    """Take an example and convert t-statistics into text explanations
+
+    :param examples: Output from :func:`sample_space`
+    :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
+    :param count: Number of text explanations to return
+    """
+    descriptor_type = descriptor_type.lower()
+    # populate lime explanation
+    if examples[-1].descriptors is None:
+        lime_explain(examples, descriptor_type=descriptor_type)
+    multiple_bases = _check_multiple_bases(examples)
+
+    # Take t-statistics, rank them
+    tstats = list(examples[0].descriptors.tstats)
+    d_importance = {
+        n: t  # name: [t-stat, index]
+        for i, (n, t) in enumerate(
+            zip(
+                examples[0].descriptors.plotting_names,
+                tstats,
+            )
+        )
+        # don't want NANs and want match (if not multiple bases)
+        if not np.isnan(t)
+        and multiple_bases
+        or examples[0].descriptors.descriptors[i] != 0
+    }
+
+    d_importance = dict(
+        sorted(d_importance.items(), key=lambda item: abs(item[1]), reverse=True)
+    )
+    # get significance value - if >significance, then important else weakly important?
+    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
+    effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    T = ss.t.ppf(0.975, df=effective_n)
+
+    # text explanation
+    success = 0
+    result = []
+    existing_names = set()
+    for k, v in d_importance.items():
+
+        if success == count:
+            break
+        name = k
+        if name is None or name in existing_names:
+            continue
+        existing_names.add(name)
+        if abs(v) > 4:
+            imp = "Very Important\n"
+        elif abs(v) >= T:
+            imp = "Important\n"
+        else:
+            imp = "Weakly Important\n"
+        s = f"{name} Yes. {imp}"
+        success += 1
+        result.append((s, v))
+    return result

@@ -241,11 +241,9 @@ def test_sample_multiple_bases():
     # check if it inferred correctly
     assert np.allclose(
         betas,
-        exmol.lime_explain(
-            all_s, descriptor_type="ECFP", return_beta=True, multiple_bases=True
-        ),
+        exmol.lime_explain(all_s, descriptor_type="ECFP", return_beta=True),
     )
-    exmol.plot_descriptors(all_s, "ECFP", multiple_bases=True)
+    exmol.plot_descriptors(all_s, "ECFP")
 
 
 def test_performance():
@@ -375,6 +373,25 @@ def test_limed():
     exmol.lime_explain(samples, descriptor_type="MACCS")
     exmol.lime_explain(samples, descriptor_type="ECFP")
     exmol.lime_explain(samples, descriptor_type="ECFP", return_beta=True)
+
+
+def test_text_explain():
+    def model(s, se):
+        return int("=O" in s)
+
+    samples = exmol.sample_space("CCCC", model, batched=False)
+    exmol.text_explain(samples, "MACCS")
+
+    samples1 = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
+    exmol.text_explain(samples1, "ECFP")
+
+    samples2 = exmol.sample_space(
+        "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False
+    )
+    samples = samples1 + samples2
+    s1 = exmol.text_explain(samples, "ECFP")
+    s2 = exmol.text_explain(samples, "MACCS")
+    s = exmol.merge_text_explains(s1, s2)
 
 
 def test_corrupt_smiles():
