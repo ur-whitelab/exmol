@@ -45,6 +45,37 @@ def _check_multiple_bases(examples):
     return sum([e.is_origin for e in examples]) > 1
 
 
+def _ecfp_names(examples):
+    # add names for given descriptor indices
+    multiple_bases = _check_multiple_bases(examples)
+    # need to get base molecule(s) for naming
+    bitInfo = {}  # Type Dict[Any, Any]
+    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
+    if multiple_bases:
+        multiBitInfo = {}  # type: Dict[int, Tuple(Any, int, int)]
+        for b in base_mol:
+            bitInfo = {}
+            AllChem.GetMorganFingerprint(b, 3, bitInfo=bitInfo)
+            for bit in bitInfo:
+                if bit not in multiBitInfo:
+                    multiBitInfo[bit] = (b, bit, {bit: bitInfo[bit]})
+    else:
+        base_mol = smi2mol(examples[0].smiles)
+        bitInfo = {}  # type: Dict[Any, Any]
+        AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bitInfo)
+    result = []  # type: List[str]
+    for i in range(len(examples[0].descriptors.descriptor_names)):
+        k = examples[0].descriptors.descriptor_names[i]
+        if multiple_bases:
+            m = multiBitInfo[k][0]
+            b = multiBitInfo[k][2]
+            name = _name_morgan_bit(m, b, k)
+        else:
+            name = _name_morgan_bit(base_mol, bitInfo, k)
+        result.append(name)
+    return tuple(result)
+
+
 def _calculate_rdkit_descriptors(mol):
     from rdkit.ML.Descriptors import MoleculeDescriptors  # type: ignore
 
@@ -171,9 +202,6 @@ def _name_morgan_bit(m, bitInfo, key):
         sp = files(exmol.lime_data).joinpath("smarts.txt")
         _SMARTS = _load_smarts(sp)
     morgan_atoms = _bit2atoms(m, bitInfo, key)
-    if len(morgan_atoms) == 1:
-        # only 1 atom, just return element
-        return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
     names = []
     for name, sm in _SMARTS:
         matches = m.GetSubstructMatches(sm)
@@ -184,6 +212,9 @@ def _name_morgan_bit(m, bitInfo, key):
                 names.append((len(match), name))
     names.sort()
     if len(names) == 0:
+        if len(morgan_atoms) == 1:
+            # only 1 atom, just return element
+            return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
         return None
     return names[-1][1].replace("_", " ")
 
@@ -227,6 +258,7 @@ def add_descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
+                plotting_names=descriptor_names,
             )
         return examples
     elif descriptor_type.lower() == "maccs":
@@ -242,6 +274,7 @@ def add_descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
+                plotting_names=descriptor_names,
             )
         return examples
     elif descriptor_type.lower() == "ecfp":
@@ -256,6 +289,9 @@ def add_descriptors(
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
             )
+        ecfp_names = _ecfp_names(examples)
+        for e in examples:
+            e.descriptors.plotting_names = ecfp_names
         return examples
     else:
         raise ValueError(
@@ -964,11 +1000,13 @@ def plot_descriptors(
 
     # find important descriptors
     d_importance = {
-        a: [b, i]
-        for i, a, b in zip(
-            np.arange(len(examples[0].descriptors.descriptors)),
-            examples[0].descriptors.descriptor_names,
-            space_tstats,
+        a: [b, i, n]
+        for i, (a, b, n) in enumerate(
+            zip(
+                examples[0].descriptors.descriptor_names,
+                space_tstats,
+                examples[0].descriptors.plotting_names,
+            )
         )
         if not np.isnan(b)
     }
@@ -978,6 +1016,7 @@ def plot_descriptors(
     t = [a[0] for a in list(d_importance.values())][:5]
     key_ids = [a[1] for a in list(d_importance.values())][:5]
     keys = [a for a in list(d_importance.keys())]
+    names = [a[2] for a in list(d_importance.values())][:5]
 
     # set colors
     colors = []
@@ -1028,11 +1067,10 @@ def plot_descriptors(
             bi = {}
             m = smi2mol(examples[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
-
-    for rect, ti, k, ki in zip(bar1, t, keys, key_ids):
+    for rect, ti, k, ki, n in zip(bar1, t, keys, key_ids, names):
         # annotate patches with text desciption
         y = rect.get_y() + rect.get_height() / 2.0
-        k = textwrap.fill(str(k), 20)
+        n = textwrap.fill(str(n), 20)
         if ti < 0:
             x = 0.25
             skx = (
@@ -1044,7 +1082,7 @@ def plot_descriptors(
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ecfp" else k,
+                n,
                 ha="left",
                 va="center",
                 wrap=True,
@@ -1061,7 +1099,7 @@ def plot_descriptors(
             ax.text(
                 x,
                 y,
-                " " if descriptor_type == "ecfp" else k,
+                n,
                 ha="right",
                 va="center",
                 wrap=True,
@@ -1140,6 +1178,7 @@ def plot_descriptors(
             with open(output_file, "w") as f:  # type: ignore
                 f.write(svg)
         if return_svg:
+            plt.close()
             return svg
     elif descriptor_type == "classic":
         xlim = max(np.max(np.absolute(t)), T + 1)
@@ -1183,7 +1222,7 @@ def text_explain(
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
     """
-
+    descriptor_type = descriptor_type.lower()
     # populate lime explanation
     if examples[-1].descriptors is None:
         lime_explain(examples, descriptor_type=descriptor_type)
@@ -1192,72 +1231,46 @@ def text_explain(
     # Take t-statistics, rank them
     tstats = list(examples[0].descriptors.tstats)
     d_importance = {
-        a: [b, i]
-        for i, a, b in zip(
-            np.arange(len(examples[0].descriptors.descriptors)),
-            examples[0].descriptors.descriptor_names,
-            tstats,
+        n: t  # name: [t-stat, index]
+        for i, (n, t) in enumerate(
+            zip(
+                examples[0].descriptors.plotting_names,
+                tstats,
+            )
         )
         # don't want NANs and want match (if not multiple bases)
-        if not np.isnan(b)
+        if not np.isnan(t)
         and multiple_bases
         or examples[0].descriptors.descriptors[i] != 0
     }
 
     d_importance = dict(
-        sorted(d_importance.items(), key=lambda item: abs(item[1][0]), reverse=True)
+        sorted(d_importance.items(), key=lambda item: abs(item[1]), reverse=True)
     )
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     T = ss.t.ppf(0.975, df=effective_n)
 
-    # need to get base molecule(s) for naming
-    bitInfo = {}  # Type Dict[Any, Any]
-    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
-    if multiple_bases:
-        multiBitInfo = {}  # type: Dict[int, Tuple(Any, int, int)]
-        for b in base_mol:
-            bitInfo = {}
-            AllChem.GetMorganFingerprint(b, 3, bitInfo=bitInfo)
-            for bit in bitInfo:
-                if bit not in multiBitInfo:
-                    multiBitInfo[bit] = (b, bit, {bit: bitInfo[bit]})
-    else:
-        base_mol = smi2mol(examples[0].smiles)
-        bitInfo = {}  # type: Dict[Any, Any]
-        AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bitInfo)
-
     # text explanation
     success = 0
     result = []
     existing_names = set()
-    for i, (k, v) in enumerate(d_importance.items()):
+    for k, v in d_importance.items():
 
         if success == count:
             break
         name = k
-        if descriptor_type == "ECFP":
-            # convert names
-            if multiple_bases:
-                m = multiBitInfo[int(k)][0]
-                b = multiBitInfo[int(k)][2]
-                name = _name_morgan_bit(m, b, k)
-            else:
-                morgan_key = examples[0].descriptors.descriptor_names[v[1]]
-                name = _name_morgan_bit(base_mol, bitInfo, morgan_key)
-            if name is None:
-                continue
-        if name in existing_names:
+        if name is None or name in existing_names:
             continue
         existing_names.add(name)
-        if abs(v[0]) > 4:
+        if abs(v) > 4:
             imp = "Very Important\n"
-        elif abs(v[0]) >= T:
+        elif abs(v) >= T:
             imp = "Important\n"
         else:
             imp = "Weakly Important\n"
         s = f"{name} Yes. {imp}"
         success += 1
-        result.append((s, v[0]))
+        result.append((s, v))
     return result
