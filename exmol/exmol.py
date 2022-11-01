@@ -52,7 +52,7 @@ def _ecfp_names(examples):
     bitInfo = {}  # Type Dict[Any, Any]
     base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
     if multiple_bases:
-        multiBitInfo = {}  # type: Dict[int, Tuple(Any, int, int)]
+        multiBitInfo = {}  # type: Dict[int, Tuple[Any, int, int]]
         for b in base_mol:
             bitInfo = {}
             AllChem.GetMorganFingerprint(b, 3, bitInfo=bitInfo)
@@ -289,7 +289,7 @@ def add_descriptors(
                 descriptors=descriptors,
                 descriptor_names=descriptor_names,
             )
-        ecfp_names = _ecfp_names(examples)
+        ecfp_names = _ecfp_names(examples)  # type: Tuple[str]
         for e in examples:
             e.descriptors.plotting_names = ecfp_names
         return examples
@@ -1202,7 +1202,7 @@ def check_multiple_aromatic_rings(mol):
     return True if count > 1 else False
 
 
-def merge_text_explains(*args: List[Tuple[str, float]]) -> str:
+def merge_text_explains(*args: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
     """Merge multiple text explanations into one and sort."""
     # sort them by T magnitude
     joint = reduce(lambda x, y: x + y, args)
