@@ -214,9 +214,22 @@ def _name_morgan_bit(m, bitInfo, key):
     if len(names) == 0:
         if len(morgan_atoms) == 1:
             # only 1 atom, just return element
-            return m.GetAtomWithIdx(list(morgan_atoms)[0]).GetSymbol()
+            return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
         return None
     return names[-1][1].replace("_", " ")
+
+
+def clear_descriptors(
+    examples: List[Example],
+) -> List[Example]:
+    """Clears all descriptors from examples
+
+    :param examples: list of examples
+    :param descriptor_type: type of descriptor to clear, if None, all descriptors are cleared
+    """
+    for e in examples:
+        e.descriptors = None
+    return examples
 
 
 def add_descriptors(
@@ -1229,35 +1242,28 @@ def text_explain(
     multiple_bases = _check_multiple_bases(examples)
 
     # Take t-statistics, rank them
-    tstats = list(examples[0].descriptors.tstats)
-    d_importance = {
-        n: t  # name: [t-stat, index]
+    d_importance = [
+        (n, t)  # name: t-stat
         for i, (n, t) in enumerate(
             zip(
                 examples[0].descriptors.plotting_names,
-                tstats,
+                examples[0].descriptors.tstats,
             )
         )
         # don't want NANs and want match (if not multiple bases)
-        if not np.isnan(t)
-        and multiple_bases
-        or examples[0].descriptors.descriptors[i] != 0
-    }
+        if not np.isnan(t) and True or examples[0].descriptors.descriptors[i] != 0
+    ]
 
-    d_importance = dict(
-        sorted(d_importance.items(), key=lambda item: abs(item[1]), reverse=True)
-    )
+    d_importance = sorted(d_importance, key=lambda x: abs(x[1]), reverse=True)
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     T = ss.t.ppf(0.975, df=effective_n)
 
-    # text explanation
     success = 0
     result = []
     existing_names = set()
-    for k, v in d_importance.items():
-
+    for k, v in d_importance:
         if success == count:
             break
         name = k
