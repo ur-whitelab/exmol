@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+
+v2.2.1
+-------------------
+* Fixed bug in sorting for text explanations
+
 v2.2.0 (2022-11-3)
 -------------------
 * Added natural language explanation method

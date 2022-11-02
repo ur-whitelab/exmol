@@ -47,6 +47,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.add_descriptors"><code class="docutils literal notranslate"><span class="pre">add_descriptors()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.cf_explain"><code class="docutils literal notranslate"><span class="pre">cf_explain()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.check_multiple_aromatic_rings"><code class="docutils literal notranslate"><span class="pre">check_multiple_aromatic_rings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.clear_descriptors"><code class="docutils literal notranslate"><span class="pre">clear_descriptors()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.get_basic_alphabet"><code class="docutils literal notranslate"><span class="pre">get_basic_alphabet()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.lime_explain"><code class="docutils literal notranslate"><span class="pre">lime_explain()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.merge_text_explains"><code class="docutils literal notranslate"><span class="pre">merge_text_explains()</span></code></a></li>
@@ -109,8 +110,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="toc.html" class="icon icon-home"></a> &raquo;</li>
-      <li>API</li>
+      <li><a href="toc.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">API</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/api.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -164,6 +165,23 @@
 <dt class="sig sig-object py" id="exmol.exmol.check_multiple_aromatic_rings">
 <span class="sig-name descname"><span class="pre">check_multiple_aromatic_rings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.check_multiple_aromatic_rings" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exmol.exmol.clear_descriptors">
+<span class="sig-name descname"><span class="pre">clear_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.clear_descriptors" title="Permalink to this definition"></a></dt>
+<dd><p>Clears all descriptors from examples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – list of examples</p></li>
+<li><p><strong>descriptor_type</strong> – type of descriptor to clear, if None, all descriptors are cleared</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.exmol.get_basic_alphabet">
