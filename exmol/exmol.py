@@ -236,7 +236,7 @@ def clear_descriptors(
     :param descriptor_type: type of descriptor to clear, if None, all descriptors are cleared
     """
     for e in examples:
-        e.descriptors = None
+        e.descriptors = None  # type: ignore
     return examples
 
 
