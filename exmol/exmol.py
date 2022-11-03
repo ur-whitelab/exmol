@@ -180,17 +180,25 @@ def _bit2atoms(m, bitInfo, key):
     return atoms
 
 
-def _load_smarts(path):
-    smarts = []
+def _load_smarts(path, rank_cutoff=299):
+    # we have a rank cut for SMARTS that match too often
+    smarts = {}
     with open(path) as f:
         for line in f.readlines():
             if line[0] == "#":
                 continue
-            i = line.find(":")
-            sm = line[i + 1 :].strip()
-            m = MolFromSmarts(sm)
-            smarts.append((line[:i].strip(), m))
-    return smarts[::-1]
+            i1 = line.find(":")
+            i2 = line.find(":", i1 + 1)
+            m = MolFromSmarts(line[i2 + 1 :].strip())
+            rank = int(line[i1 + 1 : i2])
+            if rank > rank_cutoff:
+                continue
+            name = line[:i1]
+            if m is None:
+                print(f"Could not parse SMARTS: {line}")
+                print(line[i2:].strip())
+            smarts[name] = (m, rank)
+    return smarts
 
 
 def _name_morgan_bit(m, bitInfo, key):
@@ -203,20 +211,20 @@ def _name_morgan_bit(m, bitInfo, key):
         _SMARTS = _load_smarts(sp)
     morgan_atoms = _bit2atoms(m, bitInfo, key)
     names = []
-    for name, sm in _SMARTS:
+    for name, (sm, r) in _SMARTS.items():
         matches = m.GetSubstructMatches(sm)
         for match in matches:
             # check if match is in morgan bit
             match = set(match)
             if match.issubset(morgan_atoms):
-                names.append((len(match), name))
-    names.sort()
+                names.append((r, name))
+    names.sort(key=lambda x: x[0])
     if len(names) == 0:
         if len(morgan_atoms) == 1:
             # only 1 atom, just return element
             return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
         return None
-    return names[-1][1].replace("_", " ")
+    return names[0][1].replace("_", " ")
 
 
 def clear_descriptors(
@@ -1081,6 +1089,9 @@ def plot_descriptors(
             m = smi2mol(examples[0].smiles)
             fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bi)
     for rect, ti, k, ki, n in zip(bar1, t, keys, key_ids, names):
+        # account for Nones
+        if n is None:
+            n = ""
         # annotate patches with text desciption
         y = rect.get_y() + rect.get_height() / 2.0
         n = textwrap.fill(str(n), 20)
