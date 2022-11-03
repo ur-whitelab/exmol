@@ -129,16 +129,16 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:56:11.875074: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:53:11.540037: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-11-03 05:56:12.010501: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-03 05:56:12.010522: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-2022-11-03 05:56:12.042304: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2022-11-03 05:53:11.701479: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-03 05:53:11.701510: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2022-11-03 05:53:11.738502: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:56:12.806411: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-03 05:56:12.806527: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-03 05:56:12.806536: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:53:12.811632: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-03 05:53:12.811799: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-03 05:53:12.811814: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 </pre></div>
 </div>
 </div>
@@ -331,6 +331,13 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:53:14.170401: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-03 05:53:14.170451: W tensorflow/stream_executor/cuda/cuda_driver.cc:263] failed call to cuInit: UNKNOWN ERROR (303)
+2022-11-03 05:53:14.170484: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az83-666): /proc/driver/nvidia/version does not exist
+2022-11-03 05:53:14.170724: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;model&quot;
 </pre></div>
 </div>
@@ -442,13 +449,6 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>__________________________________________________________________________________________________
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-03 05:56:13.833755: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-03 05:56:13.833790: W tensorflow/stream_executor/cuda/cuda_driver.cc:263] failed call to cuInit: UNKNOWN ERROR (303)
-2022-11-03 05:56:13.833816: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az210-668): /proc/driver/nvidia/version does not exist
-2022-11-03 05:56:13.834037: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-</pre></div>
-</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -518,7 +518,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/236e97b79de6105e90c75bee94add1021ac719e81e2e1c42ca5fa9538b455bd3.png" src="../_images/236e97b79de6105e90c75bee94add1021ac719e81e2e1c42ca5fa9538b455bd3.png" />
+<img alt="../_images/8766af08f689e0a585650e953a88ffc01ce6d6429cf2360e86ad10ceff0aed97.png" src="../_images/8766af08f689e0a585650e953a88ffc01ce6d6429cf2360e86ad10ceff0aed97.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -557,7 +557,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c0803469493e7e3e0a66ec2d30f06a35abae71ce85cde3c35c5c877ff66792f7.png" src="../_images/c0803469493e7e3e0a66ec2d30f06a35abae71ce85cde3c35c5c877ff66792f7.png" />
+<img alt="../_images/62cddc97619701e7f188a9d7233c9faa68c161e1b2904d769fa10e3f54a72926.png" src="../_images/62cddc97619701e7f188a9d7233c9faa68c161e1b2904d769fa10e3f54a72926.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -616,7 +616,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ab0c9dcee8d3928b48ac54ee3f3ab5cc9dcb3bf493e2c6a2c32f9ab25b2c7696.png" src="../_images/ab0c9dcee8d3928b48ac54ee3f3ab5cc9dcb3bf493e2c6a2c32f9ab25b2c7696.png" />
+<img alt="../_images/50e8dfd280c24eb7aa9ac673db820e0c3e36b8730f379526463d66c920a06062.png" src="../_images/50e8dfd280c24eb7aa9ac673db820e0c3e36b8730f379526463d66c920a06062.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -642,7 +642,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9930f97c285db85d070951b8c688c7e7bfbc1eb4c878731ee20bbff455786f10.png" src="../_images/9930f97c285db85d070951b8c688c7e7bfbc1eb4c878731ee20bbff455786f10.png" />
+<img alt="../_images/1af185cdd65aa829cbf2df9fc7362690dccd0adba178c99fc88d1e127a0e1fd6.png" src="../_images/1af185cdd65aa829cbf2df9fc7362690dccd0adba178c99fc88d1e127a0e1fd6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -667,7 +667,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a33732fdd4974342e8a5fc193e14e67ef1a98ead6c8b5f3389bcab42a77bfe3e.png" src="../_images/a33732fdd4974342e8a5fc193e14e67ef1a98ead6c8b5f3389bcab42a77bfe3e.png" />
+<img alt="../_images/72045858f395e6de3a731e7acec63623d60280146caaa84498a6d9beb947dacf.png" src="../_images/72045858f395e6de3a731e7acec63623d60280146caaa84498a6d9beb947dacf.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -684,7 +684,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fe0642a6594aa364ae464c11dcbf6625c118b34a647c5f7c5ec72537a9b32559.png" src="../_images/fe0642a6594aa364ae464c11dcbf6625c118b34a647c5f7c5ec72537a9b32559.png" />
+<img alt="../_images/658d5ce6964be85db37d49ef7069f284e3d34b4199e7204ac104d40cf6b034d9.png" src="../_images/658d5ce6964be85db37d49ef7069f284e3d34b4199e7204ac104d40cf6b034d9.png" />
 </div>
 </div>
 </section>
