@@ -219,11 +219,14 @@ def _name_morgan_bit(m, bitInfo, key):
             if match.issubset(morgan_atoms):
                 names.append((r, name))
     names.sort(key=lambda x: x[0])
-    if len(names) == 0:
-        if len(morgan_atoms) == 1:
-            # only 1 atom, just return element
-            return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
-        return None
+    # short-circuit if single atom
+    if len(morgan_atoms) == 1:
+        return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
+    # if len(names) == 0:
+    #     if len(morgan_atoms) == 1:
+    #         # only 1 atom, just return element
+    #         return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
+    #     return None
     return names[0][1].replace("_", " ")
 
 
