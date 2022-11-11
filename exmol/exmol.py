@@ -222,11 +222,8 @@ def _name_morgan_bit(m, bitInfo, key):
     # short-circuit if single atom
     if len(morgan_atoms) == 1:
         return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
-    # if len(names) == 0:
-    #     if len(morgan_atoms) == 1:
-    #         # only 1 atom, just return element
-    #         return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
-    #     return None
+    if len(names) == 0:
+        return None
     return names[0][1].replace("_", " ")
 
 
