@@ -327,4 +327,3 @@ CH-acidic_strong:200: [CX4;!$([H0]);!$(C[!#6;!$([P,S]=O);!$(N(~O)~O)])]([$([CX3]
 ether:298: [OD2]([#6])[#6]
 Unbranched_alkane:252: [C;R0;D2][C;R0;D2][C;R0;D2][C;R0;D2]
 Bicyclic:295: [$([*R2]([*R])([*R])([*R]))].[$([*R2]([*R])([*R])([*R]))]
-a
