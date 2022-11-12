@@ -180,7 +180,7 @@ def _bit2atoms(m, bitInfo, key):
     return atoms
 
 
-def _load_smarts(path, rank_cutoff=299):
+def _load_smarts(path, rank_cutoff=500):
     # we have a rank cut for SMARTS that match too often
     smarts = {}
     with open(path) as f:
