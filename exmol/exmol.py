@@ -175,8 +175,10 @@ def _bit2atoms(m, bitInfo, key):
     # get the atoms for highlighting
     atoms = set((i,))
     for b in bitPath:
-        atoms.add(m.GetBondWithIdx(b).GetBeginAtomIdx())
-        atoms.add(m.GetBondWithIdx(b).GetEndAtomIdx())
+        a = m.GetBondWithIdx(b).GetBeginAtomIdx()
+        atoms.add(a)
+        a = m.GetBondWithIdx(b).GetEndAtomIdx()
+        atoms.add(a)
     return atoms
 
 
@@ -220,8 +222,8 @@ def _name_morgan_bit(m, bitInfo, key):
                 names.append((r, name))
     names.sort(key=lambda x: x[0])
     # short-circuit if single atom
-    if len(morgan_atoms) == 1:
-        return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
+    # if len(morgan_atoms) == 1:
+    #    return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
     if len(names) == 0:
         return None
     return names[0][1].replace("_", " ")
@@ -302,9 +304,18 @@ def add_descriptors(
         descriptor_names = _get_joint_ecfp_descriptors(examples)
         for e, m in zip(examples, mols):
             # Now compare to reference and get other fp vectors
-            b = {}  # type: Dict[Any, Any]
-            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-            descriptors = tuple([1 if x in b.keys() else 0 for x in descriptor_names])
+            bitInfo = {}  # type: Dict[Any, Any]
+            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bitInfo)
+            # remove single atoms from ecfp descriptors
+            to_del = []
+            for b in bitInfo:
+                if bitInfo[b][0][1] == 0:
+                    to_del.append(b)
+            for b in to_del:
+                del bitInfo[b]
+            descriptors = tuple(
+                [1 if x in bitInfo.keys() else 0 for x in descriptor_names]
+            )
             e.descriptors = Descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
