@@ -14,7 +14,6 @@ def test_version():
 
 def test_example():
     e = exmol.Example("CC", "", 0, 0, 0, is_origin=True)
-    print(e)
 
 
 def test_randomize_smiles():

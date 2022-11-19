@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+
+v2.2.1
+-------------------
+* Fixed bug in sorting for text explanations
+* Fixed empty plot names saying `None`
+* Added priority for naming and removed invalid names
+
 v2.2.0 (2022-11-3)
 -------------------
 * Added natural language explanation method
