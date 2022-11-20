@@ -977,6 +977,8 @@ def plot_cf(
         fig, axs = plt.subplots(R, C, **figure_kwargs)
     else:
         axs = fig.subplots(R, C)
+    if type(axes) != np.ndarray:  # Happens if nrows=ncols=1
+        axes = np.array([[axes]])
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
         title = "Base" if e.is_origin else f"Similarity = {e.similarity:.2f}\n{e.label}"
