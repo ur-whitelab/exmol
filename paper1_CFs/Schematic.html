@@ -139,7 +139,26 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b99c8920cba066df32fb0a174167b488ff0e23a0be7c26ee280935f6e63838ed.png" src="../_images/b99c8920cba066df32fb0a174167b488ff0e23a0be7c26ee280935f6e63838ed.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">UnboundLocalError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">}</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">],</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">fkw</span><span class="p">,</span> <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">svg</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">insert_svg</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">])</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/exmol/exmol.py:980,</span> in <span class="ni">plot_cf</span><span class="nt">(exps, fig, figure_kwargs, mol_size, mol_fontsize, nrows, ncols)</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>     <span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">980</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>  <span class="c1"># Happens if nrows=ncols=1</span>
+<span class="g g-Whitespace">    </span><span class="mi">981</span>     <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">axes</span><span class="p">]])</span>
+<span class="g g-Whitespace">    </span><span class="mi">982</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="ne">UnboundLocalError</span>: local variable &#39;axes&#39; referenced before assignment
+</pre></div>
+</div>
+<img alt="../_images/cfa5ccbeb595547b439e46d0e25022547d4ce3e76700f64b2a3732213bcddd81.png" src="../_images/cfa5ccbeb595547b439e46d0e25022547d4ce3e76700f64b2a3732213bcddd81.png" />
 </div>
 </div>
 </section>
