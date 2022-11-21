@@ -29,7 +29,7 @@ pip install exmol
 
 ## Quickstart
 
-See [the tutorial](https://ur-whitelab.github.io/exmol/paper2_LIME/Tutorial.html) to give an overview of the basic usage of exmol. 
+See [the tutorial](https://ur-whitelab.github.io/exmol/paper2_LIME/Tutorial.html) to give an overview of the basic usage of exmol.
 
 ## Counterfactual Generation
 
