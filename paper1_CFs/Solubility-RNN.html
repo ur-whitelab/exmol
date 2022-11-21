@@ -129,15 +129,15 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 18:57:59.606726: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 23:03:49.145567: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-11-21 18:58:00.035259: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-21 18:58:00.035280: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2022-11-21 23:03:49.580688: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-21 23:03:49.580712: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 18:58:01.561240: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-21 18:58:01.561956: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-21 18:58:01.561967: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 23:03:51.237632: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-21 23:03:51.238761: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-21 23:03:51.238780: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 </pre></div>
 </div>
 </div>
@@ -379,7 +379,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [20, 103, 3, 20, 20, 20, 59, 20, 39, 103, 20, 19, 20, 19, 3, 20, 101, 20, 3, 20, 101, 19, 12, 107]
+selfies2ints: [90, 42, 35, 90, 90, 90, 73, 90, 43, 42, 90, 31, 90, 31, 35, 90, 12, 90, 35, 90, 12, 31, 16, 106]
 ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
 </pre></div>
 </div>
@@ -435,10 +435,10 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 18:58:04.885754: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-21 18:58:04.885789: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
-2022-11-21 18:58:04.885815: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az252-656): /proc/driver/nvidia/version does not exist
-2022-11-21 18:58:04.886676: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-21 23:03:54.942583: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-21 23:03:54.942618: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
+2022-11-21 23:03:54.942643: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az200-523): /proc/driver/nvidia/version does not exist
+2022-11-21 23:03:54.943827: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -540,7 +540,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0b1309926453a10454d1aa3f3af4351cced420e0f6372f040798bd61105b228e.png" src="../_images/0b1309926453a10454d1aa3f3af4351cced420e0f6372f040798bd61105b228e.png" />
+<img alt="../_images/904afe0825304de4ede66455c2a36e9b759070a86fcd6a07450dd2e67b3f99aa.png" src="../_images/904afe0825304de4ede66455c2a36e9b759070a86fcd6a07450dd2e67b3f99aa.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -565,7 +565,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ade6a9ccc5ad7a806cb7d8316a7dac394736674a001c145a0f28ddebf7eb7f06.png" src="../_images/ade6a9ccc5ad7a806cb7d8316a7dac394736674a001c145a0f28ddebf7eb7f06.png" />
+<img alt="../_images/27f692c596b8ab40b3544debf5f10360136ce13ebb49a0bf9af15ec3fda25869.png" src="../_images/27f692c596b8ab40b3544debf5f10360136ce13ebb49a0bf9af15ec3fda25869.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -599,7 +599,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 1/1 [==============================] - 1s 1s/step
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.28752789,        nan])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.21822974,        nan])
 </pre></div>
 </div>
 </div>
@@ -623,62 +623,66 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 1s 1000ms/step
+1/1 [==============================] - 1s 1s/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/66 [..............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/66 [=&gt;............................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/65 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/66 [====&gt;.........................] - ETA: 0s
+ 5/65 [=&gt;............................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/66 [======&gt;.......................] - ETA: 0s
+10/65 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/66 [========&gt;.....................] - ETA: 0s
+15/65 [=====&gt;........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/66 [==========&gt;...................] - ETA: 0s
+20/65 [========&gt;.....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/66 [=============&gt;................] - ETA: 0s
+25/65 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/66 [===============&gt;..............] - ETA: 0s
+30/65 [============&gt;.................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/66 [=================&gt;............] - ETA: 0s
+35/65 [===============&gt;..............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/66 [===================&gt;..........] - ETA: 0s
+40/65 [=================&gt;............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-51/66 [======================&gt;.......] - ETA: 0s
+45/65 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/66 [========================&gt;.....] - ETA: 0s
+50/65 [======================&gt;.......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-61/66 [==========================&gt;...] - ETA: 0s
+55/65 [========================&gt;.....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-66/66 [==============================] - 1s 10ms/step
+60/65 [==========================&gt;...] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+65/65 [==============================] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+65/65 [==============================] - 1s 12ms/step
 </pre></div>
 </div>
 </div>
@@ -695,7 +699,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9de50317684ad5072dd25427ae204f0d20b1980aa67e36278ba0b31067a4b966.png" src="../_images/9de50317684ad5072dd25427ae204f0d20b1980aa67e36278ba0b31067a4b966.png" />
+<img alt="../_images/efa915eabe29b539e2891e9589404c6f1f84a930ddbf5f69ef955297ccfa7393.png" src="../_images/efa915eabe29b539e2891e9589404c6f1f84a930ddbf5f69ef955297ccfa7393.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -720,7 +724,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7fd200e73b2327a53caad187a55a9a4e0b0a755a426d93e7898295311d3e0b2b.png" src="../_images/7fd200e73b2327a53caad187a55a9a4e0b0a755a426d93e7898295311d3e0b2b.png" />
+<img alt="../_images/15e6178bea4aa74e98eb54aee809135a21555de624c94d06edec9500201ceb24.png" src="../_images/15e6178bea4aa74e98eb54aee809135a21555de624c94d06edec9500201ceb24.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -737,38 +741,46 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 21ms/step
+1/1 [==============================] - 0s 22ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/85 [..............................] - ETA: 2s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/85 [=&gt;............................] - ETA: 0s
+ 5/85 [&gt;.............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/85 [==&gt;...........................] - ETA: 0s
+ 9/85 [==&gt;...........................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/85 [====&gt;.........................] - ETA: 0s
+13/85 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/85 [======&gt;.......................] - ETA: 0s
+17/85 [=====&gt;........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/85 [========&gt;.....................] - ETA: 0s
+20/85 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/85 [=========&gt;....................] - ETA: 0s
+24/85 [=======&gt;......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/85 [===========&gt;..................] - ETA: 0s
+29/85 [=========&gt;....................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+33/85 [==========&gt;...................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+37/85 [============&gt;.................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -776,19 +788,23 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/85 [===============&gt;..............] - ETA: 0s
+45/85 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-51/85 [=================&gt;............] - ETA: 0s
+49/85 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/85 [==================&gt;...........] - ETA: 0s
+54/85 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-61/85 [====================&gt;.........] - ETA: 0s
+58/85 [===================&gt;..........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+62/85 [====================&gt;.........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -796,19 +812,23 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-71/85 [========================&gt;.....] - ETA: 0s
+70/85 [=======================&gt;......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-76/85 [=========================&gt;....] - ETA: 0s
+74/85 [=========================&gt;....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-81/85 [===========================&gt;..] - ETA: 0s
+78/85 [==========================&gt;...] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-85/85 [==============================] - 1s 11ms/step
+82/85 [===========================&gt;..] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+85/85 [==============================] - 1s 13ms/step
 </pre></div>
 </div>
 </div>
@@ -830,7 +850,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/47728ae39e752d6d3d4b7e0fffeec9b9a84eaef9c5ae60f991f25ecbbb1d5b52.png" src="../_images/47728ae39e752d6d3d4b7e0fffeec9b9a84eaef9c5ae60f991f25ecbbb1d5b52.png" />
+<img alt="../_images/c9aaefeeae75161dbbc969cd968671aca6a0eebffa61ad63798358698d761fdf.png" src="../_images/c9aaefeeae75161dbbc969cd968671aca6a0eebffa61ad63798358698d761fdf.png" />
 </div>
 </div>
 </section>
@@ -867,50 +887,54 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 19ms/step
+1/1 [==============================] - 0s 25ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/55 [..............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 7/55 [==&gt;...........................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/54 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-12/55 [=====&gt;........................] - ETA: 0s
+ 6/54 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-17/55 [========&gt;.....................] - ETA: 0s
+11/54 [=====&gt;........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-22/55 [===========&gt;..................] - ETA: 0s
+16/54 [=======&gt;......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-28/55 [==============&gt;...............] - ETA: 0s
+21/54 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-34/55 [=================&gt;............] - ETA: 0s
+26/54 [=============&gt;................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-40/55 [====================&gt;.........] - ETA: 0s
+31/54 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-45/55 [=======================&gt;......] - ETA: 0s
+36/54 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-51/55 [==========================&gt;...] - ETA: 0s
+41/54 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-55/55 [==============================] - 1s 10ms/step
+46/54 [========================&gt;.....] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+51/54 [===========================&gt;..] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+54/54 [==============================] - 1s 12ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
@@ -920,137 +944,149 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 1/1 [==============================] - 0s 22ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/75 [..............................] - ETA: 1s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/74 [..............................] - ETA: 2s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/75 [=&gt;............................] - ETA: 0s
+ 5/74 [=&gt;............................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/75 [===&gt;..........................] - ETA: 0s
+ 9/74 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/75 [=====&gt;........................] - ETA: 0s
+14/74 [====&gt;.........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/75 [=======&gt;......................] - ETA: 0s
+19/74 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/75 [=========&gt;....................] - ETA: 0s
+24/74 [========&gt;.....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/75 [===========&gt;..................] - ETA: 0s
+29/74 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/75 [=============&gt;................] - ETA: 0s
+34/74 [============&gt;.................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/75 [===============&gt;..............] - ETA: 0s
+38/74 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/75 [=================&gt;............] - ETA: 0s
+43/74 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-51/75 [===================&gt;..........] - ETA: 0s
+47/74 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/75 [=====================&gt;........] - ETA: 0s
+51/74 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-61/75 [=======================&gt;......] - ETA: 0s
+55/74 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-66/75 [=========================&gt;....] - ETA: 0s
+59/74 [======================&gt;.......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-71/75 [===========================&gt;..] - ETA: 0s
+64/74 [========================&gt;.....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-75/75 [==============================] - 1s 11ms/step
+69/74 [==========================&gt;...] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+74/74 [==============================] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+74/74 [==============================] - 1s 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 20ms/step
+1/1 [==============================] - 0s 22ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/73 [..............................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/73 [=&gt;............................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/72 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/73 [===&gt;..........................] - ETA: 0s
+ 5/72 [=&gt;............................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/73 [=====&gt;........................] - ETA: 0s
+ 9/72 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/73 [=======&gt;......................] - ETA: 0s
+14/72 [====&gt;.........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/73 [=========&gt;....................] - ETA: 0s
+19/72 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/73 [===========&gt;..................] - ETA: 0s
+24/72 [=========&gt;....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/73 [=============&gt;................] - ETA: 0s
+28/72 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/73 [===============&gt;..............] - ETA: 0s
+32/72 [============&gt;.................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/73 [=================&gt;............] - ETA: 0s
+37/72 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-51/73 [===================&gt;..........] - ETA: 0s
+41/72 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/73 [======================&gt;.......] - ETA: 0s
+46/72 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-61/73 [========================&gt;.....] - ETA: 0s
+51/72 [====================&gt;.........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-66/73 [==========================&gt;...] - ETA: 0s
+55/72 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-71/73 [============================&gt;.] - ETA: 0s
+60/72 [========================&gt;.....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-73/73 [==============================] - 1s 11ms/step
+65/72 [==========================&gt;...] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+69/72 [===========================&gt;..] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+72/72 [==============================] - 1s 12ms/step
 </pre></div>
 </div>
 </div>
@@ -1067,7 +1103,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/87385199e26c5adf98b44344db9b97dd109dc6aa862afe0746ec639121c6bb92.png" src="../_images/87385199e26c5adf98b44344db9b97dd109dc6aa862afe0746ec639121c6bb92.png" />
+<img alt="../_images/a37557e83e8e4153f6e76338c858babce23013f5056c1d774480e10910b01366.png" src="../_images/a37557e83e8e4153f6e76338c858babce23013f5056c1d774480e10910b01366.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1083,7 +1119,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1613a6f6bcab861e955b0f0a0530286aba3a5e4b3a0456cd1cefb4b58257bbab.png" src="../_images/1613a6f6bcab861e955b0f0a0530286aba3a5e4b3a0456cd1cefb4b58257bbab.png" />
+<img alt="../_images/f54f9e262cc78d3e9ba00ec55e605022092c9ee4096c5ea746cf9f2d8d364a3c.png" src="../_images/f54f9e262cc78d3e9ba00ec55e605022092c9ee4096c5ea746cf9f2d8d364a3c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1116,45 +1152,49 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 21ms/step
+1/1 [==============================] - 0s 23ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/35 [..............................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/35 [====&gt;.........................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/34 [..............................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/35 [========&gt;.....................] - ETA: 0s
+ 5/34 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/35 [============&gt;.................] - ETA: 0s
+ 9/34 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/35 [=================&gt;............] - ETA: 0s
+13/34 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/35 [=====================&gt;........] - ETA: 0s
+18/34 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/35 [=========================&gt;....] - ETA: 0s
+22/34 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-35/35 [==============================] - 0s 11ms/step
+26/34 [=====================&gt;........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+30/34 [=========================&gt;....] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+34/34 [==============================] - 0s 12ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 22ms/step
+1/1 [==============================] - 0s 23ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/36 [..............................] - ETA: 0s
@@ -1165,19 +1205,23 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/36 [========&gt;.....................] - ETA: 0s
+10/36 [=======&gt;......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/36 [============&gt;.................] - ETA: 0s
+14/36 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/36 [================&gt;.............] - ETA: 0s
+19/36 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/36 [====================&gt;.........] - ETA: 0s
+23/36 [==================&gt;...........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+27/36 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1185,45 +1229,53 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/36 [==============================] - 0s 10ms/step
+35/36 [============================&gt;.] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+36/36 [==============================] - 0s 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 20ms/step
+1/1 [==============================] - 0s 22ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/35 [..............................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/35 [====&gt;.........................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/35 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/35 [========&gt;.....................] - ETA: 0s
+ 5/35 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/35 [============&gt;.................] - ETA: 0s
+ 9/35 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/35 [=================&gt;............] - ETA: 0s
+14/35 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/35 [=====================&gt;........] - ETA: 0s
+18/35 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/35 [=========================&gt;....] - ETA: 0s
+23/35 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-35/35 [==============================] - 0s 11ms/step
+28/35 [=======================&gt;......] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+32/35 [==========================&gt;...] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+35/35 [==============================] - 0s 12ms/step
 </pre></div>
 </div>
 </div>
@@ -1238,7 +1290,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c490d96c02acbe880b7e7eabba7a9a2d28bde0ce74961a522c6920d698310a85.png" src="../_images/c490d96c02acbe880b7e7eabba7a9a2d28bde0ce74961a522c6920d698310a85.png" />
+<img alt="../_images/4430ccc982a3ec60e4d3513de6154fe299b7936e0cb051bc9646bb55b20d718c.png" src="../_images/4430ccc982a3ec60e4d3513de6154fe299b7936e0cb051bc9646bb55b20d718c.png" />
 </div>
 </div>
 </section>
