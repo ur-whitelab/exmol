@@ -45,7 +45,7 @@ def _check_multiple_bases(examples):
     return sum([e.is_origin for e in examples]) > 1
 
 
-def _ecfp_names(examples):
+def _ecfp_names(examples, joint_bits):
     # add names for given descriptor indices
     multiple_bases = _check_multiple_bases(examples)
     # need to get base molecule(s) for naming
@@ -64,8 +64,8 @@ def _ecfp_names(examples):
         bitInfo = {}  # type: Dict[Any, Any]
         AllChem.GetMorganFingerprint(base_mol, 3, bitInfo=bitInfo)
     result = []  # type: List[str]
-    for i in range(len(examples[0].descriptors.descriptor_names)):
-        k = examples[0].descriptors.descriptor_names[i]
+    for i in range(len(joint_bits)):
+        k = joint_bits[i]
         if multiple_bases:
             m = multiBitInfo[k][0]
             b = multiBitInfo[k][2]
@@ -159,8 +159,24 @@ def _get_joint_ecfp_descriptors(examples):
         # Get bitinfo and create a union
         b = {}  # type: Dict[Any, Any]
         temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=b)
-        ecfp_joint |= set(b.keys())
-    return list(ecfp_joint)
+        # add if radius greater than 0
+        ecfp_joint |= set([(k, v[0][1]) for k, v in b.items() if v[0][1] > 0])
+    # want to go in order of radius so when
+    # we drop non-unique names, we keep smaller fragments
+    ecfp_joint = list(ecfp_joint)
+    ecfp_joint.sort(key=lambda x: x[1])
+    ecfp_joint = [x[0] for x in ecfp_joint]
+    names = _ecfp_names(examples, ecfp_joint)
+    # downselect to only unique names
+    unique_names = set(names)
+    output_ecfp = []
+    output_names = []
+    for b, n in zip(ecfp_joint, names):
+        if n in unique_names:
+            unique_names.remove(n)
+            output_ecfp.append(b)
+            output_names.append(n)
+    return output_ecfp, output_names
 
 
 _SMARTS = None
@@ -212,6 +228,10 @@ def _name_morgan_bit(m, bitInfo, key):
         sp = files(exmol.lime_data).joinpath("smarts.txt")
         _SMARTS = _load_smarts(sp)
     morgan_atoms = _bit2atoms(m, bitInfo, key)
+    heteroatoms = set()
+    for a in morgan_atoms:
+        if m.GetAtomWithIdx(a).GetAtomicNum() > 6:
+            heteroatoms.add(a)
     names = []
     for name, (sm, r) in _SMARTS.items():
         matches = m.GetSubstructMatches(sm)
@@ -219,14 +239,26 @@ def _name_morgan_bit(m, bitInfo, key):
             # check if match is in morgan bit
             match = set(match)
             if match.issubset(morgan_atoms):
-                names.append((r, name))
+                names.append((r, name, match))
     names.sort(key=lambda x: x[0])
     # short-circuit if single atom
     # if len(morgan_atoms) == 1:
     #    return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
     if len(names) == 0:
         return None
-    return names[0][1].replace("_", " ")
+    umatch = names[0][2]
+    name = names[0][1][0].lower() + names[0][1][1:].replace("_", " ")
+    unique_names = set([names[0][1]])
+    for _, n, m in names:
+        if len(m.intersection(umatch)) == 0:
+            if n not in unique_names:
+                name += " and " + n[0].lower() + n[1:].replace("_", " ")
+                umatch |= m
+                unique_names.add(n)
+    # if we failed to match all heteroatoms, fail
+    if len(heteroatoms.difference(umatch)) > 0:
+        return None
+    return name
 
 
 def clear_descriptors(
@@ -301,29 +333,19 @@ def add_descriptors(
             )
         return examples
     elif descriptor_type.lower() == "ecfp":
-        descriptor_names = _get_joint_ecfp_descriptors(examples)
+        descriptor_bits, plotting_names = _get_joint_ecfp_descriptors(examples)
         for e, m in zip(examples, mols):
-            # Now compare to reference and get other fp vectors
             bitInfo = {}  # type: Dict[Any, Any]
-            temp_fp = AllChem.GetMorganFingerprint(m, 3, bitInfo=bitInfo)
-            # remove single atoms from ecfp descriptors
-            to_del = []
-            for b in bitInfo:
-                if bitInfo[b][0][1] == 0:
-                    to_del.append(b)
-            for b in to_del:
-                del bitInfo[b]
+            AllChem.GetMorganFingerprint(m, 3, bitInfo=bitInfo)
             descriptors = tuple(
-                [1 if x in bitInfo.keys() else 0 for x in descriptor_names]
+                [1 if x in bitInfo.keys() else 0 for x in descriptor_bits]
             )
             e.descriptors = Descriptors(
                 descriptor_type=descriptor_type,
                 descriptors=descriptors,
-                descriptor_names=descriptor_names,
+                descriptor_names=descriptor_bits,
+                plotting_names=plotting_names,
             )
-        ecfp_names = _ecfp_names(examples)  # type: Tuple[str]
-        for e in examples:
-            e.descriptors.plotting_names = ecfp_names
         return examples
     else:
         raise ValueError(

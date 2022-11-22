@@ -232,10 +232,11 @@ def similarity_map_using_tstats(example: Example):
     bi = {}  # type: Dict[Any, Any]
     fp = AllChem.GetMorganFingerprint(mol, 3, bitInfo=bi)
     # Get contributions for atoms
-    contribs = {atom: [] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
+    contribs = {atom: [0] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
     for b in bi:
         for tup in bi[b]:
-            contribs[tup[0]].append(tstat_dict[b])
+            if b in tstat_dict:
+                contribs[tup[0]].append(tstat_dict[b])
     weights = [max(contribs[a], key=abs) for a in range(mol.GetNumAtoms())]
     # threshold significance of 0.1 --> t >= |1.645|
     weights = [b if abs(b) >= 1.645 else 0 for b in weights]
