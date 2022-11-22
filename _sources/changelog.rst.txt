@@ -7,7 +7,7 @@ v2.2.1
 * Fixed bug in sorting for text explanations
 * Fixed empty plot names saying `None`
 * Added priority for naming and removed invalid names
-* Added more names (metyhl, ethyl, butyle, etc)
+* Added more names (metyhl, ethyl, butyl, etc)
 
 v2.2.0 (2022-11-3)
 -------------------
