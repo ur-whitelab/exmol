@@ -1,4 +1,5 @@
 from functools import reduce
+import inspect
 from typing import *
 import io
 import math
@@ -602,7 +603,15 @@ def sample_space(
     wrapped_f = f
 
     # if f only takes in 1 arg, wrap it in a function that takes in 2
-    if f.__code__.co_argcount == 1:
+    # count args with no default value. Looks fancy because of possible objects/partials
+    argcount = len(
+        [
+            i
+            for i in inspect.signature(f).parameters.values()
+            if i.default == inspect.Parameter.empty
+        ]
+    )
+    if argcount == 1:
         if use_selfies:
 
             def wrapped_f(sm, sf):
