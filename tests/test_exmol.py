@@ -227,6 +227,25 @@ def test_sample_preset():
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
 
+def test_sample_with_object():
+    class A:
+        def __call__(self, seqs):
+            return [0 for _ in seqs]
+
+    obj = A()
+    exmol.sample_space("C", obj, batched=True)
+
+
+def test_sample_with_partial():
+    import functools
+
+    def model(s, x):
+        return int("N" in s)
+
+    f = functools.partial(model, x=1)
+    exmol.sample_space("C", f, batched=False)
+
+
 def test_sample_multiple_bases():
     def model(s, se):
         return int("N" in s)

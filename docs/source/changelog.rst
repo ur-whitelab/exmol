@@ -8,6 +8,7 @@ v2.2.1
 * Fixed empty plot names saying `None`
 * Added priority for naming and removed invalid names
 * Added more names (metyhl, ethyl, butyl, etc)
+* Fixed `sample_space` to accept partials or objects
 
 v2.2.0 (2022-11-3)
 -------------------
