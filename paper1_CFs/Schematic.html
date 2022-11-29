@@ -86,35 +86,35 @@
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">IPythonConsole</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">mordred</span><span class="o">,</span> <span class="nn">mordred.descriptors</span>
-<span class="kn">import</span> <span class="nn">exmol</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib as mpl
+import rdkit, rdkit.Chem, rdkit.Chem.Draw
+from rdkit.Chem.Draw import IPythonConsole
+import numpy as np
+import mordred, mordred.descriptors
+import exmol
+from rdkit.Chem.Draw import rdDepictor
 
-<span class="c1"># rdDepictor.SetPreferCoordGen(True)</span>
+# rdDepictor.SetPreferCoordGen(True)
 
-<span class="n">IPythonConsole</span><span class="o">.</span><span class="n">ipython_useSVG</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span>
-    <span class="s2">&quot;dark&quot;</span><span class="p">,</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;xtick.bottom&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;ytick.left&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;xtick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ytick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;axes.edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;axes.linewidth&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
-        <span class="s2">&quot;figure.dpi&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
-    <span class="p">},</span>
-<span class="p">)</span>
-<span class="n">color_cycle</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#1BBC9B&quot;</span><span class="p">,</span> <span class="s2">&quot;#F06060&quot;</span><span class="p">,</span> <span class="s2">&quot;#F3B562&quot;</span><span class="p">,</span> <span class="s2">&quot;#6e5687&quot;</span><span class="p">,</span> <span class="s2">&quot;#5C4B51&quot;</span><span class="p">]</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.prop_cycle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_cycle</span><span class="p">)</span>
+IPythonConsole.ipython_useSVG = True
+sns.set_context(&quot;notebook&quot;)
+sns.set_style(
+    &quot;dark&quot;,
+    {
+        &quot;xtick.bottom&quot;: True,
+        &quot;ytick.left&quot;: True,
+        &quot;xtick.color&quot;: &quot;#666666&quot;,
+        &quot;ytick.color&quot;: &quot;#666666&quot;,
+        &quot;axes.edgecolor&quot;: &quot;#666666&quot;,
+        &quot;axes.linewidth&quot;: 0.8,
+        &quot;figure.dpi&quot;: 300,
+    },
+)
+color_cycle = [&quot;#1BBC9B&quot;, &quot;#F06060&quot;, &quot;#F3B562&quot;, &quot;#6e5687&quot;, &quot;#5C4B51&quot;]
+mpl.rcParams[&quot;axes.prop_cycle&quot;] = mpl.cycler(color=color_cycle)
 </pre></div>
 </div>
 </div>
@@ -122,24 +122,24 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s1</span> <span class="o">=</span> <span class="s2">&quot;O=C([O-])C1=CC=CC=C1C(=O)NCC2=CC=CC=C2NCCC&quot;</span>
-<span class="n">s2</span> <span class="o">=</span> <span class="s2">&quot;O=C(OC)C1=CC=CC=C1C(=O)NCC2=CC=CC=C2NCCC&quot;</span>
-<span class="n">e1</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">is_origin</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">e2</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Counterfactual&quot;</span><span class="p">)</span>
-<span class="n">fkw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">)}</span>
-<span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>s1 = &quot;O=C([O-])C1=CC=CC=C1C(=O)NCC2=CC=CC=C2NCCC&quot;
+s2 = &quot;O=C(OC)C1=CC=CC=C1C(=O)NCC2=CC=CC=C2NCCC&quot;
+e1 = exmol.Example(s1, &quot;&quot;, 0, 0, 0, is_origin=True)
+e2 = exmol.Example(s2, &quot;&quot;, 0.9, 1.0, 1.0, label=&quot;Counterfactual&quot;)
+fkw = {&quot;figsize&quot;: (8, 6)}
+font = {&quot;family&quot;: &quot;normal&quot;, &quot;weight&quot;: &quot;normal&quot;, &quot;size&quot;: 22}
 
-<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">],</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">fkw</span><span class="p">,</span> <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">svg</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">insert_svg</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">])</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;counterfactual.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+mpl.rc(&quot;axes&quot;, titlesize=12)
+exmol.plot_cf([e1, e2], figure_kwargs=fkw, mol_size=(450, 400), nrows=1)
+plt.tight_layout()
+svg = exmol.insert_svg([e1, e2])
+with open(&quot;counterfactual.svg&quot;, &quot;w&quot;) as f:
+    f.write(svg)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b99c8920cba066df32fb0a174167b488ff0e23a0be7c26ee280935f6e63838ed.png" src="../_images/b99c8920cba066df32fb0a174167b488ff0e23a0be7c26ee280935f6e63838ed.png" />
+<img alt="../_images/1c6cb03479bcb3ed926da06a0481a4ff698ae77090de431bc1a98c688f8ddcbc.png" src="../_images/1c6cb03479bcb3ed926da06a0481a4ff698ae77090de431bc1a98c688f8ddcbc.png" />
 </div>
 </div>
 </section>

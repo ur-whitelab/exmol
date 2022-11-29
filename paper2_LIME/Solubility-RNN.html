@@ -93,69 +93,69 @@
 <h2>Import packages and set up RNN<a class="headerlink" href="#import-packages-and-set-up-rnn" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span><span class="p">,</span> <span class="n">FancyBboxPatch</span>
-<span class="kn">from</span> <span class="nn">matplotlib.offsetbox</span> <span class="kn">import</span> <span class="n">AnnotationBbox</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">textwrap</span>
-<span class="kn">import</span> <span class="nn">skunk</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">selfies</span> <span class="k">as</span> <span class="nn">sf</span>
-<span class="kn">import</span> <span class="nn">exmol</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span><span class="p">,</span> <span class="n">MolsToGridImage</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">MolFromSmiles</span><span class="p">,</span> <span class="n">MACCSkeys</span>
+os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0&quot;
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyBboxPatch
+from matplotlib.offsetbox import AnnotationBbox
+import seaborn as sns
+import textwrap
+import skunk
+import matplotlib as mpl
+import numpy as np
+import tensorflow as tf
+import selfies as sf
+import exmol
+from dataclasses import dataclass
+from rdkit.Chem.Draw import rdDepictor, MolsToGridImage
+from rdkit.Chem import MolFromSmiles, MACCSkeys
 
-<span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span>
-    <span class="s2">&quot;dark&quot;</span><span class="p">,</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;xtick.bottom&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;ytick.left&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;xtick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ytick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;axes.edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#666666&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;axes.linewidth&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
-        <span class="s2">&quot;figure.dpi&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
-    <span class="p">},</span>
-<span class="p">)</span>
-<span class="n">color_cycle</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F06060&quot;</span><span class="p">,</span> <span class="s2">&quot;#1BBC9B&quot;</span><span class="p">,</span> <span class="s2">&quot;#F06060&quot;</span><span class="p">,</span> <span class="s2">&quot;#5C4B51&quot;</span><span class="p">,</span> <span class="s2">&quot;#F3B562&quot;</span><span class="p">,</span> <span class="s2">&quot;#6e5687&quot;</span><span class="p">]</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.prop_cycle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_cycle</span><span class="p">)</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">soldata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="s2">&quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;</span>
-<span class="p">)</span>
-<span class="n">features_start_at</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;MolWt&quot;</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+rdDepictor.SetPreferCoordGen(True)
+sns.set_context(&quot;notebook&quot;)
+sns.set_style(
+    &quot;dark&quot;,
+    {
+        &quot;xtick.bottom&quot;: True,
+        &quot;ytick.left&quot;: True,
+        &quot;xtick.color&quot;: &quot;#666666&quot;,
+        &quot;ytick.color&quot;: &quot;#666666&quot;,
+        &quot;axes.edgecolor&quot;: &quot;#666666&quot;,
+        &quot;axes.linewidth&quot;: 0.8,
+        &quot;figure.dpi&quot;: 300,
+    },
+)
+color_cycle = [&quot;#F06060&quot;, &quot;#1BBC9B&quot;, &quot;#F06060&quot;, &quot;#5C4B51&quot;, &quot;#F3B562&quot;, &quot;#6e5687&quot;]
+mpl.rcParams[&quot;axes.prop_cycle&quot;] = mpl.cycler(color=color_cycle)
+mpl.rcParams[&quot;font.size&quot;] = 10
+soldata = pd.read_csv(
+    &quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;
+)
+features_start_at = list(soldata.columns).index(&quot;MolWt&quot;)
+np.random.seed(0)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-22 04:22:42.104405: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-29 22:46:12.830219: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-11-22 04:22:42.290353: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-22 04:22:42.290385: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2022-11-29 22:46:12.983129: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-29 22:46:12.983152: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-22 04:22:43.304835: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-22 04:22:43.304972: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-22 04:22:43.304983: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-29 22:46:13.780909: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-29 22:46:13.780996: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-29 22:46:13.781004: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># scramble them</span>
-<span class="n">soldata</span> <span class="o">=</span> <span class="n">soldata</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">soldata</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># scramble them
+soldata = soldata.sample(frac=0.01, random_state=0).reset_index(drop=True)
+soldata.head()
 </pre></div>
 </div>
 </div>
@@ -329,13 +329,13 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selfies_list</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">selfies_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">exmol</span><span class="o">.</span><span class="n">sanitize_smiles</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="k">except</span> <span class="n">sf</span><span class="o">.</span><span class="n">EncoderError</span><span class="p">:</span>
-        <span class="n">selfies_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-<span class="nb">len</span><span class="p">(</span><span class="n">selfies_list</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>selfies_list = []
+for s in soldata.SMILES:
+    try:
+        selfies_list.append(sf.encoder(exmol.sanitize_smiles(s)[1]))
+    except sf.EncoderError:
+        selfies_list.append(None)
+len(selfies_list)
 </pre></div>
 </div>
 </div>
@@ -347,48 +347,48 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basic</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">())</span>
-<span class="n">data_vocab</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
-    <span class="n">sf</span><span class="o">.</span><span class="n">get_alphabet_from_selfies</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies_list</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
-<span class="p">)</span>
-<span class="n">vocab</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;[nop]&#39;</span><span class="p">]</span>
-<span class="n">vocab</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data_vocab</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">basic</span><span class="p">)))</span>
-<span class="n">vocab_stoi</span> <span class="o">=</span> <span class="p">{</span><span class="n">o</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">)))}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>basic = set(exmol.get_basic_alphabet())
+data_vocab = set(
+    sf.get_alphabet_from_selfies([s for s in selfies_list if s is not None])
+)
+vocab = [&#39;[nop]&#39;]
+vocab.extend(list(data_vocab.union(basic)))
+vocab_stoi = {o: i for o, i in zip(vocab, range(len(vocab)))}
 
 
-<span class="k">def</span> <span class="nf">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">split_selfies</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
-            <span class="k">continue</span>  <span class="c1"># ?</span>
-        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">vocab_stoi</span><span class="p">:</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vocab_stoi</span><span class="p">[</span><span class="n">token</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-            <span class="c1"># print(&#39;Warning&#39;)</span>
-    <span class="k">return</span> <span class="n">result</span>
+def selfies2ints(s):
+    result = []
+    for token in sf.split_selfies(s):
+        if token == &#39;.&#39;:
+            continue  # ?
+        if token in vocab_stoi:
+            result.append(vocab_stoi[token])
+        else:
+            result.append(np.nan)
+            # print(&#39;Warning&#39;)
+    return result
 
 
-<span class="k">def</span> <span class="nf">ints2selfies</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">vocab</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span>
+def ints2selfies(v):
+    return &quot;&quot;.join([vocab[i] for i in v])
 
 
-<span class="c1"># test them out</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">selfies_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selfies:&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selfies2ints:&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-<span class="n">so</span> <span class="o">=</span> <span class="n">ints2selfies</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ints2selfes:&#39;</span><span class="p">,</span> <span class="n">so</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">so</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-    <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
-<span class="p">)</span>  <span class="c1"># make sure &#39;.&#39; is removed from Selfies string during assertion</span>
+# test them out
+s = selfies_list[0]
+print(&#39;selfies:&#39;, s)
+v = selfies2ints(s)
+print(&#39;selfies2ints:&#39;, v)
+so = ints2selfies(v)
+print(&#39;ints2selfes:&#39;, so)
+assert so == s.replace(
+    &#39;.&#39;, &#39;&#39;
+)  # make sure &#39;.&#39; is removed from Selfies string during assertion
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [13, 34, 6, 13, 13, 13, 40, 13, 44, 34, 13, 35, 13, 35, 6, 13, 51, 13, 6, 13, 51, 35, 7, 45]
+selfies2ints: [2, 19, 4, 2, 2, 2, 41, 2, 26, 19, 2, 40, 2, 40, 4, 2, 23, 2, 4, 2, 23, 40, 42, 52]
 ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
 </pre></div>
 </div>
@@ -396,59 +396,59 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating an object</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
-    <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">example_number</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">buffer_size</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">rnn_units</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># creating an object
+@dataclass
+class Config:
+    vocab_size: int
+    example_number: int
+    batch_size: int
+    buffer_size: int
+    embedding_dim: int
+    rnn_units: int
+    hidden_dim: int
 
 
-<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span>
-    <span class="n">vocab_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">),</span>
-    <span class="n">example_number</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">selfies_list</span><span class="p">),</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-    <span class="n">buffer_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-    <span class="n">embedding_dim</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
-    <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-    <span class="n">rnn_units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-<span class="p">)</span>
+config = Config(
+    vocab_size=len(vocab),
+    example_number=len(selfies_list),
+    batch_size=16,
+    buffer_size=10000,
+    embedding_dim=256,
+    hidden_dim=128,
+    rnn_units=128,
+)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># now get sequences</span>
-<span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span><span class="n">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies_list</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
-<span class="n">padded_seqs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">sequence</span><span class="o">.</span><span class="n">pad_sequences</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># now get sequences
+encoded = [selfies2ints(s) for s in selfies_list if s is not None]
+padded_seqs = tf.keras.preprocessing.sequence.pad_sequences(encoded, padding=&quot;post&quot;)
 
-<span class="c1"># Now build dataset</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">padded_seqs</span><span class="p">,</span> <span class="n">soldata</span><span class="o">.</span><span class="n">Solubility</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="nb">bool</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies_list</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="c1"># now split into val, test, train and batch</span>
-<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">split</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">test_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">split</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
-<span class="n">nontest</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
-<span class="n">val_data</span><span class="p">,</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">nontest</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">split</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">batch_size</span><span class="p">),</span> <span class="n">nontest</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span>
-    <span class="n">split</span>
-<span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">buffer_size</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">prefetch</span><span class="p">(</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span>
-<span class="p">)</span>
+# Now build dataset
+data = tf.data.Dataset.from_tensor_slices(
+    (padded_seqs, soldata.Solubility.iloc[[bool(s) for s in selfies_list]].values)
+)
+# now split into val, test, train and batch
+N = len(data)
+split = int(0.1 * N)
+test_data = data.take(split).batch(config.batch_size)
+nontest = data.skip(split)
+val_data, train_data = nontest.take(split).batch(config.batch_size), nontest.skip(
+    split
+).shuffle(config.buffer_size).batch(config.batch_size).prefetch(
+    tf.data.experimental.AUTOTUNE
+)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-22 04:22:45.404181: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
-2022-11-22 04:22:45.404227: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
-2022-11-22 04:22:45.404251: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az278-57): /proc/driver/nvidia/version does not exist
-2022-11-22 04:22:45.404620: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-11-29 22:46:15.513051: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.14/x64/lib
+2022-11-29 22:46:15.513081: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
+2022-11-29 22:46:15.513105: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az204-303): /proc/driver/nvidia/version does not exist
+2022-11-29 22:46:15.513466: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -456,23 +456,23 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = tf.keras.Sequential()
 
-<span class="c1"># make embedding and indicate that 0 should be treated as padding mask</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span>
-        <span class="n">input_dim</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">,</span> <span class="n">mask_zero</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-<span class="p">)</span>
+# make embedding and indicate that 0 should be treated as padding mask
+model.add(
+    tf.keras.layers.Embedding(
+        input_dim=config.vocab_size, output_dim=config.embedding_dim, mask_zero=True
+    )
+)
 
-<span class="c1"># RNN layer</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">rnn_units</span><span class="p">))</span>
-<span class="c1"># a dense hidden layer</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
-<span class="c1"># regression, so no activation</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+# RNN layer
+model.add(tf.keras.layers.GRU(config.rnn_units))
+# a dense hidden layer
+model.add(tf.keras.layers.Dense(config.hidden_dim, activation=&quot;relu&quot;))
+# regression, so no activation
+model.add(tf.keras.layers.Dense(1))
 
-<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+model.summary()
 </pre></div>
 </div>
 </div>
@@ -532,17 +532,17 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span> <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;mean_squared_error&quot;</span><span class="p">)</span>
-<span class="c1"># verbose=0 silences output, to get progress bar set verbose=1</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="n">val_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.compile(tf.optimizers.Adam(1e-4), loss=&quot;mean_squared_error&quot;)
+# verbose=0 silences output, to get progress bar set verbose=1
+result = model.fit(train_data, validation_data=val_data, epochs=100, verbose=0)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;solubility-rnn-accurate&quot;</span><span class="p">)</span>
-<span class="c1"># model = tf.keras.models.load_model(&#39;solubility-rnn-accurate/&#39;)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.save(&quot;solubility-rnn-accurate&quot;)
+# model = tf.keras.models.load_model(&#39;solubility-rnn-accurate/&#39;)
 </pre></div>
 </div>
 </div>
@@ -560,53 +560,53 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;training&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;val_loss&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;validation&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rnn-loss.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(5, 3.5))
+plt.plot(result.history[&quot;loss&quot;], label=&quot;training&quot;)
+plt.plot(result.history[&quot;val_loss&quot;], label=&quot;validation&quot;)
+plt.legend()
+plt.xlabel(&quot;Epoch&quot;)
+plt.ylabel(&quot;Loss&quot;)
+plt.savefig(&quot;rnn-loss.png&quot;, bbox_inches=&quot;tight&quot;, dpi=300)
+plt.show()
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2444d10b382c03ae37ca5794f794dedbbc604f2a18d2802428fab6833b6cc123.png" src="../_images/2444d10b382c03ae37ca5794f794dedbbc604f2a18d2802428fab6833b6cc123.png" />
+<img alt="../_images/064b886f644b27b3530c03847a21df80d35ef07e1ecd518017cfa9a677e9c69c.png" src="../_images/064b886f644b27b3530c03847a21df80d35ef07e1ecd518017cfa9a677e9c69c.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yhat</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">test_y</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">test_data</span><span class="p">:</span>
-    <span class="n">yhat</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
-    <span class="n">test_y</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
-<span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yhat</span><span class="p">)</span>
-<span class="n">test_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>yhat = []
+test_y = []
+for x, y in test_data:
+    yhat.extend(model(x).numpy().flatten())
+    test_y.extend(y.numpy().flatten())
+yhat = np.array(yhat)
+test_y = np.array(test_y)
 
-<span class="c1"># plot test data</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_y</span><span class="p">,</span> <span class="n">yhat</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-    <span class="nb">max</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="nb">min</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="sa">f</span><span class="s2">&quot;correlation = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">test_y</span><span class="p">,</span> <span class="n">yhat</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-    <span class="nb">max</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">test_y</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;loss = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">test_y</span> <span class="o">-</span> <span class="n">yhat</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$y$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{y}</span><span class="s2">$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Testing Data&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rnn-fit.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+# plot test data
+plt.figure(figsize=(5, 3.5))
+plt.plot(test_y, test_y, &quot;:&quot;)
+plt.plot(test_y, yhat, &quot;.&quot;)
+plt.text(
+    max(test_y) - 6,
+    min(test_y) + 1,
+    f&quot;correlation = {np.corrcoef(test_y, yhat)[0,1]:.3f}&quot;,
+)
+plt.text(
+    max(test_y) - 6, min(test_y), f&quot;loss = {np.sqrt(np.mean((test_y - yhat)**2)):.3f}&quot;
+)
+plt.xlabel(r&quot;$y$&quot;)
+plt.ylabel(r&quot;$\hat{y}$&quot;)
+plt.title(&quot;Testing Data&quot;)
+plt.savefig(&quot;rnn-fit.png&quot;, dpi=300, bbox_inches=&quot;tight&quot;)
+plt.show()
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/002180d2cac6949d71aefd49439304e66317eefbbb6b5430ea5759a5aae04116.png" src="../_images/002180d2cac6949d71aefd49439304e66317eefbbb6b5430ea5759a5aae04116.png" />
+<img alt="../_images/56d103b3325b6dcfb95e173b046621d96f8c32c62f060055c0add22e87ee12c2.png" src="../_images/56d103b3325b6dcfb95e173b046621d96f8c32c62f060055c0add22e87ee12c2.png" />
 </div>
 </div>
 </section>
@@ -617,15 +617,15 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <h3>Wrapper function for RNN, to use in STONED<a class="headerlink" href="#wrapper-function-for-rnn-to-use-in-stoned" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predictor function is used as input to sample_space function</span>
-<span class="k">def</span> <span class="nf">predictor_function</span><span class="p">(</span><span class="n">smile_list</span><span class="p">,</span> <span class="n">selfies</span><span class="p">):</span>
-    <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span><span class="n">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies</span><span class="p">]</span>
-    <span class="c1"># check for nans</span>
-    <span class="n">valid</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">encoded</span><span class="p">]</span>
-    <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">encoded</span><span class="p">]</span>
-    <span class="n">padded_seqs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">sequence</span><span class="o">.</span><span class="n">pad_sequences</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="p">)</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">padded_seqs</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">labels</span> <span class="o">*</span> <span class="n">valid</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Predictor function is used as input to sample_space function
+def predictor_function(smile_list, selfies):
+    encoded = [selfies2ints(s) for s in selfies]
+    # check for nans
+    valid = [1.0 if sum(e) &gt; 0 else np.nan for e in encoded]
+    encoded = [np.nan_to_num(e, nan=0) for e in encoded]
+    padded_seqs = tf.keras.preprocessing.sequence.pad_sequences(encoded, padding=&quot;post&quot;)
+    labels = np.reshape(model.predict(padded_seqs), (-1))
+    return labels * valid
 </pre></div>
 </div>
 </div>
@@ -635,16 +635,16 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <h3>Descriptor explanations<a class="headerlink" href="#descriptor-explanations" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure SMILES doesn&#39;t contain multiple fragments</span>
-<span class="n">smi</span> <span class="o">=</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">2500</span><span class="p">,</span>
-    <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
-    <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span>
-    <span class="n">smi</span><span class="p">,</span> <span class="n">predictor_function</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Make sure SMILES doesn&#39;t contain multiple fragments
+smi = soldata.SMILES[0]
+stoned_kwargs = {
+    &quot;num_samples&quot;: 2500,
+    &quot;alphabet&quot;: exmol.get_basic_alphabet(),
+    &quot;max_mutations&quot;: 2,
+}
+space = exmol.sample_space(
+    smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True
+)
 </pre></div>
 </div>
 </div>
@@ -653,79 +653,59 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 1s 1s/step
+1/1 [==============================] - 1s 985ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/57 [..............................] - ETA: 1:12
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/56 [..............................] - ETA: 51s
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 5/57 [=&gt;............................] - ETA: 0s  
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-10/57 [====&gt;.........................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+ 9/56 [===&gt;..........................] - ETA: 0s 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-15/57 [======&gt;.......................] - ETA: 0s
+17/56 [========&gt;.....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-20/57 [=========&gt;....................] - ETA: 0s
+24/56 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-25/57 [============&gt;.................] - ETA: 0s
+32/56 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-30/57 [==============&gt;...............] - ETA: 0s
+39/56 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-34/57 [================&gt;.............] - ETA: 0s
+46/56 [=======================&gt;......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-38/57 [===================&gt;..........] - ETA: 0s
+53/56 [===========================&gt;..] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-43/57 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-48/57 [========================&gt;.....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-52/57 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/57 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/57 [==============================] - 2s 13ms/step
+56/56 [==============================] - 1s 7ms/step
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">SVG</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from IPython.display import display, SVG
 
-<span class="n">desc_type</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Classic&quot;</span><span class="p">,</span> <span class="s2">&quot;ecfp&quot;</span><span class="p">,</span> <span class="s2">&quot;maccs&quot;</span><span class="p">]</span>
+desc_type = [&quot;Classic&quot;, &quot;ecfp&quot;, &quot;maccs&quot;]
 
-<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desc_type</span><span class="p">:</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="s2">&quot;ecfp&quot;</span><span class="p">:</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">.svg&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">space</span><span class="p">)</span>
+for d in desc_type:
+    beta = exmol.lime_explain(space, descriptor_type=d)
+    if d == &quot;ecfp&quot;:
+        exmol.plot_descriptors(space, output_file=f&quot;{d}.svg&quot;)
+        plt.close()
+    else:
+        exmol.plot_descriptors(space)
 </pre></div>
 </div>
 </div>
@@ -733,106 +713,106 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
 </pre></div>
 </div>
-<img alt="../_images/16542bd141b5a2a44f8e3813420979decf374a8bd5a2f841ec3198723df3056f.png" src="../_images/16542bd141b5a2a44f8e3813420979decf374a8bd5a2f841ec3198723df3056f.png" />
-<img alt="../_images/f6ae34d1190e63213497210c8e7e66150b96bba199890e5bf2342c2d274a167d.png" src="../_images/f6ae34d1190e63213497210c8e7e66150b96bba199890e5bf2342c2d274a167d.png" />
+<img alt="../_images/ac8f8e7eabb2b69a9bfcaa0b9591c9876f758553fe2a04cfd0cf10e5661231f2.png" src="../_images/ac8f8e7eabb2b69a9bfcaa0b9591c9876f758553fe2a04cfd0cf10e5661231f2.png" />
+<img alt="../_images/8b1dd1c41108934a620d36e3143120ba85ba647d91a05a58fe52e8f072b859e4.png" src="../_images/8b1dd1c41108934a620d36e3143120ba85ba647d91a05a58fe52e8f072b859e4.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="s2">&quot;ECFP&quot;</span><span class="p">)</span>
-<span class="n">weights</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">similarity_map_using_tstats</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>beta = exmol.lime_explain(space, &quot;ECFP&quot;)
+weights = exmol.plot_utils.similarity_map_using_tstats(space[0])
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c22ac193cacb91d9c405be7bfc6823db8a57a7e8c794427ba5d1e4e016dc1be8.png" src="../_images/c22ac193cacb91d9c405be7bfc6823db8a57a7e8c794427ba5d1e4e016dc1be8.png" />
+<img alt="../_images/da9fdbc0de760a1086b06032d2bfd31ecf0dea71d66bf611d5d797c7804b321f.png" src="../_images/da9fdbc0de760a1086b06032d2bfd31ecf0dea71d66bf611d5d797c7804b321f.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fkw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)}</span>
-<span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fkw = {&quot;figsize&quot;: (6, 4)}
+font = {&quot;family&quot;: &quot;normal&quot;, &quot;weight&quot;: &quot;normal&quot;, &quot;size&quot;: 16}
 
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">ax_dict</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplot_mosaic</span><span class="p">(</span><span class="s2">&quot;AABBB&quot;</span><span class="p">)</span>
+fig = plt.figure(figsize=(10, 5))
+mpl.rc(&quot;axes&quot;, titlesize=12)
+mpl.rc(&quot;font&quot;, size=16)
+ax_dict = fig.subplot_mosaic(&quot;AABBB&quot;)
 
-<span class="c1"># Plot space by fit</span>
-<span class="n">svg</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">plot_space_by_fit</span><span class="p">(</span>
-    <span class="n">space</span><span class="p">,</span>
-    <span class="p">[</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-    <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">fkw</span><span class="p">,</span>
-    <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
-    <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span>
-    <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="c1"># Compute y_wls</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">similarity</span> <span class="o">+</span> <span class="mf">0.000001</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])</span>
-<span class="n">non_zero</span> <span class="o">=</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">non_zero</span><span class="p">]</span>
-<span class="n">N</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+# Plot space by fit
+svg = exmol.plot_utils.plot_space_by_fit(
+    space,
+    [space[0]],
+    figure_kwargs=fkw,
+    mol_size=(200, 200),
+    offset=1,
+    ax=ax_dict[&quot;B&quot;],
+    beta=beta,
+)
+# Compute y_wls
+w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in space])
+non_zero = w &gt; 10 ** (-6)
+w = w[non_zero]
+N = w.shape[0]
 
-<span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])[</span><span class="n">non_zero</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">x_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptors</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])[</span><span class="n">non_zero</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-    <span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
-<span class="p">)</span>
-<span class="n">y_wls</span> <span class="o">=</span> <span class="n">x_mat</span> <span class="o">@</span> <span class="n">beta</span>
-<span class="n">y_wls</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+ys = np.array([e.yhat for e in space])[non_zero].reshape(N).astype(float)
+x_mat = np.array([list(e.descriptors.descriptors) for e in space])[non_zero].reshape(
+    N, -1
+)
+y_wls = x_mat @ beta
+y_wls += np.mean(ys)
 
-<span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
-<span class="n">higher</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+lower = np.min(ys)
+higher = np.max(ys)
 
-<span class="c1"># set transparency using w</span>
-<span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Oranges</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
-<span class="n">cmap</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
-
-
-<span class="k">def</span> <span class="nf">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+# set transparency using w
+norm = plt.Normalize(min(w), max(w))
+cmap = plt.cm.Oranges(w)
+cmap[:, -1] = w
 
 
-<span class="k">def</span> <span class="nf">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+def weighted_mean(x, w):
+    return np.sum(x * w) / np.sum(w)
 
 
-<span class="k">def</span> <span class="nf">weighted_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-        <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
-    <span class="p">)</span>
+def weighted_cov(x, y, w):
+    return np.sum(w * (x - weighted_mean(x, w)) * (y - weighted_mean(y, w))) / np.sum(w)
 
 
-<span class="n">corr</span> <span class="o">=</span> <span class="n">weighted_correlation</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">y_wls</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+def weighted_correlation(x, y, w):
+    return weighted_cov(x, y, w) / np.sqrt(
+        weighted_cov(x, x, w) * weighted_cov(y, y, w)
+    )
 
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
-<span class="p">)</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">y_wls</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;weighted </span><span class="se">\n</span><span class="s2">correlation = </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{y}</span><span class="s2">$&quot;</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$g$&quot;</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Weighted Least Squares Fit&quot;</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">)</span>
-<span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data_ratio</span><span class="p">(),</span> <span class="n">adjustable</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">)</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Oranges</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">])</span>
-<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Chemical similarity&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;weighted_fit.svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+corr = weighted_correlation(ys, y_wls, w)
+
+ax_dict[&quot;A&quot;].plot(
+    np.linspace(lower, higher, 100), np.linspace(lower, higher, 100), &quot;--&quot;, linewidth=2
+)
+sc = ax_dict[&quot;A&quot;].scatter(ys, y_wls, s=50, marker=&quot;.&quot;, c=cmap, cmap=cmap)
+ax_dict[&quot;A&quot;].text(max(ys) - 3, min(ys) + 1, f&quot;weighted \ncorrelation = {corr:.3f}&quot;)
+ax_dict[&quot;A&quot;].set_xlabel(r&quot;$\hat{y}$&quot;)
+ax_dict[&quot;A&quot;].set_ylabel(r&quot;$g$&quot;)
+ax_dict[&quot;A&quot;].set_title(&quot;Weighted Least Squares Fit&quot;)
+ax_dict[&quot;A&quot;].set_xlim(lower, higher)
+ax_dict[&quot;A&quot;].set_ylim(lower, higher)
+ax_dict[&quot;A&quot;].set_aspect(1.0 / ax_dict[&quot;A&quot;].get_data_ratio(), adjustable=&quot;box&quot;)
+sm = plt.cm.ScalarMappable(cmap=plt.cm.Oranges, norm=norm)
+cbar = plt.colorbar(sm, orientation=&quot;horizontal&quot;, pad=0.15, ax=ax_dict[&quot;A&quot;])
+cbar.set_label(&quot;Chemical similarity&quot;)
+plt.tight_layout()
+plt.savefig(&quot;weighted_fit.svg&quot;, dpi=300, bbox_inches=&quot;tight&quot;, transparent=False)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_44349/2076087530.py:60: UserWarning: No data for colormapping provided via &#39;c&#39;. Parameters &#39;cmap&#39; will be ignored
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_43525/2076087530.py:60: UserWarning: No data for colormapping provided via &#39;c&#39;. Parameters &#39;cmap&#39; will be ignored
   sc = ax_dict[&quot;A&quot;].scatter(ys, y_wls, s=50, marker=&quot;.&quot;, c=cmap, cmap=cmap)
-/tmp/ipykernel_44349/2076087530.py:71: UserWarning: Tight layout not applied. tight_layout cannot make axes width small enough to accommodate all axes decorations
+/tmp/ipykernel_43525/2076087530.py:71: UserWarning: Tight layout not applied. tight_layout cannot make axes width small enough to accommodate all axes decorations
   plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../_images/535889a78a67532e6ecd00c87ec25d5d08aa029180e2031f42880514fa226f1a.png" src="../_images/535889a78a67532e6ecd00c87ec25d5d08aa029180e2031f42880514fa226f1a.png" />
+<img alt="../_images/1a2444346097b25abb3ce6abbf7214374b95cb078864f16329e658475e5a963d.png" src="../_images/1a2444346097b25abb3ce6abbf7214374b95cb078864f16329e658475e5a963d.png" />
 </div>
 </div>
 </section>
@@ -842,16 +822,16 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <p>We first sample a reference chemical space, and then subsample smaller chemical spaces from this reference. Rank correlation is computed between important descriptors for the smaller subspaces and the reference space.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample a big space</span>
-<span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
-    <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
-    <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span>
-    <span class="n">smi</span><span class="p">,</span> <span class="n">predictor_function</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-<span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample a big space
+stoned_kwargs = {
+    &quot;num_samples&quot;: 5000,
+    &quot;alphabet&quot;: exmol.get_basic_alphabet(),
+    &quot;max_mutations&quot;: 2,
+}
+space = exmol.sample_space(
+    smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True
+)
+len(space)
 </pre></div>
 </div>
 </div>
@@ -860,194 +840,162 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 25ms/step
+1/1 [==============================] - 0s 19ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1/101 [..............................] - ETA: 3s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-  6/101 [&gt;.............................] - ETA: 1s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1/103 [..............................] - ETA: 2s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 11/101 [==&gt;...........................] - ETA: 1s
+  8/103 [=&gt;............................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 15/101 [===&gt;..........................] - ETA: 1s
+ 16/103 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 20/101 [====&gt;.........................] - ETA: 0s
+ 23/103 [=====&gt;........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 25/101 [======&gt;.......................] - ETA: 0s
+ 30/103 [=======&gt;......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 30/101 [=======&gt;......................] - ETA: 0s
+ 37/103 [=========&gt;....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 35/101 [=========&gt;....................] - ETA: 0s
+ 44/103 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 40/101 [==========&gt;...................] - ETA: 0s
+ 52/103 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 45/101 [============&gt;.................] - ETA: 0s
+ 60/103 [================&gt;.............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 50/101 [=============&gt;................] - ETA: 0s
+ 68/103 [==================&gt;...........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 55/101 [===============&gt;..............] - ETA: 0s
+ 75/103 [====================&gt;.........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 60/101 [================&gt;.............] - ETA: 0s
+ 83/103 [=======================&gt;......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 65/101 [==================&gt;...........] - ETA: 0s
+ 91/103 [=========================&gt;....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 70/101 [===================&gt;..........] - ETA: 0s
+ 99/103 [===========================&gt;..] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 75/101 [=====================&gt;........] - ETA: 0s
+103/103 [==============================] - 1s 7ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 80/101 [======================&gt;.......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 85/101 [========================&gt;.....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 90/101 [=========================&gt;....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 94/101 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 98/101 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-101/101 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-101/101 [==============================] - 1s 12ms/step
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3230
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3283
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get descriptor attributions</span>
-<span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="s2">&quot;MACCS&quot;</span><span class="p">,</span> <span class="n">return_beta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get descriptor attributions
+exmol.lime_explain(space, &quot;MACCS&quot;, return_beta=False)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assign feature ids for rank comparison</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">a</span><span class="p">:</span> <span class="n">b</span>
-    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-        <span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="p">,</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptors</span><span class="p">)),</span>
-    <span class="p">)</span>
-<span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Assign feature ids for rank comparison
+features = features = {
+    a: b
+    for a, b in zip(
+        space[0].descriptors.descriptor_names,
+        np.arange(len(space[0].descriptors.descriptors)),
+    )
+}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get set of ranks for the reference space</span>
-<span class="n">baseline_imp</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">a</span><span class="p">:</span> <span class="n">b</span>
-    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="p">,</span> <span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">tstats</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="n">baseline_imp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">sorted</span><span class="p">(</span><span class="n">baseline_imp</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">baseline_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">features</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">baseline_imp</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Get set of ranks for the reference space
+baseline_imp = {
+    a: b
+    for a, b in zip(space[0].descriptors.descriptor_names, space[0].descriptors.tstats)
+    if not np.isnan(b)
+}
+baseline_imp = dict(
+    sorted(baseline_imp.items(), key=lambda item: abs(item[1]), reverse=True)
+)
+baseline_set = [features[x] for x in baseline_imp.keys()]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get subsets and calculate lime importances - subsample - get rank correlation</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Get subsets and calculate lime importances - subsample - get rank correlation
+from scipy.stats import spearmanr
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="p">)</span>
-<span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="n">rank_corr</span> <span class="o">=</span> <span class="p">{</span><span class="n">N</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-    <span class="c1"># subsample space</span>
-    <span class="n">rank_corr</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-        <span class="c1"># subsample space of size f</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">subspace</span> <span class="o">=</span> <span class="p">[</span><span class="n">space</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">]</span>
-        <span class="c1"># get desc attributions</span>
-        <span class="n">ss_beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s2">&quot;MACCS&quot;</span><span class="p">)</span>
-        <span class="n">ss_imp</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">a</span><span class="p">:</span> <span class="n">b</span>
-            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">subspace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="p">,</span> <span class="n">subspace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">tstats</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="n">ss_imp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="nb">sorted</span><span class="p">(</span><span class="n">ss_imp</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">ss_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">features</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ss_imp</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-        <span class="c1"># Get ranks for subsampled space and compare with reference</span>
-        <span class="n">ranks</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">baseline_set</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))}</span>
-        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ss_set</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ranks</span><span class="p">:</span>
-                <span class="n">ranks</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># compute rank correlation</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">[</span><span class="n">ranks</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ranks</span><span class="p">])</span>
-        <span class="n">rank_corr</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">correlation</span><span class="p">)</span>
+plt.figure(figsize=(4, 3))
+N = len(space)
+size = np.arange(500, N, 1000)
+rank_corr = {N: 1}
+for i, f in enumerate(size):
+    # subsample space
+    rank_corr[f] = []
+    for _ in range(10):
+        # subsample space of size f
+        idx = np.random.choice(np.arange(N), size=f, replace=False)
+        subspace = [space[i] for i in idx]
+        # get desc attributions
+        ss_beta = exmol.lime_explain(subspace, descriptor_type=&quot;MACCS&quot;)
+        ss_imp = {
+            a: b
+            for a, b in zip(
+                subspace[0].descriptors.descriptor_names, subspace[0].descriptors.tstats
+            )
+            if not np.isnan(b)
+        }
+        ss_imp = dict(
+            sorted(ss_imp.items(), key=lambda item: abs(item[1]), reverse=True)
+        )
+        ss_set = [features[x] for x in ss_imp.keys()]
+        # Get ranks for subsampled space and compare with reference
+        ranks = {a: [b] for a, b in zip(baseline_set[:5], np.arange(1, 6))}
+        for j, s in enumerate(ss_set):
+            if s in ranks:
+                ranks[s].append(j + 1)
+        # compute rank correlation
+        r = spearmanr(np.arange(1, 6), [ranks[x][1] for x in ranks])
+        rank_corr[f].append(r.correlation)
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rank_corr</span><span class="p">[</span><span class="n">f</span><span class="p">]),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#13254a&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+    plt.scatter(f, np.mean(rank_corr[f]), color=&quot;#13254a&quot;, marker=&quot;o&quot;)
 
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Size of chemical space&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Rank correlation&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rank correlation.svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+plt.scatter(N, 1.0, color=&quot;red&quot;, marker=&quot;o&quot;)
+plt.axvline(x=N, linestyle=&quot;:&quot;, color=&quot;red&quot;)
+plt.xlabel(&quot;Size of chemical space&quot;)
+plt.ylabel(&quot;Rank correlation&quot;)
+plt.tight_layout()
+plt.savefig(&quot;rank correlation.svg&quot;, dpi=300, bbox_inches=&quot;tight&quot;)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6485d7d188706baa58ffba8b72d7b65eab92f9e690655bd9817732478c76138a.png" src="../_images/6485d7d188706baa58ffba8b72d7b65eab92f9e690655bd9817732478c76138a.png" />
+<img alt="../_images/24a2744930fdc0a4055f83dae1aacc9685d116fbca08f0c756a1882c0643fc8a.png" src="../_images/24a2744930fdc0a4055f83dae1aacc9685d116fbca08f0c756a1882c0643fc8a.png" />
 </div>
 </div>
 </section>
@@ -1055,22 +1003,22 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <h2>Effect of mutation number, alphabet and size of chemical space<a class="headerlink" href="#effect-of-mutation-number-alphabet-and-size-of-chemical-space" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mutation</span>
-<span class="n">desc_type</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Classic&quot;</span><span class="p">]</span>
-<span class="n">muts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">muts</span><span class="p">:</span>
-    <span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">2500</span><span class="p">,</span>
-        <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
-        <span class="s2">&quot;min_mutations&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
-        <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span>
-        <span class="n">smi</span><span class="p">,</span> <span class="n">predictor_function</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desc_type</span><span class="p">:</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mutations=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Mutation
+desc_type = [&quot;Classic&quot;]
+muts = [1, 2, 3]
+for i in muts:
+    stoned_kwargs = {
+        &quot;num_samples&quot;: 2500,
+        &quot;alphabet&quot;: exmol.get_basic_alphabet(),
+        &quot;min_mutations&quot;: i,
+        &quot;max_mutations&quot;: i,
+    }
+    space = exmol.sample_space(
+        smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True
+    )
+    for d in desc_type:
+        exmol.lime_explain(space, descriptor_type=d)
+        exmol.plot_descriptors(space, title=f&quot;Mutations={i}&quot;)
 </pre></div>
 </div>
 </div>
@@ -1079,68 +1027,48 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 26ms/step
+1/1 [==============================] - 0s 20ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/45 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/45 [===&gt;..........................] - ETA: 0s
+ 9/45 [=====&gt;........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-10/45 [=====&gt;........................] - ETA: 0s
+17/45 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-14/45 [========&gt;.....................] - ETA: 0s
+25/45 [===============&gt;..............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-19/45 [===========&gt;..................] - ETA: 0s
+33/45 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-23/45 [==============&gt;...............] - ETA: 0s
+41/45 [==========================&gt;...] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-27/45 [=================&gt;............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-32/45 [====================&gt;.........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-37/45 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-42/45 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-45/45 [==============================] - 1s 13ms/step
+45/45 [==============================] - 0s 7ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 26ms/step
+1/1 [==============================] - 0s 20ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/66 [..............................] - ETA: 2s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/66 [=&gt;............................] - ETA: 0s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/66 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-10/66 [===&gt;..........................] - ETA: 0s
+ 8/66 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1148,23 +1076,15 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-20/66 [========&gt;.....................] - ETA: 0s
+22/66 [=========&gt;....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-24/66 [=========&gt;....................] - ETA: 0s
+29/66 [============&gt;.................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-28/66 [===========&gt;..................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-33/66 [==============&gt;...............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-38/66 [================&gt;.............] - ETA: 0s
+36/66 [===============&gt;..............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1172,23 +1092,19 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-47/66 [====================&gt;.........] - ETA: 0s
+49/66 [=====================&gt;........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-52/66 [======================&gt;.......] - ETA: 0s
+56/66 [========================&gt;.....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/66 [========================&gt;.....] - ETA: 0s
+63/66 [===========================&gt;..] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-62/66 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-66/66 [==============================] - 1s 12ms/step
+66/66 [==============================] - 1s 8ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
@@ -1198,15 +1114,11 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 1/1 [==============================] - 0s 28ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/70 [..............................] - ETA: 2s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/70 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 5/70 [=&gt;............................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-10/70 [===&gt;..........................] - ETA: 0s
+ 8/70 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1214,23 +1126,15 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-19/70 [=======&gt;......................] - ETA: 0s
+22/70 [========&gt;.....................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-24/70 [=========&gt;....................] - ETA: 0s
+29/70 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-28/70 [===========&gt;..................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-32/70 [============&gt;.................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-37/70 [==============&gt;...............] - ETA: 0s
+35/70 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1238,54 +1142,42 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/70 [==================&gt;...........] - ETA: 0s
+49/70 [====================&gt;.........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-50/70 [====================&gt;.........] - ETA: 0s
+56/70 [=======================&gt;......] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-54/70 [======================&gt;.......] - ETA: 0s
+63/70 [==========================&gt;...] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-58/70 [=======================&gt;......] - ETA: 0s
+70/70 [==============================] - 1s 8ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-62/70 [=========================&gt;....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-67/70 [===========================&gt;..] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-70/70 [==============================] - 1s 12ms/step
-</pre></div>
-</div>
-<img alt="../_images/24ab7275431833b5c0ccba985a25bac7900532adb1e90e70219e6d62567b39cd.png" src="../_images/24ab7275431833b5c0ccba985a25bac7900532adb1e90e70219e6d62567b39cd.png" />
-<img alt="../_images/7f4b77d44b1c4d601da1fa4bda4fc7f49e36c56f2e575ca23fb7b55772f60463.png" src="../_images/7f4b77d44b1c4d601da1fa4bda4fc7f49e36c56f2e575ca23fb7b55772f60463.png" />
-<img alt="../_images/3883e8017814054daeee871ff3f60a07ed5bcd710df5aef7d42bef42a35f883f.png" src="../_images/3883e8017814054daeee871ff3f60a07ed5bcd710df5aef7d42bef42a35f883f.png" />
+<img alt="../_images/a8efddbc1980429a934cb7c65fb2affabd8ea567049bfdd9640e545829a110f0.png" src="../_images/a8efddbc1980429a934cb7c65fb2affabd8ea567049bfdd9640e545829a110f0.png" />
+<img alt="../_images/e707f1504c36332b5be4e2258960f98026af5fb7fddc387d693e5e56ed7118a7.png" src="../_images/e707f1504c36332b5be4e2258960f98026af5fb7fddc387d693e5e56ed7118a7.png" />
+<img alt="../_images/79f95f6f5753fd848cf0b1f5b0a778d02e915a255b94a86c5905d1f239ff507d.png" src="../_images/79f95f6f5753fd848cf0b1f5b0a778d02e915a255b94a86c5905d1f239ff507d.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alphabet</span>
-<span class="n">basic</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">()</span>
-<span class="n">train</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">get_alphabet_from_selfies</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies_list</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
-<span class="n">wide</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">get_semantic_robust_alphabet</span><span class="p">()</span>
-<span class="n">desc_type</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MACCS&quot;</span><span class="p">]</span>
-<span class="n">alphs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Basic&quot;</span><span class="p">:</span> <span class="n">basic</span><span class="p">,</span> <span class="s2">&quot;Training Data&quot;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span> <span class="s2">&quot;SELFIES&quot;</span><span class="p">:</span> <span class="n">wide</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">alphs</span><span class="p">:</span>
-    <span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">2500</span><span class="p">,</span> <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">alphs</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
-    <span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span>
-        <span class="n">smi</span><span class="p">,</span> <span class="n">predictor_function</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desc_type</span><span class="p">:</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Alphabet: </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Alphabet
+basic = exmol.get_basic_alphabet()
+train = sf.get_alphabet_from_selfies([s for s in selfies_list if s is not None])
+wide = sf.get_semantic_robust_alphabet()
+desc_type = [&quot;MACCS&quot;]
+alphs = {&quot;Basic&quot;: basic, &quot;Training Data&quot;: train, &quot;SELFIES&quot;: wide}
+for a in alphs:
+    stoned_kwargs = {&quot;num_samples&quot;: 2500, &quot;alphabet&quot;: alphs[a], &quot;max_mutations&quot;: 2}
+    space = exmol.sample_space(
+        smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True
+    )
+    for d in desc_type:
+        exmol.lime_explain(space, descriptor_type=d)
+        exmol.plot_descriptors(space, title=f&quot;Alphabet: {a}&quot;)
 </pre></div>
 </div>
 </div>
@@ -1294,50 +1186,30 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 27ms/step
+1/1 [==============================] - 0s 20ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/57 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 5/57 [=&gt;............................] - ETA: 0s
+ 7/57 [==&gt;...........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 9/57 [===&gt;..........................] - ETA: 0s
+15/57 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-13/57 [=====&gt;........................] - ETA: 0s
+23/57 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-17/57 [=======&gt;......................] - ETA: 0s
+31/57 [===============&gt;..............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/57 [==========&gt;...................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-25/57 [============&gt;.................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-29/57 [==============&gt;...............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-33/57 [================&gt;.............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-37/57 [==================&gt;...........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/57 [====================&gt;.........] - ETA: 0s
+39/57 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1345,19 +1217,11 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-49/57 [========================&gt;.....] - ETA: 0s
+52/57 [==========================&gt;...] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-53/57 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/57 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/57 [==============================] - 1s 14ms/step
+57/57 [==============================] - 0s 7ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
@@ -1367,62 +1231,46 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 25ms/step
+1/1 [==============================] - 0s 20ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/60 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/60 [==&gt;...........................] - ETA: 0s
+ 8/60 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-10/60 [====&gt;.........................] - ETA: 0s
+15/60 [======&gt;.......................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-14/60 [======&gt;.......................] - ETA: 0s
+23/60 [==========&gt;...................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-19/60 [========&gt;.....................] - ETA: 0s
+30/60 [==============&gt;...............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-24/60 [===========&gt;..................] - ETA: 0s
+36/60 [=================&gt;............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-29/60 [=============&gt;................] - ETA: 0s
+43/60 [====================&gt;.........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-34/60 [================&gt;.............] - ETA: 0s
+50/60 [========================&gt;.....] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-39/60 [==================&gt;...........] - ETA: 0s
+57/60 [===========================&gt;..] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-44/60 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-49/60 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-54/60 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-59/60 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-60/60 [==============================] - 1s 12ms/step
+60/60 [==============================] - 0s 8ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
@@ -1432,214 +1280,14 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 29ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/57 [..............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 5/57 [=&gt;............................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 9/57 [===&gt;..........................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-14/57 [======&gt;.......................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-19/57 [=========&gt;....................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-24/57 [===========&gt;..................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-29/57 [==============&gt;...............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-33/57 [================&gt;.............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-37/57 [==================&gt;...........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/57 [====================&gt;.........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-45/57 [======================&gt;.......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-49/57 [========================&gt;.....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-53/57 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/57 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-57/57 [==============================] - 1s 13ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
-</pre></div>
-</div>
-<img alt="../_images/201ef13624383c59e7a4e23daa7b4129878d1560f1afe5011c3129420f47f5f4.png" src="../_images/201ef13624383c59e7a4e23daa7b4129878d1560f1afe5011c3129420f47f5f4.png" />
-<img alt="../_images/f56d43f4b196cbeee4bfe9b654185ba698a4f5db86c7667cc174f29cb8be2c0b.png" src="../_images/f56d43f4b196cbeee4bfe9b654185ba698a4f5db86c7667cc174f29cb8be2c0b.png" />
-<img alt="../_images/0501e90050dda756df1d9ad577707676d75ccc0e71e9a4ad6929b54837df33cf.png" src="../_images/0501e90050dda756df1d9ad577707676d75ccc0e71e9a4ad6929b54837df33cf.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Size of space</span>
-<span class="n">desc_type</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MACCS&quot;</span><span class="p">]</span>
-<span class="n">space_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">space_size</span><span class="p">:</span>
-    <span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
-        <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
-        <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span>
-        <span class="n">smi</span><span class="p">,</span> <span class="n">predictor_function</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desc_type</span><span class="p">:</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-        <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span>
-            <span class="n">space</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Chemical space size=</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 33ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/37 [..............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/37 [===&gt;..........................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/37 [=======&gt;......................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-15/37 [===========&gt;..................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-20/37 [===============&gt;..............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-25/37 [===================&gt;..........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-29/37 [======================&gt;.......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-33/37 [=========================&gt;....] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-37/37 [==============================] - 0s 12ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 26ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/46 [..............................] - ETA: 1s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/46 [==&gt;...........................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/46 [======&gt;.......................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-16/46 [=========&gt;....................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-20/46 [============&gt;.................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-24/46 [==============&gt;...............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-29/46 [=================&gt;............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-34/46 [=====================&gt;........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-38/46 [=======================&gt;......] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-42/46 [==========================&gt;...] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-46/46 [==============================] - 1s 12ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-1/1 [==============================] - 0s 25ms/step
+1/1 [==============================] - 0s 21ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/56 [..............................] - ETA: 1s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
- 6/56 [==&gt;...........................] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-11/56 [====&gt;.........................] - ETA: 0s
+ 9/56 [===&gt;..........................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1647,23 +1295,15 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-21/56 [==========&gt;...................] - ETA: 0s
+23/56 [===========&gt;..................] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-26/56 [============&gt;.................] - ETA: 0s
+30/56 [===============&gt;..............] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-31/56 [===============&gt;..............] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-36/56 [==================&gt;...........] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-41/56 [====================&gt;.........] - ETA: 0s
+38/56 [===================&gt;..........] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1671,23 +1311,167 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-50/56 [=========================&gt;....] - ETA: 0s
+52/56 [==========================&gt;...] - ETA: 0s
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-55/56 [============================&gt;.] - ETA: 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-56/56 [==============================] - 1s 12ms/step
+56/56 [==============================] - 0s 7ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
 </pre></div>
 </div>
-<img alt="../_images/4f6accc807493b8b45af7bd045e3d3839a24197715420d3120a507da4cd98e71.png" src="../_images/4f6accc807493b8b45af7bd045e3d3839a24197715420d3120a507da4cd98e71.png" />
-<img alt="../_images/de02ca3ade6a32fdc42167e17a9e05d6d44c3027482e010e7b3756033025b3c5.png" src="../_images/de02ca3ade6a32fdc42167e17a9e05d6d44c3027482e010e7b3756033025b3c5.png" />
-<img alt="../_images/6f257b990a25a3bdc5f382b14f536e4d66750b8f70c13341bd8ef7db0b3da3da.png" src="../_images/6f257b990a25a3bdc5f382b14f536e4d66750b8f70c13341bd8ef7db0b3da3da.png" />
+<img alt="../_images/2a5292f586f6764444a53dc163b8f27b8e6b0e0eeb0602314323ae387dd60f41.png" src="../_images/2a5292f586f6764444a53dc163b8f27b8e6b0e0eeb0602314323ae387dd60f41.png" />
+<img alt="../_images/8ad19cec5c2b9a6cb4dcd5ac9a0f9ad93c438ba617d6cddda68b61666a050277.png" src="../_images/8ad19cec5c2b9a6cb4dcd5ac9a0f9ad93c438ba617d6cddda68b61666a050277.png" />
+<img alt="../_images/1f1c0ef081c634a12d09ac2a6d2e876bbda385bbc62e456020a0b3da587cef67.png" src="../_images/1f1c0ef081c634a12d09ac2a6d2e876bbda385bbc62e456020a0b3da587cef67.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Size of space
+desc_type = [&quot;MACCS&quot;]
+space_size = [1500, 2000, 2500]
+for s in space_size:
+    stoned_kwargs = {
+        &quot;num_samples&quot;: s,
+        &quot;alphabet&quot;: exmol.get_basic_alphabet(),
+        &quot;max_mutations&quot;: 2,
+    }
+    space = exmol.sample_space(
+        smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True
+    )
+    for d in desc_type:
+        exmol.lime_explain(space, descriptor_type=d)
+        exmol.plot_descriptors(
+            space,
+            title=f&quot;Chemical space size={s}&quot;,
+        )
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+1/1 [==============================] - 0s 21ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/37 [..............................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+ 9/37 [======&gt;.......................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+17/37 [============&gt;.................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+24/37 [==================&gt;...........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+31/37 [========================&gt;.....] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+37/37 [==============================] - 0s 7ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+1/1 [==============================] - 0s 20ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/47 [..............................] - ETA: 1s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+ 9/47 [====&gt;.........................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+16/47 [=========&gt;....................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+23/47 [=============&gt;................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+31/47 [==================&gt;...........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+39/47 [=======================&gt;......] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+46/47 [============================&gt;.] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+47/47 [==============================] - 0s 7ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/1 [==============================] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+1/1 [==============================] - 0s 19ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1/58 [..............................] - ETA: 1s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+ 8/58 [===&gt;..........................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+16/58 [=======&gt;......................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+23/58 [==========&gt;...................] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+29/58 [==============&gt;...............] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+36/58 [=================&gt;............] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+44/58 [=====================&gt;........] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+52/58 [=========================&gt;....] - ETA: 0s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+58/58 [==============================] - 0s 7ms/step
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
+</pre></div>
+</div>
+<img alt="../_images/f0821aee6c82b9fbeebce68498e41e333d33ce97d8bb226782b0f1d6c2ad95d2.png" src="../_images/f0821aee6c82b9fbeebce68498e41e333d33ce97d8bb226782b0f1d6c2ad95d2.png" />
+<img alt="../_images/2f76a5fd5fdb71f7b64c2b2cae4b1abafd49020a8a7435c6caa70a56f25c96fe.png" src="../_images/2f76a5fd5fdb71f7b64c2b2cae4b1abafd49020a8a7435c6caa70a56f25c96fe.png" />
+<img alt="../_images/0e1a3d9f8f37105ffcf7ee5b1bed666e403b889f193e9dad6b540f803b694845.png" src="../_images/0e1a3d9f8f37105ffcf7ee5b1bed666e403b889f193e9dad6b540f803b694845.png" />
 </div>
 </div>
 </section>

@@ -88,37 +88,37 @@
 <h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import matplotlib.pyplot as plt
 
-<span class="c1"># import seaborn as sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">IPythonConsole</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">mordred</span><span class="o">,</span> <span class="nn">mordred.descriptors</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">HydrogenBond</span><span class="p">,</span> <span class="n">Polarizability</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">SLogP</span><span class="p">,</span> <span class="n">AcidBase</span><span class="p">,</span> <span class="n">BertzCT</span><span class="p">,</span> <span class="n">Aromatic</span><span class="p">,</span> <span class="n">BondCount</span><span class="p">,</span> <span class="n">AtomCount</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">Calculator</span>
+# import seaborn as sns
+import matplotlib as mpl
+import rdkit, rdkit.Chem, rdkit.Chem.Draw
+from rdkit.Chem.Draw import IPythonConsole
+import numpy as np
+import mordred, mordred.descriptors
+from mordred import HydrogenBond, Polarizability
+from mordred import SLogP, AcidBase, BertzCT, Aromatic, BondCount, AtomCount
+from mordred import Calculator
 
-<span class="kn">import</span> <span class="nn">exmol</span> <span class="k">as</span> <span class="nn">exmol</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">plot_roc_curve</span>
+import exmol as exmol
+from rdkit.Chem.Draw import rdDepictor
+import os
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score, plot_roc_curve
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
-<span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0&quot;
+rdDepictor.SetPreferCoordGen(True)
 
-<span class="n">IPythonConsole</span><span class="o">.</span><span class="n">ipython_useSVG</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">color_cycle</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F06060&quot;</span><span class="p">,</span> <span class="s2">&quot;#1BBC9B&quot;</span><span class="p">,</span> <span class="s2">&quot;#F3B562&quot;</span><span class="p">,</span> <span class="s2">&quot;#6e5687&quot;</span><span class="p">,</span> <span class="s2">&quot;#5C4B51&quot;</span><span class="p">]</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.prop_cycle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_cycle</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">soldata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="s2">&quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;</span>
-<span class="p">)</span>
-<span class="n">features_start_at</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;MolWt&quot;</span><span class="p">)</span>
+IPythonConsole.ipython_useSVG = True
+color_cycle = [&quot;#F06060&quot;, &quot;#1BBC9B&quot;, &quot;#F3B562&quot;, &quot;#6e5687&quot;, &quot;#5C4B51&quot;]
+mpl.rcParams[&quot;axes.prop_cycle&quot;] = mpl.cycler(color=color_cycle)
+np.random.seed(0)
+soldata = pd.read_csv(
+    &quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;
+)
+features_start_at = list(soldata.columns).index(&quot;MolWt&quot;)
 </pre></div>
 </div>
 </div>
@@ -128,77 +128,77 @@
 <h2>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make object that can compute descriptors</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">Calculator</span><span class="p">()</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">([</span><span class="n">HydrogenBond</span><span class="o">.</span><span class="n">HBondDonor</span><span class="p">,</span> <span class="n">HydrogenBond</span><span class="o">.</span><span class="n">HBondAcceptor</span><span class="p">])</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">AcidBase</span><span class="o">.</span><span class="n">AcidicGroupCount</span><span class="p">,</span> <span class="n">AcidBase</span><span class="o">.</span><span class="n">BasicGroupCount</span><span class="p">,</span> <span class="n">Aromatic</span><span class="o">.</span><span class="n">AromaticBondsCount</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">([</span><span class="n">SLogP</span><span class="o">.</span><span class="n">SLogP</span><span class="p">,</span> <span class="n">Polarizability</span><span class="o">.</span><span class="n">APol</span><span class="p">])</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">BondCount</span><span class="o">.</span><span class="n">BondCount</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">),</span>
-        <span class="n">BondCount</span><span class="o">.</span><span class="n">BondCount</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;aromatic&quot;</span><span class="p">),</span>
-        <span class="n">AtomCount</span><span class="o">.</span><span class="n">AtomCount</span><span class="p">(</span><span class="s2">&quot;Hetero&quot;</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># make object that can compute descriptors
+calc = Calculator()
+calc.register([HydrogenBond.HBondDonor, HydrogenBond.HBondAcceptor])
+calc.register(
+    [AcidBase.AcidicGroupCount, AcidBase.BasicGroupCount, Aromatic.AromaticBondsCount]
+)
+calc.register([SLogP.SLogP, Polarizability.APol])
+calc.register(
+    [
+        BondCount.BondCount(type=&quot;double&quot;),
+        BondCount.BondCount(type=&quot;aromatic&quot;),
+        AtomCount.AtomCount(&quot;Hetero&quot;),
+    ]
+)
 
-<span class="c1"># make subsample from pandas df</span>
-<span class="n">molecules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">]</span>
+# make subsample from pandas df
+molecules = [rdkit.Chem.MolFromSmiles(smi) for smi in soldata.SMILES]
 
-<span class="n">raw_features</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">calc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
-    <span class="n">raw_features</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
-<span class="n">feature_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">description</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">calc</span><span class="o">.</span><span class="n">descriptors</span><span class="p">])</span>
+raw_features = []
+for e, c in zip(molecules, calc.map(molecules, quiet=True)):
+    raw_features.append([v for v in c.values()])
+feature_names = np.array([d.description() for d in calc.descriptors])
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="n">soldata</span><span class="p">[</span><span class="s2">&quot;Solubility&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>raw_features = np.array(raw_features)
+labels = soldata[&quot;Solubility&quot;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">):</span>
-    <span class="n">fm</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">fs</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def pick_features(raw_features):
+    fm = raw_features.mean()
+    fs = raw_features.std()
 
-    <span class="k">def</span> <span class="nf">feature_convert</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="n">f</span> <span class="o">-=</span> <span class="n">fm</span>
-        <span class="n">f</span> <span class="o">/=</span> <span class="n">fs</span>
-        <span class="k">return</span> <span class="n">f</span>
+    def feature_convert(f):
+        f -= fm
+        f /= fs
+        return f
 
-    <span class="n">features</span> <span class="o">=</span> <span class="n">feature_convert</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
+    features = feature_convert(raw_features)
 
-    <span class="c1"># we have some nans in features, likely because std was 0</span>
-    <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">features_select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
-        <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span>
-    <span class="p">)</span>  <span class="c1"># np.all(np.isfinite(features), axis=0)</span>
-    <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:,</span> <span class="n">features_select</span><span class="p">]</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="n">feature_names</span><span class="p">[</span><span class="n">features_select</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">features</span><span class="p">,</span> <span class="n">names</span>
+    # we have some nans in features, likely because std was 0
+    features = features.astype(float)
+    features_select = np.random.randint(
+        0, len(raw_features[0]), size=3
+    )  # np.all(np.isfinite(features), axis=0)
+    features = features[:, features_select]
+    names = feature_names[features_select]
+    return features, names
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>features, names = pick_features(raw_features)
+print(features.shape, names)
 
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    features, labels, test_size=0.1, shuffle=True
+)
 
-<span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">predicted</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+clf = RandomForestRegressor(max_depth=10, random_state=0)
+clf.fit(X_train, y_train)
+predicted = clf.predict(X_test)
 </pre></div>
 </div>
 </div>
@@ -211,22 +211,22 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-    <span class="nb">max</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="nb">min</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="sa">f</span><span class="s2">&quot;correlation = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-    <span class="nb">max</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="nb">min</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span>
-    <span class="sa">f</span><span class="s2">&quot;loss = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_test</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;RF-ROC.png&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(5, 4))
+plt.plot(y_test, predicted, &quot;.&quot;)
+plt.plot(y_test, y_test, linestyle=&quot;:&quot;)
+plt.text(
+    max(y_test) - 6,
+    min(y_test) + 1,
+    f&quot;correlation = {np.corrcoef(y_test, predicted)[0,1]:.3f}&quot;,
+    fontsize=12,
+)
+plt.text(
+    max(y_test) - 6,
+    min(y_test),
+    f&quot;loss = {np.sqrt(np.mean((y_test - predicted)**2)):.3f}&quot;,
+    fontsize=12,
+)
+plt.savefig(&quot;RF-ROC.png&quot;)
 </pre></div>
 </div>
 </div>
@@ -239,67 +239,67 @@
 <h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
-    <span class="n">molecules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">]</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">labels</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def model_eval(smiles):
+    molecules = [rdkit.Chem.MolFromSmiles(smi) for smi in smiles]
+    labels = clf.predict(np.nan_to_num(features))
+    return labels
 
 
-<span class="n">labels</span> <span class="o">=</span> <span class="n">model_eval</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">)</span>
+labels = model_eval(soldata.SMILES)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smi</span> <span class="o">=</span> <span class="n">soldata</span><span class="o">.</span><span class="n">SMILES</span><span class="p">[</span><span class="mi">1500</span><span class="p">]</span>
-<span class="n">stoned_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
-    <span class="s2">&quot;alphabet&quot;</span><span class="p">:</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">(),</span>
-    <span class="s2">&quot;max_mutations&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">space</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">sample_space</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">model_eval</span><span class="p">,</span> <span class="n">stoned_kwargs</span><span class="o">=</span><span class="n">stoned_kwargs</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>smi = soldata.SMILES[1500]
+stoned_kwargs = {
+    &quot;num_samples&quot;: 2000,
+    &quot;alphabet&quot;: exmol.get_basic_alphabet(),
+    &quot;max_mutations&quot;: 2,
+}
+space = exmol.sample_space(smi, model_eval, stoned_kwargs=stoned_kwargs, quiet=True)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_feature_importance</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def calc_feature_importance(descriptors, tstats):
+    from collections import OrderedDict
 
-    <span class="n">feature_importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)}</span>
-    <span class="n">feature_importance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="nb">sorted</span><span class="p">(</span><span class="n">feature_importance</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="c1"># Fitted space important features</span>
-    <span class="k">return</span> <span class="n">feature_importance</span>
+    feature_importance = {a: b for a, b in zip(descriptors, tstats) if not np.isnan(b)}
+    feature_importance = dict(
+        sorted(feature_importance.items(), key=lambda item: abs(item[1]), reverse=True)
+    )
+    # Fitted space important features
+    return feature_importance
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">descriptor_type</span> <span class="o">=</span> <span class="s2">&quot;Classic&quot;</span>
-<span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="n">descriptor_type</span><span class="p">)</span>
-<span class="n">wls_attr</span> <span class="o">=</span> <span class="n">calc_feature_importance</span><span class="p">(</span>
-    <span class="nb">list</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">space</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">tstats</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">wls_attr</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>descriptor_type = &quot;Classic&quot;
+exmol.lime_explain(space, descriptor_type=descriptor_type)
+wls_attr = calc_feature_importance(
+    list(space[0].descriptors.descriptor_names), list(space[0].descriptors.tstats)
+)
+wls_attr
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;atomic polarizability&#39;: -1.9672167260538753,
- &#39;ring count&#39;: 1.468012894776731,
- &#39;acidic group count&#39;: -1.4527244600496918,
- &#39;basic group count&#39;: 1.3465564388215183,
- &#39;number of heteroatoms&#39;: 0.73864261203354,
- &#39;number of hydrogen bond acceptor&#39;: 0.5813461001861288,
- &#39;number of rotatable bonds&#39;: 0.5560006450711482,
- &#39;number of hydrogen bond donor&#39;: -0.2989037024781038,
- &#39;aromatic bonds count&#39;: 0.17681924326093992,
- &#39;Wildman-Crippen LogP&#39;: -0.011117040028385776}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;atomic polarizability&#39;: -1.0418766486730988,
+ &#39;aromatic bonds count&#39;: 0.7328045656154728,
+ &#39;number of hydrogen bond acceptor&#39;: 0.7061177786509087,
+ &#39;Wildman-Crippen LogP&#39;: 0.6187968966003694,
+ &#39;number of hydrogen bond donor&#39;: 0.5517276195584861,
+ &#39;acidic group count&#39;: 0.4336846721556531,
+ &#39;number of rotatable bonds&#39;: 0.29716077811609704,
+ &#39;basic group count&#39;: 0.2480503097547944,
+ &#39;ring count&#39;: -0.1918129437715256,
+ &#39;number of heteroatoms&#39;: 0.03382619230428524}
 </pre></div>
 </div>
 </div>
@@ -309,30 +309,30 @@
 <h2>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">wls_attr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">xaxis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">x_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;purple&quot;</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = wls_attr.keys()
+xaxis = np.arange(len(x))
+x_colors = [&quot;purple&quot; if t in names else &quot;black&quot; for t in x]
 
-<span class="n">rf_imp</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)}</span>
-<span class="n">rf_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">rf_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">rf_imp</span><span class="p">:</span>
-        <span class="n">rf_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="n">rf_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rf_imp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+rf_imp = {a: b for a, b in zip(names, clf.feature_importances_)}
+rf_x = np.zeros(len(x))
+rf_y = np.zeros(len(x))
+for i, j in enumerate(x):
+    if j in rf_imp:
+        rf_x[i] = i
+        rf_y[i] = rf_imp[j]
 
-<span class="n">width</span> <span class="o">=</span> <span class="p">[</span><span class="n">wls_attr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F06060&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;#1BBC9B&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">width</span><span class="p">]</span>
+width = [wls_attr[i] for i in x]
+colors = [&quot;#F06060&quot; if i &lt; 0 else &quot;#1BBC9B&quot; for i in width]
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">xaxis</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;WLS&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+fig, ax = plt.subplots(figsize=(6, 5))
+ax.barh(xaxis + 0.2, width, 0.75, label=&quot;WLS&quot;, color=colors)
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Feature t-statistics&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_colors</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_ticklabels</span><span class="p">())]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Random Forest Regression&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+plt.xticks(fontsize=12)
+plt.xlabel(&quot;Feature t-statistics&quot;, fontsize=12)
+plt.yticks(xaxis, x, fontsize=12)
+[t.set_color(i) for (i, t) in zip(x_colors, ax.yaxis.get_ticklabels())]
+plt.gca().invert_yaxis()
+plt.title(&quot;Random Forest Regression&quot;, fontsize=12)
 </pre></div>
 </div>
 </div>
@@ -340,7 +340,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
 </pre></div>
 </div>
-<img alt="../_images/b2b8f73fd3ad426ab6e810b9d46dfea033917b31730697971458d685726ff47c.png" src="../_images/b2b8f73fd3ad426ab6e810b9d46dfea033917b31730697971458d685726ff47c.png" />
+<img alt="../_images/a6100e6c6a9ed17cd00bb58d43ea166b15804626957baf09fccb7f45a9ca45b1.png" src="../_images/a6100e6c6a9ed17cd00bb58d43ea166b15804626957baf09fccb7f45a9ca45b1.png" />
 </div>
 </div>
 </section>
