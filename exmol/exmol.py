@@ -1332,7 +1332,7 @@ def text_explain(
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     if np.isnan(effective_n):
-        effective_n = 100  # go with asymtotic
+        effective_n = len(examples)  # go with asymtotic
     T = ss.t.ppf(0.975, df=effective_n)
 
     success = 0
