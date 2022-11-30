@@ -1351,10 +1351,10 @@ def text_explain(
             imp = "This is important for the property\n"
         else:
             imp = "This may be important for the property\n"
-        # check if it's present in a base molecule
+        # check if it's present in majority of base molecules
         present = sum(
             [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
-        )
+        ) / sum([1 for e in examples if e.is_origin]) > 0.5
         if not present and v < 0:
             kind = "No (Counterfactual)."
         elif present and v > 0:
