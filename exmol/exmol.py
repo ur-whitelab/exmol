@@ -242,9 +242,6 @@ def _name_morgan_bit(m, bitInfo, key):
             if match.issubset(morgan_atoms):
                 names.append((r, name, match))
     names.sort(key=lambda x: x[0])
-    # short-circuit if single atom
-    # if len(morgan_atoms) == 1:
-    #    return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
     if len(names) == 0:
         return None
     umatch = names[0][2]
@@ -253,9 +250,11 @@ def _name_morgan_bit(m, bitInfo, key):
     for _, n, m in names:
         if len(m.intersection(umatch)) == 0:
             if n not in unique_names:
-                name += " and " + n[0].lower() + n[1:].replace("_", " ")
+                name += "/" + n[0].lower() + n[1:].replace("_", " ")
                 umatch |= m
                 unique_names.add(n)
+    if "/" in name and "fragment" not in name.split("/")[-1]:
+        name = name + " group"
     # if we failed to match all heteroatoms, fail
     if len(heteroatoms.difference(umatch)) > 0:
         return None
@@ -1270,13 +1269,32 @@ def check_multiple_aromatic_rings(mol):
     return True if count > 1 else False
 
 
-def merge_text_explains(*args: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
+def merge_text_explains(
+    *args: List[Tuple[str, float]], filter: Optional[float] = None
+) -> List[Tuple[str, float]]:
     """Merge multiple text explanations into one and sort."""
     # sort them by T magnitude
     joint = reduce(lambda x, y: x + y, args)
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
+    if filter is not None:
+        joint = [x for x in joint if np.absolute(x[1]) > filter]
     # return top ones
     return joint
+
+
+_text_prompt = """
+The following are a series of questions about molecules that connect their structure to a property, along with how important each question is for the molecular property. An answer of "Yes" means that the question was true and that attribute of structure contributed to the molecular property. An answer of "Counterfactual" means the lack of that attribute contributed to the molecular property. A summary paragraph is given below, which focuses on the most important structure-property relationships.
+
+Property: [PROPERTY]
+[TEXT]
+Summary: The molecular property "[PROPERTY]" can be explained"""
+
+
+def text_prompt(text_explanations: List[Tuple[str, float]], property_name: str) -> str:
+    """Insert text explanations into template."""
+    result = _text_prompt.replace("[PROPERTY]", property_name)
+    result = result.replace("[TEXT]", "".join([f"{t[0]}" for t in text_explanations]))
+    return result
 
 
 def text_explain(
@@ -1298,7 +1316,7 @@ def text_explain(
 
     # Take t-statistics, rank them
     d_importance = [
-        (n, t)  # name: t-stat
+        (n, t, i)  # name, t-stat, index
         for i, (n, t) in enumerate(
             zip(
                 examples[0].descriptors.plotting_names,
@@ -1306,19 +1324,21 @@ def text_explain(
             )
         )
         # don't want NANs and want match (if not multiple bases)
-        if not np.isnan(t) and True or examples[0].descriptors.descriptors[i] != 0
+        if not np.isnan(t)
     ]
 
     d_importance = sorted(d_importance, key=lambda x: abs(x[1]), reverse=True)
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    if np.isnan(effective_n):
+        effective_n = 100  # go with asymtotic
     T = ss.t.ppf(0.975, df=effective_n)
 
     success = 0
     result = []
     existing_names = set()
-    for k, v in d_importance:
+    for k, v, i in d_importance:
         if success == count:
             break
         name = k
@@ -1326,12 +1346,25 @@ def text_explain(
             continue
         existing_names.add(name)
         if abs(v) > 4:
-            imp = "Very Important\n"
+            imp = "This is very important for the property\n"
         elif abs(v) >= T:
-            imp = "Important\n"
+            imp = "This is important for the property\n"
         else:
-            imp = "Weakly Important\n"
-        s = f"{name} Yes. {imp}"
+            imp = "This may be important for the property\n"
+        # check if it's present in a base molecule
+        present = sum(
+            [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
+        )
+        if not present and v < 0:
+            kind = "No (Counterfactual)."
+        elif present and v > 0:
+            kind = "Yes."
+        else:
+            continue
+        # adjust name to be question
+        if name[-1] != "?":
+            name = "Is there " + name + "?"
+        s = f"{name} {kind} {imp}"
         success += 1
         result.append((s, v))
     return result
