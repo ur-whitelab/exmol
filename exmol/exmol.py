@@ -1301,7 +1301,7 @@ def text_explain(
     examples: List[Example],
     descriptor_type: str = "maccs",
     count: int = 5,
-    presence_thresh: float = 0.8,
+    presence_thresh: float = 0.2,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
 
