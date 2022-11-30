@@ -173,7 +173,7 @@ def _get_joint_ecfp_descriptors(examples):
     output_ecfp = []
     output_names = []
     for b, n in zip(ecfp_joint, names):
-        if n in unique_names:
+        if n in unique_names and n is not None:
             unique_names.remove(n)
             output_ecfp.append(b)
             output_names.append(n)
