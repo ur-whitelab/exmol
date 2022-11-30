@@ -1301,18 +1301,20 @@ def text_explain(
     examples: List[Example],
     descriptor_type: str = "maccs",
     count: int = 5,
+    presence_thresh: float = 0.8,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
 
     :param examples: Output from :func:`sample_space`
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
+    :param presence_thresh: Threshold for presence of descriptor in examples
     """
     descriptor_type = descriptor_type.lower()
     # populate lime explanation
     if examples[-1].descriptors is None:
         lime_explain(examples, descriptor_type=descriptor_type)
-    multiple_bases = _check_multiple_bases(examples)
+    nbases = sum([1 for e in examples if e.is_origin])
 
     # Take t-statistics, rank them
     d_importance = [
@@ -1332,7 +1334,7 @@ def text_explain(
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
     if np.isnan(effective_n):
-        effective_n = len(examples)  # go with asymtotic
+        effective_n = len(examples)
     T = ss.t.ppf(0.975, df=effective_n)
 
     success = 0
@@ -1352,12 +1354,13 @@ def text_explain(
         else:
             imp = "This may be important for the property\n"
         # check if it's present in majority of base molecules
+
         present = sum(
             [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
-        ) / sum([1 for e in examples if e.is_origin]) > 0.5
-        if not present and v < 0:
+        )
+        if present / nbases < (1 - presence_thresh) and v < 0:
             kind = "No (Counterfactual)."
-        elif present and v > 0:
+        elif present / nbases > presence_thresh and v > 0:
             kind = "Yes."
         else:
             continue
