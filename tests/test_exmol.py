@@ -6,6 +6,7 @@ import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit import RDPaths
+from rdkit.Chem import AllChem
 
 
 def test_version():
@@ -244,6 +245,14 @@ def test_sample_with_partial():
 
     f = functools.partial(model, x=1)
     exmol.sample_space("C", f, batched=False)
+
+
+def test_name_morgan_bit():
+    mol = smi2mol("CO")
+    bitInfo = {}
+    AllChem.GetMorganFingerprintAsBitVect(mol, 2, bitInfo=bitInfo)
+    name = exmol.name_morgan_bit(mol, bitInfo=bitInfo, key=1155)
+    assert name == "alcohol"
 
 
 def test_sample_multiple_bases():

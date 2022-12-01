@@ -70,9 +70,9 @@ def _ecfp_names(examples, joint_bits):
         if multiple_bases:
             m = multiBitInfo[k][0]
             b = multiBitInfo[k][2]
-            name = _name_morgan_bit(m, b, k)
+            name = name_morgan_bit(m, b, k)
         else:
-            name = _name_morgan_bit(base_mol, bitInfo, k)
+            name = name_morgan_bit(base_mol, bitInfo, k)
         result.append(name)
     return tuple(result)
 
@@ -220,7 +220,13 @@ def _load_smarts(path, rank_cutoff=500):
     return smarts
 
 
-def _name_morgan_bit(m, bitInfo, key):
+def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
+    """Get the name of a Morgan bit using a SMARTS dictionary
+
+    :param m: RDKit molecule
+    :param bitInfo: bitInfo dictionary from rdkit.Chem.AllChem.GetMorganFingerprint
+    :param key: bit key corresponding to the fingerprint you want to have named
+    """
     global _SMARTS
     if _SMARTS is None:
         from importlib_resources import files  # type: ignore
@@ -1277,7 +1283,8 @@ def merge_text_explains(
     joint = reduce(lambda x, y: x + y, args)
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
     if filter is not None:
-        joint = [x for x in joint if np.absolute(x[1]) > filter]
+        # we make sure at least one is included
+        joint = joint[:1] + [x for x in joint[1:] if np.absolute(x[1]) > filter]
     # return top ones
     return joint
 
@@ -1290,10 +1297,34 @@ Property: [PROPERTY]
 Summary: The molecular property "[PROPERTY]" can be explained"""
 
 
-def text_prompt(text_explanations: List[Tuple[str, float]], property_name: str) -> str:
-    """Insert text explanations into template."""
+def text_prompt(
+    text_explanations: List[Tuple[str, float]],
+    property_name: str,
+    open_ai_key: Optional[str] = None,
+) -> str:
+    """Insert text explanations into template, and optionally send to OpenAI."""
     result = _text_prompt.replace("[PROPERTY]", property_name)
     result = result.replace("[TEXT]", "".join([f"{t[0]}" for t in text_explanations]))
+    if open_ai_key is not None:
+        import openai
+
+        openai.api_key = open_ai_key
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=result,
+            temperature=0.5,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+        )
+        completion = response["choices"][0]["text"]
+        return (
+            'The molecular property "'
+            + property_name
+            + '" can be explained by '
+            + completion
+        )
     return result
 
 
@@ -1302,6 +1333,7 @@ def text_explain(
     descriptor_type: str = "maccs",
     count: int = 5,
     presence_thresh: float = 0.2,
+    include_weak: bool = False,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
 
@@ -1309,6 +1341,7 @@ def text_explain(
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
     :param presence_thresh: Threshold for presence of descriptor in examples
+    :param include_weak: Include weak descriptors
     """
     descriptor_type = descriptor_type.lower()
     # populate lime explanation
@@ -1337,11 +1370,12 @@ def text_explain(
         effective_n = len(examples)
     T = ss.t.ppf(0.975, df=effective_n)
 
-    success = 0
+    pos_count = 0
+    neg_count = 0
     result = []
     existing_names = set()
     for k, v, i in d_importance:
-        if success == count:
+        if pos_count + neg_count == count:
             break
         name = k
         if name is None or name in existing_names:
@@ -1351,23 +1385,29 @@ def text_explain(
             imp = "This is very important for the property\n"
         elif abs(v) >= T:
             imp = "This is important for the property\n"
-        else:
+        elif include_weak:
             imp = "This may be important for the property\n"
+        else:
+            continue
         # check if it's present in majority of base molecules
 
         present = sum(
             [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
         )
         if present / nbases < (1 - presence_thresh) and v < 0:
+            if neg_count == count - 2:
+                # don't want to have only negative examples
+                continue
             kind = "No (Counterfactual)."
+            neg_count += 1
         elif present / nbases > presence_thresh and v > 0:
             kind = "Yes."
+            pos_count += 1
         else:
             continue
         # adjust name to be question
         if name[-1] != "?":
             name = "Is there " + name + "?"
         s = f"{name} {kind} {imp}"
-        success += 1
         result.append((s, v))
     return result
