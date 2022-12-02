@@ -1279,13 +1279,12 @@ def merge_text_explains(
     *args: List[Tuple[str, float]], filter: Optional[float] = None
 ) -> List[Tuple[str, float]]:
     """Merge multiple text explanations into one and sort."""
-    # sort them by T magnitude
+    # sort them by T value, putting negative examples at the end
     joint = reduce(lambda x, y: x + y, args)
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
     if filter is not None:
         # we make sure at least one is included
         joint = joint[:1] + [x for x in joint[1:] if np.absolute(x[1]) > filter]
-    # return top ones
     return joint
 
 
@@ -1304,6 +1303,8 @@ def text_prompt(
 ) -> str:
     """Insert text explanations into template, and optionally send to OpenAI."""
     result = _text_prompt.replace("[PROPERTY]", property_name)
+    # want to have negative examples at the end
+    text_explanations.sort(key=lambda x: x[1], reverse=True)
     result = result.replace("[TEXT]", "".join([f"{t[0]}" for t in text_explanations]))
     if open_ai_key is not None:
         import openai
@@ -1312,7 +1313,7 @@ def text_prompt(
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=result,
-            temperature=0.5,
+            temperature=0.7,
             max_tokens=256,
             top_p=1,
             frequency_penalty=0,
