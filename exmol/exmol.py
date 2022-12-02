@@ -1322,7 +1322,7 @@ def text_prompt(
         return (
             'The molecular property "'
             + property_name
-            + '" can be explained by '
+            + '" can be explained'
             + completion
         )
     return result
