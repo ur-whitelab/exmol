@@ -1281,11 +1281,12 @@ def merge_text_explains(
     """Merge multiple text explanations into one and sort."""
     # sort them by T value, putting negative examples at the end
     joint = reduce(lambda x, y: x + y, args)
+    # get the highest positive
+    m = max([x[1] for x in joint if x[1] > 0])
+    pos = [x for x in joint if x[1] == m]
+    joint = [x for x in joint if x[1] != m]
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
-    if filter is not None:
-        # we make sure at least one is included
-        joint = joint[:1] + [x for x in joint[1:] if np.absolute(x[1]) > filter]
-    return joint
+    return pos + joint
 
 
 _text_prompt = """
