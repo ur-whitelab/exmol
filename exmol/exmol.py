@@ -1292,7 +1292,7 @@ def merge_text_explains(
 
 
 _text_prompt = """
-The following are a series of questions about molecules that connect their structure to a property, along with how important each question is for the molecular property. An answer of "Yes" means that the question was true and that attribute of structure contributed to the molecular property. An answer of "Counterfactual" means the lack of that attribute contributed to the molecular property. A summary paragraph is given below, which focuses on the most important structure-property relationships.
+The following are a series of questions about molecules that connect their structure to a property, along with how important each question is for the molecular property. An answer of "Yes" means that the question was true and that attribute of structure contributed to the molecular property. An answer of "Counterfactual" means the lack of that attribute contributed to the molecular property. A summary paragraph is given below, which only summarizes on the most important structure-property relationships.
 
 Property: [PROPERTY]
 [TEXT]
@@ -1337,7 +1337,7 @@ def text_explain(
     descriptor_type: str = "maccs",
     count: int = 5,
     presence_thresh: float = 0.2,
-    include_weak: bool = False,
+    include_weak: Optional[bool] = None,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
 
@@ -1345,7 +1345,9 @@ def text_explain(
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
     :param presence_thresh: Threshold for presence of descriptor in examples
-    :param include_weak: Include weak descriptors
+    :param include_weak: Include weak descriptors. If not set, the function
+    will be first have this set to False, and if no descriptors are found,
+    will be set to True and function will be re-run
     """
     descriptor_type = descriptor_type.lower()
     # populate lime explanation
@@ -1390,7 +1392,7 @@ def text_explain(
         elif abs(v) >= T:
             imp = "This is important for the property\n"
         elif include_weak:
-            imp = "This may be important for the property\n"
+            imp = "This could be relevent for the property\n"
         else:
             continue
         # check if it's present in majority of base molecules
@@ -1414,4 +1416,12 @@ def text_explain(
             name = "Is there " + name + "?"
         s = f"{name} {kind} {imp}"
         result.append((s, v))
+    if len(result) == 0 or len(pos_count) == 0 and include_weak is None:
+        return text_explain(
+            examples,
+            descriptor_type=descriptor_type,
+            count=count,
+            presence_thresh=presence_thresh,
+            include_weak=True,
+        )
     return result

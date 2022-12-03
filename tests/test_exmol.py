@@ -407,17 +407,23 @@ def test_text_explain():
         return int("=O" in s)
 
     samples = exmol.sample_space("CCCC", model, batched=False)
-    exmol.text_explain(samples, "MACCS")
+    s = exmol.text_explain(samples, "MACCS")
+    assert len(s) > 0, "No explanation generated"
 
     samples1 = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
-    exmol.text_explain(samples1, "ECFP")
+    s = exmol.text_explain(samples1, "ECFP")
+    assert len(s) > 0, "No explanation generated"
 
     samples2 = exmol.sample_space(
         "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False
     )
+
+    # try with multiple origins
     samples = samples1 + samples2
     s1 = exmol.text_explain(samples, "ECFP")
+    assert len(s1) > 0, 'No explanation found for "ECFP"'
     s2 = exmol.text_explain(samples, "MACCS")
+    assert len(s2) > 0, 'No explanation found for "MACCS"'
     s = exmol.merge_text_explains(s1, s2)
 
 
