@@ -1281,7 +1281,9 @@ def merge_text_explains(
     """Merge multiple text explanations into one and sort."""
     # sort them by T value, putting negative examples at the end
     joint = reduce(lambda x, y: x + y, args)
-    # get the highest positive
+    if len(joint) == 0:
+        return []
+    # get the highest (hopefully) positive
     m = max([x[1] for x in joint if x[1] > 0])
     pos = [x for x in joint if x[1] == m]
     joint = [x for x in joint if x[1] != m]
