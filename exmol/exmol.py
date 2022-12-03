@@ -1416,7 +1416,7 @@ def text_explain(
             name = "Is there " + name + "?"
         s = f"{name} {kind} {imp}"
         result.append((s, v))
-    if len(result) == 0 or len(pos_count) == 0 and include_weak is None:
+    if len(result) == 0 or pos_count == 0 and include_weak is None:
         return text_explain(
             examples,
             descriptor_type=descriptor_type,
