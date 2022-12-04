@@ -9,6 +9,7 @@ from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
 from rdkit.Chem import AllChem  # type: ignore
 from rdkit.Chem.Draw import SimilarityMaps  # type:ignore
+from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 import rdkit.Chem  # type: ignore
 import matplotlib as mpl  # type: ignore
 from .data import *
@@ -16,6 +17,22 @@ import skunk  # type: ignore
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
+
+
+def _bit2atoms(m, bitInfo, key):
+    # get atom id and radius
+    i, r = bitInfo[key][0]  # just take first matching atom
+    # taken from rdkit drawing code
+    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
+
+    # get the atoms for highlighting
+    atoms = set((i,))
+    for b in bitPath:
+        a = m.GetBondWithIdx(b).GetBeginAtomIdx()
+        atoms.add(a)
+        a = m.GetBondWithIdx(b).GetEndAtomIdx()
+        atoms.add(a)
+    return atoms
 
 
 def _imgtext2mpl(txt):
@@ -249,9 +266,9 @@ def similarity_map_using_tstats(
     # Get contributions for atoms
     contribs = {atom: [0] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
     for b in bi:
-        for tup in bi[b]:
+        for atom in _bit2atoms(mol, bi, b):
             if b in tstat_dict:
-                contribs[tup[0]].append(tstat_dict[b])
+                contribs[atom].append(tstat_dict[b])
     weights = [max(contribs[a], key=abs) for a in range(mol.GetNumAtoms())]
     # use max or threshold of significance t-value
     # threshold significance of 0.1 --> t >= |1.645|

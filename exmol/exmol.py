@@ -24,12 +24,11 @@ from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
 from . import stoned
-from .plot_utils import _mol_images, _image_scatter
+from .plot_utils import _mol_images, _image_scatter, _bit2atoms
 from .data import *
 
 
@@ -181,22 +180,6 @@ def _get_joint_ecfp_descriptors(examples):
 
 
 _SMARTS = None
-
-
-def _bit2atoms(m, bitInfo, key):
-    # get atom id and radius
-    i, r = bitInfo[key][0]  # just take first matching atom
-    # taken from rdkit drawing code
-    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
-
-    # get the atoms for highlighting
-    atoms = set((i,))
-    for b in bitPath:
-        a = m.GetBondWithIdx(b).GetBeginAtomIdx()
-        atoms.add(a)
-        a = m.GetBondWithIdx(b).GetEndAtomIdx()
-        atoms.add(a)
-    return atoms
 
 
 def _load_smarts(path, rank_cutoff=500):
