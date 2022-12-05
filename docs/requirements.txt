@@ -4,7 +4,7 @@ sphinx-rtd-theme
 sphinx_autodoc_typehints
 myst-nb
 mordred[full]==1.2.0
-sklearn
+scikit-learn
 jupyter
 seaborn
 pandas
