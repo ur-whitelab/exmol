@@ -808,9 +808,10 @@ def lime_explain(
     # now compute t-statistic for existence of coefficients
     tstat = beta * np.sqrt(1 / np.diag(se2_beta))
     # Set tstats for bases, to be used later
+    # TODO: Used to put them on examples[0] only,
+    # but now copy them to all examples
     for e in examples:
-        if e.is_origin:
-            e.descriptors.tstats = tstat
+        e.descriptors.tstats = tstat
     # Return beta (feature weights) which are the fits if asked for
     if return_beta:
         return beta
