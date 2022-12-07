@@ -9,6 +9,7 @@ from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img  # type: ignore
 from rdkit.Chem import AllChem  # type: ignore
 from rdkit.Chem.Draw import SimilarityMaps  # type:ignore
+from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 import rdkit.Chem  # type: ignore
 import matplotlib as mpl  # type: ignore
 from .data import *
@@ -16,6 +17,30 @@ import skunk  # type: ignore
 
 delete_color = mpl.colors.to_rgb("#F06060")
 modify_color = mpl.colors.to_rgb("#1BBC9B")
+
+
+def _bit2atoms(m, bitInfo, key):
+    # get atom id and radius
+    i, r = bitInfo[key][0]  # just take first matching atom
+    # taken from rdkit drawing code
+    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
+
+    # get the atoms for highlighting
+    atoms = set((i,))
+    for b in bitPath:
+        a = m.GetBondWithIdx(b).GetBeginAtomIdx()
+        atoms.add(a)
+        a = m.GetBondWithIdx(b).GetEndAtomIdx()
+        atoms.add(a)
+    return atoms
+
+
+def _imgtext2mpl(txt):
+    from PIL import Image  # type: ignore
+    from io import BytesIO  # type: ignore
+
+    plt.imshow(Image.open(BytesIO(txt)))
+    plt.axis("off")
 
 
 def _extract_loc(e):
@@ -211,9 +236,16 @@ def moldiff(template, query) -> Tuple[List[int], List[int]]:
     return inv_match, bond_match
 
 
-def similarity_map_using_tstats(example: Example):
+def similarity_map_using_tstats(
+    example: Example, mol_size: Tuple[int, int] = (300, 200), return_svg: bool = False
+) -> Optional[str]:
     """Create similarity map for example molecule using descriptor t-statistics.
     Only works for ECFP descriptors
+
+    :param example: Example object
+    :param mol_size: size of molecule image
+    :param return_svg: return svg instead of saving to file
+    :return: svg if return_svg is True, else None
     """
     assert (
         example.descriptors.descriptor_type.lower() == "ecfp"
@@ -234,16 +266,30 @@ def similarity_map_using_tstats(example: Example):
     # Get contributions for atoms
     contribs = {atom: [0] for atom in range(mol.GetNumAtoms())}  # type: Dict[Any,Any]
     for b in bi:
-        for tup in bi[b]:
+        for atom in _bit2atoms(mol, bi, b):
             if b in tstat_dict:
-                contribs[tup[0]].append(tstat_dict[b])
+                contribs[atom].append(tstat_dict[b])
     weights = [max(contribs[a], key=abs) for a in range(mol.GetNumAtoms())]
+    # use max or threshold of significance t-value
     # threshold significance of 0.1 --> t >= |1.645|
-    weights = [b if abs(b) >= 1.645 else 0 for b in weights]
-    # Draw the similarity map
-    fig = SimilarityMaps.GetSimilarityMapFromWeights(mol, weights, contourLines=10)
-    plt.savefig("atom_contribs.svg", dpi=180, bbox_inches="tight")
-    return weights
+    cut = min(max(abs(min(weights)), abs(max(weights))), 1.645)
+    weights = [b if abs(b) >= cut else 0 for b in weights]
+    dos = rdkit.Chem.Draw.MolDrawOptions()
+    dos.useBWAtomPalette()
+    dos.drawMolsSameScale = True
+    if return_svg:
+        d = rdkit.Chem.Draw.MolDraw2DSVG(*mol_size)
+    else:
+        d = rdkit.Chem.Draw.MolDraw2DCairo(*mol_size)
+    d.SetDrawOptions(dos)
+    rdkit.Chem.Draw.SimilarityMaps.GetSimilarityMapFromWeights(
+        mol, weights=weights, draw2d=d, contourLines=0, colorMap="bwr"
+    )
+    d.FinishDrawing()
+    text = d.GetDrawingText()
+    if return_svg:
+        return text
+    _imgtext2mpl(text)
 
 
 def plot_space_by_fit(

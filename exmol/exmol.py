@@ -24,12 +24,11 @@ from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
-from rdkit.Chem import FindAtomEnvironmentOfRadiusN  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 
 from . import stoned
-from .plot_utils import _mol_images, _image_scatter
+from .plot_utils import _mol_images, _image_scatter, _bit2atoms
 from .data import *
 
 
@@ -70,9 +69,9 @@ def _ecfp_names(examples, joint_bits):
         if multiple_bases:
             m = multiBitInfo[k][0]
             b = multiBitInfo[k][2]
-            name = _name_morgan_bit(m, b, k)
+            name = name_morgan_bit(m, b, k)
         else:
-            name = _name_morgan_bit(base_mol, bitInfo, k)
+            name = name_morgan_bit(base_mol, bitInfo, k)
         result.append(name)
     return tuple(result)
 
@@ -173,7 +172,7 @@ def _get_joint_ecfp_descriptors(examples):
     output_ecfp = []
     output_names = []
     for b, n in zip(ecfp_joint, names):
-        if n in unique_names:
+        if n in unique_names and n is not None:
             unique_names.remove(n)
             output_ecfp.append(b)
             output_names.append(n)
@@ -181,22 +180,6 @@ def _get_joint_ecfp_descriptors(examples):
 
 
 _SMARTS = None
-
-
-def _bit2atoms(m, bitInfo, key):
-    # get atom id and radius
-    i, r = bitInfo[key][0]  # just take first matching atom
-    # taken from rdkit drawing code
-    bitPath = FindAtomEnvironmentOfRadiusN(m, r, i)
-
-    # get the atoms for highlighting
-    atoms = set((i,))
-    for b in bitPath:
-        a = m.GetBondWithIdx(b).GetBeginAtomIdx()
-        atoms.add(a)
-        a = m.GetBondWithIdx(b).GetEndAtomIdx()
-        atoms.add(a)
-    return atoms
 
 
 def _load_smarts(path, rank_cutoff=500):
@@ -220,7 +203,13 @@ def _load_smarts(path, rank_cutoff=500):
     return smarts
 
 
-def _name_morgan_bit(m, bitInfo, key):
+def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
+    """Get the name of a Morgan bit using a SMARTS dictionary
+
+    :param m: RDKit molecule
+    :param bitInfo: bitInfo dictionary from rdkit.Chem.AllChem.GetMorganFingerprint
+    :param key: bit key corresponding to the fingerprint you want to have named
+    """
     global _SMARTS
     if _SMARTS is None:
         from importlib_resources import files  # type: ignore
@@ -242,9 +231,6 @@ def _name_morgan_bit(m, bitInfo, key):
             if match.issubset(morgan_atoms):
                 names.append((r, name, match))
     names.sort(key=lambda x: x[0])
-    # short-circuit if single atom
-    # if len(morgan_atoms) == 1:
-    #    return m.GetAtomWithIdx(bitInfo[key][0][0]).GetSymbol()
     if len(names) == 0:
         return None
     umatch = names[0][2]
@@ -253,9 +239,11 @@ def _name_morgan_bit(m, bitInfo, key):
     for _, n, m in names:
         if len(m.intersection(umatch)) == 0:
             if n not in unique_names:
-                name += " and " + n[0].lower() + n[1:].replace("_", " ")
+                name += "/" + n[0].lower() + n[1:].replace("_", " ")
                 umatch |= m
                 unique_names.add(n)
+    if "/" in name and "fragment" not in name.split("/")[-1]:
+        name = name + " group"
     # if we failed to match all heteroatoms, fail
     if len(heteroatoms.difference(umatch)) > 0:
         return None
@@ -819,8 +807,11 @@ def lime_explain(
     se2_beta = se2_epsilon * xtinv
     # now compute t-statistic for existence of coefficients
     tstat = beta * np.sqrt(1 / np.diag(se2_beta))
-    # Set tstats for base, to be used later
-    examples[0].descriptors.tstats = tstat
+    # Set tstats for bases, to be used later
+    # TODO: Used to put them on examples[0] only,
+    # but now copy them to all examples
+    for e in examples:
+        e.descriptors.tstats = tstat
     # Return beta (feature weights) which are the fits if asked for
     if return_beta:
         return beta
@@ -1270,35 +1261,89 @@ def check_multiple_aromatic_rings(mol):
     return True if count > 1 else False
 
 
-def merge_text_explains(*args: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
+def merge_text_explains(
+    *args: List[Tuple[str, float]], filter: Optional[float] = None
+) -> List[Tuple[str, float]]:
     """Merge multiple text explanations into one and sort."""
-    # sort them by T magnitude
+    # sort them by T value, putting negative examples at the end
     joint = reduce(lambda x, y: x + y, args)
+    if len(joint) == 0:
+        return []
+    # get the highest (hopefully) positive
+    m = max([x[1] for x in joint if x[1] > 0])
+    pos = [x for x in joint if x[1] == m]
+    joint = [x for x in joint if x[1] != m]
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
-    # return top ones
-    return joint
+    return pos + joint
+
+
+_text_prompt = """
+The following are a series of questions about molecules that connect their structure to a property, along with how important each question is for the molecular property. An answer of "Yes" means that the question was true and that attribute of structure contributed to the molecular property. An answer of "Counterfactual" means the lack of that attribute contributed to the molecular property. A summary paragraph is given below, which only summarizes on the most important structure-property relationships.
+
+Property: [PROPERTY]
+[TEXT]
+Summary: The molecular property "[PROPERTY]" can be explained"""
+
+
+def text_prompt(
+    text_explanations: List[Tuple[str, float]],
+    property_name: str,
+    open_ai_key: Optional[str] = None,
+) -> str:
+    """Insert text explanations into template, and optionally send to OpenAI."""
+    result = _text_prompt.replace("[PROPERTY]", property_name)
+    # want to have negative examples at the end
+    text_explanations.sort(key=lambda x: x[1], reverse=True)
+    result = result.replace("[TEXT]", "".join([f"{t[0]}" for t in text_explanations]))
+    if open_ai_key is not None:
+        import openai
+
+        openai.api_key = open_ai_key
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=result,
+            temperature=0.7,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+        )
+        completion = response["choices"][0]["text"]
+        return (
+            'The molecular property "'
+            + property_name
+            + '" can be explained'
+            + completion
+        )
+    return result
 
 
 def text_explain(
     examples: List[Example],
     descriptor_type: str = "maccs",
     count: int = 5,
+    presence_thresh: float = 0.2,
+    include_weak: Optional[bool] = None,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
 
     :param examples: Output from :func:`sample_space`
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
+    :param presence_thresh: Threshold for presence of descriptor in examples
+    :param include_weak: Include weak descriptors. If not set, the function
+    will be first have this set to False, and if no descriptors are found,
+    will be set to True and function will be re-run
     """
     descriptor_type = descriptor_type.lower()
     # populate lime explanation
     if examples[-1].descriptors is None:
         lime_explain(examples, descriptor_type=descriptor_type)
-    multiple_bases = _check_multiple_bases(examples)
+    nbases = sum([1 for e in examples if e.is_origin])
 
     # Take t-statistics, rank them
     d_importance = [
-        (n, t)  # name: t-stat
+        (n, t, i)  # name, t-stat, index
         for i, (n, t) in enumerate(
             zip(
                 examples[0].descriptors.plotting_names,
@@ -1306,32 +1351,63 @@ def text_explain(
             )
         )
         # don't want NANs and want match (if not multiple bases)
-        if not np.isnan(t) and True or examples[0].descriptors.descriptors[i] != 0
+        if not np.isnan(t)
     ]
 
     d_importance = sorted(d_importance, key=lambda x: abs(x[1]), reverse=True)
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
     effective_n = np.sum(w) ** 2 / np.sum(w**2)
+    if np.isnan(effective_n):
+        effective_n = len(examples)
     T = ss.t.ppf(0.975, df=effective_n)
 
-    success = 0
+    pos_count = 0
+    neg_count = 0
     result = []
     existing_names = set()
-    for k, v in d_importance:
-        if success == count:
+    for k, v, i in d_importance:
+        if pos_count + neg_count == count:
             break
         name = k
         if name is None or name in existing_names:
             continue
         existing_names.add(name)
         if abs(v) > 4:
-            imp = "Very Important\n"
+            imp = "This is very important for the property\n"
         elif abs(v) >= T:
-            imp = "Important\n"
+            imp = "This is important for the property\n"
+        elif include_weak:
+            imp = "This could be relevent for the property\n"
         else:
-            imp = "Weakly Important\n"
-        s = f"{name} Yes. {imp}"
-        success += 1
+            continue
+        # check if it's present in majority of base molecules
+
+        present = sum(
+            [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
+        )
+        if present / nbases < (1 - presence_thresh) and v < 0:
+            if neg_count == count - 2:
+                # don't want to have only negative examples
+                continue
+            kind = "No (Counterfactual)."
+            neg_count += 1
+        elif present / nbases > presence_thresh and v > 0:
+            kind = "Yes."
+            pos_count += 1
+        else:
+            continue
+        # adjust name to be question
+        if name[-1] != "?":
+            name = "Is there " + name + "?"
+        s = f"{name} {kind} {imp}"
         result.append((s, v))
+    if len(result) == 0 or pos_count == 0 and include_weak is None:
+        return text_explain(
+            examples,
+            descriptor_type=descriptor_type,
+            count=count,
+            presence_thresh=presence_thresh,
+            include_weak=True,
+        )
     return result
