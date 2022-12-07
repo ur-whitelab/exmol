@@ -9,6 +9,8 @@ v2.2.1
 * Added priority for naming and removed invalid names
 * Added more names (metyhl, ethyl, butyl, etc)
 * Fixed `sample_space` to accept partials or objects
+* Added openai prompting
+* Added `name_morgan_bit` as external facing
 
 v2.2.0 (2022-11-3)
 -------------------

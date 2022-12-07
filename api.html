@@ -51,6 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.get_basic_alphabet"><code class="docutils literal notranslate"><span class="pre">get_basic_alphabet()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.lime_explain"><code class="docutils literal notranslate"><span class="pre">lime_explain()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.merge_text_explains"><code class="docutils literal notranslate"><span class="pre">merge_text_explains()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.name_morgan_bit"><code class="docutils literal notranslate"><span class="pre">name_morgan_bit()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.plot_cf"><code class="docutils literal notranslate"><span class="pre">plot_cf()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.plot_descriptors"><code class="docutils literal notranslate"><span class="pre">plot_descriptors()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.plot_space"><code class="docutils literal notranslate"><span class="pre">plot_space()</span></code></a></li>
@@ -60,6 +61,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.run_stoned"><code class="docutils literal notranslate"><span class="pre">run_stoned()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.sample_space"><code class="docutils literal notranslate"><span class="pre">sample_space()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.text_explain"><code class="docutils literal notranslate"><span class="pre">text_explain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exmol.exmol.text_prompt"><code class="docutils literal notranslate"><span class="pre">text_prompt()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exmol.data.Descriptors"><code class="docutils literal notranslate"><span class="pre">Descriptors</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#exmol.data.Descriptors.descriptor_names"><code class="docutils literal notranslate"><span class="pre">Descriptors.descriptor_names</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exmol.data.Descriptors.descriptor_type"><code class="docutils literal notranslate"><span class="pre">Descriptors.descriptor_type</span></code></a></li>
@@ -218,11 +220,29 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.exmol.merge_text_explains">
-<span class="sig-name descname"><span class="pre">merge_text_explains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.merge_text_explains" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">merge_text_explains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.merge_text_explains" title="Permalink to this definition"></a></dt>
 <dd><p>Merge multiple text explanations into one and sort.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exmol.exmol.name_morgan_bit">
+<span class="sig-name descname"><span class="pre">name_morgan_bit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitInfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.name_morgan_bit" title="Permalink to this definition"></a></dt>
+<dd><p>Get the name of a Morgan bit using a SMARTS dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>) – RDKit molecule</p></li>
+<li><p><strong>bitInfo</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – bitInfo dictionary from rdkit.Chem.AllChem.GetMorganFingerprint</p></li>
+<li><p><strong>key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – bit key corresponding to the fingerprint you want to have named</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -407,7 +427,7 @@ set to 3,000 by default if using STONED and 150 if using <code class="docutils l
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.exmol.text_explain">
-<span class="sig-name descname"><span class="pre">text_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptor_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'maccs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.text_explain" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">text_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptor_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'maccs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presence_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_weak</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.text_explain" title="Permalink to this definition"></a></dt>
 <dd><p>Take an example and convert t-statistics into text explanations</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -415,10 +435,27 @@ set to 3,000 by default if using STONED and 150 if using <code class="docutils l
 <li><p><strong>examples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>]) – Output from <a class="reference internal" href="#exmol.exmol.sample_space" title="exmol.exmol.sample_space"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample_space()</span></code></a></p></li>
 <li><p><strong>descriptor_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Type of descriptor, either “maccs”, or “ecfp”.</p></li>
 <li><p><strong>count</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of text explanations to return</p></li>
+<li><p><strong>presence_thresh</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Threshold for presence of descriptor in examples</p></li>
+<li><p><strong>include_weak</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]) – Include weak descriptors. If not set, the function</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+</dl>
+<p>will be first have this set to False, and if no descriptors are found,
+will be set to True and function will be re-run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="exmol.exmol.text_prompt">
+<span class="sig-name descname"><span class="pre">text_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_explanations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.exmol.text_prompt" title="Permalink to this definition"></a></dt>
+<dd><p>Insert text explanations into template, and optionally send to OpenAI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -587,9 +624,24 @@ Adapted from <code class="xref py py-func docutils literal notranslate"><span cl
 
 <dl class="py function">
 <dt class="sig sig-object py" id="exmol.plot_utils.similarity_map_using_tstats">
-<span class="sig-name descname"><span class="pre">similarity_map_using_tstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.plot_utils.similarity_map_using_tstats" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">similarity_map_using_tstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(300,</span> <span class="pre">200)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exmol.plot_utils.similarity_map_using_tstats" title="Permalink to this definition"></a></dt>
 <dd><p>Create similarity map for example molecule using descriptor t-statistics.
 Only works for ECFP descriptors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>example</strong> (<a class="reference internal" href="#exmol.data.Example" title="exmol.data.Example"><code class="xref py py-class docutils literal notranslate"><span class="pre">Example</span></code></a>) – Example object</p></li>
+<li><p><strong>mol_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – size of molecule image</p></li>
+<li><p><strong>return_svg</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – return svg instead of saving to file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>svg if return_svg is True, else None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
