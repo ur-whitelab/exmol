@@ -2,7 +2,7 @@ Change Log
 ==========
 
 
-v2.2.1
+v2.2.1 (2022-12-7)
 -------------------
 * Fixed bug in sorting for text explanations
 * Fixed empty plot names saying `None`
