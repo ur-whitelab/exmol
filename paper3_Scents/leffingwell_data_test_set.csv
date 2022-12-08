@@ -1,0 +1,723 @@
+Unnamed: 0,chemical_name,smiles,database_id,cas,odor_data,odor_labels_filtered,labels_trainAndtest,labels_cv0,labels_cv1,labels_cv2,labels_cv3,labels_cv4
+1238,Isoamyl propionate,CCC(=O)OCCC(C)C,1381,105-68-0,"Sweet, fruity, apricot-banana-pineapple-plum tropical notes","['apricot', 'fruity', 'banana', 'tropical', 'pineapple', 'plum', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2601,Methylthiobutanone,CSC(C)C(C)=O,2967,53475-15-3,"Sulfurous; alliaceous, earthy, currant, tropical in dilution","['earthy', 'alliaceous', 'tropical', 'black currant', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1453,Mercaptobutanone,CC(=O)C(C)S,1634,40789-98-8,"Beefy, meat-like, eggy, onion, savory, coffee; catty in extreme dilution","['meaty', 'savory', 'catty', 'onion', 'coffee', 'beefy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+586,Dimethylacetylthiazole,CC(=O)c1sc(C)nc1C,669,38205-60-6,"Roasted, nutty, meaty; sulfurous notes of boiled meat","['meaty', 'roasted', 'nutty', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3021,Phenyl propionate,CCC(=O)Oc1ccccc1,3477,637-27-4,"Foral, honey, phenolic notes","['honey', 'phenolic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1861,Methylthiopropanol,CSCCCO,2076,505-10-2,"Strong, meaty, mushroom, soup-like odor & taste in dilution","['meaty', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1979,Octanal,CCCCCCCC=O,2211,124-13-0,"Fatty-fruity odor; sweet, citrus-orange-fatty taste","['fatty', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1534,Methyl dihydrojasmonate,CCCCCC1C(=O)CCC1CC(=O)OC,1720,24851-98-7,"Floral-fruity, jasmine like odor; sweet floral-fruity taste","['fruity', 'floral', 'jasmine']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+154,Anisyl butyrate,CCCC(=O)OCc1ccc(OC)cc1,180,6963-56-0,"Mild, sweet, floral, fruity, plum-like with some heliotropin-like notes","['fruity', 'plum', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1180,Hydroxycitronellol,CC(CCO)CCCC(C)(C)O,1320,107-74-4,"Weak, sweet, floral-rose odor","['rose', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1495,Methoxyphenol,COc1cccc(O)c1,1678,150-19-6,Sweet medicinal phenolic in dilution,"['phenolic', 'medicinal', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1070,Hexanoic acid,CCCCCC(=O)O,1196,142-62-1,"Heavy, fatty, cheesey-sweaty odor and taste","['fatty', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+812,Ethyl octanoate,CCCCCCCC(=O)OCC,908,106-32-1,"Fruity, winey, sweet odor; cognac-apricot taste","['fruity', 'winey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2946,Isopropyl acetoacetate,CC(=O)CC(=O)OC(C)C,3386,542-08-5,"Fruity, caramellic, fermented, brandy, heavy fruit-apple notes","['apple', 'caramellic', 'fruity', 'fermented', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2097,Phenethyl senecioate,CC(C)=CC(=O)OCCc1ccccc1,2346,42078-65-9,Weak green winey-yeast odor; winey-fruity sherry-like taste,"['green', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+16,Acetaldehyde ethyl 3-methylbutyl acetal,CCOCCOCCC(C)C,17,13442-90-5,"Pungent, ethereal, alcoholic, green-nutty, cognac","['alcoholic', 'ethereal', 'green', 'nutty', 'cognac', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+438,Damascone,C/C=C\C(=O)C1=C(C)CCCC1(C)C,504,23726-92-3,"Complex odour of blackcurrant, plum, rose, honey and tobacco.","['rose', 'tobacco', 'plum', 'honey', 'black currant']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1742,Methylindole,Cc1cc2ccccc2[nH]1,1942,95-20-5,Animalic-indole like odor,['animal'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+874,Ethylhydroxymethylfuranone,CCC1=C(O)C(=O)C(C)O1,973,27538-09-6,"Sweet, sugary, caramel, bread like; intensely sweet caramel flavor; fruity","['caramellic', 'fruity', 'bread', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1136,Hexyl benzoate,CCCCCCOC(=O)c1ccccc1,1273,6789-88-4,"Woody-balsamic-floral, green, herbaceous notes","['green', 'herbal', 'woody', 'balsamic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+134,Amyl octanoate,CCCCCCCC(=O)OCCCCC,160,638-25-5,"Sweet, oily, fruity with floral-fatty undertone; fruity winey taste","['oily', 'fruity', 'fatty', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+558,Dihydroterpineol,CC1CCC(C(C)(C)O)CC1,638,498-81-7,Floral lilac (trans isomer); terpineol pine (cis isomer) See comments,"['pine', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+110,Allyl sulfide,C=CCSCC=C,128,592-88-1,"Sweet, pungent, garlic-horseradish like","['garlic', 'pungent', 'sweet', 'horseradish']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1811,Methylpropylpyridine,CC(C)Cc1cccnc1,2020,14159-61-6,"Narcotic, somewhat earthy green; See comments","['green', 'earthy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+77,Allyl phenylacetate,C=CCOC(=O)Cc1ccccc1,94,1797-74-6,"Sweet, honey-pineapple like odor and taste","['honey', 'pineapple', 'fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2026,Octylthiophene,CCCCCCCCc1cccs1,2261,880-36-4,Greasy fatty oily notes,"['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1978,Octanal dimethyl acetal,CCCCCCCC(OC)OC,2210,10022-28-3,"Fresh, waxy, green, orange-citrus odor with cognac connotation","['citrus', 'green', 'fresh', 'waxy', 'orange', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2265,Pyrazineethanethiol,SCCc1cnccn1,2527,35250-53-4,"Meaty, pot roast, sulfurous, savory, chicken, pork notes","['roasted', 'meaty', 'savory', 'chicken', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+502,Dibutyl trisulfide,CCCCSSSCCCC,573,5943-31-7,Cooked onion garlic notes,"['onion', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1369,Isopropylphenol,CC(C)c1ccccc1O,1523,88-69-7,"Spicy, medicinal-smoky phenolic odor; phenolic-smoky taste","['phenolic', 'spicy', 'medicinal', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+691,Dodecanol,CCCCCCCCCCCCO,781,112-53-8,"Oily-fatty, slight waxy-floral-citrus odor; fatty waxy taste","['citrus', 'oily', 'fatty', 'waxy', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+800,Ethyl methylphenylglycidate,CCOC(=O)C1OC1(C)c1ccccc1,895,77-83-8,"Sweet, fruity-strawberry, candy-like odor; strawberry-like taste","['fruity', 'strawberry', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2431,Trimethylpyridine,Cc1cc(C)nc(C)c1,2743,108-75-8,"Animalic, leathery, tobacco-musty, somewhat green-fishy","['leathery', 'green', 'tobacco', 'fishy', 'animal', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2006,Octenyl butanoate,CCCCC/C=C/COC(=O)CCC,2241,84642-60-4,"Waxy, fruity, berry-like","['fruity', 'waxy', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+200,Benzyl phenylacetate,O=C(Cc1ccccc1)OCc1ccccc1,231,102-16-9,"Weak, sweet floral odor and slight honey-like taste","['floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1705,Methylfuranmethanethiol,Cc1ccoc1CS,1903,59303-05-8,"Sulfurous roasted, coffee odor; meaty flavor at 0.5-1.0 ppb","['sulfurous', 'coffee', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+38,Acetosyringone,COc1cc(C(C)=O)cc(OC)c1O,42,2478-38-8,"Weak, sweet, balsamic, vanilla phenolic spicy notes","['spicy', 'vanilla', 'phenolic', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1985,Octanol,CCCCCCC(C)O,2217,123-96-6,"Weak green, floral-leafy, somewhat earthy musty odor and taste","['green', 'earthy', 'musty', 'leafy', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2610,Decenal,CCCC=CCCCCC=O,2978,105683-99-6,"Tallowy, green, herbaceous; an impact compound of parsley","['green', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+296,Butyl propionate,CCC(=O)OC(C)(C)C,332,20487-40-5,"Brandy, rum-like, fruity odor and taste","['fruity', 'rum', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3345,Methylthiolane,CC1CCCS1,3959,1795-09-1,"Sulfurous, allium-like, savoury on dilution","['sulfurous', 'alliaceous', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2052,Pentanoylthiophene,CCCCC(=O)c1cccs1,2299,53119-25-8,"Somewhat roasted, fried, nutty, caramellic","['nutty', 'caramellic', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1614,Methyl salicylate,COC(=O)c1ccccc1O,1806,119-36-8,"Warm, sweet, wintergreen odor and taste","['sweet', 'warm']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1363,Isopropylmethoxypyrazine,COc1nccnc1C(C)C,1516,93905-03-4,"Earthy, bell pepper; vegetable; potato-like","['potato', 'earthy', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+208,Bisabolene,CC(C)=CCC/C(C)=C1\CC=C(C)CC1,239,495-62-5,"Sweet, balsamic odor, Citrus, woody, Myrrh, fruity, tropical, floral","['citrus', 'fruity', 'tropical', 'woody', 'balsamic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1957,Nonyl acetate,CCCCCCCCCOC(C)=O,2185,143-13-5,"Fruity-green, leafy, floral, mushroom odor; fruity, waxy tropical taste","['green', 'fruity', 'leafy', 'floral', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+773,Ethyl hydroxymethylbutyrate,CCOC(=O)C(C)C(C)O,868,27372-03-8,Fruity,"['green', 'fruity', 'grape']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3102,Trimethylhexanoic acid,CC(CC(=O)O)CC(C)(C)C,3592,3302-10-1,"Mild, characteristic sour acidic odor (not rancid)",['sour'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1026,Heptenone,CCC/C=C/C(C)=O,1150,1119-44-4,"Sweet, green-grassy-fruity, cheesy, milky, dairy, slight caraway note","['grassy', 'green', 'fruity', 'milky', 'dairy', 'sweet', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+147,Angelic acid,C/C=C(/C)C(=O)O,173,565-63-9,"Spicy, caramellic odor; herbaceous somewhat celery like taste","['spicy', 'caramellic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+279,Butyl isovalerate,CCCCOC(=O)CC(C)C,315,109-19-3,"Ethereal, fruity, apple-banana odor, pineapple fruity taste","['fruity', 'apple', 'banana', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2524,Undecatetraene,C=CC=CC=CCC=CCC,2855,38533-54-9,"Fatty, green galbanum notes; useful in mint compositions","['green', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+119,Amyl acetate,CCCCCOC(C)=O,144,628-63-7,"Banana, ethereal, fruity","['banana', 'fruity', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2573,Dimethylisobutylpyrazine,Cc1cnc(CC(C)C)c(C)n1,2929,38888-81-2,"Cocoa, hazelnut, slightly musky animalic, patchouli-vetiver tones, minty","['cocoa', 'musk', 'hazelnut', 'animal', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1287,Isobutyl valerate,CCCCC(=O)OCC(C)C,1434,10588-10-0,"Ethereal, fruity, apple; sweet fruity apple-berry-winey taste","['fruity', 'apple', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+462,Decenal,CCCCC/C=C/CCC=O,528,65405-70-1,"Fresh, fruity, citrus-orange","['fruity', 'fresh', 'orange', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+623,Dimethylmethylfurylthioheptanone,Cc1occc1SC(C(=O)CC(C)C)C(C)C,708,61295-51-0,"Roasted meat aroma, roasted meat and citrus flavor w/ onion note","['onion', 'meaty', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+506,Diethoxymethylbutane,CCOC(OCC)C(C)CC,578,3658-94-4,"Ethereal, green, fruity, slightly fermented, apple note","['apple', 'ethereal', 'green', 'fruity', 'fermented']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+202,Benzyl salicylate,O=C(OCc1ccccc1)c1ccccc1O,233,118-58-1,"Weak, sweet,  balsamic odor; sweet, balsamic, slightly medicinal flavor","['balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+44,Acetoxyphenylbutanone,CC(=O)CCc1ccc(OC(C)=O)cc1,49,3572-06-3,"Fruity, raspberry, jam-like with vanilla & woody nuance","['fruity', 'vanilla', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+454,Decanone,CCCCCCCC(=O)CC,520,928-80-3,"Waxy, fatty, fruity, foral-green-citrus, orange","['citrus', 'green', 'fatty', 'fruity', 'waxy', 'orange', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+875,Ethylmethoxybenzene,CCc1ccc(OC)cc1,974,1515-95-3,"Anise, tobacco-phenolic notes, nut-like","['anisic', 'tobacco', 'nutty', 'phenolic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2309,Styrene,C=Cc1ccccc1,2603,100-42-5,Characteristic resinous-balsamic pungent gassy-plastic odor,"['gasoline', 'balsamic', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+254,Butyl anthranilate,CCCCOC(=O)c1ccccc1N,290,7756-96-9,"Sweet, grape-like and fruity with winey white-flower & berry notes","['fruity', 'grape', 'berry', 'winey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1185,Hydroxyhexanone,CCC(=O)C(O)CC,1326,4984-85-4,"Somewhat buttery, caramellic, dairy notes","['caramellic', 'dairy', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3377,Methyldecenolide,CC1=CCCCCCCCOC1=O,3999,188442-41-3,"Green, nut-like, milky and extremely strong lactone aroma","['green', 'nutty', 'milky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1425,Maltol isobutyrate,Cc1occc(=O)c1OC(=O)C(C)C,1591,65416-14-0,"Sweet, caramellic, sugary, strawberry-like odor and taste","['strawberry', 'caramellic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1421,Maleic acid,O=C(O)/C=C\C(=O)O,1586,110-16-7,Weak odor with acidic-sour taste; somewhat winey on dilution,['winey'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1320,Isopentylidene phenethylamine,CC(C)CC=NCCc1ccccc1,1472,,"Fishy, seafood notes on dilution",['fishy'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+25,Acetaldehyde isobutyl isoamyl acetal,CC(C)CCOC(C)OCC(C)C,26,75048-15-6,"Ethereal, alcoholic, green-nutty, cognac","['alcoholic', 'ethereal', 'green', 'nutty', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+524,Diethylamine,CCNCC,598,109-89-7,"Fishy, amine-like,  on dilution a cheese nuance","['fishy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3366,Butylphenol,CC(C)(C)c1cccc(O)c1,3988,585-34-2,"Phenolic, slightly terpeny, leather spicy amber odor;","['spicy', 'leathery', 'phenolic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1531,Methyl decanoate,CCCCCCCCCC(=O)OC,1717,110-42-9,"Fatty, oily, fruity-winey-cognac","['oily', 'fatty', 'fruity', 'cognac', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+378,Citral diethyl acetal,CCOC(/C=C(\C)CCC=C(C)C)OCC,436,7492-66-2,"Fresh, green, citrusy aroma; oily citrus peel like flavor","['green', 'fresh', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1585,Methyl nicotinate,COC(=O)c1cccnc1,1775,93-60-7,"Sweet, herbaceous tobacco-like odor","['tobacco', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3257,Menthyl decanoate,CCCCCCCCCC(=O)OC1CC(C)CCC1C(C)C,3820,94020-93-6,Weak herbaceous-floral-minty,"['floral', 'mint', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2807,Cyclohexyl phenylacetate,O=C(Cc1ccccc1)OC1CCCCC1,3222,42288-75-5,"Sweet aromatic, fruity, honey-note","['honey', 'fruity', 'aromatic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+526,Diethylmethylpyrazine,CCc1cnc(CC)c(C)n1,600,32736-91-7,"Hazelnut, cocoa, slightly burnt odor/taste","['hazelnut', 'cocoa', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+170,Benzoic acid,O=C(O)c1ccccc1,201,65-85-0,"Very weak, balsamic odor and burning taste",['balsamic'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3435,Fenchone,CC1(C)C(=O)[C@]2(C)CC[C@H]1C2,4106,7787-20-4,"Camphoraceous, strong, diffusive, sweet odor, slight pine note","['pine', 'camphoreous', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2680,Methyl methylmercaptopropionate,COC(=O)C(C)CS,3065,4131-76-4,"Fruity, fresh fruity, grape, foxy, tropical","['fruity', 'grape', 'fresh', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+80,Allyl butanoate,C=CCOC(=O)CCC,98,2051-78-7,"Fruity, green, pineapple-apricot-apple like odor; tropical, apple in taste","['apple', 'apricot', 'green', 'fruity', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+459,Decenal,C=CCCCCCCCC=O,525,39770-05-3,"Fresh, green citrus, floral, rose, fatty,","['rose', 'citrus', 'green', 'fatty', 'fresh', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1146,Hexyl lactate,CCCCCCOC(=O)C(C)O,1283,20279-51-0,Sweet floral odor; pear-like taste,"['floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2793,Butyl undecanoate,CCCCCCCCCCC(=O)OCCCC,3204,10580-24-2,"Oily-waxy-fatty, somewhat cognac-fruity","['oily', 'fruity', 'fatty', 'waxy', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1312,Isoleucine,CC[C@H](C)[C@@H](N)C(=O)O,1462,443-79-8,Essentially odorless; Used in reaction flavors,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+232,Butanedithiol,CC(S)C(C)S,266,4532-64-3,"Sulfurous, fatty and roast beef-like with egg-salami-pork notes","['roasted', 'meaty', 'fatty', 'sulfurous', 'beefy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1014,Heptanone,CCCC(=O)CCC,1135,123-19-3,"Fruity, green, pungent odor; green-fruity, cheesy taste","['green', 'fruity', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3287,Trimethylcyclohexanedione,CC1CC(=O)CC(C)(C)C1=O,3875,20547-99-3,"Weak, sour, with some tea & tobacco notes","['tea', 'tobacco', 'sour']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1651,Methylbutanone,CC(=O)C(C)C,1847,563-80-4,Ethereal-camphoraceous ketonic odor; ethereal winey fruity taste,"['ketonic', 'camphoreous', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+14,Acetaldehyde dipropyl acetal ,CCCOC(C)OCCC,15,105-82-8,"Fresh earthy, ethereal alcoholic, winey-fruity, green, vegetable","['alcoholic', 'ethereal', 'green', 'earthy', 'fruity', 'fresh', 'vegetable', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+908,Eugenyl isovalerate,C=CCc1ccc(OC(=O)CC(C)C)c(OC)c1,1011,61114-24-7,"Aromatic, fruity. spicy, woody & clove like notes","['spicy', 'fruity', 'woody', 'aromatic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2021,Octyl nonanoate,CCCCCCCCOC(=O)CCCCCCCC,2256,5303-26-4,"Oily, earthy-floral-citrus, fruity notes","['citrus', 'earthy', 'oily', 'fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2087,Phenethyl hexanoate,CCCCCC(=O)OCCc1ccccc1,2336,6290-37-5,"Fruity-waxy, woody, honey-rose odor; waxy-herbal-floral fruity taste","['rose', 'fruity', 'honey', 'waxy', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3415,Caryophyllene alcohol,CC1(C)CC2C3CCCC(C)(C3O)C2C1,4074,4586-22-5,"Woody, somewhat dusty, balsamic","['woody', 'balsamic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1906,Neryl isobutyrate,CC(C)=CCC/C(C)=C\COC(=O)C(C)C,2131,2345-24-6,Sweet floral (rose) odor; sweet juicy green fruity melon & berry taste,"['rose', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+771,Ethyl hydroxyhexanoate,CCCC(O)CC(=O)OCC,866,2305-25-1,"Strong, fresh-fruity, juicy, green-winey odor with grape & citrus notes","['citrus', 'green', 'fruity', 'grape', 'fresh', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2541,Dodecenal,CCCCCCC/C=C/CCC=O,2882,30390-51-3,"Fishy-citrus, mandarin, tangarine type notes","['fishy', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+422,Cyclohexyl formate,O=COC1CCCCC1,483,4351-54-6,"Sweet, fruity odor and a sweet geen-banana fruit taste","['fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1270,Isobutyl hexadecanoate,CCCCCCCCCCCCCCCC(=O)OCC(C)C,1417,110-34-9,Essentially odorless; Mild fatty-waxy taste,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1456,Mercaptohexyl butyrate,CCCC(=O)OCCC(S)CCC,1637,136954-21-7,"Tropical fruit, passionfruit, over-ripe fruit, catty, sulfurous","['ripe', 'fruity', 'tropical', 'catty', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1557,Methyl isobutyrate,COC(=O)C(C)C,1745,547-63-7,"Fruity, apple-pineapple-apricot-rum like odor and juicy fruit taste","['apple', 'apricot', 'fruity', 'pineapple', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+393,Citronellyl hexanoate,CCCCCC(=O)OCCC(C)CCC=C(C)C,451,10580-25-3,"Floral, apple-pear-pineapple fruity notes with rose connotations","['apple', 'rose', 'fruity', 'pear', 'pineapple', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+432,Cyclotetradecanone,O=C1CCCCCCCCCCCCC1,493,3603-99-4,Musky notes,['musk'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+595,Dimethylbutyl acetate,CC(=O)OC(C)CC(C)C,678,108-84-9,"Fresh pleasant ruity, banana with apple note","['fruity', 'apple', 'fresh', 'banana']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1161,Hexylamine,CCCCCCN,1298,111-26-2,"Amine, fishy, cheese-like on dilution","['fishy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2955,Menthyl butyrate,CCCC(=O)OC1CC(C)CCC1C(C)C,3397,6070-14-0,"Fresh, minty, fruity, herbaceous-floral","['fruity', 'fresh', 'herbal', 'floral', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1820,Methylquinoline,Cc1ccc2ncccc2c1,2029,91-62-3,"Sweet, floral, animalic, tobacco, civet, woody notes in dilution","['tobacco', 'animal', 'woody', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2076,Phellandrene,CC1=CCC(C(C)C)C=C1,2324,99-83-2,"Fresh, spicy, citrus, peppery, woody-minty; spicy-citrus taste","['spicy', 'citrus', 'fresh', 'woody', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+304,Butylcinnamaldehyde,CCCC/C(C=O)=C\c1ccccc1,343,7492-44-6,"Green, herbaceous floral (jasmine) fruity notes","['green', 'fruity', 'jasmine', 'herbal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3237,Butyl mercaptopropionate,CCCCOC(=O)C(C)S,3783,7529-07-9,"Sulfurous, meaty and brothy, vegetative; tropical fruity in dilution","['vegetable', 'meaty', 'fruity', 'tropical', 'brothy', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+227,Butanal diethyl acetal,CCCC(OCC)OCC,259,3658-95-5,"Ethereal, green, fruity, slightly fermented","['green', 'fruity', 'fermented', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1855,Methylthiooxobutanoic acid,CSCCC(=O)C(=O)O,2069,583-92-6,"Sulfurous, slight cheesy in dilution; a precursor of methional","['sulfurous', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1618,Methyl thioacetate,CSC(C)=O,1810,1534-08-3,1 ppm-cabbage vegetable; 0.1 ppm-popcorn-cereal taste; cheese,"['vegetable', 'popcorn', 'cabbage']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1055,Hexadienal,C/C=C/C=C/C=O,1181,142-83-6,Sweet green fruity citrus odor; green waxy citrus & tropical taste,"['green', 'fruity', 'sweet', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+48,Acetyldihydrothiazine,CC(=O)N1CCC=CS1,54,101417-25-8,"Roasty, popcorn, cereal, nutty; Useful in nut, cereal & meat flavors","['nutty', 'popcorn', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2282,Rhodinyl phenylacetate,C=C(C)CCCC(C)CCOC(=O)Cc1ccccc1,2555,10486-14-3,"Sweet, honey-rose odor; sweet honey-rose taste","['honey', 'rose', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2054,Pentenal,C=CCCC=O,2301,2100-17-6,"Sharp, green, malty, brown notes, contributes to fruity & brown flavors","['green', 'sharp', 'malty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+133,Amyl methylbutyrate,CCCCCOC(=O)C(C)CC,159,68039-26-9,Fruity ripe apple-banana odor and apple-banana like taste,"['ripe', 'fruity', 'apple', 'banana']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2290,Safranal,CC1=C(C=O)C(C)(C)CC=C1,2565,116-26-7,Powerful saffron aroma and taste; tobacco-camphoraceous notes,"['tobacco', 'camphoreous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+374,Cinnamyl isovalerate,CC(C)CC(=O)OC/C=C/c1ccccc1,432,140-27-2,"Herbaceous-green, floral, rose-like odor; apple-like taste","['green', 'floral', 'rose', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+916,Fenchone (no enantiomer specified),CC12CCC(C1)C(C)(C)C2=O,1019,1195-79-5,"Camphoraceous, strong, diffusive, sweet odor, weak pine needle","['pine', 'camphoreous', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+101,Allyl octanoate,C=CCOC(=O)CCCCCCC,119,4230-97-1,"Fatty, fruity, pineapple, winey with apple-banana notes","['apple', 'fatty', 'fruity', 'banana', 'pineapple', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1402,Limonene,C=C(C)[C@@H]1CC=C(C)CC1,1559,5989-54-8,More herbaceous & turpentine notes than d-limonene,"['orange', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3393,Ethyl hydroxymethylvalerate,CCCC(CO)C(=O)OCC,4033,24323-38-4,Fruity with berry notes,"['fruity', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1586,Methyl nonanoate,CCCCCCCCC(=O)OC,1776,1731-84-6,"Fruity-winey, green, nut-coconut like odor; winey, green fruity taste","['green', 'fruity', 'nutty', 'coconut', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3015,Phenethyl nonanoate,CCCCCCCCC(=O)OCCc1ccccc1,3471,57943-67-6,"Oily-sweet, delicately rosy, petal-like and mildly waxy, herbaceous odor","['rose', 'oily', 'herbal', 'waxy', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+979,Glucose pentaacetate,CC(=O)OC[C@@H](OC(C)=O)[C@@H](OC(C)=O)[C@H](OC(C)=O)[C@H](C=O)OC(C)=O,1089,3891-59-6,Odorless; bitter tonic taste at 100 ppm,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3115,Methylhexanol,CC(C)CCCCO,3608,627-98-5,"Oily, fusel oil, yeasty-fermented alcoholic notes","['alcoholic', 'solvent', 'oily', 'fermented']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2259,Propylthiazole,CCCc1nccs1,2520,17626-75-4,"Green, vegetative, herby, nutty (see comments)","['green', 'vegetable', 'nutty', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+222,Bornyl formate,CC1(C)C2CCC1(C)C(OC=O)C2,253,7492-41-3,"Green, coniferous, earthy pine note; a sweet, green woody taste","['green', 'earthy', 'pine']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+717,Ethoxymethylpyrazine,CCOc1nccnc1C,808,32737-14-7,"Roasted, nutty & hazelnuts, cocoa, almonds, peanuts","['roasted', 'nutty', 'cocoa']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1550,Methyl hexanoate,CCCCCC(=O)OC,1737,106-70-7,Ethereal fruity (pineapple-apple) odor; sweet fruity taste,"['fruity', 'apple', 'pineapple', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3497,Ethyl octenoate,C=CCCCCCC(=O)OCC,4271,35194-38-8,"Chinese quince-like, cognac-like, sweet, strong","['cognac', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2670,Benzaldehyde dibutyl acetal,CCCCOC(OCCCC)c1ccccc1,3053,,"Sweet, mildly herbal-cherry, bitter-almond","['cherry', 'almond', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2675,Methylacetophenone,CC(=O)c1ccccc1C,3060,577-16-2,"Sweet aromatic, somewhat bitter almond, hay-like, coumarinic","['hay', 'sweet', 'almond', 'aromatic', 'coumarinic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3472,Ethylmethylthiazoline,CCC1=S(C)CCN1,4194,41803-21-8,"Tropical, fuzzy peach, creamy, dairy, tomato, roasted and meaty.","['creamy', 'roasted', 'meaty', 'tropical', 'tomato', 'dairy', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+76,Allyl ionone,C=CCCC(=O)/C=C/C1C(C)=CCCC1(C)C,93,79-78-7,"Sweet, woody-fruity; berry and pineapple-like","['fruity', 'sweet', 'berry', 'woody', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3461,Decyl isobutyrate,CCCCCCCCCCOC(=O)C(C)C,4166,5454-22-8,"Mild, oily-herbaceous odor","['oily', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+958,Geranic acid,CC(C)=CCC/C(C)=C/C(=O)O,1068,459-80-3,"Mild. green-flowery, slightly herbaceous, fresh, woody, fruity-citrus note","['citrus', 'green', 'fruity', 'fresh', 'herbal', 'woody', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+972,Geranyl octanoate,CCCCCCCC(=O)OC/C=C(\C)CCC=C(C)C,1082,51532-26-4,"Herbaceous, rosy, fruity odor","['fruity', 'rose', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1205,Ionol,CC1=CCCC(C)(C)C1/C=C/C(C)O,1348,25312-34-9,"Floral, violet-vetiver berry notes","['violet', 'floral', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+559,Dihydroterpinyl acetate,CC(=O)OC(C)(C)C1CCC(C)CC1,639,58985-18-5,"Fresh, citrus-woody-pine cologne like odor with an herbaceous fruity note","['pine', 'citrus', 'fruity', 'fresh', 'herbal', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+751,Ethyl dioxohexanoate,CCOC(=O)C(=O)CC(=O)CC,843,13246-52-1,Burnt sugar-caramel aroma with fruity-floral-lactonic notes,"['caramellic', 'fruity', 'burnt', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2360,Thienyl disulfide,c1csc(SSc2cccs2)c1,2664,6911-51-9,"Strong rubber-savory, brothy odor; nutty, earthy taste; fried, roasted","['brothy', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+359,Cedryl acetate,CC(=O)OC1(C)CCC23CC1C(C)(C)[C@@H]2CC[C@H]3C,417,77-54-3,"Woody, cedar, vetivert, slight leathery & earthy note","['leathery', 'earthy', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+146,Anethole,C/C=C/c1ccc(OC)cc1,172,4180-23-8,"Sweet, herbaceous, anise (artificial Licorice) odor & taste","['herbal', 'anisic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+206,Biphenyl,c1ccc(-c2ccccc2)cc1,237,92-52-4,"Metallic geranium-rose odor; neroli, bergamot & cinnamon at 2 ppm taste","['rose', 'metallic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1166,Hexylthiophene,CCCCCCc1cccs1,1303,18794-77-9,"Sulphurous; savory, green, metallic, mushroom & tropical nuances","['green', 'savory', 'metallic', 'tropical', 'sulfurous', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1187,Hydroxymethoxycinnamaldehyde,COc1cc(/C=C/C=O)ccc1O,1328,458-36-6,Vanilla-balsamic with cinnamic spicy notes; caramellic taste,"['spicy', 'vanilla', 'balsamic', 'cinnamon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+82,Allyl butenoate,C=CCOC(=O)/C=C/C,100,20474-93-5,"Pungent, acrylic; fresh fruity on dilution","['fruity', 'fresh', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+698,Dodecyl acetate,CCCCCCCCCCCCOC(C)=O,788,112-66-3,"Refreshing, waxy-citrus-rose-fruity odor; citrus on dilution","['rose', 'citrus', 'fruity', 'fresh', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+986,Glyceryl tripropanoate,CCC(=O)OCC(COC(=O)CC)OC(=O)CC,1101,139-45-7,Weak fruity sour odor; oily bitter taste,"['fruity', 'sour']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3110,Menthenol,CC(C)[C@@H]1C=C[C@](C)(O)CC1,3600,619-62-5,"Musty, herbaceous, floral","['floral', 'musty', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+60,Acetylmethylfuran,CC(=O)c1ccc(C)o1,68,1193-79-9,"Nutty, hay, caramel, coumarin odor","['nutty', 'hay', 'caramellic', 'coumarinic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+21,Acetaldehyde ethyl methyl acetal,CCOC(C)OC,22,10471-14-4,"Pungent, ethereal, alcoholic, green, nutty","['alcoholic', 'ethereal', 'green', 'nutty', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2384,Tolyl laurate,CCCCCCCCCCCC(=O)Oc1ccc(C)cc1,2691,10024-57-4,"Sweet, floral, waxy, balsamic odor and taste","['waxy', 'balsamic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3499,Phenoxyacetaldehyde,O=CCOc1ccccc1,4274,2120-70-9,"Powerful green, wood-sap-like, fresh aldehydic, sweet, floral odor","['green', 'fresh', 'aldehydic', 'woody', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+645,Dimethylpyrazine,Cc1nccnc1C,730,5910-89-4,"Green, nutty, potato, cocoa, coffee, caramel, meaty notes","['caramellic', 'meaty', 'green', 'nutty', 'cocoa', 'coffee', 'potato']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1884,Myrtanol,CC1(C)C2CCC(CO)C1C2,2102,514-99-8,"Herbaceous, somewhat confiferous, minty-woody odor","['woody', 'mint', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3350,Benzothiophene,c1ccc2sccc2c1,3966,95-15-8,"Sulfurous, rubbery, hydrocarbon, naphthalenic, earthy, burnt","['earthy', 'gasoline', 'burnt', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1091,Hexenone,C/C=C\C(=O)CC,1221,2497-21-4,"Pungent, spicy, horseradish, mustard, rum, green, tropical & metallic","['spicy', 'green', 'tropical', 'metallic', 'horseradish', 'pungent', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2698,Citronellal dimethyl acetal,COC(CC(C)CCC=C(C)C)OC,3086,923-69-3,"Relatively weak citrusy, herbal-floral;","['floral', 'citrus', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+731,Ethyl aconitate (mixed esters),CCOC(=O)C/C(=C/C(=O)O)C(=O)O,822,1321-30-8,"Sweet, caramel, fruity, winey-rum odor; weak sweet fruity winey taste","['caramellic', 'fruity', 'winey', 'sweet', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1038,Heptyl hexanoate,CCCCCC(=O)OC(C)CCCCC,1163,6624-58-4,"Sweet, fruity estery and green with tropical notes","['green', 'fruity', 'tropical', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1028,Heptenyl acetate,CCCC/C=C/COC(C)=O,1152,16939-73-4,"Green, fruity, fatty-waxy, tropical","['green', 'fruity', 'fatty', 'tropical', 'waxy', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+54,Acetyldimethylthiophene,CC(=O)c1cc(C)sc1C,61,2530-10-1,"Dried hazelnut, nutty notes, Blue-cheese, savory, roasty meaty notes","['roasted', 'meaty', 'nutty', 'savory', 'hazelnut', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1615,Methyl senecioate,COC(=O)C=C(C)C,1807,924-50-5,"Ethereal, sweet, ripe fruity, herbal-apple-chamomille","['ripe', 'apple', 'ethereal', 'fruity', 'herbal', 'chamomile', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2864,Ethyl acetoacetate ethylene glycol Ketal,CCOC(=O)CC1(C)OCCO1,3296,6413-10-1,"Fruity, apple-like note with a woody aspect of sweet pine","['pine', 'apple', 'fruity', 'woody', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+178,Benzyl benzoate,O=C(OCc1ccccc1)c1ccccc1,209,120-51-4,"Faint, sweet, balsamic with slight bitter, fruity notes","['fruity', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3449,Acetylisopropylpyridine,CC(=O)c1cccnc1C(C)C,4151,142896-09-1,"Grassy-green leaf, green herbal, somewhat violet odor; useful in mint","['grassy', 'green', 'violet', 'herbal', 'leafy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2599,Methylmethylthiobutene,CCC=C(C)SC,2964,89534-74-7,"Savory, sulphurol, meaty, creamy, sulphury, heavy, soupy","['creamy', 'meaty', 'savory', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1454,Mercaptohexanol,CCCC(S)CCO,1635,51755-83-0,"Tropical fruit, meaty, alliaceous, passionfruit, guava, grapefruit","['meaty', 'fruity', 'alliaceous', 'tropical', 'grapefruit']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2058,Pentenol,C=CC(O)CC,2305,616-25-1,"Pungent, grassy, alliaceous-wasabi; green vegetable, tomato taste","['grassy', 'alliaceous', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+580,Dimethyl malonate,COC(=O)CC(=O)OC,662,108-59-8,Ethereal fruity; green-apple notes,"['green', 'fruity', 'apple', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2004,Octenyl acetate,C=CC(CCCCC)OC(C)=O,2239,2442-10-6,"Fresh, herbaceous, fruity-mushroom with lavender note odor","['fruity', 'fresh', 'herbal', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3199,Dihydrobenzofuran,c1ccc2c(c1)CCO2,3714,496-16-2,"Sweet, aromatic, slightly phenolic hydrocarbon odor","['phenolic', 'aromatic', 'gasoline', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1052,Hexadecanol,CCCCCCCCCCCCCCCCO,1178,36653-82-4,"Odorless; faint, bland taste; adds mouthfeel to low fat products",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+781,Ethyl maltol,CCc1occc(=O)c1O,876,4940-11-8,"Sweet, fruity-caramellic cotton candy odor; fruity preserve taste","['caramellic', 'fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+882,Ethylmethylpyrazine,CCc1nccnc1C,982,15707-23-0,"Burnt nutty-hazelnut roasted, cereal, earthy potato, green notes","['roasted', 'green', 'earthy', 'nutty', 'burnt', 'hazelnut', 'potato']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+214,Bisfurfuryl disulfide,c1coc(CSSCc2ccco2)c1,245,4437-20-1,"Powerful mercaptan-like; In dilution roasted, coffee, meaty","['sulfurous', 'roasted', 'coffee', 'meaty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1746,Methylisopropylphenylpropionaldehyde,CC(C)c1ccc(C(C)CC=O)cc1,1948,103-95-7,"Strong, floral, green vegetable odor; melon-cantaloupe taste","['green', 'vegetable', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1479,Methoxybenzaldehyde,COc1ccccc1C=O,1661,135-02-4,"Sweet spicy, salicylate, almond, cinnamate-like aroma; woody-spicy taste","['spicy', 'cinnamon', 'almond', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+841,Ethyl undecenoate,C=CCCCCCCCCC(=O)OCC,937,692-86-4,"Pleasant, fruity-green, fatty-waxy, winey odor and taste","['green', 'fruity', 'fatty', 'waxy', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+74,Adipic acid,O=C(O)CCCCC(=O)O,89,124-04-9,Pleasant sour taste; odorless,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2158,Phenylpropylpyridine,c1ccc(CCCc2ccccn2)cc1,2407,2110-18-1,"Green, earthy, root-like, herbaceous, reminiscent of pea pods","['green', 'earthy', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1034,Heptyl butyrate,CCCCCCCOC(=O)CCC,1159,5870-93-9,"Sweet fruity, chamomile, green-tropical, fresh, tea-like notes","['green', 'fruity', 'tropical', 'fresh', 'tea', 'chamomile', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2217,Propyl benzoate,CCCOC(=O)c1ccccc1,2476,2315-68-6,"Balsamic, nut-like odor; fruity nut-like taste","['nutty', 'balsamic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3444,Mercaptomethylbutyl isovalerate,CCCC(CS)OC(=O)CC(C)C,4128,612071-27-9,"Sulfurous, Tropical fruit notes,effective in grape","['fruity', 'tropical', 'grape', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+709,Ethanethiol,CCS,800,75-08-1,"Sulfurous, rubbery, vegetative, onion, garlic, meaty, coffee, tropical","['vegetable', 'meaty', 'garlic', 'tropical', 'onion', 'coffee', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+294,Butyl phenylacetate,CCCCOC(=O)Cc1ccccc1,330,122-43-0,"Sweet, rose-honey aroma; sweet honey taste","['honey', 'rose', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+136,Amyl phenylacetate,CCCCCOC(=O)Cc1ccccc1,162,5137-52-0,"Sweet balsamic, honey-apple fruity like","['apple', 'fruity', 'honey', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1017,Heptenal,CC/C=C/CCC=O,1138,62238-34-0,Odor like cream and fried fats on dilution & buttery taste,"['creamy', 'green', 'fatty', 'melon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3424,Safrole,C=CCc1ccc2c(c1)OCO2,4088,94-59-7,"Aromatic, spicy, reminiscent of sassafras","['spicy', 'aromatic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2932,Isoamyl undecanoate,CCCCCCCCCCC(=O)OCCC(C)C,3372,,"Oily, rosy with vinous-brandy undertones","['rose', 'oily', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+275,Butyl hexenoate,CC/C=C/CC(=O)OCCCC,311,118869-62-8,"Fruity, green, apple, tropical notes","['green', 'fruity', 'apple', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+179,Benzyl butyl ether,CCCCOCc1ccccc1,210,588-67-0,"Sweet, sharp, fruity, floral (rose-geranium) odor; used in fruit flavors","['rose', 'fruity', 'sharp', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+460,Decenal,CCC/C=C/C=C/CCCO,526,21662-09-9,"Diffusive, powerful, citrus-orange, cardamom, rancid, waxy-floral odor","['citrus', 'waxy', 'orange', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1158,Hexyl tiglate,C/C=C(\C)C(=O)OCCCCCC,1295,16930-96-4,"Fresh, green, fruity odor","['green', 'fruity', 'fresh']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3182,Thenyl alcohol,OCc1cccs1,3694,636-72-6,"Ethereal, ferrmented, burnt, alliaceous, coffee like, slight savory","['ethereal', 'alliaceous', 'savory', 'fermented', 'burnt', 'coffee']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+191,Benzyl isothiocyanate,S=C=NCc1ccccc1,222,622-78-6,"Pungent, hot vegetative, radish-horseradish-cress like; papaya note","['radish', 'horseradish', 'vegetable', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+961,Geranyl acetoacetate,CC(=O)CC(=O)OC/C=C(\C)CCC=C(C)C,1071,10032-00-5,"Sweet, fruity, overripe, fermented fruit-like applle notes","['apple', 'fruity', 'fermented', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+517,Diethyl oxalate,CCOC(=O)C(=O)OCC,591,95-92-1,"Weak fermented musky winey, fruity, herbaceous","['fruity', 'musk', 'fermented', 'herbal', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+257,Butyl butenoate,CC=CC(=O)OCCCC,293,591-63-9,"Fruity, green, herbal, pineapple, rum, cognac, apple in dilution","['apple', 'green', 'fruity', 'cognac', 'herbal', 'pineapple', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+831,Ethyl propyl sulfide,CCCSCC,927,4110-50-3,"Cooked vegetable; corn, onion and seafood notes","['onion', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2248,Propylanisole,CCCc1ccc(OC)cc1,2507,104-45-0,"Sweet, herbaceous, anise-fennel, licorice odor and taste","['herbal', 'anisic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3025,Propyl acetoacetate,CCCOC(=O)CC(C)=O,3485,1779-60-8,"Fruity, caramellic, fermented, brandy, heavy fruit-apple notes","['apple', 'caramellic', 'fruity', 'fermented', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+676,Dipropyl malonate,CCCOC(=O)CC(=O)OCCC,762,1117-19-7,"Weak ethereal, apple, fruity-winey","['fruity', 'apple', 'winey', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1361,Isopropylcyclohexanol,CC(C)C1CCC(O)CC1,1513,4621-04-9,"Diffusive floral notes reminiscent of lilac, rose and geranium","['floral', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1179,Hydroxycitronellal,CC(CC=O)CCCC(C)(C)O,1319,107-75-5,"Sweet, floral, lily-type odor; sweet waxy green, floral taste & melon note","['floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2397,Tridecalactone,CCCCCCCCC1CCCC(=O)O1,2705,7370-92-5,"Fatty, creamy, dairy-butter notes","['buttery', 'fatty', 'dairy', 'creamy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+447,Decanal diethyl acetal,CCCCCCCCCC(OCC)OCC,513,34764-02-8,"Fresh citrusy, herbal-oily-fruity, fatty-waxy, ethereal rum note","['citrus', 'ethereal', 'oily', 'fruity', 'fatty', 'fresh', 'waxy', 'herbal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2824,Dimethyl benzyl carbinyl crotonate,C/C=C/C(=O)OC(C)(C)Cc1ccccc1,3249,93762-34-6,"Warm, herbaceous, heavy fruity, spicy","['fruity', 'spicy', 'warm', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+889,Ethyloctanoic acid,CCCC[C@@H](CC)CCC(=O)O,989,16493-80-4,Powerful goaty odor; costus root like with dairy cheese notes,"['dairy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1661,Methylbutyl acetate,CCCC(C)OC(C)=O,1857,626-38-0,"Fruity, ripe, banana creamy, green taste at 10 ppm","['ripe', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+762,Ethyl geranyl ether,CCOC/C=C(\C)CCC=C(C)C,855,40267-72-9,"Flowery odor (Aster), Light spicy, natural flowery green, rose-like odor","['spicy', 'rose', 'green', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1857,Methylthiophene,Cc1cccs1,2072,554-14-3,"Onion, pungent, sulfurous, roasted, green (See comments)","['roasted', 'green', 'onion', 'sulfurous', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1974,Octahydrocoumarin,O=C1CCC2CCCCC2O1,2206,4430-31-3,"Sweet, herbaceous (tonka-coumarin like), spicy","['coumarinic', 'spicy', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+292,Butyl octenoate,CCCCC/C=C\C(=O)OCCCC,328,57403-32-4,"Oily, green, fruity, somewhat pear like","['green', 'oily', 'fruity', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+730,Ethyl acetylphenylpropionate,CCOC(=O)C(Cc1ccccc1)C(C)=O,821,620-79-1,"Balsamic, fruity-floral odor; fruity, spicy-cinnamon ""preserve"" like taste","['fruity', 'balsamic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+555,Dihydromercaptomethylfuran,SCC1CC=CO1,634,26486-13-5,"Sulfurous, roasted meat, savory on dilution","['sulfurous', 'meaty', 'roasted', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+564,Dihydroxydihydroxymethyldioxane,O=C(CO)CO,645,62147-49-3,"Mild, sweet, somewhat fruity odor; sweet & cool in taste?","['fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2407,Trimethyldihydrodithiazine,CC1NC(C)SC(C)S1,2718,638-17-5,"Roasted brothy, beef-like, chicken, cooked shrimp","['roasted', 'meaty', 'chicken', 'brothy', 'beefy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1438,Menthol,CC(C)[C@@H]1CC[C@@H](C)C[C@@H]1O,1610,15356-60-2,"Much weaker cooling than l-menthol, musty-minty-bitter","['mint', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3404,Methylfuryl methylthiomethyl disulfide,CSCSSc1occc1C,4048,333384-99-9,"Sufurous, roasted meat, beefy","['sulfurous', 'meaty', 'beefy', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2235,Propyl methanethiosulfinate,CCCOS(C)=S,2494,,Contributes to odor of freshly cut onions & garlic,"['garlic', 'fresh']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1063,Hexanal ethyl isoamyl acetal,CCCCCC(OCC)OCCC(C)C,1189,,"Green, cognac, apple-like","['green', 'cognac', 'apple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2034,Patchouli alcohol,C[C@H]1CCC2(O)C(C)(C)C3CC[C@@]2(C)C1C3,2279,5986-55-0,"Woody, earthy, slight camphorous note; Patchouli-like","['earthy', 'woody', 'camphoreous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+785,Ethyl methacrylate,C=C(C)C(=O)OCC,880,97-63-2,Pungent acrylic odor; apple-chamomile-like topnote,"['apple', 'chamomile', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+379,Citral dimethyl acetal,COC(/C=C(\C)CCC=C(C)C)OC,437,7549-37-3,Citrus lemon aroma; green-unripe citrus taste,"['lemon', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2434,Trimethylvinyltetrahydropyran,CC(C)=C(C)C1CCCCO1,2746,7392-19-0,Fresh camphoraceous; herbaceous on dilution,"['herbal', 'fresh', 'camphoreous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1892,Naphthalenethiol,Sc1ccc2ccccc2c1,2112,91-60-1,"Sulfury, meaty, mushroom notes; rubbery, mercaptan-like","['sulfurous', 'meaty', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2065,Pentyl butyrate,CCCC(=O)OC(C)CCC,2312,60415-61-4,"Sweet, fruity, banana, green, blueberry","['ethereal', 'green', 'fruity', 'banana', 'sharp', 'peach', 'pineapple', 'plum', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+187,Benzyl ethyl ether,CCOCc1ccccc1,218,539-30-0,"Sharp, fruity odor & taste","['fruity', 'sharp']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1701,Methylenedioxyphenylbutanone,CC(=O)CCc1ccc2c(c1)OCO2,1898,55418-52-5,"Sweet, floral, berry-woody-cherry odor and taste; jammy nuances","['berry', 'woody', 'cherry', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+339,Carvacryl methyl ether,COc1cc(C(C)C)ccc1C,391,6379-73-3,"Herbaceous, spicy, phenolic, green root connotation","['spicy', 'green', 'herbal', 'phenolic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+337,Carvacryl acetate,CC(=O)Oc1cc(C(C)C)ccc1C,389,6380-28-5,"Herbaceous, spicy, slight fruity note","['fruity', 'spicy', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+371,Cinnamyl cinnamate,O=C(/C=C/c1ccccc1)OC/C=C/c1ccccc1,429,122-69-0,"Sweet, balsamic, floral with some cinnamic-spicy notes","['spicy', 'cinnamon', 'balsamic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3308,Oxododecanoic acid,CCCCCCCCCCC(=O)C(=O)O,3913,3637-16-9,Creamy. peach; Precursor of delta-dodecalactone by microorganisms.,"['creamy', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+657,Dimethyltetrathiane,CC1(C)CSSSS1,743,67411-27-2,"Sulfurous onion. garlic, durian, shiitake, also mutton flavor","['garlic', 'onion', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+52,Acetyldimethylpyrazine,CC(=O)c1ncc(C)nc1C,59,54300-08-2,"Nutty, popcorn, roasted hazelnut","['nutty', 'hazelnut', 'popcorn', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1830,Methylthiazole,Cc1cscn1,2040,693-95-8,"Nutty, green vegetative, meaty, with an alliaceous nuance","['meaty', 'green', 'alliaceous', 'nutty', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2167,Pinocarveol,C=C1C(O)CC2CC1C2(C)C,2417,5947-36-4,"Sweet, pine-camphoraceous with slight minty odor","['pine', 'camphoreous', 'sweet', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+388,Citronellyl acetate,CC(=O)OCCC(C)CCC=C(C)C,446,150-84-5,"Fresh, rosy, fruity odor; green fruity citrus-pear-apple-apricot taste","['fruity', 'fresh', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1040,Heptyl isobutyrate,CCCCCCCOC(=O)C(C)C,1165,2349-13-5,"Fruity, tropical herbaceous aroma; sweet green tropical fruity taste","['fruity', 'tropical', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2880,Ethylhexyl mercaptopropionate,CCCCC(CC)COC(=O)CCS,3315,50448-95-8,"Sulfurous, tropical fruit, savory","['sulfurous', 'fruity', 'tropical', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2633,Propyl mercaptopropionate,CCCOC(=O)C(C)S,3005,19788-50-2,"Fruity, tropical, overripe, strawberry in dilution; meaty at higher levels","['meaty', 'fruity', 'tropical', 'strawberry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+9,Acetaldehyde di-isopropyl acetal,CC(C)OC(C)OC(C)C,9,4285-59-0,"Pungent, ethereal, green, alcoholic, brandy, cognac, somewhat fruity","['alcoholic', 'ethereal', 'green', 'fruity', 'cognac', 'pungent', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3490,Octenal,CC=CCCCCC=O,4259,63196-63-4,Green melon aroma & flavor,"['green', 'melon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2947,Isopropyl lactate,CC(C)OC(=O)C(C)O,3388,617-51-6,"Buttery, milky, fruity with caramellic note","['fruity', 'milky', 'caramellic', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1267,Isobutyl formate,CC(C)COC=O,1414,542-55-2,"Fruity, ethereal, rum-like odor; rum-fruity taste","['fruity', 'ethereal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+392,Citronellyl formate,CC(C)=CCCC(C)CCOC=O,450,105-85-1,"Strong, leafy-green, fruity, rose odor; sweet, green-fruity taste","['leafy', 'fruity', 'green', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1988,Octanone,CCCCCC(=O)CC,2220,106-68-3,"Earthy, herbaceous-fruity, cheese odor; earthy-cheese fruity taste","['earthy', 'fruity', 'cheesy', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2602,Methylthiopentanone,CCCC(=O)CSC,2968,143764-28-7,"Sulfurous, sweet, vegetable, fruity ester like","['vegetable', 'fruity', 'sulfurous', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3091,Hydroxymethylpentanoic acid,CCC(C)C(O)C(=O)O,3580,488-15-3,"Fruity, cream, butter & cheese notes","['buttery', 'fruity', 'cheesy', 'creamy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1400,Limonene,C=C(C)[C@H]1CC=C(C)CC1,1557,5989-27-5,"Fresh, sweet, hydrocarbon and orange citrus odor","['citrus', 'gasoline', 'fresh', 'orange', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3178,Helional®,CC(C=O)Cc1ccc2c(c1)OCO2,3689,1205-17-0,"Green, melon, floral (cyclamen) with top notes of ozone and new mown hay","['hay', 'green', 'melon', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1169,Hydroxyacetophenone,CC(=O)c1ccccc1O,1309,118-93-4,"Almond-hawthorne-hay, cherry-pit. coumarinic, cinnamon notes","['hay', 'cinnamon', 'almond', 'cherry', 'coumarinic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+620,Dimethylisopropyloxazole,Cc1nc(C(C)C)oc1C,703,19519-45-0,Green earthy peanut flavor,"['green', 'earthy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2075,Perillyl acetate,C=C(C)C1CC=C(COC(C)=O)CC1,2323,15111-96-3,"Floral-fruity, herbaceous woody spicy odor; woody-fruity taste","['spicy', 'fruity', 'herbal', 'woody', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2271,Pyruvaldehyde,CC(=O)C=O,2534,78-98-8,"Sharp, pungent odor; sweet, sharp caramellic-burnt & dairy taste","['sharp', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+323,Butyrin,CCCC(=O)OCC(COC(=O)CCC)OC(=O)CCC,368,60-01-5,"Weak sweet, mild, fruity, butter, creamy; slight bitter taste","['fruity', 'creamy', 'sweet', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+380,Citral propylene glycol acetal,CC(C)=CCC/C(C)=C/C1OCC(C)O1,438,10444-50-5,"Sweet, citrus lemon-like","['lemon', 'sweet', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+470,Decenolide,CCCCCCC1C=CC(=O)O1,538,2518-53-8,"Mushroom, lactonic, coconut-dairy","['dairy', 'coconut', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1795,Methylphenylbutyraldehyde,CC(C=O)CCc1ccccc1,2002,40654-82-8,"Sweet, earthy-musty, floral odor; sweet, fruity-nut taste","['floral', 'earthy', 'musty', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2242,Propyl phenylacetate,CCCOC(=O)Cc1ccccc1,2501,4606-15-9,"Honey, apricot-rose odor; honey-like rose flavor","['honey', 'rose', 'apricot']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1096,Hexenyl acetate,C/C=C\CCCOC(C)=O,1227,42125-17-7,Green fruity banana odor,"['green', 'fruity', 'banana']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2202,Propenal,C=CC=O,2460,107-02-8,"Sharp pungent acrid, alliaceous, acrylic, herbaceous on dilution","['alliaceous', 'sharp', 'herbal', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2929,Isoamyl anthranilate,CC(C)CCOC(=O)c1ccccc1N,3369,28457-05-8,Plum-Grape like flavor,"['grape', 'plum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+97,Allyl methyl sulfide,C=CCSC,115,10152-76-8,"Sulfurous, Garlic, onion notes","['onion', 'sulfurous', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+776,Ethyl lactate,CCOC(=O)C(C)O,871,97-64-3,"Ethereal, rum-buttery odor; milk-like buttery taste on dilution","['buttery', 'ethereal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+219,Bornyl acetate,CC(=O)OC1CC2CCC1(C)C2(C)C,250,76-49-3,"Sweet, herbaceous, piney odor reminiscent of pine needles","['pine', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2429,Trimethylphenylbutenone,C=C(C)C(=O)C(C)(C)c1ccccc1,2741,56681-06-2,"Floral, slghtly fruity (See comments)","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+321,Butyraldehyde,CCCC=O,365,123-72-8,"In high dilution, cocoa, fruity, malt-like green odor & taste","['malty', 'green', 'fruity', 'cocoa']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+165,Benzaldehyde glyceryl acetal,OCC(O)/C(O)=C/c1ccccc1,196,1319-88-6,Faint odor reminiscent of bitter almond,['almond'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+949,Furfurylpyrrole,c1coc(Cn2cccc2)c1,1056,1438-94-4,"Pungent, somewhat alliaceous-vegetative earthy-smoky odor and taste","['earthy', 'alliaceous', 'vegetable', 'smoky', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+56,Acetylethylpyrazine,CCc1cnc(C(C)=O)cn1,63,43108-58-3,"Nutty, cracker, toasted cereal, popcorn","['nutty', 'popcorn']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+832,Ethyl pyruvate,CCOC(=O)C(C)=O,928,617-35-6,"Sweet, fruity-caramellic odor; rum-spicy-caramellic taste","['fruity', 'caramellic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1891,Naphthalene,c1ccc2ccccc2c1,2111,91-20-3,Characteristic dry tarry camhorous hydrocarbon odor; musty taste,"['camphoreous', 'gasoline', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1900,"Nerolidol, S-(cis)]-isomer",C=C[C@@](C)(O)CC/C=C(/C)CCC=C(C)C,2124,142-50-7,"Faint, woody-floral, slight green odor; weak green floral taste","['green', 'woody', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2996,Nerolidyl isobutyrate,C=CC(C)(CC/C=C(/C)CCC=C(C)C)OC(=O)C(C)C,3449,2639-68-1,"Sweet, fruity-woody, Bergamot-and-Pear-like","['fruity', 'pear', 'woody', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+934,Furfuryl heptanoate,CCCCCCC(=O)OCc1ccco1,1040,39481-28-2,Green musty fermented fruity notes,"['green', 'fermented', 'fruity', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1006,Heptanedione,CCCCC(=O)C(C)=O,1127,96-04-8,"Strong, sweet, butter, fatty, cheesy odor; sweet buttery taste","['fatty', 'cheesy', 'sweet', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+413,Cyclohexaneethyl acetate,CC(=O)OCCC1CCCCC1,474,21722-83-8,"Strong, sweet, minty, rose, fruity odor; fruity-berry flavor","['fruity', 'rose', 'sweet', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2625,Ethylformylpyrrole,CCn1cccc1C=O,2996,2167-14-8,"Burnt, roasted flavor at 1-2 ppm","['burnt', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3147,Butyl propyl disulfide,CCCCSSCCC,3645,72437-64-0,"Pungent, alliaceous, garlic, onion, savory","['alliaceous', 'garlic', 'savory', 'onion', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+89,Allyl ethylbutyrate,C=CCOC(=O)C(CC)CC,107,7493-69-8,"Oily-fruity odor with a sweet, fruity, oily-nut taste","['oily', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2048,Pentanol,CCC(O)CC,2295,584-02-1,"Ethereal, somewhat fermented note, slightly fruity","['fermented', 'fruity', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+156,Anisyl isobutyrate,COc1ccc(COC(=O)C(C)C)cc1,182,71172-26-4,"Sweet, floral, mildly fruity","['fruity', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3136,Nonenal,CCCCC/C=C\CC=O,3633,31823-43-5,"Cucumber, green, watermelon","['green', 'cucumber']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2562,Pentamethylheptanethiol,CC(C)(C)CC(C)(S)CC(C)(C)C,2914,93002-38-1,Undoubtedly it has fatty sulfurous connotations,"['fatty', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3396,Mercaptoheptyl acetate,CC(=O)OCCCCCCCS,4037,548774-80-7,"Exotic fruit, peach, citrus, tea tonality","['citrus', 'fruity', 'tea', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+223,Bornyl isovalerate,CC(C)CC(=O)OC1CC2CCC1(C)C2(C)C,254,76-50-6,"Herbaceous, earthy, green, fruity; similar to valerian oil/borneol","['green', 'earthy', 'fruity', 'camphoreous', 'herbal', 'woody', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2200,Propanethiol,CCCS,2458,107-03-9,"Strong, sulfuraceous, onion, meaty, eggy, cabbage-like odor and taste","['meaty', 'cabbage', 'onion', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1977,Octanal diethyl acetal,CCCCCCCC(OCC)OCC,2209,54889-48-4,"Citrus, orange connotation, floral green odor","['green', 'floral', 'orange', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3155,Methyl octyl sulfide,CCCCCCCCSC,3658,3698-95-1,"Green, sulfurous, dirty pineapple, fruity tropical, onion, wasabi notes","['green', 'fruity', 'tropical', 'onion', 'sulfurous', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+997,Heptadecatetraenal,CCCCCCCCC=CC=CC=CC=CC=O,1116,,"Oily fatty; Contributes to savoury, chicken & fatty flavors, fish flavor","['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+361,Chavicol,C=CCc1ccc(O)cc1,419,501-92-8,Tarry-medicinal phenolic sicy smoky odor,"['spicy', 'smoky', 'phenolic', 'medicinal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+750,Ethyl decenoate,CCCCC/C=C/CCC(=O)OCC,842,76649-16-6,"Fatty, waxy, green, pineapple and pear-apple notes","['apple', 'green', 'fatty', 'pear', 'waxy', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1688,Methylcyclohexanone,CC1CCCC(=O)C1,1884,591-24-2,"Fresh, ketonic-minty, cooling; minty-cooling-ethereal solvent odor/flavor","['ketonic', 'mint', 'solvent', 'ethereal', 'fresh']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+125,Amyl formate,CCCCCOC=O,151,638-49-3,"Sweet, fresh, fruity, green-winey odor and taste","['green', 'fruity', 'fresh', 'winey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2028,Oxobutanal dimethyl acetal,COC(CC(C)=O)OC,2265,5436-21-5,"Sweet herbal, spearmint-like odor and taste (see comments)","['sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1880,Myrcenyl acetate,C=CC(=C)CCCC(C)(C)OC(C)=O,2098,1118-39-4,"Fresh, citrus, sweet, herbaceous; pleasant pear like in dilution","['citrus', 'pear', 'fresh', 'herbal', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+621,Dimethylmethoxyfuranone,COC1=C(C)OC(C)C1=O,705,4077-47-8,"Sweet, fruity caramellic ""sherry"" like odor; Xeres wine note","['caramellic', 'fruity', 'winey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2773,Allyl levulinate,C=CCOC(=O)CCC(C)=O,3181,1070-35-5,"Fruity & somewhat sweet-burnt, banana peel like","['fruity', 'burnt', 'sweet', 'banana']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3473,Mercaptomethylbutanol,CC(O)C(C)CS,4195,33959-27-2,"Sulfurous, meaty, onion, savory notes","['onion', 'sulfurous', 'meaty', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+592,Dimethylbenzyl isobutyrate,CC(C)C(=O)OC(C)(C)c1ccccc1,675,7774-60-9,"Sweet, fruity, apricot-peach-plum like notes","['apricot', 'fruity', 'plum', 'peach', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2267,Pyridine,c1ccncc1,2529,110-86-1,"Strong, amine-like, fishy, burnt odor","['fishy', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1032,Heptyl acetate,CCCCCC(C)OC(C)=O,1157,5921-82-4,"Banana flesh, melon, pear, fruity, green","['green', 'banana', 'fruity', 'melon', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1443,Menthyl acetate,CC(=O)O[C@@H]1C[C@H](C)CC[C@H]1C(C)C,1622,2623-23-6,"Sweet, fruity-sour, weak, minty cooling sensation","['mint', 'sour', 'fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1171,Hydroxybenzoic acid,O=C(O)c1ccc(O)cc1,1311,99-96-7,Nearly odorless; slight tingling taste; sweetness modiffier,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+116,Ambrinol,CC1(O)CCC2C(=CCCC2(C)C)C1,134,41199-19-3,"Strong and substantive ambergris note, earthy and animalistic","['earthy', 'animal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+571,Dimethoxybenzene,COc1ccc(OC)cc1,652,150-78-7,"Sweet, nut-like, tobacco-phenolic-earthy notes; somewhat bitter taste","['earthy', 'tobacco', 'nutty', 'phenolic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1747,Methylmercaptothiophene,Cc1sccc1S,1949,2527-76-6,Roasted meat notes,"['meaty', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+198,Benzyl octanoate,CCCCCCCC(=O)OCc1ccccc1,229,10276-85-4,"Fruity, peach, slightly fatty floral","['floral', 'fruity', 'fatty', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3158,Methylthiazole,Cc1cncs1,3661,3581-89-3,"Sulfurous, roasted, coffee and roasted nuts connotation","['sulfurous', 'coffee', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1178,Hydroxycitronellal dimethyl acetal,COC(CC(C)CCCC(C)(C)O)OC,1318,141-92-4,"Faint, green, fresh-floral lily of the valley odor; some melon-like nuance","['green', 'melon', 'fresh', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1365,Isopropylmethylhexenal,CC(C)C/C=C(/C=O)C(C)C,1519,35158-25-9,"Herbaceous, woody, cocoa, earthy, blueberry character","['earthy', 'cocoa', 'herbal', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+797,Ethyl methylpentenoate,C/C=C/C(C)C(=O)OCC,892,1617-23-8,"Sweet, fruity, pineapple, strawberry, melon-green taste at 1 ppm","['green', 'fruity', 'melon', 'strawberry', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+88,Allyl ethyl ether,C=CCOCC,106,557-31-3,Sharp ethereal,"['sharp', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3426,Ethyldimethylpyrazine,CCc1cnc(C)c(C)n1,4092,15707-34-3,"Cocoa, chocolate, nutty (burnt almond) notes","['nutty', 'cocoa', 'burnt', 'almond', 'chocolate']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2474,Vanillyl butyl ether,CCCCOCc1ccc(O)c(OC)c1,2796,82654-98-6,"Weak sweet vanilla note and ""warm-pungent"" sensation. See comments","['vanilla', 'warm', 'pungent', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+608,Dimethylfuran,Cc1ccc(C)o1,691,625-86-5,"Ethereal, solvent, rum-cognac odor; meaty, beef, nutty, burnt cocoa taste","['cognac', 'solvent', 'ethereal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1042,Heptyl isovalerate,CCCCCC(C)OC(=O)CC(C)C,1167,238757-71-6,"Green. fruity, oily-winey slightly herbaceous","['green', 'fruity', 'oily', 'herbal', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+828,Ethyl propanethioate,CCSC(=O)CC,924,2432-42-0,"Sulfurous, green cooked vegetable notes; cheese & tropical in dilution","['vegetable', 'green', 'tropical', 'sulfurous', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1461,Mercaptomethyldihydrothiophene,SCC1CC=CS1,1642,,"Sulfurous, roasted meaty notes","['sulfurous', 'meaty', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+531,Diethylpyrazine,CCc1cnc(CC)cn1,605,13238-84-1,"Musty, earthy, nutty, cocoa notes","['earthy', 'nutty', 'cocoa', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+570,Dimethoxybenzene,COc1ccccc1OC,651,91-16-7,"Sweet, creamy, vanilla, earthy-phenolic-musty, nut, odor/taste","['creamy', 'earthy', 'vanilla', 'nutty', 'phenolic', 'musty', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+614,Dimethylheptenal,CC(C)=CCCC(C)C=O,697,106-72-9,"Strong, green, watery, characteristic melon; melon in dilution","['green', 'melon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2635,Trimethylnonenol,CCCCCCC(C)C(C)=C(C)O,3007,437770-28-0,"Grapefruit, citrus, floral, nootkatone, citronellal like aroma and taste","['citrus', 'grapefruit', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1351,Isopropyl nonanoate,CCCCCCCCC(=O)OC(C)C,1503,28267-32-5,Winey-fruity-oily with melon and fermented notes,"['oily', 'fruity', 'melon', 'fermented', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+229,Butanal ethyl isoamyl acetal,CCCC(OCC)OCCC(C)C,261,238757-30-7,"Ethereal, green, fruity, alcoholic, slightly fermented","['alcoholic', 'ethereal', 'green', 'fruity', 'fermented']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3206,Methoxypyridine,COc1ccncc1,3724,620-08-6,"Aromatic, somewhat spicy, smoky, narcotic","['spicy', 'aromatic', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+872,Ethylhydroxymethylcyclopentenone,CCC1=C(O)C(=O)CC1C,971,42348-12-9,"Burnt, caramellic, maple-like odor; burnt sugar, maple-caramel taste","['burnt', 'caramellic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2329,Terpinyl formate,CC1=CCC(C(C)(C)OC=O)CC1,2629,2153-26-6,"Floral, citrus, herbaceous-lavender odor; fruity-floral oily dry taste","['floral', 'citrus', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+145,Amylcinnamyl isovalerate,CCCCC/C(=C/c1ccccc1)COC(=O)CC(C)C,171, 7493-80-3,"Mild herbaceous, floral, spicy, fruity, somewhat tobacco-hay like notes","['spicy', 'hay', 'fruity', 'tobacco', 'herbal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2381,Tolyl isobutyrate,Cc1ccccc1OC(=O)C(C)C,2688,36438-54-7,"Phenolic, fruity-berry, medicinal","['medicinal', 'phenolic', 'fruity', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3222,Pinene oxide,CC1(C)C2CCC3(CO3)C1C2,3747,6931-54-0,"Herbal, camphoraceous, rosemay, sage","['camphoreous', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+965,Geranyl formate,CC(C)=CCC/C(C)=C/COC=O,1075,105-86-2,"Fruity, fresh, green-rosy-leafy odor; green-apple-apricot spicy taste","['rose', 'green', 'fruity', 'fresh', 'leafy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+601,Dimethyldioxolane,CC1COC(C)O1,684,3390-12-3,"Ethereal, sweet, dairy, buttery, green fruity","['ethereal', 'green', 'fruity', 'dairy', 'sweet', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1750,Methylmethylthiofuran,CSc1ccc(C)o1,1952,13678-59-6,"Strong, sulfuraceous, burnt odor, coffee, alliaceous taste","['sulfurous', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+36,Acetonyl acetate,CC(=O)COC(C)=O,40,592-20-1,"Fermented, sour fruity-buttery, caramellic notes","['caramellic', 'sour', 'fruity', 'fermented', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3269,Octyl isohexanoate,CCCCCCCCOC(=O)CCC(C)C,3839,29289-91-6,"Oily, cognac, green fruity, unripe fruit","['green', 'oily', 'fruity', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+241,Butenol,C/C=C\CO,275,6117-91-5,"Sweet, gassy, ethereal, slightly fruity","['fruity', 'gasoline', 'sweet', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+725,Ethyl acetoxyhexanoate,CCCC(CC(=O)OCC)OC(C)=O,816,21188-61-4,"Fruity, green; good body effect in fruit compositions","['green', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+155,Anisyl formate,COc1ccc(COC=O)cc1,181,122-91-8,"Sweet, spicy,floral-vanilla, green odor; fruity vanillic-berry taste","['spicy', 'green', 'vanilla', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2120,Phenylbutanone,CC(=O)CCc1ccccc1,2369,2550-26-7,"Fresh floral, green odor reminiscent of jasmin, gardenia","['green', 'fresh', 'jasmine', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+376,Cinnamyl propionate,CCC(=O)OC/C=C/c1ccccc1,434,103-56-0,"Spicy, fruity, balsamic, rosy-floral odor; sweet floral mixed-fruity taste","['spicy', 'rose', 'fruity', 'balsamic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+236,Butanol,CCC(C)O,270,78-92-2,"Fermented, fusel-alcoholic notes, oily wine-like,","['alcoholic', 'solvent', 'oily', 'fermented', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+607,Dimethylethylthiazoline,CCC1N=C(C)C(C)S1,690,76788-46-0,"Meaty, nutty, musty, cocoa, peach & licorice nuances","['meaty', 'nutty', 'cocoa', 'musty', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+113,Allyl undecenoate,C=CCCCCCCCCC(=O)OCC=C,131,7493-76-7,"Sweet, fatty, coconut-pineapple like, nutty note","['fatty', 'nutty', 'coconut', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1024,Heptenol,CCCC/C=C/CO,1148,33467-76-4,"Pungent, fatty odor, mild green in dilution","['green', 'fatty', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3279,Ethyl butanethioate,CCCC(=S)OCC,3858,20807-99-2,"Cheesy with cocoa, fruity odor in dilution","['fruity', 'cocoa', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1484,Methoxycitronellal,COC(C)(C)CCCC(C)CC=O,1667,3613-30-7,"Floral, sweet, fresh and muguet-like","['fresh', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+859,Ethyldimethylpyrazine,CCc1nc(C)cnc1C,956,13360-65-1,"Cocoa, chocolate, nutty (burnt almond) notes","['nutty', 'cocoa', 'burnt', 'almond', 'chocolate']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1427,Massoia lactone,CCCCCC1CC=CC(=O)O1,1595,54814-64-1*,"Powerful creamy, buttery, coconut character","['creamy', 'coconut', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+449,Decanal,CCCCCCCCCC=O,515,112-31-2,"Strong, penetrating, sweet, waxy, orange peel odor; citrus taste","['waxy', 'sweet', 'orange']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+452,Decanol,CCCCCCCC(O)CC,518,1565-81-7,"Oily-fatty-waxy, orange, mushroom, musty odor","['oily', 'fatty', 'waxy', 'orange', 'musty', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1339,Isopropyl dodecanoate,CCCCCCCCCCCC(=O)OC(C)C,1491,10233-13-3,"Waxy-fatty-oily, slightly green floral with cream, dairy & fruity notes","['creamy', 'green', 'oily', 'fatty', 'fruity', 'waxy', 'dairy', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3140,Eicosane,CCCCCCCCCCCCCCCCCCCC,3637,112-95-8,"Bland, waxy",['waxy'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1455,Mercaptohexyl acetate,CCCC(S)CCOC(C)=O,1636,136954-20-6,"Tropical fruit, passionfruit, sulfurous, black currant, guava, grapefruit","['fruity', 'tropical', 'black currant', 'sulfurous', 'grapefruit']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3128,Hexylidenehexanal,CCCCC/C=C(/C=O)CCCC,3625,13019-16-4,"Adds fatty, citrus, green, grassy, aldehydic and fruity flavor notes","['grassy', 'citrus', 'green', 'fatty', 'fruity', 'aldehydic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1325,Isoprenyl benzoate,C=C(C)C=COC(=O)c1ccccc1,1477,5205-12-9,"Sweet balsamic, tea-like, floral","['tea', 'balsamic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1973,Octadienone,CCC=CC=CC(C)=O,2205,65213-86-7,"Geranium-like, green, metallic, earthy, mushroom, fishy odor;","['green', 'earthy', 'fishy', 'metallic', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3022,Phenylpropyl decanoate,CCCCCCCCCC(=O)OCCCc1ccccc1,3479,,"Mild, oily-fruity, slightly green-bland odor reminiscent of unripe Banana,","['green', 'oily', 'fruity', 'banana']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+412,Cyclohexanecarboxylic acid,O=C(O)C1CCCCC1,473,98-89-5,"Fruity, cheese like odor (See comments)","['fruity', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2298,Sinapinaldehyde,COc1cc(/C=C/C=O)cc(OC)c1O,2579,4206-58-0,"Sweet, spicy","['spicy', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3458,Ethoxymethylpyrazine,CCOc1cncc(C)n1,4162,53163-97-6,Strong odor and flavor of fresh pineapple,"['pineapple', 'fresh']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+299,Butyl undecenoate,C=CCCCCCCCCC(=O)OCCCC,336,109-42-2,"Fatty-waxy, buttery, wine-brandy notes; creamy buttery, fatty vinous taste","['fatty', 'waxy', 'buttery', 'winey', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1120,Hexenyl methylbutanoate,CC/C=C\CCOC(=O)C(C)CC,1254,10094-41-4,Fruity green apple odor; green apple taste,"['apple', 'green', 'fruity', 'pear', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2036,Pentadecane,CCCCCCCCCCCCCCC,2281,629-62-9,"Mild waxy, hydrocarbon odor","['waxy', 'gasoline']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+192,Benzyl isovalerate,CC(C)CC(=O)OCc1ccccc1,223,103-38-8,"Fruity, herbaceous, with apple, tobacco, cheese notes","['apple', 'fruity', 'tobacco', 'herbal', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2029,Oxobutyric acid,CCC(=O)C(=O)O,2266,600-18-0,"Sweet, brown, creamy, caramellic, fatty nuance  (see comments)","['creamy', 'caramellic', 'fatty', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+398,Citronellyl propionate,CCC(=O)OCCC(C)CCC=C(C)C,456,141-14-0,"Sweet fruity rose odor; bittersweet, floral-green-citrus-plum-like taste","['fruity', 'rose', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+962,Geranyl benzoate,CC(C)=CCC/C(C)=C/COC(=O)c1ccccc1,1072,94-48-4,"Amber-rose, ylang-ylang like, floral odor","['floral', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1007,Heptanethiol,CCCCCCCS,1128,1639-09-4,"Sulfurous, onion, vegetative, savory & fatty-meaty notes on dilution","['vegetable', 'meaty', 'fatty', 'savory', 'onion', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+176,Benzyl acetoacetate,CC(=O)CC(=O)OCc1ccccc1,207,5396-89-4,"Pleasant, fresh, floral, balsamic fruity  odor","['fruity', 'balsamic', 'fresh', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+469,Decenol,C=CCCCCCCCCO,537,13019-22-2,"Waxy, fresh, dewy, aldehydic, rosy odor","['rose', 'fresh', 'aldehydic', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1085,Hexenol,C=CC(O)CCC,1215,4798-44-1,"Ethereal, rum like odor","['ethereal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+867,Ethylhexanoic acid,CCCCC(CC)C(=O)O,966,149-57-5,"Mild, fatty-cheese-fruity, sour rancid, herbaceous musty notes","['sour', 'fatty', 'fruity', 'herbal', 'musty', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1019,Heptenoic acid,CCC/C=C\CC(=O)O,1142,29901-85-7,"Green, waxy rancid dairy-like fruity","['green', 'fruity', 'waxy', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3010,Octyl crotonate,C/C=C\C(=O)OCCCCCCCC,3466,22874-79-9,"Fresh, herbal-fruity, slightly floral, somewhat lavender-like","['fruity', 'fresh', 'herbal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1031,Heptyl acetate,CCCCCCCOC(C)=O,1156,112-06-1,"Fruity, fatty, slight floral odor; pear-apricot taste","['fruity', 'fatty', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2050,Pentanone,CCC(=O)CC,2297,96-22-0,"Ethereal, caramel; slight fruity cheese note","['fruity', 'caramellic', 'ethereal', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+149,Anisaldehyde: p-Anisaldehyde,COc1ccc(C=O)cc1,175,123-11-5,"Floral, hay-like odor; sweet anisic-vanilla-fruity herbaceous","['hay', 'vanilla', 'fruity', 'herbal', 'anisic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3198,Methoxypropanol,COCC(C)O,3713,107-98-2,"Sweet, ethereal odor","['sweet', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+350,Caryophyllene alcohol,CC12CCCC(O)(C1)C1CC(C)(C)C1CC2,407,472-97-9,"Warm, mossy, dry-woody with spicy clove-like note","['spicy', 'warm', 'woody', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+814,Ethyl octenoate,CCCCC=CCC(=O)OCC,910,1117-65-3,"Fruity, fatty tropical notes, somewhat pineapple, passion fruit","['fruity', 'fatty', 'tropical', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+587,Dimethylanisole,COc1ccc(C)cc1C,670,6738-23-4,"Herbal, spicy, somewhat earthy nut-like","['earthy', 'spicy', 'nutty', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+140,Amylcinnamaldehyde dimethyl acetal,CCCCC/C(=C\c1ccccc1)C(OC)OC,166,91-87-2,"Green, mild floral somewhat jasmine-like aroma and taste","['green', 'floral', 'jasmine']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+139,Amyl salicylate,CCCCCOC(=O)c1ccccc1O,165,2050-08-0,"Sweet balsamic, mild herbal floral notes","['balsamic', 'floral', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2709,Ethyl methoxybenzyl ether,CCOCc1ccccc1OC,3099,64988-06-3,"Sweet aromatic, fresh floral; tea-rose and wintergreen-like","['rose', 'fresh', 'tea', 'aromatic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+276,Butyl hydroxybenzoate,CCCCOC(=O)c1ccc(O)cc1,312,94-26-8,Almost odorless and tasteless; antimicrobial preservative,['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+912,Farnesene,C=CC(=C)CC/C=C(\C)CCC=C(C)C,1015,18794-84-8,"Citrus, herbaceous-green, woody","['green', 'woody', 'citrus', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+584,Dimethylacetophenone,CC(=O)c1ccc(C)cc1C,667,89-74-7,"Sharp, sweet, chemical, floral, coumarinic, woody-hay minty notes","['hay', 'sharp', 'sweet', 'woody', 'floral', 'coumarinic', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+199,Benzyl octyl ether,CCCCCCCCOCc1ccccc1,230,54852-64-1,"Aromatic, floral, balsamic; slightly fruity, earthy (See comments)","['earthy', 'fruity', 'balsamic', 'aromatic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+992,Guaiene,CC(C)=C1CCC(C)C2=C(C1)C(C)CC2,1110,88-84-6,"Sweet, woody, balsamic odor with peppery notes","['woody', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2818,Decyl hexanoate,CCCCCCCCCCOC(=O)CCCCC,3235,52363-43-6,"Oily-fruity, fatty with some pineapple notes","['oily', 'fruity', 'fatty', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+342,Carvomenthol,CC(C)[C@@H]1CC[C@@H](C)[C@H](O)C1,394,499-69-4,"Weak minty, herbal; can serve as a menthol enhancer (see comments)","['herbal', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+69,Acetylthiazole,CC(=O)c1nccs1,83,24295-03-2,"Nutty, popcorn, bread, toasted cereal notes","['nutty', 'bread', 'popcorn']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+780,Ethyl linolenate,CC/C=C/C/C=C/C/C=C/CCCCCCCC(=O)OCC,875,1191-41-9,Mild Oily fatty odor & mild fatty flavor,"['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+624,Dimethylmethylpropenyltetrahydrofuran,C/C=C(\C)C1CCC(C)(C)O1,709,7416-35-5,"Citrus (lime-like), camphoraceous, fresh, minty odor","['citrus', 'fresh', 'camphoreous', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+667,Dimethyltrithiolane,CC1SSC(C)S1,753,23654-92-4,"Cooked Chicken, meat aroma; onion-like; important to Durian flavor","['onion', 'chicken', 'meaty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1772,Methylpentanol,CCCC(C)(C)O,1978,590-36-3,"Yeasty, minty, slightly camphoraceous notes, fermented fusel notes","['alcoholic', 'solvent', 'fermented', 'camphoreous', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2144,Phenylpropionic acid,CC(C(=O)O)c1ccccc1,2393,492-37-5,Sweet floral honey-like,"['honey', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+402,Cresol,Cc1cccc(O)c1,460,108-39-4,"Dry-tarry, medicinal-phenolic, leathery odor","['leathery', 'phenolic', 'medicinal', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2470,Vanillin acetate,COc1cc(C=O)ccc1OC(C)=O,2788,881-68-5,"Mild, sweet, creamy, floral, vanilla-like odor and taste","['creamy', 'floral', 'sweet', 'vanilla']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1059,Hexalactone,CC1CCCC(=O)O1,1185,823-22-3,"Sweet, slight coumarinic-coconut odor; cream, buttery, chocolate notes","['creamy', 'coconut', 'sweet', 'coumarinic', 'chocolate', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+716,Ethoxymethylphenol,CCOCc1ccccc1O,807,20920-83-6,"Sweet vanilla, smoky, phenolic, animalic","['vanilla', 'animal', 'phenolic', 'smoky', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2,Acetaldehyde benzyl methoxyethyl acetal,COC(C)OC(C)OCc1ccccc1,2,7492-39-9,"Sweet, somewhat green, fruity bitter almond odor","['green', 'fruity', 'almond', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2000,Octenol,CC/C=C\CCCCO,2234,64275-73-6,"Green, melon, fruity and mushroom odor & taste","['green', 'fruity', 'melon', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2846,Ethyl ethylphenylglycidate,CCOC(=O)C1(c2ccccc2)OC1CC,3272,,"Fruity, berry, jammy, cooked fruit notes","['fruity', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+794,Ethyl methylpentadienoate,C=C=CC(C)C(=O)OCC,889,60523-21-9,"Fruity, berry, mango-melon, apple, pear notes; juicy nuances","['apple', 'fruity', 'melon', 'pear', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2035,Pentadecalactone,O=C1CCCCCCCCCCCCCCO1,2280,106-02-5,Powerful sweet musk odor and taste with pear connotations,"['musk', 'sweet', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+575,Dimethoxyphenol,COc1cccc(OC)c1O,657,91-10-1,"Phenolic-woody-medicinal, smoky odor; a tarry, spicy, smoky (bacon) taste","['woody', 'phenolic', 'medicinal', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2899,Hexenyl acetate,C=CCCCCOC(C)=O,3339,5048-26-0,"Sweet, green fruity-sour odor; useful in Quince","['sour', 'green', 'fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+4,Acetaldehyde butyl isoamyl acetal,CCCCOC(C)OCCC(C)C,4,238757-27-2,"Ethereal, green, alcoholic, cognac, somewhat vegetable","['vegetable', 'alcoholic', 'ethereal', 'green', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1886,Myrtenal,CC1(C)C2CC=C(C=O)C1C2,2104,564-94-3,"Spicy-herbaceous, bay-leaf and cinnamon-like odor and taste","['spicy', 'cinnamon', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2967,Methyl oxohexanoate,CCCC(=O)CC(=O)OC,3411,30414-54-1,Caramellic fruity; somewhat roasted; 2-pentanone precursor,"['fruity', 'caramellic', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1591,Methyl octanoate,CCCCCCCC(=O)OC,1781,111-11-5,"Strong, winey-fruity, orange-like odor; green fruity, waxy, citrus taste","['fruity', 'winey', 'orange']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2854,Ethyl trimethylhexanoate,CCOC(=O)CC(C)CC(C)(C)C,3283,67707-75-9,"Fruity, flowery with apple and wine yeast note.","['apple', 'fruity', 'winey', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+546,Dihydrodimethylcyclopentapyrazine,Cc1cnc2c(n1)CCC2C,623,38917-61-2,"Burnt, cocoa, nutty, brown, roasted, earthy and musty","['roasted', 'earthy', 'nutty', 'cocoa', 'burnt', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+702,Elemol,C=C[C@]1(C)CC[C@@H](C(C)(C)O)C[C@H]1C(=C)C,792,639-99-6,Sweet woody odor with green-foral undertone,"['green', 'woody', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1181,Hydroxycyclohexenone,O=C1CCCC=C1O,1321,10316-66-2,"Caramellic, intense foenugreek character; somewhat burnt, harsh chemical","['caramellic', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+703,Epithiomenthane,CC1CCC2CC1SC2(C)C,793,68398-18-5,Sulphurous with grapefuit-like & tropical fruit notes,"['sulfurous', 'fruity', 'grapefruit', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+933,Furfuryl butyrate,CCCC(=O)OCc1ccco1,1039,623-21-2,"Fruity, somewhat grape, green odor; gooseberry-like taste at 20 ppm","['green', 'fruity', 'grape']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2335,Tetradecanone,CCCCCCCCCCCCC(C)=O,2636,2345-27-9,"Milky, oily-spicy odor; dairy milky-coconut taste; adds mouthfeel","['oily', 'milky', 'spicy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2622,Furfurylmethylfuryl disulfide,c1coc(CCSSc2ccco2)c1,2992,109537-55-5,"Sulfury, meaty, savory; Cooked meat like in dilution","['sulfurous', 'meaty', 'savory']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+854,Ethylbutyric acid,CCC(CC)C(=O)O,951,88-09-5,"Fruity, earthy, slight dairy & nut-like odor and sour fruity-cheese taste","['earthy', 'fruity', 'nutty', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+289,Butyl myristate,CCCCCCCCCCCCCC(=O)OCCCC,325,110-36-1,Mild fatty-waxy,"['fatty', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1606,Methyl propenyl sulfide,CC=CSC,1798,10152-77-9,"Sulfurous, cooked onion & garlic notes","['onion', 'sulfurous', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+503,Dicyclohexyl disulfide,C1CCC(SSC2CCCCC2)CC1,574,2550-40-5,"Onion, meat, clam, crab, coffee and cocoa; (berry, musty, green @ 1 ppm)","['meaty', 'green', 'cocoa', 'onion', 'coffee', 'berry', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1910,Nonadienal,CCCC/C=C/C=C/C=O,2136,6750-03-4,Strong fatty type odor and taste; chicken fat-nutty on dilution,"['fatty', 'nutty', 'chicken']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2361,Thienylethanethiol,CC(S)c1cccs1,2665,94089-02-8,"Burnt, coffee grounds, anise taste at 0.01 ppm in sugar syrup","['burnt', 'coffee']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1804,Methylpropenyldimethyloxathiane,CC=CC1(C)CCOSC1(C)C,2012,,"Sulfurous, green herbal, spicy, somewhat tropical","['spicy', 'green', 'tropical', 'herbal', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+18,Acetaldehyde ethyl cis-3-hexenyl acetal ,CC/C=C/CCOC(C)OCC,19,28069-74-1,"Green, vegetative, grassy, musty, radish-like with a fruity note","['grassy', 'radish', 'green', 'fruity', 'vegetable', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1303,Isoeugenyl acetate,C/C=C/c1ccc(OC(C)=O)c(OC)c1,1453,93-29-8,"Fruity-floral, balsamic, spicy, clove-like; warm sweet taste","['spicy', 'fruity', 'balsamic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+474,Decenone,CCCCCC/C=C/C(C)=O,542,10519-33-2,"Green, fruity, fatty-waxy, jasmine, slight butterry, savory chicken notes","['green', 'fruity', 'fatty', 'savory', 'chicken', 'waxy', 'jasmine', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1789,Methylphenethyl alcohol,CC(CO)c1ccccc1,1996,1123-85-9,Sweet-floral (hyacinth) odor; sweet woody floral herbaceous taste,"['floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+603,Dimethylethyloxazole,CCc1nc(C)oc1C,686,30408-61-8,"Green, vegetative, nutty, hazelnut","['green', 'vegetable', 'nutty', 'hazelnut']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+540,Dihydrocarveol,C=C(C)C1CCC(C)C(O)C1,615,619-01-2,"Sweet, woody-cuminic, floral odor; minty, sweet weedy spicy taste","['woody', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+909,Eugenyl methyl ether,C=CCc1ccc(OC)c(OC)c1,1012,93-15-2,"Musty, tea-like, mild-spicy, clove-like herbal odor and taste","['spicy', 'herbal', 'tea', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1023,Heptenol,CCC/C=C/CCO,1147,10606-47-0,"Green, freshly-mowed grass, herbaceous and floral odor","['grassy', 'green', 'fresh', 'herbal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1030,Heptenyl methylpropanoate,CCC/C=C/CCOC(=O)C(C)C,1155,67801-45-0,"Green, fruity, apple-like odor & taste","['green', 'fruity', 'apple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1731,Methylhexanedione,CC(=O)C(=O)CC(C)C,1931,13706-86-0,"Strong, oily-buttery odor; creamy, buttery fruity taste","['oily', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1263,Isobutyl butyrate,CCCC(=O)OCC(C)C,1410,539-90-2,"Sweet-fruity, reminiscent of pear, pineapple, banana rummy odor/flavor","['fruity', 'banana', 'pear', 'pineapple', 'sweet', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1194,Hydroxymethyloctanone,CCCCCC(CO)C(C)=O,1335,59191-78-5,"Sweet, musty-herbaceous, earthy odor and taste","['earthy', 'musty', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+710,Ethoxybenzaldehyde,CCOc1ccc(C=O)cc1,801,10031-82-0,"Sweet, cherry-almond, anisic odor; spicy, cherry-almond, vanilla taste","['anisic', 'cherry', 'almond', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1223,Isoamyl formate,CC(C)CCOC=O,1366,110-45-2,"Sweet, green-fruity-winey resembles blackcurrant, plum & apple","['apple', 'green', 'fruity', 'black currant', 'winey', 'plum', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1416,Linalyl phenylacetate,C=CC(C)(CCC=C(C)C)OC(=O)Cc1ccccc1,1575,7143-69-3,"Sweet, floral (neroli-rose) odor; sweet honey like floral taste","['rose', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+102,Allyl pentanoate,C=CCOC(=O)CCCC,120,6321-45-5,"Fruity, apple, fermented winey, pineapple","['apple', 'fruity', 'fermented', 'pineapple', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+463,Decenoic acid,CCCCCCC/C=C\C(=O)O,530,3913-85-7,"Waxy-fatty odor; fruity (waxy, sweet, peach-orange) at 5ppm","['fatty', 'fruity', 'waxy', 'orange', 'peach', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1767,Methylpentanedione,CC(=O)C(=O)C(C)C,1973,7493-58-5,"Strong, creamy-sweet, fruity-buttery odor; butter-rum taste","['creamy', 'fruity', 'sweet', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2201,Propanol,CCCO,2459,71-23-8,"Alcoholic, fermented sweet odor; bland fermented, fusel fruity flavor","['fermented', 'alcoholic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+301,Butylamine,CCCCN,338,109-73-9,Mild ammonia fishy like odor/taste; on dilution a blue cheese nuance,"['fishy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+141,Amylcinnamaldehyde,CCCCC/C(C=O)=C/c1ccccc1,167,122-40-7,"Floral, reminiscent of gardenia/jasmin; Sweet floral light fruity taste","['floral', 'jasmine']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1203,Indole,c1ccc2[nH]ccc2c1,1345,120-72-9,Erogenic Floral animalic odor and taste in dilution; cheese notes,"['cheesy', 'floral', 'animal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1311,Isojasmone,CC/C=C/CC1=C(C)C(=O)CC1,1461,11050-62-7,"Sweet, herbaceous, jasmine odor; sweet waxy-floral-fruit taste","['jasmine', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2132,Phenylpentenal,C=CC(CC=O)c1ccccc1,2381,939-21-9,"Floral, cocoa odor; chocolate taste","['cocoa', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+218,Borneol,CC1(C)C2CCC1(C)C(O)C2,249,507-70-0,"Sharp, camphoraceous, coniferous, woody, peppery odor reminiscent of mint","['sharp', 'camphoreous', 'woody', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1459,Mercaptomethylbutyl formate,CCCC(CS)OC=O,1640,,"Sulfurous, catty, black currant and tropical fruity, roasted on dilution","['roasted', 'fruity', 'tropical', 'catty', 'black currant', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1275,Isobutyl mercaptan,CC(C)CS,1422,513-44-0,"Rotten, putrified (of onion, garlic, egg); vegetable, mustard","['garlic', 'onion', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3315,Undecenoic acid,CCCCC/C=C\CCCC(=O)O,3921,62472-76-8,"Fatty-waxy & green, dairy-like in dilution","['green', 'fatty', 'waxy', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+325,Cadinene,CC(C)[C@@H]1CC[C@H](C)[C@@H]2C=C[C@H](C)C[C@@H]12,371,29350-73-0,"Dry, woody, slight burnt, spice character","['woody', 'burnt', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+306,Butyldimethylthiazole,CCCCc1sc(C)nc1C,345,,"Green vegetable, with nutty roasted notes","['green', 'vegetable', 'nutty', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+428,Cycloionone,CC1=CC=C2C(C)(C)CCCC2(C)O1,489,5552-30-7,"Fruity, berry, orris, sweet, floral, and woody odor & taste","['fruity', 'berry', 'orris', 'woody', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3085,Trimethylhydroxycyclohexanone,CC1(C)CCCC(C)(O)C1=O,3569,7500-42-7,"Tobacco, cistus, somewhat tea like","['tea', 'tobacco']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1107,Hexenyl formate,CC/C=C/CCOC=O,1238,2315-09-5,"Strong, sharp, green fruity-apple; green fruity vegetable taste","['green', 'fruity', 'apple', 'sharp']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+537,Difurfurylfuran,c1coc(Cc2ccoc2Cc2ccco2)c1,612,64280-32-6,"Floral, fruity","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+492,Diallyl pentasulfide,C=CCSSSSSCC=C,562,118686-45-6,"Sulfurous; alliaceous garlic, onion, savory, roasted notes","['roasted', 'alliaceous', 'garlic', 'savory', 'onion', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1937,Nonanonyl acetate,CCCCCCCC(=O)COC(C)=O,2165,7779-54-6,"Warm, herbaceous, fruity odor and taste","['fruity', 'warm', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3226,Ethylhexyl salicylate,CCCCC(CC)COC(=O)c1ccccc1O,3758,118-60-5,"Heavy, fruity, slightly spicy-floral odor; heavy fruity flavor","['fruity', 'spicy', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+940,Furfuryl methyl sulfide,CSCc1ccco1,1046,1438-91-1,Cooked onion-garlic-radish-mustard notes in dilution,"['onion', 'garlic', 'radish']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+799,Ethyl methylpentenoate,CCOC(=O)CC=C(C)C,894,6849-18-9,"Fruity, green, apple, berry, strawberry, mixed fruit","['apple', 'green', 'fruity', 'strawberry', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+95,Allyl mercaptan,C=CCS,113,870-23-5,"Pungent, strong leek and onion-like, sweet odor and taste","['onion', 'pungent', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1050,Hexadecanal,CCCCCCCCCCCCCCCC=O,1176,629-80-1,"Mild, fatty, orris, waxy odor; contributes to fatty meat flavors","['fatty', 'waxy', 'orris']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1620,Methyl thiofuroate,CSC(=O)c1ccco1,1812,13679-61-3,"Cabbage like; dairy, blue cheese, fried, cooked onion-like","['cabbage', 'onion', 'dairy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2145,Phenylpropyl acetate,CC(=O)OCCCc1ccccc1,2394,122-72-5,"Floral-honey, balsamic, spicy odor; balsamic, fruity, spicy taste","['honey', 'balsamic', 'floral', 'spicy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+932,Furfuryl butenoate,CC=CC(=O)OCc1ccco1,1038,59020-84-7,"Earthy, mushroom-like taste at 0.7 ppm.","['earthy', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+732,Ethyl acrylate,C=CC(=O)OCC,823,140-88-5,"Sharp, irritating, acrid odor; rum-like in dilution","['rum', 'sharp']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3519,Mercaptopentanol,CCCCC(O)S,4314,548740-99-4,"Catty, citrus, grapefruit; brothy, greenery, stinging nettle like","['citrus', 'green', 'catty', 'brothy', 'grapefruit']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1671,Methylbutyl methylbutanoate,CCC(C)COC(=O)CC(C)C,1867,2445-77-4,"Herbaceous, fruity, winey-earthy apple odor","['apple', 'earthy', 'fruity', 'herbal', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+851,Ethylbutanol,CCC(CC)CO,948,97-95-0,"Fermented, fusel oil & yeasty","['fermented', 'alcoholic', 'solvent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+788,Ethyl methyl sulfide,CCSC,883,624-89-5,"Sulfurous, tomato, meaty, bloody, alliaceous, corn, clam, savory","['meaty', 'alliaceous', 'savory', 'tomato', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+168,Benzenethiol,Sc1ccccc1,199,108-98-5,"Burnt rubber, meaty, burnt-like on dilution","['burnt', 'meaty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2754,Trimethylhexenal dimethyl acetal,COC(OC)C(C)(C)CC=C(C)C,3162,67674-46-8,"Fresh, Citrus, Grapefruit Peel-Like, vetiveryl acetate aspect","['citrus', 'fresh', 'grapefruit']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1329,Isopropenylmethylvinyltetrahydrofuran,C=CC1(C)CCC(C(=C)C)O1,1481,13679-86-2,"Fresh, pine, herbaceous, minty, lime-like topnote","['pine', 'fresh', 'herbal', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1883,Myristyl alcohol,CCCCCCCCCCCCCCO,2101,112-72-1,Weak oily fatty,"['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+253,Butyl angelate,C/C=C(/C)C(=O)OCCCC,289,7785-64-0,"Sweet, herbal, fruity, floral with winey, caramelic, chamomille notes","['caramellic', 'fruity', 'herbal', 'chamomile', 'winey', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1737,Methylhexanone,CC(=O)CCC(C)C,1937,110-12-3,"Mild, sweet ketonic, minty cheesy-fruity","['ketonic', 'mint', 'fruity', 'sweet', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+0,Acetal,CCOC(C)OCC,0,105-57-7,"Fruity, choking alcoholic-like, green odor; nut, whiskey taste","['green', 'fruity', 'alcoholic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2066,Pentylamine,CCCCCN,2313,110-58-7,Fishy; fresh fermented & slightly cheese-like in dilution,"['fermented', 'fishy', 'fresh', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+815,Ethyl octenoate,CCCCC/C=C/C(=O)OCC,911,7367-82-0,"Fruity, green, pineapple-pear, juicy tropical notes","['green', 'fruity', 'pear', 'tropical', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+171,Benzoin,O=C(c1ccccc1)C(O)c1ccccc1,202,119-53-9,"Faint, sweet, nondescript spicy camphor notes","['spicy', 'camphoreous', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2082,Phenethyl cinnamate,O=C(/C=C/c1ccccc1)OCCc1ccccc1,2331,103-53-7,"Sweet, balsamic odor; fruity sweet heavy fruit taste","['balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1072,Hexanol,CCCC(O)CC,1198,623-37-0,"Alcoholic, fermented, medicinal-solvent like odor","['fermented', 'medicinal', 'alcoholic', 'solvent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2512,Methylheptanone,CCCCC(=O)C(C)C,2840,13019-20-0,"Herbaceous-green-fruity, caraway-spearmint, cheese & dairy notes","['green', 'fruity', 'dairy', 'herbal', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+285,Butyl methylbutenethioate,CCC(C)SC(=O)C=C(C)C,321,34322-09-3,"Sulfurous, green-vegetative galbanum notes; cheese & tropical fruit","['vegetable', 'green', 'fruity', 'tropical', 'sulfurous', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+481,Decylfuran,CCCCCCCCCCc1ccco1,549,83469-85-6,"Spicy, fatty aroma","['fatty', 'spicy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+104,Allyl propenyl disulfide,C=CCSSC=CC,122,33368-82-0,"Cooked onion, garlic","['onion', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2236,Propyl methylbutenoate,C/C=C(\C)C(=O)OCCC,2495,61692-83-9,"Sweet, fruity-green, minty, roman chamomille like notes","['green', 'fruity', 'chamomile', 'sweet', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+599,Dimethylcyclopentenone,CC1=CC(=O)CC1C,682,30434-64-1,"Ketonic, caramellic, somewhat burnt","['ketonic', 'caramellic', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2830,Dimethylbenzyl formate,CC(C)(OC=O)c1ccccc1,3256,,"Floral, fruity","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1542,Methyl furfuryl disulfide,CSSCc1ccco1,1729,57500-00-2,"Roasted coffee, meat, onion; some bread crust odor in dilution","['meaty', 'roasted', 'onion', 'coffee', 'bread']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2345,Tetrahydrofurfuryl phenylacetate (See comments),O=C(Cc1ccccc1)OCC1CCCO1,2646,5421-00-1,"Sweet, honey-chocolate-fruity, heavy odor & taste","['honey', 'fruity', 'sweet', 'chocolate']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1719,Methylheptanoic acid,CCCCCC(C)C(=O)O,1919,3302-03-2,"Fatty, sour,  cheesey, somewhat goaty odor","['fatty', 'sour', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1123,Hexenyl octanoate,CC/C=C\CCOC(=O)CCCCCCC,1258,61444-41-5,"Green, fruity, winey, somewhat waxy-fatty, tropical notes","['green', 'fruity', 'fatty', 'tropical', 'waxy', 'winey']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1293,Isobutylmethylpyrazine,Cc1nccnc1CC(C)C,1440,13925-06-9,"Powerful herbaceous, vegetative, green pepper, earthy notes","['earthy', 'vegetable', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+673,Diphenyl ether,c1ccc(Oc2ccccc2)cc1,759,101-84-8,"Floral-green, metallic geranium odor","['green', 'floral', 'metallic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3356,Mint sulfide,C=C1CC[C@@H]2S[C@@H]1[C@H]1[C@H](C(C)C)CC[C@@]21C,3973,72445-42-2,"Heavy, woody musty-earthy odor","['earthy', 'woody', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2277,Rhodinyl acetate,C=C(C)CCCC(C)CCOC(C)=O,2550,141-11-7,"Fresh rosy, fruity odor; fruity-berry like taste","['fruity', 'fresh', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1407,Linalyl anthranilate,C=CC(C)(CCC=C(C)C)OC(=O)c1ccccc1N,1566,7149-26-0,"Green, floral, mandarin, orange blossom  odor & similar taste","['green', 'orange', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1680,Methylbutyric acid,CCC(C)C(=O)O,1876,116-53-0,"Pungent, acrid, roquefort cheese like; fruity in dilution","['fruity', 'pungent', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+632,Dimethyloctenone,CCCCC=CC(=O)C(C)C,717,2550-18-7,"Herbaceous, fresh, ketonic, slight fruity","['ketonic', 'fruity', 'fresh', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1419,Linolenic acid,CC/C=C/C/C=C/C/C=C/CCCCCCCC(=O)O,1578,463-40-1,Fatty (see comments),['fatty'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+805,Ethyl methylthiopropionate,CCOC(=O)CCSC,901,13327-56-5,"Fruity, caramelized pineapple odor; pineapple taste; milky, cheese notes","['fruity', 'caramellic', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2104,Phenoxyethyl isobutyrate,CC(C)C(=O)OCCOc1ccccc1,2353,103-60-6,"Fruity, floral-honey-like odor; fruity waxy apple-chamomile like taste","['honey', 'fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+619,Dimethylisobutylthiazoline,CC1=NC(CC(C)C)SC1C,702,65894-83-9,"Sweet, roasted, meat, nut, burnt corn, chocolate; green vegetable notes","['meaty', 'roasted', 'green', 'nutty', 'burnt', 'vegetable', 'sweet', 'chocolate']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+157,Anisyl phenylacetate,COc1ccc(COC(=O)Cc2ccccc2)cc1,183,102-17-0,"Weak balsamic, rosy odor with honey notes; honey-balsamic taste","['honey', 'balsamic', 'rose']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1608,Methyl propionate,CCC(=O)OC,1800,554-12-1,"Ethereal, fruity, rum-like odor; sweet fruity taste","['fruity', 'ethereal', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+363,Cinnamaldehyde ethylene glycol acetal,C(=C/C1OCCO1)\c1ccccc1,421,5660-60-6,"Pleasant, spicy, sweet, cinnamon-like; cinnamon-allspice taste","['cinnamon', 'spicy', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1165,Hexylpyridine,CCCCCCc1ccccn1,1302,1129-69-7,"Green, vegetable, nutty, fatty, mutton notes","['green', 'fatty', 'nutty', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+628,Dimethyloctanol,CCC(C)CCC(C)(O)CC,713,151-19-9,Sweet floral similar to tetrahydrolinalool,"['floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1109,Hexenyl heptanoate,CC/C=C/CCOC(=O)CCCCCC,1242,61444-39-1,"Green, fruity, somewhat waxy-fatty, tropical notes","['green', 'fruity', 'fatty', 'tropical', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+792,Ethyl methyldithiopropionate,CCOC(=O)C(C)SSC,887,23747-43-5,"Sulfurous, green, onion; fruity (tropical-pineapple) in extreme dilution","['green', 'fruity', 'tropical', 'onion', 'sulfurous', 'pineapple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3378,Nonenolide,O=C1C=CCCCCCCO1,4000,51352-68-2,"Coconut, coumarinic, tobacco, somewhat fruity","['tobacco', 'fruity', 'coconut', 'coumarinic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+45,Acetyl thymol,CC(=O)Oc1cc(C)ccc1C(C)C,50,528-79-0,"Spicy-herbaceous, thyme, balsamic, smoky; pungent spicy taste","['spicy', 'smoky', 'herbal', 'balsamic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+967,Geranyl isobutyrate,CC(C)=CCC/C(C)=C/COC(=O)C(C)C,1077,2345-26-8,"Sweet, heavy fruity rosy odor and a sweet apricot-like taste","['fruity', 'rose', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2527,Hexenol,C/C=C\CCCO,2859,928-91-6,"Green, fruity, vegetable, slight tomato","['green', 'fruity', 'vegetable', 'tomato']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1403,Linalool oxide,CC(C)=CCCC(C)(O)C1CO1,1561,1365-19-1,"Strong, sweet, woody, floral, creamy with a slight minty note","['creamy', 'fresh', 'woody', 'floral', 'sweet', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1505,Methoxyvinylphenol,C=Cc1ccc(O)c(OC)c1,1689,7786-61-0,"Sweet, spicy, clove-like, somewhat smoky odor; sweet taste","['spicy', 'sweet', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2210,Propionylmenthene,CCC(=O)C1CC(C(C)C)CC=C1C,2468,31375-17-4,"Citrus, Green, Leafy, Natural, Agrestic","['citrus', 'green', 'leafy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+985,Glyceryl monooleate,CCCCCCCC/C=C\CCCCCCCC(=O)OCC(O)CO,1098,25496-72-4,"Faint, sweet, oily odor; weak fatty, oily taste","['oily', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1755,Methylnaphthalene,Cc1cccc2ccccc12,1958,90-12-0,"Green, musty taste, earthy, medicinal","['green', 'earthy', 'medicinal', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+160,Artemisia Ketone,C=CC(C)(C)C(=O)C=C(C)C,189,546-49-6,"Green herbaceous artemisia odor, with some honey, mint & berry like notes","['green', 'honey', 'berry', 'herbal', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+264,Butyl decenoate,CCCCCCC/C=C/C(=O)OCCCC,300,7492-45-7,"Rich, green-waxy, fruity-milky-coconut-peach-apricot notes","['apricot', 'green', 'fruity', 'milky', 'coconut', 'waxy', 'peach']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+996,Heptadecanone,CCCCCCCCCCCCCCCC(C)=O,1115,2922-51-2,Mild fatty dairy note,"['fatty', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3245,Decyl isohexanoate,CCCCCCCCCCOC(=O)CCC(C)C,3796,,"Oily, fruity","['oily', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+135,Amyl palmitate,CCCCCCCCCCCCCCCC(=O)OCCCCC,161,31148-31-9,Mild fatty-waxy; adds mouthfeel,"['fatty', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+384,Citronellal,CC(C)=CCC[C@@H](C)CC=O,442,106-23-0,"Fresh,  green, citrus-lemon, woody; citronella oil-like","['citrus', 'green', 'fresh', 'lemon', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3130,Empetal,CC(C)=CCCC1=CCC(C=O)CC1,3627,37677-14-8,"Citrus, Aldehydic, Floral, Ozone (Fresh Air/Marine)","['floral', 'aldehydic', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+320,Butylthiophene,CCCCc1cccs1,363,1455-20-5,Roasted fried notes,['roasted'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1257,Isobutyl acetoacetate,CC(=O)CC(=O)OCC(C)C,1404,7779-75-1,"Sweet, winey, brandy-like odor and fruity taste","['winey', 'sweet', 'brandy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+968,Geranyl isovalerate,CC(C)=CC/C=C(\C)CCOC(=O)CC(C)C,1078,109-20-6,"Fruity, blueberry, tropical apple-like, rosy odor; tropical & apple taste","['apple', 'rose', 'fruity', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+10,Acetaldehyde diamyl acetal,CCCCCOC(C)OCCCCC,11,13002-08-9,"Ethereal, green, alcoholic, cognac, somewhat cocoa, vegetable","['vegetable', 'alcoholic', 'ethereal', 'green', 'cocoa', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1307,Isoeugenyl formate,C/C=C/c1ccc(OC=O)c(OC)c1,1457,7774-96-1,"Weak, fresh, green, sweet, woody, orris-clove like notes","['green', 'fresh', 'orris', 'woody', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3328,Cyclododecanol,OC1CCCCCCCCCCC1,3938,1724-39-6,"Soft, woody, slightly camphoraceous-earthy","['woody', 'camphoreous', 'earthy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+646,Dimethylpyrazine,Cc1cnc(C)cn1,731,123-32-0,"Chocolate, roasted nuts, earthy; chocolate taste","['earthy', 'roasted', 'chocolate']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3193,Erucin,CSCCCCN=C=S,3707,4430-36-8,"Pungent, cabbage, radish-like","['pungent', 'radish', 'cabbage']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1758,Methylnonanoic acid,CCCCC[C@@H](C)CCC(=O)O,1961,45019-28-1,"Fatty, mutton, costus, dairy, milk odor; fatty musty, mutton & dairy taste","['fatty', 'milky', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+772,Ethyl hydroxymethylbenzoate,CCOC(=O)c1ccccc1CO,867,60770-00-5,"Floral salicylate, licorice, animalic, ylang-ylang notes","['animal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+981,Glutamine,NC(=O)CC[C@H](N)C(=O)O,1092,56-85-9,"Odorless, mildly sweet; Used in Reaction flavors & salt replacers",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1721,Methylheptanone,CCC(=O)CC(C)CC,1921,541-85-5,"Flat, pleasant ketonic, mild fruity, herbaceous notes","['fruity', 'ketonic', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1549,Methyl hexanethioate,CCCCCC(=S)OC,1736,20756-86-9,"Sulfurous, green, cheese, tropical-fruit-pineapple on dilution","['green', 'fruity', 'tropical', 'sulfurous', 'pineapple', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3481,Propyl decadienoate,CCCCC/C=C\C=C\C(=O)OCCC,4229,28316-62-3,"Bartlett pear, with waxy tropical notes","['tropical', 'waxy', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2351,Tetrahydromethylquinoxaline,CN1CCNc2ccccc21,2652,52517-54-1,"Weak, meaty, burnt notes","['burnt', 'meaty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1049,Hexadecalactone,CCCCCCCCCCCCC1CCC(=O)O1,1175,730-46-1,"Mild waxy, fatty, creamy, adds mouthfeel","['fatty', 'waxy', 'creamy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1678,Methylbutyraldehyde,CCC(C)C=O,1874,96-17-3,"Strong, cocoa-like, malty, fermented odor, cocoa, green fruity on dilution","['malty', 'green', 'fruity', 'cocoa', 'fermented']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2845,Ethyl ethylmethylphenylglycidate,CCOC(=O)C1(c2ccccc2)OC1(C)CC,3271,19464-94-9,"Fruity, berry, jammy, cooked fruit notes","['fruity', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+406,Cuminaldehyde,CC(C)c1ccc(C=O)cc1,465,122-03-2,"Pungent, green, herbaceous, characteristic cumin-like odor and taste","['green', 'pungent', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1769,Methylpentanoic acid,CC(C)CCC(=O)O,1975,646-07-1,"Unpleasant, sour, pungent cheese odor; sour, cheese taste","['sour', 'pungent', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1382,Isovaleraldehyde diethyl acetal,CCOC(CC(C)C)OCC,1537,3842-03-3,"Ethereal, green, fruity, malty, cocoa, slightly fermented, fatty","['ethereal', 'malty', 'green', 'fruity', 'fatty', 'cocoa', 'fermented']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+367,Cinnamyl alcohol,OC/C=C\c1ccccc1,425,104-54-1,"Balsamic, sweet with floral & spicy nuances odor and taste","['balsamic', 'floral', 'sweet', 'spicy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1446,Menthyl isovalerate,CC(C)CC(=O)OC1CC(C)CCC1C(C)C,1626,16409-46-4,"Balsamic, herbaceous, fruity, minty odor; woody-bitter taste","['fruity', 'balsamic', 'mint', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+720,Ethoxythiazole,CCOc1nccs1,811,15679-19-3,"Burnt, phenolic, nutty, roasted meat, brothy;  sweet roasted onion","['meaty', 'roasted', 'nutty', 'onion', 'burnt', 'brothy', 'phenolic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+804,Ethyl methylthiopentanoate,CCCC(C)C(=S)OCC,900,233665-98-0,"Fruity-green, sulfurous tropical note in dilution","['green', 'fruity', 'sulfurous', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2117,Phenylbutanol,CC(O)CCc1ccccc1,2366,2344-70-9,"Herbaceous, fruity-floral odor; sweet fruity taste","['fruity', 'floral', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1047,Heptylfuran,CCCCCCCc1ccco1,1172,3777-71-7,"Green, fatty, Iactonic, oily,  dairy, meaty notes, tropical, nutty","['meaty', 'green', 'fatty', 'oily', 'nutty', 'tropical', 'dairy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+118,Amyl  cinnamate,CCCCCOC(=O)/C=C/c1ccccc1,143,3487-99-8,"Sweet, balsamic, floral, cocoa-like odor and taste","['balsamic', 'cocoa', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1708,Methylfuranthiol,Cc1occc1S,1906,28588-74-1,"Odor and taste of roasted meat; sweet beef broth, fishy & HVP notes","['meaty', 'roasted', 'fishy', 'brothy', 'beefy', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+58,Acetylethylthiazole,CC(=O)CCc1nccs1,65,233665-91-3,"Roasted, burnt, nutty","['nutty', 'burnt', 'roasted']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1408,Linalyl benzoate,C=CC(C)(CCC=C(C)C)OC(=O)c1ccccc1,1567,126-64-7,"Floral-tuberose, citrus-bergamot-fruity odor; floral, heavy fruit taste","['floral', 'citrus', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+736,Ethyl benzoate,CCOC(=O)c1ccccc1,827,93-89-0,"Floral, fruity-wintergreen ylang-ylang like odor; fruity-wintergreen taste","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+425,Cyclohexyl propionate,CCC(=O)OC1CCCCC1,486,6222-35-1,"Sweet, fruity odor; banana, green-waxy pineapple notes","['green', 'fruity', 'banana', 'waxy', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+231,Butanedithiol,CC(S)CCS,265,24330-52-7,"Sulfuraceous; garlic-onion, contributes to Meat flavors on dilution","['onion', 'sulfurous', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1144,Hexyl hexenoate,CCC/C=C/C(=O)OCCCCCC,1281,33855-57-1,"Fruity, green, sweet, somewhat fatty-waxy notes","['green', 'fruity', 'fatty', 'waxy', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+569,Dimethoxybenzene,COc1cccc(OC)c1,650,151-10-0,"Sweet, slightly earthy, root-beer, nut-like odor and taste","['earthy', 'nutty', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1509,Methyl acetoxycyclohexyl ketone,CC(=O)OC1(C(C)=O)CCCCC1,1694,52789-73-8,"Floral, fruity, honey aroma, a nutty and cinnamic undertone","['fruity', 'nutty', 'cinnamon', 'honey', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1113,Hexenyl hexenoate,CC/C=C\CCOC(=O)C/C=C\CC,1247,61444-38-0,"Fruity, green, leafy, tomato, violet leaf, apple, pear-melon like odor","['apple', 'green', 'fruity', 'melon', 'pear', 'violet', 'tomato', 'leafy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+734,Ethyl anisate,CCOC(=O)c1ccc(OC)cc1,825,94-30-4,"Sweet, anisic, floral, fennel-like odor","['anisic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+293,Butyl oleate,CCCCCCCC/C=C\CCCCCCCC(=O)OCCCC,329,142-77-8,"Weak fatty, some fishy-oily notes","['oily', 'fatty', 'fishy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+184,Benzyl dimethylcrotonate,CC(C)=C(C)C(=O)OCc1ccccc1,215,7492-69-5,"Herbaceous, spicy, fruity odor","['fruity', 'spicy', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+823,Ethyl phenylacetate,CCOC(=O)Cc1ccccc1,919,101-97-3,"Strong, sweet, honey-like odor; honey flavor with cocoa & fruity notes","['honey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3392,Ethyl hydroxymethylbutyrate,CCOC(=O)C(C)(O)CC,4032,77-70-3,"Fruity (grape-like), nutty, caramel","['fruity', 'grape', 'caramellic', 'nutty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2848,Ethyl ethylhexanoate,CCCCC(CC)C(=O)OCC,3274,2983-37-1,Fruity with fatty note slightly woody-herbal,"['woody', 'fruity', 'fatty', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+83,Allyl cyclohexaneacetate,C=CCOC(=O)CC1CCCCC1,101,4728-82-9,"Sweet, mixed-fruity odor with a ""tutti-frutti"" flavor","['fruity', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+516,Diethyl nonanedioate,CCOC(=O)CCCCCCCC(=O)OCC,590,624-17-9,"Mild oily, slightly fatty fruity","['oily', 'fruity', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+850,Ethylbenzyl butyrate,CCCC(=O)OC(CC)c1ccccc1,947,10031-86-4,"Strong, fruity, floral, sweet odor; heavy fruity taste","['fruity', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+627,Dimethyloctanal,CCC(C)CCCC(C)C=O,712,7779-07-9,"Strong, fresh, sweet, fruity, green-waxy-rose, citrus, melon, vegetable","['rose', 'citrus', 'green', 'fruity', 'melon', 'fresh', 'waxy', 'vegetable', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3183,Dimethoxybenzyl alcohol,COc1ccc(CO)cc1OC,3695,93-03-8,"Mild, aromatic, slightly vanilla","['vanilla', 'aromatic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+616,Dimethylheptyl acetate,CC(=O)OC(CC(C)C)CC(C)C,699,10250-45-0,"Herbaceous, rhubarb, floral with lilac-lavender backnotes","['herbal', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+258,Butyl butyrate,CCCCOC(=O)CCC,294,109-21-7,"Strong, sweet, fruity, banana-pear-pineapple-apple notes","['apple', 'fruity', 'banana', 'pear', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1761,Methyloctanol,CCCCCCC(C)CO,1964,818-81-5,"Oily-waxy, some fruit notes","['oily', 'fruity', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+542,Dihydrocarvyl acetate,C=C(C)C1CCC(C)C(OC(C)=O)C1,617,56422-50-5,"Sweet, spearmint, floral, rosy odor","['rose', 'floral', 'sweet', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1637,Methylbenzyl acetate ,CC(=O)OCc1cccc(C)c1,1830,17369-57-2,"Sweet, fruity, reminiscent of cherry","['fruity', 'cherry', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+550,Dihydroionone,CC(=O)CCC1C(C)=CCCC1(C)C,628,31499-72-6,"Woody, fruity, orris-violet, raspberry-like floral notes","['fruity', 'violet', 'orris', 'woody', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+7,Acetaldehyde di-isoamyl acetal,CC(C)CCOC(C)OCCC(C)C,7,13002-09-0,"Ethereal, green, alcoholic, fermented, somewhat vegetable","['alcoholic', 'ethereal', 'green', 'fermented', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1945,Nonenoic acid,CCCCCC/C=C/C(=O)O,2173,14812-03-4,Fatty with green notes,"['green', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+230,Butanedithiol,CCC(S)CS,264,16128-68-0,"Sulfuraceous; garlic-burnt meaty, contributes to Meat aroma","['sulfurous', 'burnt', 'garlic', 'meaty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1389,Jasmolactone extra C,CC/C=C/CCC1CCCC(=O)O1,1545,68959-28-4,Floral (Jasmine absolute) with butter-peach notes,"['peach', 'jasmine', 'floral', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3259,Menthyl palmitate,CCCCCCCCCCCCCCCC(=O)OC1CC(C)CCC1C(C)C,3822,96097-19-7,"Virtually odorless, waxy","['waxy', 'odorless']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1057,Hexadienyl acetate,C/C=C/C=C/COC(C)=O,1183,1516-17-2,"Sweet fruity, apple, pineapple, pear, wine-like odor","['apple', 'fruity', 'pear', 'pineapple', 'winey', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1368,Isopropylmethylthiopyrazine,CSc1nccnc1C(C)C,1522,67952-59-4,"Green, eathy woody odor; roasted, cooked meat notes","['meaty', 'roasted', 'green', 'earthy', 'woody']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1852,Methylthiomethylbutenal,C/C=C(/C=O)CSC,2066,40878-72-6,Reported to impart potato chip aroma; tomato and meat-like flavor,['potato'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+612,Dimethylheptanol,CC(C)CC(O)CC(C)C,695,108-82-7,"Mild, sweet, fermented, yeasty, fruity, green odor with winey notes","['green', 'fruity', 'winey', 'fermented', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+366,Cinnamyl acetate,CC(=O)OC/C=C/c1ccccc1,424,103-54-8,"Sweet, balsamic, floral-fruity odor; slightly cinnamic spicy","['spicy', 'fruity', 'cinnamon', 'balsamic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1972,Octadienol,CCC/C=C/C=C/CO,2203,18409-20-6,"Mild, pleasant fatty odor; Chicken fat, melon notes","['fatty', 'chicken', 'melon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2681,Decadiene,C=CC=CCCCCCC,3066,20996-35-4,"Gassy, green-herbal oily odor","['green', 'oily', 'gasoline', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3044,Butylcyclohexyl acetate,CCCCC1(OC(C)=O)CCCCC1,3516,33210-23-4,"Rich woody, pleasant floral, with fruity note","['woody', 'fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1432,Menthadienyl acetate,CC(=O)OC1=C(C(C)C)CCC(C)=C1,1600,71660-03-2,"Herbaceous minty, raspberry-fruity note","['fruity', 'mint', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2715,Heliotropin propylene glycol acetal,CC1COC(c2ccc3c(c2)OCO3)O1,3106,61683-99-6,"Weak, sweet, aromatic-floral, heliotrope notes","['aromatic', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3492,Methyldecanal,CCC(C)CCCCCCC=O,4266,127793-88-8,"Green, fresh, sweet, rose, somewhat Yuzu citrus & cucumber like","['rose', 'citrus', 'green', 'fresh', 'cucumber', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+13,Acetaldehyde diphenethyl acetal,CC(OCCc1ccccc1)OCCc1ccccc1,14,122-71-4,"Leafy with warm floral, balsamic rosy notes","['rose', 'warm', 'leafy', 'balsamic', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3303,Dodecenoic acid,C=CCCCCCCCCCC(=O)O,3902,65423-25-8,"Fatty, citrus","['fatty', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+764,Ethyl heptanoate,CCCCCCC(=O)OCC,857,106-30-9,"Strong, fruity, winey, cognac-like odor and taste","['fruity', 'winey', 'cognac']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3124,Ethylhexenal,CCC/C=C(/C=O)CC,3620,645-62-5,"Lemon, apple, fruity ( for cis isomer)","['apple', 'fruity', 'lemon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1104,Hexenyl decanoate,CC/C=C/CCOC(=O)CCCCCCCCC,1235,85554-69-4,"Green, fruity fatty-waxy notes","['green', 'fruity', 'fatty', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2373,Tiglic acid,C/C=C(\C)C(=O)O,2678,80-59-1,"Sweet, warm, spicy (cake-like) odor; sweet, caramellic, fruity taste","['spicy', 'sweet', 'warm']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+344,Carvone oxide,C=C(C)[C@H]1CC(=O)[C@@]2(C)O[C@H]2C1,397,18383-49-8,Reminiscent of Spearmint; more ethereal than carvone,['ethereal'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1117,Hexenyl isovalerate,CCC/C=C/COC(=O)CC(C)C,1251,68698-59-9,"Fruity, buttery, apple, tropical odor; green apple fruity taste","['fruity', 'apple', 'tropical', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+107,Allyl propyl sulfide,C=CCSCCC,125,27817-67-0,"Sulfurous, alliaceous, onion-garlic","['onion', 'sulfurous', 'alliaceous', 'garlic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+213,Bisethylthioethane,CCSC(C)SCC,244,14252-42-7,"Tropical fruit, sulfurous, mercaptan, meat, coffee, alliaceous","['meaty', 'fruity', 'alliaceous', 'tropical', 'coffee', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3020,Phenyl isobutyrate,CC(C)C(=O)Oc1ccccc1,3476,20279-29-2,"Pungent-heavy, honey-fruity odor with distinctly animal undertones","['fruity', 'honey', 'animal', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+91,Allyl heptanoate,C=CCOC(=O)CCCCCC,109,142-19-8,"Sweet, fruity, banana-pineapple-apple odor; Brandy-peach-pineapple taste","['apple', 'fruity', 'banana', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1193,Acetaldehyde glyceryl acetal,CC1OCC(CO)O1,1334,3773-93-1,"Fruity-green, ethereal","['green', 'fruity', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1338,Isopropyl decanoate,CCCCCCCCCC(=O)OC(C)C,1490,2311-59-3,"Mild green, vegetable, woody, oily fruity","['green', 'fruity', 'oily', 'woody', 'vegetable']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1738,Methylhexenone,CC(=O)/C=C/C(C)C,1938,5166-53-0,"Somewhat blue cheese, metallic and berry-like character","['metallic', 'berry', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1112,Hexenyl hexanoate,CC/C=C/CCOC(=O)CCCCC,1246,56922-82-8,"Fruity-green, fatty-apple-pear-like odor","['apple', 'green', 'fruity', 'fatty', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3103,Decenol,CCCCC/C=C/CCCO,3593,57074-37-0,"Fruity melon-cucumber-like; herbaceous, waxy-fatty, peely, earthy notes","['fruity', 'fatty', 'earthy', 'melon', 'waxy', 'herbal', 'cucumber']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+536,Difurfuryl ether,c1coc(COCc2ccco2)c1,611,4437-22-3,"Salicylate, coffee-like at 10 ppm in sugar syrup; also nutty, burnt","['nutty', 'burnt', 'coffee']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3071,Hydroxypentanone,CCCC(=O)CO,3547,5704-20-1,"Buttery, hay-like","['hay', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+679,Dithiane,C1CSCCS1,769,505-29-3,"Seafood-like, clam and oyster, garlic, onion, mushroom, turkey","['garlic', 'onion', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+563,Dihydroxybenzoic acid,O=C(O)c1ccc(O)cc1O,644,89-86-1,"Nearly odorless; sweetness modifier for sucrose, sucralose & aspartame",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1239,Isoamyl pyruvate,CC(=O)C(=O)OCCC(C)C,1382,7779-72-8,"Sweet, fruity, caramellic-rum like odor and taste","['fruity', 'caramellic', 'sweet', 'rum']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1960,Nonyl octanoate,CCCCCCCCCOC(=O)CCCCCCC,2188,7786-48-3,"Sweet, rose, fatty, earthy (mushroom), oily odor; rose citrus taste","['rose', 'earthy', 'fatty', 'oily', 'sweet', 'mushroom']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+839,Ethyl tolyloxyacetate,CCOC(=O)COc1ccc(C)cc1,935,67028-40-4,"Fruity, cherry, anisic-honey-cocoa with a nut skin nuance","['fruity', 'nutty', 'cocoa', 'honey', 'anisic', 'cherry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+185,Benzyl disulfide,c1ccc(CSSCc2ccccc2)cc1,216,150-60-7,"Harsh, burnt-caramellic, earthy, green sulfurous odor","['caramellic', 'green', 'earthy', 'burnt', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1825,Methyltetrahydrofuran,CC1CCCO1,2035,96-47-9,"Sweet, somewhat irritating, minty solventy odor","['solvent', 'mint', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+270,Butyl heptanoate,CCCCCCC(=O)OCCCC,306,5454-28-4,"Fruity, green-herbal apple-like odor and taste","['green', 'fruity', 'apple', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1101,Hexenyl butenoate,C/C=C/C(=O)OCC/C=C/CC,1232,65405-80-3,"Green, fruity with apple & tropical odor; green fruity waxy, tomato taste","['green', 'fruity', 'apple', 'tropical']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+53,Acetyldimethylpyrazine,CC(=O)c1cnc(C)c(C)n1,60,54300-10-6,"Roasted, slighty aromatic green, nutty grain","['roasted', 'green', 'nutty', 'aromatic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+924,Fumaric acid,O=C(O)/C=C/C(=O)O,1029,110-17-8,"Odorless with a clean, tart, acidic-sour taste",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1919,Nonadienyl acetate,CC/C=C\CC/C=C/COC(C)=O,2146,68555-65-7,"Green apple and melon, spicy, cucumber, violet & nutty notes","['apple', 'spicy', 'green', 'nutty', 'melon', 'violet', 'cucumber']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1841,Methylthiobutanol,CSCCCCO,2053,20582-85-8,"Metallic, mushroom, tomato, vegetable, cheesy, fruity","['fruity', 'metallic', 'tomato', 'vegetable', 'mushroom', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+354,Cedrene,CC1=CC[C@@]23C[C@@H]1C(C)(C)[C@@H]2CC[C@@H]3C,411,35944-22-0,Sweet dry tea peculiar fatty woody odor,"['fatty', 'tea', 'woody', 'sweet', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3106,Dodecenol,CCCCCCCCC/C=C/CO,3596,22104-81-0,"Pleasant, fatty-citrus","['fatty', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2085,Phenethyl formate,O=COCCc1ccccc1,2334,104-62-1,"Strong, green, herbaceous, rose odor; green-herbal, mild fruity taste","['green', 'rose', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+988,Guaiacol,COc1ccccc1O,1106,90-05-1,"Strong, sweet, smoke-like & vanilla, phenolic-medicinal notes","['vanilla', 'phenolic', 'smoky', 'sweet', 'medicinal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2751,Terpineol ethyl ether,CCOC(C)(C)C1CC=C(C)CC1,3159,27153-54-4,"Green weedy, oxidized terpenes, fatty, citrus","['citrus', 'green', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+114,Allyldimethoxyphenol,C=CCc1cc(OC)c(O)c(OC)c1,132,6627-88-9,"Spicy, burnt smoky phenolic note; smoked meat note","['spicy', 'meaty', 'burnt', 'phenolic', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+643,Dimethylpropyloxazole,CCCc1nc(C)c(C)o1,728,53833-32-2,"Somewhat fatty, metallic, roasted burnt, herbal","['roasted', 'fatty', 'metallic', 'burnt', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3446,Nonenol,CCCCC/C=C/CCO,4142,10339-61-4,"Green, waxy, somewhat melon-like","['green', 'melon', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3357,Mercaptobenzothiazole,S=c1[nH]c2ccccc2s1,3974,149-30-4,"Sulfurous, burnt, rubbery, garlic","['garlic', 'sulfurous', 'burnt']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2452,Undecatriene,C=C/C=C/C=C/CCCCC,2767,16356-11-9,"Galbanum, green, herbaceous odor; green, waxy, melon, vegetative taste","['green', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1912,Nonadienal,CC/C=C/CC/C=C/C=O,2138,17587-33-6,"Green, vegetable, cucumber, violet leaf & fatty notes","['green', 'fatty', 'violet', 'leafy', 'vegetable', 'cucumber']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+466,Decenoic acid,C=CCCCCCCCC(=O)O,534,14436-32-9,"Waxy, fatty, creamy, slight fruity, milky, cream cheese","['creamy', 'fatty', 'fruity', 'milky', 'waxy', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1707,Methylfuranone,CC1=CC(=O)CO1,1905,3511-32-8,"Sweet, roasted, caramellic, nutty-bread ike, somewhat buttery","['caramellic', 'roasted', 'nutty', 'bread', 'sweet', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2809,Cyclohexyl valerate,CCCCC(=O)OC1CCCCC1,3224,1551-43-5,"Fruity, slightly animalic, herbaceous; Fruity, berry-like taste","['fruity', 'herbal', 'animal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2721,Hexanal hexyl isoamyl acetal,CCCCCCOC(CCCCC)OCCC(C)C,3115,896447-13-5,"Sweet green, oily, cognac, apple","['apple', 'green', 'oily', 'cognac', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3494,Butyl decenoate,CCCCCCCC=CC(=O)OCCCC,4268,108058-82-8,"Woody, fatty, Chinese quince-like odor","['woody', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1366,Isopropylmethylpyrazine,Cc1cnc(C(C)C)cn1,1520,13925-05-8,Green roasted coffee nutty earthy odor; green taste at 50 ppm in syrup,"['roasted', 'green', 'earthy', 'nutty', 'coffee']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+19,Acetaldehyde ethyl hexyl acetal,CCCCCCOC(C)OCC,20,54484-73-0,"Ethereal, green, floral, floral earthy, alcoholic, cognac","['alcoholic', 'ethereal', 'green', 'earthy', 'cognac', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+85,Allyl cyclohexanehexanoate,C=CCOC(=O)CCCCCC1CCCCC1,103,7493-66-5,Fatty-fruity odor with a Peach-Apricot like flavor,"['fatty', 'fruity']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+312,Butylketodioxane,CCCCC1OCCOC1=O,351,65504-45-2,"Fruity, winey, peach-caramellic odor","['fruity', 'winey', 'peach', 'caramellic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1198,Hydroxyoxopropanoic acid,O=C(O)C(=O)CO,1339,1113-60-6,Enhances butter & cream; buttery and burnt notes,"['creamy', 'burnt', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1944,Nonenoic acid,CCCCCC/C=C\C(=O)O,2172,3760-11-0,Fatty with green notes,"['green', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2690,Decadienal,CCCCCC=CC=CC=O,3077,134998-59-7,"Strong fatty, tallowy, with a melon-like nuance","['fatty', 'melon']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2668,Anisaldehyde dimethyl acetal,COc1ccc(C(OC)OC)cc1,3050,2186-92-7,"Green-floral, spicy, lilac-hawthorn-anisic","['spicy', 'anisic', 'green', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+999,Heptalactone,CCC1CCCC(=O)O1,1120,3301-90-4,"Lactonic, coconut, coumarinic","['coconut', 'coumarinic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1199,Hydroxypentanone,CCC(O)C(C)=O,1340,3142-66-3,Buttery-creamy caramel notes,"['creamy', 'caramellic', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+748,Ethyl decenoate,CCCCCCC/C=C/C(=O)OCC,839,37486-72-9,"Fruity pear-like with apple, green, waxy, citrus notes","['apple', 'citrus', 'green', 'fruity', 'pear', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2507,Heptyl butyrate,CCCCCC(C)OC(=O)CCC,2831,39026-94-3,"Waxy, fruity, green, somewhat tropical with floral note","['green', 'fruity', 'tropical', 'waxy', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+190,Benzyl isobutyrate,CC(C)C(=O)OCc1ccccc1,221,103-28-6,"Fruity, floral odor and a sweet, fruity berry-like taste","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+747,Ethyl decatrienoate,CC/C=C/C/C=C/C=C/C(=O)OCC,838,78417-28-4,William pear odor with a green note (see comments on preferred isomers),"['green', 'pear']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1009,Heptanol,CCCCCC(C)O,1130,543-49-7,"Green, lemon, herbaceous odor; fruity green taste","['green', 'lemon', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1412,Linalyl hexanoate,C=CC(C)(CCC=C(C)C)OC(=O)CCCCC,1571,7779-23-9,"Green, dry-fruity odor; pineapple-pear taste","['green', 'fruity', 'dry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2084,Phenethyl decanoate,CCCCCCCCCC(=O)OCCc1ccccc1,2333,61810-55-7,"Mild, floral (rose) with oily, waxy, somewhat green-herbal winey notes","['rose', 'green', 'oily', 'waxy', 'herbal', 'winey', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1233,Isoamyl nonanoate,CCCCCCCCC(=O)OCCC(C)C,1376,7779-70-6,"Nutty, oily, fruity (apricot), winey floral notes","['apricot', 'oily', 'nutty', 'fruity', 'winey', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1076,Hexenal diethyl acetal,CCC/C=C/C(OCC)OCC,1202,54306-00-2,"Strong green fruity, apple-like","['green', 'fruity', 'apple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1462,Mercaptomethylpropionic acid,CC(CS)C(=O)O,1643,26473-47-2,"Sulfurous, vegetative, meaty; ripe cheese notes; tropical","['ripe', 'vegetable', 'meaty', 'tropical', 'sulfurous', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+836,Ethyl stearate,CCCCCCCCCCCCCCCCCC(=O)OCC,932,111-61-5,"Almost odorless; mild waxy, adds mouthfeel taste","['waxy', 'odorless']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1148,Hexyl methylbutanoate,CCCCCCOC(=O)C(C)CC,1285,10032-15-2,"Green, fruity apple-like odor and taste; pear & banana nuances","['green', 'fruity', 'apple']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2546,Lavender lactone,C=CC1(C)CCC(=O)O1,2889,1073-11-6,"Weak, floral, fruity with peppermint connotation","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+86,Allyl cyclohexanepropionate,C=CCOC(=O)CCC1CCCCC1,104,2705-87-5,Sweet-fruity pineapple-like odor and taste,"['fruity', 'pineapple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1439,Menthol,CC1CCC(C(C)C)C(O)C1,1611,1490-04-6,"Cooling; less cooling than (-)-menthol, with musty-minty notes","['mint', 'musty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+382,Citric acid,O=C(O)CC(O)(CC(=O)O)C(=O)O,440,77-92-9,"Odorless with a clean, acid, tart taste",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+41,Acetoxybutyl acetate,CC(=O)OCCCCOC(C)=O,45,628-67-1,"Ethereal, solventy, pleasant, somewhat sweet fruity","['fruity', 'sweet', 'solvent', 'ethereal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+706,Estragole,C=CCc1ccc(OC)cc1,797,140-67-0,"Sweet, herbaceous, anise-fennel odor & sweet basil, licorice, celery taste","['anisic', 'sweet', 'herbal']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1423,Maltol Propionate,CCC(=O)Oc1c(C)occc1=O,1589,68555-63-5,"Caramellic, fruity-strawberry note odor & taste","['fruity', 'strawberry', 'caramellic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2969,Methyl acetoxydodecanoate,CCCCCCCCCCC(OC(C)=O)C(=O)OC,3413,,"delta-dodecalactone precursor; fatty, peach, buttery","['fatty', 'peach', 'buttery']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+664,Dimethylthiophene,Cc1ccc(C)s1,750,638-02-8,"Xylene-like, fresh onion & green notes; (See comments)","['onion', 'fresh', 'green']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+441,Decadienal,CCCCC/C=C/C=C/C=O,507,25152-84-5,"Strong, deep chicken  fat flavor; fatty-citrus notes","['fatty', 'citrus']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+929,Furfural diethyl acetal,CCOC(OCC)c1ccco1,1034,13529-27-6,"Aromatic, slightly burnt-grain, bread, somewhat fruity","['fruity', 'burnt', 'bread', 'aromatic']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+663,Dimethylthioisovalerylfuran,Cc1cc(SC(=O)CC(C)C)c(C)o1,749,55764-28-8,"Enhances creamy, cocoa aroma; also enhences meaty flavors","['creamy', 'cocoa']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+711,Ethoxyethyl acetate,CCOCCOC(C)=O,802,111-15-9,"Mild weak sweet estery fruity, solvent like odor","['fruity', 'solvent', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2747,Phenylacetaldehyde diethyl acetal,CCOC(Cc1ccccc1)OCC,3154,6314-97-2,"Sweet green-leafy, floral (hyacinth-like),","['green', 'leafy', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+515,Diethyl malonate,CCOC(=O)CC(=O)OCC,589,105-53-3,"Sweet, fruity, green odor; somewhat apple-like","['green', 'fruity', 'apple', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+421,Cyclohexyl cinnamate,O=C(/C=C/c1ccccc1)OC1CCCCC1,482,7779-17-1,"Sweet, balsamic, fruity, cherry-almond like notes","['fruity', 'almond', 'balsamic', 'cherry', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+753,Ethyl ethylphenylpropanoate,CCOC(=O)C(CC)Cc1ccccc1,845,2983-36-0,Sweet floral green-fruity odor; fruity balsamic taste,"['green', 'fruity', 'floral', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2889,Geranyl anthranilate,CC(C)=CCC/C(C)=C/COC(=O)c1ccccc1N,3327,67874-69-5,"Heavy floral (honeysuckle), slightly fruity","['fruity', 'floral']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3466,Dimethyldithiolaneone,CC1(C)CSSC1=O,4175,122152-29-8,"Potato, fatty, savory, slightly roasted, burnt","['roasted', 'fatty', 'savory', 'burnt', 'potato']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1895,Naphthyl methyl ether,COc1ccc2ccccc2c1,2116,93-04-9,Intense sweet floral orange blossom odor,"['floral', 'sweet', 'orange']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+857,Ethyldimethyloxazole,CCc1nc(C)c(C)o1,954,53833-30-0,"Green vegetable, musty-earthy odor","['green', 'vegetable', 'musty', 'earthy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+925,Furan,c1ccoc1,1030,110-00-9,"Peculiar, sweetish spice-smoke-like, burnt on dilution","['burnt', 'smoky']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1150,Hexyl methylpentenoate,C/C=C/C(C)C(=O)OCCCCCC,1287,58625-95-9,"Fruity, pear, berry, grape and green melon notes","['green', 'fruity', 'melon', 'pear', 'grape', 'berry']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1562,Methyl linoleate,CCCCC/C=C\C/C=C\CCCCCCCC(=O)OC,1752,112-63-0,Weak fatty oily,"['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2473,Vanillyl alcohol,COc1cc(CO)ccc1O,2795,498-00-0,"Sweet, creamy-milky balsamic-Vanilla like odor and taste","['creamy', 'vanilla', 'milky', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1054,Hexadecatrienal,CCCCCCCCCC=CC=CC=CC=O,1180,,"Oily fatty; Contributes to fatty savory flavors, chicken & fish flavors","['oily', 'fatty']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2046,Pentanethiol,CCCCCS,2293,110-66-7,"Sulfurous, green, vegetative, cabbage, broccoli like; tropical notes","['vegetable', 'green', 'tropical', 'cabbage', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+672,Dipentyl sulfide,CCCCCSCCCCC,758,872-10-6,"Sulfurous, alliaceous, green, vegetative, cooked meat note","['vegetable', 'meaty', 'green', 'alliaceous', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3263,Methyl mercaptopropionate,COC(=O)C(C)S,3831,53907-46-3,"Sulfurous, meaty and brothy, slightly vegetative and tropical durian","['vegetable', 'meaty', 'tropical', 'brothy', 'sulfurous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2737,Methional diethyl acetal,CCOC(CCSC)OCC,3138,16630-61-8,Sulfurous with potato and cheese notes,"['sulfurous', 'potato', 'cheesy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+853,Ethylbutyraldehyde,CCC(C=O)CC,950,97-96-1,"Pungent; fresh, cocoa, green-fruity, caramellic odor and taste","['caramellic', 'green', 'fruity', 'cocoa', 'fresh', 'pungent']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1324,Isoprene,C=CC(=C)C,1476,78-79-5,Mild penetrating gassy odor,['gasoline'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+2794,Carvyl butyrate,C=C(C)C1CC=C(C)C(OC(=O)CCC)C1,3206,93919-04-1,"Fruity, minty, herbaceous","['fruity', 'herbal', 'mint']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+905,Eugenyl acetate,C=CCc1ccc(OC(C)=O)c(OC)c1,1008,93-28-7,"Sweet, spicy, balsamic-clove, fruity; warm clove-like taste","['spicy', 'fruity', 'balsamic', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3405,Allyl cysteine,C=CCSCC(N)C(=O)O,4049,21593-77-1,"Precursor for generating garlic, allium & kokumi notes","['garlic', 'alliaceous']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+3008,Octyl acetoacetate,CCCCCCCCOC(=O)CC(C)=O,3464,16436-00-3,"Somewhat oily-waxy, fermented, fruity, caramellic","['caramellic', 'oily', 'fruity', 'fermented', 'waxy']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+617,Dimethylhexane,CCCCC(C)(C)C,700,590-73-8,"Hydrocarbon odor, mild gasoline",['gasoline'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1046,Heptyldihydromethylfuranone,CCCCCCCC1CC(C)OC1=O,1171,40923-64-6,"Fruity, green, sweet, creamy, fatty & nutty with a citrus nuance","['creamy', 'citrus', 'green', 'fruity', 'fatty', 'nutty', 'sweet']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1353,Isopropyl palmitate,CCCCCCCCCCCCCCCC(=O)OC(C)C,1505,142-91-6,"Nearly odorless & tasteless, Mild fatty-waxy-oily; adds mouthfeel",['odorless'],0.0,-1.0,-1.0,-1.0,-1.0,-1.0
+784,Ethyl mercaptopropionate,CCOC(=O)CCS,879,5466-06-8,"Fruity, fresh grape, foxy, skunky, Concord grape-like, tropical, durian","['fruity', 'tropical', 'grape', 'fresh']",0.0,-1.0,-1.0,-1.0,-1.0,-1.0

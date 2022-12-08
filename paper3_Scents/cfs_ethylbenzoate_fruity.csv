@@ -1,0 +1,3 @@
+smiles,selfies,similarity,yhat,index,position,is_origin,cluster,label,descriptors
+CCOC(=O)C1=CC=CC=C1,[C][C][O][C][=Branch1][C][=O][C][=C][C][=C][C][=C][Ring1][=Branch1],1.0,1,0,[-2.42994849  8.42254498],True,-1,,
+O(C=C(O)C1=CC=CC=C1)CC,[O][Branch1][=N][C][=C][=Branch1][C][=O][C][=C][C][=C][C][=C][Ring1][=Branch1][C][C],0.5476190476190477,0,1076,[-2.7714682   4.67223501],False,28,Counterfactual 1,
