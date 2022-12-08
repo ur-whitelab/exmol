@@ -1,11 +1,11 @@
 tensorflow
 seaborn
-jax==0.2.13
+jax
+jaxlib
 pandas
 dm-haiku
 optax==0.0.9
 matplotlib
-urllib
 scikit-learn
 CairoSVG
 Pillow
