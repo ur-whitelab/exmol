@@ -2,7 +2,7 @@ tensorflow
 seaborn
 jax==0.2.13
 pandas
-haiku
+dm-haiku
 optax==0.0.9
 matplotlib
 urllib
