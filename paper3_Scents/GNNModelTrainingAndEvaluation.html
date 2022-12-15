@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GNN Model Code &mdash; exmol  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../toc.html" class="icon icon-home"> exmol
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/Schematic.html">MMACE Paper: Counterfactual Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/RF.html">MMACE Paper: Random Forest for Blood-Brain Barrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/GNN.html">MMACE Paper: Graph Neural Network for HIV Inhibition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper1_CFs/Solubility-RNN.html">MMACE Paper: Recurrent Neural Network for Predicting Solubility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/Solubility-RNN.html">LIME paper: Recurrent Neural Network for Solubility Prediciton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/RF-lime.html">LIME paper: Random Forest for Solubility Prediciton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../toc.html">exmol</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../toc.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">GNN Model Code</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper3_Scents/GNNModelTrainingAndEvaluation.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gnn-model-code">
+<h1>GNN Model Code<a class="headerlink" href="#gnn-model-code" title="Permalink to this heading"></a></h1>
+<p>GNN model using molecular scent dataset from Leffingwell Odor Datset (loaded using Pyrfume - https://pyrfume.org)</p>
+<p>Code below modified from example code given in the “Predicting DFT Energies with GNNs”, “Interpretability and Deep Learning” sections of “Deep Learning for Molecules and Materials” textbook (https://dmol.pub/applied/QM9.html)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Imports
+import pyrfume
+import tensorflow as tf
+import numpy as np
+import seaborn as sns
+import jax
+import jax.numpy as jnp
+import pandas as pd
+import rdkit, rdkit.Chem, rdkit.Chem.rdDepictor, rdkit.Chem.Draw
+
+import haiku as hk
+import optax
+import sklearn.metrics
+import numpy as np
+
+import warnings
+
+warnings.filterwarnings(&quot;ignore&quot;)
+
+np.random.seed(0)
+tf.random.set_seed(0)
+
+# Plotting style
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as font_manager
+import urllib.request
+
+urllib.request.urlretrieve(
+    &quot;https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf&quot;,
+    &quot;IBMPlexMono-Regular.ttf&quot;,
+)
+fe = font_manager.FontEntry(fname=&quot;IBMPlexMono-Regular.ttf&quot;, name=&quot;plexmono&quot;)
+font_manager.fontManager.ttflist.append(fe)
+plt.rcParams.update(
+    {
+        &quot;axes.facecolor&quot;: &quot;#f5f4e9&quot;,
+        &quot;grid.color&quot;: &quot;#AAAAAA&quot;,
+        &quot;axes.edgecolor&quot;: &quot;#333333&quot;,
+        &quot;figure.facecolor&quot;: &quot;#FFFFFF&quot;,
+        &quot;axes.grid&quot;: False,
+        &quot;axes.prop_cycle&quot;: plt.cycler(&quot;color&quot;, plt.cm.Dark2.colors),
+        &quot;font.family&quot;: fe.name,
+        &quot;figure.figsize&quot;: (3.5, 3.5 / 1.2),
+        &quot;ytick.left&quot;: True,
+        &quot;xtick.bottom&quot;: True,
+    }
+)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Imports</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pyrfume</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pyrfume&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="model-training-related-code">
+<h2>Model Training Related Code<a class="headerlink" href="#model-training-related-code" title="Permalink to this heading"></a></h2>
+<p>NOTE: numEpochs is currently set to 2 &amp; the dataset is downsampled, edit code when actually training/evaluating model to use the entire dataset &amp; a larger number of empochs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save model inputs and hyperparameters
+learning_rate = 1e-5
+num_Dense_layers = 2
+num_GNN_layers = 4
+# NOTE: currently using reduced number of epochs, increase when training model (in paper used 138 epochs)
+numEpochs = (
+    2  # reduced value for checking notebook, edit when training/evaluating the model
+)
+steps_for_gradUpdate = 8
+graph_feat_length = 512
+node_feat_length = 256
+message_feat_length = node_feat_length
+weights_stddevGNN = 1e-2
+earlyStopping = True
+earlyStopping_patience = 3
+earlyStopping_minDelta = 0
+regularizationStrength = 1e-6
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Use train-test split given in Leffingwell Dataset - except add in validation set (have 70% train, 10% validation, 20% test rather than 80% train &amp; 20% test)
+# Load data
+scentdata = pyrfume.load_data(&quot;leffingwell/leffingwell_data.csv&quot;, remote=True)
+
+# Code used to create train, test &amp; validation sets (based on the splits given in Leffingwell Dataset)
+testData = scentdata[scentdata[&quot;labels_train/test&quot;] == 0]
+numTestData = len(testData)
+
+trainAndValidationData = scentdata[scentdata[&quot;labels_train/test&quot;] == 1]
+
+numTrainAndValidationData = len(trainAndValidationData)
+trainAndValidationData = trainAndValidationData.reset_index()
+
+numMoleculesInDataset = numTestData + numTrainAndValidationData
+
+# randomly select indices from trainAndValidation data - validation set = 10% of entire dataset
+numValidationData = int(0.10 * numMoleculesInDataset)
+validationIndices = np.random.choice(
+    a=numTrainAndValidationData, size=numValidationData, replace=False
+)  # https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html
+validationData = trainAndValidationData.iloc[
+    validationIndices
+]  # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html
+trainData = trainAndValidationData.drop(
+    index=validationIndices
+)  # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html
+
+
+# Use smaller set of data (just to check code does not crash)
+# NOTE: comment out the next 3 lines when actually training/evaluating model to use the entire dataset
+trainData = trainData.sample(frac=0.01, random_state=0).reset_index(drop=True)
+validationData = validationData.sample(frac=0.01, random_state=0).reset_index(drop=True)
+testData = testData.sample(frac=0.8, random_state=0).reset_index(
+    drop=True
+)  # Sample more from test set to avoid error that there is only 1 molecule with a certain scent when calculating AUROC score
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Code to generate list of all scent labels (scentClasses)
+numMolecules = len(scentdata.odor_labels_filtered)
+numClasses = 112  # No odorless class
+scentClasses = pd.read_csv(&quot;scentClasses.csv&quot;)
+scentClasses = scentClasses[&quot;Scent&quot;].tolist()
+moleculeScentList = []
+for i in range(numMolecules):
+    scentString = scentdata.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList.append(scentList)
+
+# Generate moleculeScentList_train, moleculeScentList_test, moleculeScentList_validation
+numTrainMolecules = len(trainData.odor_labels_filtered)
+moleculeScentList_train = []
+for i in range(numTrainMolecules):
+    scentString = trainData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_train.append(scentList)
+
+numValidationMolecules = len(validationData.odor_labels_filtered)
+moleculeScentList_validation = []
+for i in range(numValidationMolecules):
+    scentString = validationData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_validation.append(scentList)
+
+numTestMolecules = len(testData.odor_labels_filtered)
+moleculeScentList_test = []
+for i in range(numTestMolecules):
+    scentString = testData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_test.append(scentList)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def gen_smiles2graph(sml):
+    &quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence
+    returns: the graph
+    &quot;&quot;&quot;
+    m = rdkit.Chem.MolFromSmiles(sml)
+    m = rdkit.Chem.AddHs(m)
+    order_string = {
+        rdkit.Chem.rdchem.BondType.SINGLE: 1,
+        rdkit.Chem.rdchem.BondType.DOUBLE: 2,
+        rdkit.Chem.rdchem.BondType.TRIPLE: 3,
+        rdkit.Chem.rdchem.BondType.AROMATIC: 4,
+    }
+    N = len(list(m.GetAtoms()))
+    nodes = np.zeros((N, node_feat_length))
+    for i in m.GetAtoms():
+        nodes[i.GetIdx(), i.GetAtomicNum()] = 1
+        # Add in whether atom is in a ring or not for one-hot encoding
+        if i.IsInRing():
+            nodes[i.GetIdx(), -1] = 1
+
+    adj = np.zeros((N, N))
+    for j in m.GetBonds():
+        u = min(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
+        v = max(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
+        order = j.GetBondType()
+        if order in order_string:
+            order = order_string[order]
+        else:
+            raise Warning(&quot;Ignoring bond order&quot; + order)
+        adj[u, v] = 1
+        adj[v, u] = 1
+    adj += np.eye(N)
+    return nodes, adj
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Function that creates label vector given list of strings describing scent of molecule as input
+# Each index in label vector corresponds to specific scent -&gt; if output has a 0 at index i, then molecule does not have scent i
+# If label vector has 1 at index i, then molecule does have scent i
+
+
+def createLabelVector(scentsList):
+    # Find class index in label vector that each scent corresponds to &amp; update label for that molecule to 1
+    labelVector = np.zeros(numClasses)
+    for j in range(len(scentsList)):
+        # Find class index
+        classIndex = scentClasses.index(scentsList[j])
+        # print(classIndex)
+        # print(scentsList[j])
+        # print(scentClasses[classIndex])
+        # Update label vector
+        labelVector[classIndex] = 1
+    return labelVector
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def generateGraphsTrain():
+    for i in range(numTrainMolecules):
+        graph = gen_smiles2graph(trainData.smiles[i])
+        labels = createLabelVector(moleculeScentList_train[i])
+        yield graph, labels
+
+
+def generateGraphsValidation():
+    for i in range(numValidationMolecules):
+        graph = gen_smiles2graph(validationData.smiles[i])
+        labels = createLabelVector(moleculeScentList_validation[i])
+        yield graph, labels
+
+
+def generateGraphsTest():
+    for i in range(numTestMolecules):
+        graph = gen_smiles2graph(testData.smiles[i])
+        labels = createLabelVector(moleculeScentList_test[i])
+        yield graph, labels
+
+
+def generateGraphs():
+    for i in range(numMolecules):
+        graph = gen_smiles2graph(scentdata.smiles[i])
+        labels = createLabelVector(moleculeScentList[i])
+        yield graph, labels
+
+
+# Check that generateGraphs() works for 1st molecule
+# print(gen_smiles2graph(scentdata.SMILES[0]))
+# print(scentdata.SENTENCE[0].split(&#39;,&#39;))
+# print(np.nonzero(createLabelVector(scentdata.SENTENCE[0].split(&#39;,&#39;))))
+# print(scentClasses[89])
+
+data = tf.data.Dataset.from_generator(
+    generateGraphs,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+
+train_set = tf.data.Dataset.from_generator(
+    generateGraphsTrain,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+valid_set = tf.data.Dataset.from_generator(
+    generateGraphsValidation,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+test_set = tf.data.Dataset.from_generator(
+    generateGraphsTest,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_N = numTrainMolecules
+valid_N = numValidationMolecules
+test_N = numTestMolecules
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class GNNLayer(hk.Module):
+    def __init__(self, output_size, name=None):
+        super().__init__(name=name)
+        self.output_size = output_size
+
+    def __call__(self, inputs):
+        # split input into nodes, edges &amp; features
+        nodes, edges, features = inputs
+        # Nodes is of shape (N, Nf) --&gt; N = # atoms, Nf = node_feature_length
+        # Edges is of shape (N,N) (adjacency matrix)
+        # Features is of shape (Gf) --&gt; Gf = graph_feature_length
+
+        graph_feature_len = features.shape[-1]  # graph_feature_len (Gf)
+        node_feature_len = nodes.shape[-1]  # node_feature_len (Nf)
+        message_feature_len = message_feat_length  # message_feature_length (Mf)
+
+        # Initialize weights
+        w_init = hk.initializers.RandomNormal(stddev=weights_stddevGNN)
+
+        # we is of shape (Nf,Mf)
+        we = hk.get_parameter(
+            &quot;we&quot;, shape=[node_feature_len, message_feature_len], init=w_init
+        )
+
+        # b is of shape (Mf)
+        b = hk.get_parameter(&quot;b&quot;, shape=[message_feature_len], init=w_init)
+
+        # wv is of shape (Mf,Nf)
+        wv = hk.get_parameter(
+            &quot;wv&quot;, shape=[message_feature_len, node_feature_len], init=w_init
+        )
+
+        # wu is of shape (Nf,Gf)
+        wu = hk.get_parameter(
+            &quot;wu&quot;, shape=[node_feature_len, graph_feature_len], init=w_init
+        )
+
+        # make nodes be N x N x Nf so we can just multiply directly (N = number of atoms)
+        # ek is now shaped N x N x Mf
+        ek = jax.nn.leaky_relu(
+            b
+            + jnp.repeat(nodes[jnp.newaxis, ...], nodes.shape[0], axis=0)
+            @ we
+            * edges[..., None]
+        )
+
+        # Uncomment lines below to update edges (also edit return line so new_edges is returned)
+        # Update edges, use jnp.any to have new_edges be of shape N x N
+        # new_edges = jnp.any(ek, axis=-1)
+
+        # Normalize over edge features w/layer normalization
+        # new_edges = hk.LayerNorm(axis=[0,1], create_scale=False, create_offset=False, eps=1e-05)(new_edges)
+
+        # take sum over neighbors to get ebar shape = Nf x Mf
+        ebar = jnp.sum(ek, axis=1)
+
+        # dense layer for new nodes to get new_nodes shape = N x Nf
+        new_nodes = jax.nn.leaky_relu(ebar @ wv) + nodes  # Use leaky ReLU
+
+        # Normalize over node features w/layer normalization
+        new_nodes = hk.LayerNorm(
+            axis=[0, 1], create_scale=False, create_offset=False, eps=1e-05
+        )(new_nodes)
+
+        # sum over nodes to get shape features so global_node_features shape = Nf
+        global_node_features = jnp.sum(new_nodes, axis=0)
+
+        # dense layer for new features so new_features shape = Gf
+        new_features = (
+            jax.nn.leaky_relu(global_node_features @ wu) + features
+        )  # Use leaky ReLU for activation
+
+        return new_nodes, edges, new_features
+
+
+def model_fn(x):
+    nodes, edges = x
+    features = jnp.ones(graph_feat_length)
+    x = nodes, edges, features
+
+    # NOTE: If edited num_GNN_layers, need to edit code below (increase or decrease # times have x = GNNLayer(...))
+    # 4 GNN layers
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+
+    # 2 dense layers
+    logits = hk.Linear(numClasses)(x[-1])
+    logits = hk.Linear(numClasses)(logits)
+
+    return logits  # Model now returns logits
+
+
+model = hk.without_apply_rng(hk.transform(model_fn))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Code for loss function
+
+# Code to compute cross entropy loss w/logits based on https://dmol.pub/dl/xai.html
+def cross_entropy_logits(logits, y):
+    &quot;&quot;&quot;Cross entropy without sigmoid. Works with logits directly&quot;&quot;&quot;
+    return jnp.mean(
+        jnp.clip(logits, 0, None) - logits * y + jnp.log(1 + jnp.exp(-jnp.abs(logits)))
+    )
+
+
+# Use loss function below if model outputs logits &amp; do not want to use L2 regularization
+def loss_fn_logits(params, x, y):
+    logits = model.apply(params, x)
+    return cross_entropy_logits(logits, y)
+
+
+# Use loss function below if model outputs logits &amp; want to include L2 regularization
+# Code to compute L2 regularization based on that in the &quot;MLP on MNIST&quot; Example on the Haiku Github repository (https://github.com/deepmind/dm-haiku/blob/main/examples/mnist.py)
+def loss_fn_logits_reg(params, x, y):
+    l2_lossTerm = regularizationStrength * sum(
+        jnp.sum(jnp.square(p)) for p in jax.tree_leaves(params)
+    )
+    logits = loss_fn_logits(params, x, y)
+    return logits + l2_lossTerm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = jax.random.PRNGKey(0)
+
+sampleData = data.take(1)
+
+for dataVal in sampleData:
+    (nodes_i, edges_i), yi = dataVal
+nodes_i = nodes_i.numpy()
+edges_i = edges_i.numpy()
+
+yi = yi.numpy()
+xi = (nodes_i, edges_i)
+
+params = model.init(rng, xi)
+
+opt_init, opt_update = optax.chain(
+    optax.apply_every(k=steps_for_gradUpdate), optax.adam(learning_rate)
+)
+
+opt_state = opt_init(params)
+
+
+@jax.jit
+def update(opt_state, x, y, params):
+    value, grads = jax.value_and_grad(loss_fn_logits_reg)(params, x, y)
+    updates, opt_state = opt_update(grads, opt_state)
+    updated_params = optax.apply_updates(params, updates)
+    return value, opt_state, updated_params
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Train model
+epochs = numEpochs
+print(
+    f&quot;Number of Epochs: {epochs}, learning rate: {learning_rate}, node_feature_len: {node_feat_length}, graph_feature_len: {graph_feat_length}, message_feature_length: {message_feat_length}, {num_Dense_layers} Dense, {num_GNN_layers} GNN layers&quot;
+)
+val_loss = np.zeros(epochs)
+train_loss = np.zeros(epochs)
+
+# early stopping counter
+counter = 0
+epochStoppedAt = epochs
+
+for e in range(epochs):
+    if counter == earlyStopping_patience:
+        print(f&quot;Early stopping, stopped at Epoch {e} (Note 1st epoch = 0)&quot;)
+        epochStoppedAt = e
+        break  # Early stopping
+
+    for i, elementInTrainSet in enumerate(train_set):
+        (ni, ei), yi = elementInTrainSet
+        ni = ni.numpy()
+        ei = ei.numpy()
+        yi = yi.numpy()
+        xi = ni, ei
+        value, opt_state, params = update(opt_state, xi, yi, params)
+        train_loss[e] += value
+
+    train_loss[e] = train_loss[e] / train_N  # Take average loss over all molecules
+    print(f&quot;Training Loss, Epoch {e}: {train_loss[e]}&quot;)
+
+    for j, v in enumerate(valid_set):
+        (n_val, e_val), y = v
+        n_val = n_val.numpy()
+        e_val = e_val.numpy()
+        y = y.numpy()
+        x = n_val, e_val
+        loss = loss_fn_logits_reg(params, x, y)
+        val_loss[e] += loss
+
+    val_loss[e] = val_loss[e] / valid_N  # Take average loss over all molecules
+
+    # Check if have improvement/increase in validation loss (early stopping)
+    if e &gt; 0:
+        lossDiff = (
+            prevValidLoss - val_loss[e]
+        )  # If have improvement, prevValidLoss &gt; val_loss[e]
+        if lossDiff &lt; earlyStopping_minDelta:
+            counter += 1
+        else:
+            counter = 0
+
+    prevValidLoss = val_loss[e]
+
+    print(f&quot;Epoch {e}, Validation Loss: {val_loss[e]}&quot;)
+
+
+opt_params = params
+# Save optimal parameters
+opt_params_flattened = jax.tree_util.tree_flatten(opt_params)
+# fileName = f&#39;optParams_{epochs}Epochs.npy&#39;
+# np.save(fileName, opt_params_flattened[0])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-evaluation-related-code">
+<h2>Model Evaluation Related Code<a class="headerlink" href="#model-evaluation-related-code" title="Permalink to this heading"></a></h2>
+<section id="run-2-cells-below-if-reading-model-parameters-from-file-have-not-run-earlier-cells-in-the-notebook">
+<h3>Run 2 cells below if reading model parameters from file &amp; have not run earlier cells in the notebook<a class="headerlink" href="#run-2-cells-below-if-reading-model-parameters-from-file-have-not-run-earlier-cells-in-the-notebook" title="Permalink to this heading"></a></h3>
+<p>NOTE: the dataset is downsampled, edit code when actually training/evaluating model to use the entire dataset</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># NOTE: If reading model parameters from file (rather than computing metrics directly after training), run 2 cells below
+
+# Parameters for GNN model (parameters being read in)
+node_feat_length = 256
+message_feat_length = 256
+graph_feat_length = 512
+weights_stddevGNN = 0.01
+
+# Use train-test split given in Leffingwell Dataset - except add in validation set (have 70% train, 10% validation, 20% test rather than 80% train &amp; 20% test)
+# Load data
+scentdata = pyrfume.load_data(&quot;leffingwell/leffingwell_data.csv&quot;, remote=True)
+
+# Code used to create train, test &amp; validation sets (based on the splits given in Leffingwell Dataset) &amp; write to csv file
+testData = scentdata[scentdata[&quot;labels_train/test&quot;] == 0]
+numTestData = len(testData)
+
+trainAndValidationData = scentdata[scentdata[&quot;labels_train/test&quot;] == 1]
+
+numTrainAndValidationData = len(trainAndValidationData)
+trainAndValidationData = trainAndValidationData.reset_index()
+
+numMoleculesInDataset = numTestData + numTrainAndValidationData
+
+# randomly select indices from trainAndValidation data - validation set = 10% of entire dataset
+numValidationData = int(0.10 * numMoleculesInDataset)
+validationIndices = np.random.choice(
+    a=numTrainAndValidationData, size=numValidationData, replace=False
+)  # https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html
+validationData = trainAndValidationData.iloc[
+    validationIndices
+]  # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html
+trainData = trainAndValidationData.drop(
+    index=validationIndices
+)  # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html
+
+
+# Use smaller set of data (just to check code does not crash)
+# NOTE: comment out the next 3 lines when actually training/evaluating model to use the entire dataset
+trainData = trainData.sample(frac=0.01, random_state=0).reset_index(drop=True)
+validationData = validationData.sample(frac=0.01, random_state=0).reset_index(drop=True)
+# testData = testData.sample(frac=0.8, random_state=0).reset_index(
+#    drop=True
+# )  # Sample more from test set to avoid error that there is only 1 molecule with a certain scent when calculating AUROC score
+
+# Code to generate list of all scent labels (scentClasses)
+numMolecules = len(scentdata.odor_labels_filtered)
+numClasses = 112  # No odorless class
+scentClasses = pd.read_csv(&quot;scentClasses.csv&quot;)
+scentClasses = scentClasses[&quot;Scent&quot;].tolist()
+moleculeScentList = []
+for i in range(numMolecules):
+    scentString = scentdata.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList.append(scentList)
+
+# Generate moleculeScentList_train, moleculeScentList_test, moleculeScentList_validation
+numTrainMolecules = len(trainData.odor_labels_filtered)
+moleculeScentList_train = []
+for i in range(numTrainMolecules):
+    scentString = trainData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_train.append(scentList)
+
+numValidationMolecules = len(validationData.odor_labels_filtered)
+moleculeScentList_validation = []
+for i in range(numValidationMolecules):
+    scentString = validationData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_validation.append(scentList)
+
+numTestMolecules = len(testData.odor_labels_filtered)
+moleculeScentList_test = []
+for i in range(numTestMolecules):
+    scentString = testData.odor_labels_filtered[i]
+    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
+    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
+    temp = temp.replace(&quot; &quot;, &quot;&quot;)
+    scentList = temp.split(&quot;,&quot;)
+    if &quot;odorless&quot; in scentList:
+        scentList.remove(&quot;odorless&quot;)
+    moleculeScentList_test.append(scentList)
+
+
+def gen_smiles2graph(sml):
+    &quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence
+    returns: the graph
+    &quot;&quot;&quot;
+    m = rdkit.Chem.MolFromSmiles(sml)
+    m = rdkit.Chem.AddHs(m)
+    order_string = {
+        rdkit.Chem.rdchem.BondType.SINGLE: 1,
+        rdkit.Chem.rdchem.BondType.DOUBLE: 2,
+        rdkit.Chem.rdchem.BondType.TRIPLE: 3,
+        rdkit.Chem.rdchem.BondType.AROMATIC: 4,
+    }
+    N = len(list(m.GetAtoms()))
+    nodes = np.zeros((N, node_feat_length))
+    for i in m.GetAtoms():
+        nodes[i.GetIdx(), i.GetAtomicNum()] = 1
+        # Add in whether atom is in a ring or not for one-hot encoding
+        if i.IsInRing():
+            nodes[i.GetIdx(), -1] = 1
+
+    adj = np.zeros((N, N))
+    for j in m.GetBonds():
+        u = min(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
+        v = max(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
+        order = j.GetBondType()
+        if order in order_string:
+            order = order_string[order]
+        else:
+            raise Warning(&quot;Ignoring bond order&quot; + order)
+        adj[u, v] = 1
+        adj[v, u] = 1
+    adj += np.eye(N)
+    return nodes, adj
+
+
+# Function that creates label vector given list of strings describing scent of molecule as input
+# Each index in label vector corresponds to specific scent -&gt; if output has a 0 at index i, then molecule does not have scent i
+# If label vector has 1 at index i, then molecule does have scent i
+
+
+def createLabelVector(scentsList):
+    # Find class index in label vector that each scent corresponds to &amp; update label for that molecule to 1
+    labelVector = np.zeros(numClasses)
+    for j in range(len(scentsList)):
+        # Find class index
+        classIndex = scentClasses.index(scentsList[j])
+        # print(classIndex)
+        # print(scentsList[j])
+        # print(scentClasses[classIndex])
+        # Update label vector
+        labelVector[classIndex] = 1
+    return labelVector
+
+
+def generateGraphsTrain():
+    for i in range(numTrainMolecules):
+        graph = gen_smiles2graph(trainData.smiles[i])
+        labels = createLabelVector(moleculeScentList_train[i])
+        yield graph, labels
+
+
+def generateGraphsValidation():
+    for i in range(numValidationMolecules):
+        graph = gen_smiles2graph(validationData.smiles[i])
+        labels = createLabelVector(moleculeScentList_validation[i])
+        yield graph, labels
+
+
+def generateGraphsTest():
+    for i in range(numTestMolecules):
+        graph = gen_smiles2graph(testData.smiles[i])
+        labels = createLabelVector(moleculeScentList_test[i])
+        yield graph, labels
+
+
+def generateGraphs():
+    for i in range(numMolecules):
+        graph = gen_smiles2graph(scentdata.smiles[i])
+        labels = createLabelVector(moleculeScentList[i])
+        yield graph, labels
+
+
+# Get graph data for training, testing &amp; validation sets
+data = tf.data.Dataset.from_generator(
+    generateGraphs,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+
+train_set = tf.data.Dataset.from_generator(
+    generateGraphsTrain,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+valid_set = tf.data.Dataset.from_generator(
+    generateGraphsValidation,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+test_set = tf.data.Dataset.from_generator(
+    generateGraphsTest,
+    output_types=((tf.float32, tf.float32), tf.float32),
+    output_shapes=(
+        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
+        tf.TensorShape([None]),
+    ),
+)
+
+train_N = numTrainMolecules
+valid_N = numValidationMolecules
+test_N = numTestMolecules
+
+
+class GNNLayer(hk.Module):
+    def __init__(self, output_size, name=None):
+        super().__init__(name=name)
+        self.output_size = output_size
+
+    def __call__(self, inputs):
+        # split input into nodes, edges &amp; features
+        nodes, edges, features = inputs
+        # Nodes is of shape (N, Nf) --&gt; N = # atoms, Nf = node_feature_length
+        # Edges is of shape (N,N) (adjacency matrix)
+        # Features is of shape (Gf) --&gt; Gf = graph_feature_length
+
+        graph_feature_len = features.shape[-1]  # graph_feature_len (Gf)
+        node_feature_len = nodes.shape[-1]  # node_feature_len (Nf)
+        message_feature_len = message_feat_length  # message_feature_length (Mf)
+
+        # Initialize weights
+        w_init = hk.initializers.RandomNormal(stddev=weights_stddevGNN)
+
+        # we is of shape (Nf,Mf)
+        we = hk.get_parameter(
+            &quot;we&quot;, shape=[node_feature_len, message_feature_len], init=w_init
+        )
+
+        # b is of shape (Mf)
+        b = hk.get_parameter(&quot;b&quot;, shape=[message_feature_len], init=w_init)
+
+        # wv is of shape (Mf,Nf)
+        wv = hk.get_parameter(
+            &quot;wv&quot;, shape=[message_feature_len, node_feature_len], init=w_init
+        )
+
+        # wu is of shape (Nf,Gf)
+        wu = hk.get_parameter(
+            &quot;wu&quot;, shape=[node_feature_len, graph_feature_len], init=w_init
+        )
+
+        # make nodes be N x N x Nf so we can just multiply directly (N = number of atoms)
+        # ek is now shaped N x N x Mf
+        ek = jax.nn.leaky_relu(
+            b
+            + jnp.repeat(nodes[jnp.newaxis, ...], nodes.shape[0], axis=0)
+            @ we
+            * edges[..., None]
+        )
+
+        # Uncomment lines below to update edges (also edit return line so new_edges is returned)
+        # Update edges, use jnp.any to have new_edges be of shape N x N
+        # new_edges = jnp.any(ek, axis=-1)
+
+        # Normalize over edge features w/layer normalization
+        # new_edges = hk.LayerNorm(axis=[0,1], create_scale=False, create_offset=False, eps=1e-05)(new_edges)
+
+        # take sum over neighbors to get ebar shape = Nf x Mf
+        ebar = jnp.sum(ek, axis=1)
+
+        # dense layer for new nodes to get new_nodes shape = N x Nf
+        new_nodes = jax.nn.leaky_relu(ebar @ wv) + nodes  # Use leaky ReLU
+
+        # Normalize over node features w/layer normalization
+        new_nodes = hk.LayerNorm(
+            axis=[0, 1], create_scale=False, create_offset=False, eps=1e-05
+        )(new_nodes)
+
+        # sum over nodes to get shape features so global_node_features shape = Nf
+        global_node_features = jnp.sum(new_nodes, axis=0)
+
+        # dense layer for new features so new_features shape = Gf
+        new_features = (
+            jax.nn.leaky_relu(global_node_features @ wu) + features
+        )  # Use leaky ReLU for activation
+
+        # just return features for ease of use
+        return new_nodes, edges, new_features
+
+
+def model_fn(x):
+    nodes, edges = x
+    features = jnp.ones(graph_feat_length)
+    x = nodes, edges, features
+
+    # NOTE: If edited num_GNN_layers, need to edit code below (increase or decrease # times have x = GNNLayer(...))
+    # 4 GNN layers
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+    x = GNNLayer(output_size=graph_feat_length)(x)
+
+    # 2 dense layers
+    logits = hk.Linear(numClasses)(x[-1])
+    # logits = jax.nn.relu(logits) #ReLU activation between dense layer
+    logits = hk.Linear(numClasses)(logits)
+
+    return logits  # Model now returns logits
+
+
+model = hk.without_apply_rng(hk.transform(model_fn))
+
+# Initialize model
+rng = jax.random.PRNGKey(0)
+sampleData = data.take(1)
+for dataVal in sampleData:  # Look into later how to get larger set
+    (nodes_i, edges_i), yi = dataVal
+nodes_i = nodes_i.numpy()
+edges_i = edges_i.numpy()
+
+yi = yi.numpy()
+xi = (nodes_i, edges_i)
+
+params = model.init(rng, xi)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load optimal parameters for GNN model
+print(&quot;Edit fileName to change parameters being loaded&quot;)
+fileName = &quot;optParams_dry-waterfall-17.npy&quot;  # Currently optimal parameters, edit when get better model
+paramsArr = jnp.load(fileName, allow_pickle=True)
+opt_params = {
+    &quot;gnn_layer&quot;: {
+        &quot;b&quot;: paramsArr[0],
+        &quot;we&quot;: paramsArr[1],
+        &quot;wu&quot;: paramsArr[2],
+        &quot;wv&quot;: paramsArr[3],
+    },
+    &quot;gnn_layer_1&quot;: {
+        &quot;b&quot;: paramsArr[4],
+        &quot;we&quot;: paramsArr[5],
+        &quot;wu&quot;: paramsArr[6],
+        &quot;wv&quot;: paramsArr[7],
+    },
+    &quot;gnn_layer_2&quot;: {
+        &quot;b&quot;: paramsArr[8],
+        &quot;we&quot;: paramsArr[9],
+        &quot;wu&quot;: paramsArr[10],
+        &quot;wv&quot;: paramsArr[11],
+    },
+    &quot;gnn_layer_3&quot;: {
+        &quot;b&quot;: paramsArr[12],
+        &quot;we&quot;: paramsArr[13],
+        &quot;wu&quot;: paramsArr[14],
+        &quot;wv&quot;: paramsArr[15],
+    },
+    &quot;linear&quot;: {&quot;b&quot;: paramsArr[16], &quot;w&quot;: paramsArr[17]},
+    &quot;linear_1&quot;: {&quot;b&quot;: paramsArr[18], &quot;w&quot;: paramsArr[19]},
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-auroc-values-on-test-set">
+<h3>Calculate AUROC values on test set<a class="headerlink" href="#calculate-auroc-values-on-test-set" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Compute AUROC &amp; Create ROC curve for each scent class - uses scikit-learn
+# https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html
+
+test_yhat = np.empty(
+    (test_N, numClasses)
+)  # create empty array to store predictions on test set
+test_y = np.empty((test_N, numClasses))
+
+
+for i, testVal in enumerate(test_set):
+    (nodes_i, edges_i), yi = testVal
+    nodes_i = nodes_i.numpy()
+    edges_i = edges_i.numpy()
+    yi = yi.numpy()
+    xi = nodes_i, edges_i
+    test_yhat[i] = jax.nn.sigmoid(model.apply(opt_params, xi))
+    test_y[i] = yi
+
+# Shape of test_yhat and test_y should be (n_samples, n_classes)
+# print(f&#39;Shape of test_y: {np.shape(test_y)} and test_yhat: {np.shape(test_yhat)}&#39;)
+
+scentClasses_testSet = []
+aurocs_allClasses = []
+
+for c in range(numClasses):
+    if np.count_nonzero(test_y[:, c]) == 0:
+        print(f&quot;Test set does not have any molecules with scent {scentClasses[c]}&quot;)
+    else:
+        ##Uncomment lines below to create ROC curves
+        # fpr, tpr, thresholds = sklearn.metrics.roc_curve(y_true = test_y[:,c], y_score = test_yhat[:,c])
+        # plt.plot(fpr, tpr, &#39;-o&#39;, label=&#39;Trained Model&#39;)
+        # plt.plot([0,1], [0, 1], label=&#39;Naive Classifier&#39;)
+        # plt.ylabel(&#39;True Positive Rate&#39;)
+        # plt.xlabel(&#39;False Positive Rate&#39;)
+        # plt.title(f&#39;ROC Curve for {scentClasses[c]}&#39;)
+        # plt.legend()
+        # plt.show()
+        # plt.savefig(f&#39;GNN_ROC_Curve_{scentClasses[c]}.jpg&#39;)
+        # plt.close()
+        scentClasses_testSet.append(scentClasses[c])
+        auroc = sklearn.metrics.roc_auc_score(
+            y_true=test_y[:, c], y_score=test_yhat[:, c]
+        )
+        aurocs_allClasses.append(auroc)
+        print(f&quot;AUROC for scent {scentClasses[c]}: {auroc}&quot;)
+
+# Write AUROC results to csv file
+# aurocTable = pd.DataFrame({&#39;Scent&#39;: scentClasses_testSet,&#39;AUROC&#39;: aurocs_allClasses})
+# csvFileName  = f&#39;AurocTable_{runName}.csv&#39;
+# aurocTable.to_csv(csvFileName,index=False)
+
+# Print Mean AUROC
+mean_AUROC = np.mean(aurocs_allClasses)
+print(f&quot;Mean AUROC: {mean_AUROC}&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check that calculating AUROC for each scent class using method above &amp; taking the mean of it is equivalent to using average=macro parameter
+auroc_sklearnAverageMacro = sklearn.metrics.roc_auc_score(
+    y_true=test_y, y_score=test_yhat, average=&quot;macro&quot;
+)
+print(mean_AUROC == auroc_sklearnAverageMacro)
+print(f&quot;macro-average AUROC: {auroc_sklearnAverageMacro}&quot;)
+
+# Calculate micro-average AUROC
+auroc_sklearnAverageMicro = sklearn.metrics.roc_auc_score(
+    y_true=test_y, y_score=test_yhat, average=&quot;micro&quot;
+)
+print(f&quot;micro-average AUROC: {auroc_sklearnAverageMicro}&quot;)
+
+# Calculate weighted AUROC (each class weighted by how many times it occurs in the true data sample)
+auroc_sklearnAverageWeighted = sklearn.metrics.roc_auc_score(
+    y_true=test_y, y_score=test_yhat, average=&quot;weighted&quot;
+)
+print(f&quot;weighted-average AUROC: {auroc_sklearnAverageWeighted}&quot;)
+
+# Calculate median AUROC (find median value of AUROC for each scent class)
+auroc_median = np.median(aurocs_allClasses)
+print(f&quot;median AUROC: {auroc_median}&quot;)
+
+# Print out values for each AUROC score value as pandas table
+tableOfAUROCValues = pd.DataFrame(index=None)
+tableOfAUROCValues[&quot;macro-average AUROC&quot;] = [auroc_sklearnAverageMacro]
+tableOfAUROCValues[&quot;micro-average AUROC&quot;] = [auroc_sklearnAverageMicro]
+tableOfAUROCValues[&quot;weighted-average AUROC&quot;] = [auroc_sklearnAverageWeighted]
+tableOfAUROCValues[&quot;median AUROC&quot;] = [auroc_median]
+tableOfAUROCValues
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">Last updated on True.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

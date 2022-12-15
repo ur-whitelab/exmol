@@ -1,0 +1,89 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Imports
+from typing import *
+import exmol
+
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import rdkit, rdkit.Chem, rdkit.Chem.rdDepictor, rdkit.Chem.Draw
+from IPython.display import display, SVG
+from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
+from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
+import skunk
+import cairosvg
+import matplotlib
+import warnings
+
+warnings.filterwarnings("ignore")
+
+import pyrfume  # for loading dataset
+
+# Packages needed for GNN model (model used when creating spaces)
+##not needed if generating descriptor explanations or NLEs using a previously created sample space
+import haiku as hk
+import jax
+import jax.numpy as jnp
+import tensorflow as tf
+
+# Plotting style
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as font_manager
+import urllib.request
+
+urllib.request.urlretrieve(
+    "https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf",
+    "IBMPlexMono-Regular.ttf",
+)
+fe = font_manager.FontEntry(fname="IBMPlexMono-Regular.ttf", name="plexmono")
+font_manager.fontManager.ttflist.append(fe)
+plt.rcParams.update(
+    {
+        "axes.facecolor": "#f5f4e9",
+        "grid.color": "#AAAAAA",
+        "axes.edgecolor": "#333333",
+        "figure.facecolor": "#FFFFFF",
+        "axes.grid": False,
+        "axes.prop_cycle": plt.cycler("color", plt.cm.Dark2.colors),
+        "font.family": fe.name,
+        "figure.figsize": (3.5, 3.5 / 1.2),
+        "ytick.left": True,
+        "xtick.bottom": True,
+    }
+)
+
+
+np.random.seed(0)
+tf.random.set_seed(0)
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 13[0m
+[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m [38;5;28;01mimport[39;00m rdchem, MACCSkeys, AllChem  [38;5;66;03m# type: ignore[39;00m
+[1;32m     12[0m [38;5;28;01mimport[39;00m [38;5;21;01mskunk[39;00m
+[0;32m---> 13[0m [38;5;28;01mimport[39;00m [38;5;21;01mcairosvg[39;00m
+[1;32m     14[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m
+[1;32m     15[0m [38;5;28;01mimport[39;00m [38;5;21;01mwarnings[39;00m
+
+[0;31mModuleNotFoundError[0m: No module named 'cairosvg'
+ModuleNotFoundError: No module named 'cairosvg'
+

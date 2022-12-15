@@ -116,9 +116,23 @@ color_cycle = [&quot;#F06060&quot;, &quot;#1BBC9B&quot;, &quot;#F3B562&quot;, &q
 mpl.rcParams[&quot;axes.prop_cycle&quot;] = mpl.cycler(color=color_cycle)
 np.random.seed(0)
 soldata = pd.read_csv(
-    &quot;https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv&quot;
+    &quot;https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv&quot;
 )
 features_start_at = list(soldata.columns).index(&quot;MolWt&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">19</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="ne">---&gt; </span><span class="mi">19</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">plot_roc_curve</span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;plot_roc_curve&#39; from &#39;sklearn.metrics&#39; (/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/sklearn/metrics/__init__.py)
 </pre></div>
 </div>
 </div>
@@ -202,12 +216,6 @@ predicted = clf.predict(X_test)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(9982, 3) [&#39;Wildman-Crippen LogP&#39; &#39;number of hydrogen bond donor&#39;
- &#39;basic group count&#39;]
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -229,9 +237,6 @@ plt.text(
 plt.savefig(&quot;RF-ROC.png&quot;)
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/2e1195ba8a8e415f462b800a6a5ef704509f6373cdd3936824831d122d8b84c4.png" src="../_images/2e1195ba8a8e415f462b800a6a5ef704509f6373cdd3936824831d122d8b84c4.png" />
 </div>
 </div>
 </section>
@@ -289,20 +294,6 @@ wls_attr
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;number of heteroatoms&#39;: 2.005639250403021,
- &#39;acidic group count&#39;: 1.7178494920326794,
- &#39;atomic polarizability&#39;: -1.6519164000027657,
- &#39;Wildman-Crippen LogP&#39;: 1.267846013204191,
- &#39;number of hydrogen bond acceptor&#39;: -1.1504129562775953,
- &#39;basic group count&#39;: -0.9129639743522328,
- &#39;number of hydrogen bond donor&#39;: -0.34274599286467194,
- &#39;ring count&#39;: 0.32799733404574416,
- &#39;aromatic bonds count&#39;: 0.18091037688652478,
- &#39;number of rotatable bonds&#39;: 0.04327099645711095}
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="do-we-recover-training-features">
@@ -335,12 +326,6 @@ plt.gca().invert_yaxis()
 plt.title(&quot;Random Forest Regression&quot;, fontsize=12)
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
-</pre></div>
-</div>
-<img alt="../_images/0953e30be606142c276118b6158efeba56a0b56236d5655d0ee9dd2e82077840.png" src="../_images/0953e30be606142c276118b6158efeba56a0b56236d5655d0ee9dd2e82077840.png" />
 </div>
 </div>
 </section>

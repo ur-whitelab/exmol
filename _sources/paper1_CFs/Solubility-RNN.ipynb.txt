@@ -47,7 +47,7 @@
     "color_cycle = [\"#1BBC9B\", \"#F06060\", \"#5C4B51\", \"#F3B562\", \"#6e5687\"]\n",
     "mpl.rcParams[\"axes.prop_cycle\"] = mpl.cycler(color=color_cycle)\n",
     "soldata = pd.read_csv(\n",
-    "    \"https://github.com/whitead/dmol-book/raw/master/data/curated-solubility-dataset.csv\"\n",
+    "    \"https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv\"\n",
     ")\n",
     "features_start_at = list(soldata.columns).index(\"MolWt\")\n",
     "np.random.seed(0)"
