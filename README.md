@@ -6,6 +6,7 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 - [Install](#install)
+- [Quickstart](#quickstart)
 - [Counterfactual Generation](#counterfactual-generation)
 - [Descriptor Attribution](#descriptor-attribution)
 - [Usage](#usage)
@@ -25,6 +26,10 @@
 ```sh
 pip install exmol
 ```
+
+## Quickstart
+
+See [the tutorial](https://ur-whitelab.github.io/exmol/paper2_LIME/Tutorial.html) to give an overview of the basic usage of exmol.
 
 ## Counterfactual Generation
 

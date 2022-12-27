@@ -1,5 +1,5 @@
 mordred[full]==1.2.0
-sklearn
+scikit-learn==1.1.2
 jupyter
 seaborn
 pandas

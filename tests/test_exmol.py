@@ -6,6 +6,7 @@ import exmol
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit import RDPaths
+from rdkit.Chem import AllChem
 
 
 def test_version():
@@ -227,6 +228,33 @@ def test_sample_preset():
     assert len(explanation) == len(set([e.smiles for e in explanation]))
 
 
+def test_sample_with_object():
+    class A:
+        def __call__(self, seqs):
+            return [0 for _ in seqs]
+
+    obj = A()
+    exmol.sample_space("C", obj, batched=True)
+
+
+def test_sample_with_partial():
+    import functools
+
+    def model(s, x):
+        return int("N" in s)
+
+    f = functools.partial(model, x=1)
+    exmol.sample_space("C", f, batched=False)
+
+
+def test_name_morgan_bit():
+    mol = smi2mol("CO")
+    bitInfo = {}
+    AllChem.GetMorganFingerprintAsBitVect(mol, 2, bitInfo=bitInfo)
+    name = exmol.name_morgan_bit(mol, bitInfo=bitInfo, key=1155)
+    assert name == "alcohol"
+
+
 def test_sample_multiple_bases():
     def model(s, se):
         return int("N" in s)
@@ -379,17 +407,23 @@ def test_text_explain():
         return int("=O" in s)
 
     samples = exmol.sample_space("CCCC", model, batched=False)
-    exmol.text_explain(samples, "MACCS")
+    s = exmol.text_explain(samples, "MACCS")
+    assert len(s) > 0, "No explanation generated"
 
     samples1 = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
-    exmol.text_explain(samples1, "ECFP")
+    s = exmol.text_explain(samples1, "ECFP")
+    assert len(s) > 0, "No explanation generated"
 
     samples2 = exmol.sample_space(
         "O=C(NCC1CCCCC1N)C2=CC=CC=C2C3=CC=C(F)C=C3C(=O)NC4CCCCC4", model, batched=False
     )
+
+    # try with multiple origins
     samples = samples1 + samples2
     s1 = exmol.text_explain(samples, "ECFP")
+    assert len(s1) > 0, 'No explanation found for "ECFP"'
     s2 = exmol.text_explain(samples, "MACCS")
+    assert len(s2) > 0, 'No explanation found for "MACCS"'
     s = exmol.merge_text_explains(s1, s2)
 
 

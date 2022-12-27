@@ -1,0 +1,15 @@
+pyrfume
+tensorflow==2.5.0
+seaborn
+jaxlib==0.1.67
+jax==0.2.13
+pandas
+dm-haiku==0.0.5
+chex==0.0.7
+optax==0.0.9
+matplotlib
+scikit-learn==1.1.2
+jupyter
+CairoSVG
+Pillow
+skunk

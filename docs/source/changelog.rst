@@ -2,11 +2,15 @@ Change Log
 ==========
 
 
-v2.2.1
+v2.2.1 (2022-12-7)
 -------------------
 * Fixed bug in sorting for text explanations
 * Fixed empty plot names saying `None`
 * Added priority for naming and removed invalid names
+* Added more names (metyhl, ethyl, butyl, etc)
+* Fixed `sample_space` to accept partials or objects
+* Added openai prompting
+* Added `name_morgan_bit` as external facing
 
 v2.2.0 (2022-11-3)
 -------------------
