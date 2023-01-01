@@ -1,37 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>MMACE Paper: Graph Neural Network for HIV Inhibition &mdash; exmol  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="MMACE Paper: Recurrent Neural Network for Predicting Solubility" href="Solubility-RNN.html" />
     <link rel="prev" title="MMACE Paper: Random Forest for Blood-Brain Barrier" href="RF.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../toc.html" class="icon icon-home"> exmol
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
@@ -56,32 +107,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/RF-lime.html">LIME paper: Random Forest for Solubility Prediciton</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../toc.html">exmol</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../toc.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">MMACE Paper: Graph Neural Network for HIV Inhibition</li>
+    
+      <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>MMACE Paper: Graph Neural Network for HIV Inhibition</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+            
               <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper1_CFs/GNN.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section class="tex2jax_ignore mathjax_ignore" id="mmace-paper-graph-neural-network-for-hiv-inhibition">
-<h1>MMACE Paper: Graph Neural Network for HIV Inhibition<a class="headerlink" href="#mmace-paper-graph-neural-network-for-hiv-inhibition" title="Permalink to this heading"></a></h1>
+<h1>MMACE Paper: Graph Neural Network for HIV Inhibition<a class="headerlink" href="#mmace-paper-graph-neural-network-for-hiv-inhibition" title="Permalink to this heading">¶</a></h1>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -129,15 +223,15 @@ np.random.seed(0)
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-12-15 16:08:17.560718: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-01-01 21:06:11.220992: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-12-15 16:08:17.699206: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
-2022-12-15 16:08:17.699235: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2023-01-01 21:06:11.350447: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
+2023-01-01 21:06:11.350466: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-12-15 16:08:18.767070: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
-2022-12-15 16:08:18.767205: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
-2022-12-15 16:08:18.767217: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-01-01 21:06:12.094466: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
+2023-01-01 21:06:12.094560: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
+2023-01-01 21:06:12.094569: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 </pre></div>
 </div>
 </div>
@@ -333,13 +427,6 @@ gcnmodel.summary()
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;model&quot;
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-12-15 16:08:20.135032: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
-2022-12-15 16:08:20.135064: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
-2022-12-15 16:08:20.135112: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az401-90): /proc/driver/nvidia/version does not exist
-2022-12-15 16:08:20.135395: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>__________________________________________________________________________________________________
 </pre></div>
 </div>
@@ -448,6 +535,13 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>__________________________________________________________________________________________________
 </pre></div>
 </div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-01-01 21:06:13.121431: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.15/x64/lib
+2023-01-01 21:06:13.121458: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
+2023-01-01 21:06:13.121479: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az244-31): /proc/driver/nvidia/version does not exist
+2023-01-01 21:06:13.121670: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -517,7 +611,7 @@ fig.show()
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/af47a9b913d8693e153e30d16893c6183e276baaa00eddd078346be89812c292.png" src="../_images/af47a9b913d8693e153e30d16893c6183e276baaa00eddd078346be89812c292.png" />
+<img alt="../_images/dfbf46dd0ea28ee605ff1cadd262fc7ac2fcd3415015974083791f9fb4c9aab0.png" src="../_images/dfbf46dd0ea28ee605ff1cadd262fc7ac2fcd3415015974083791f9fb4c9aab0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -556,11 +650,11 @@ plt.show()
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5fdd1fdeed530f6e586171363dd5bd4bdb87374a63e9535f3324c93bdfe47648.png" src="../_images/5fdd1fdeed530f6e586171363dd5bd4bdb87374a63e9535f3324c93bdfe47648.png" />
+<img alt="../_images/9f4dfa55c83dcdd6e14ef17cd49e4e6b08aed14904662d4b81fd332ff88e992e.png" src="../_images/9f4dfa55c83dcdd6e14ef17cd49e4e6b08aed14904662d4b81fd332ff88e992e.png" />
 </div>
 </div>
 <section id="cf-explanation">
-<h2>CF explanation<a class="headerlink" href="#cf-explanation" title="Permalink to this heading"></a></h2>
+<h2>CF explanation<a class="headerlink" href="#cf-explanation" title="Permalink to this heading">¶</a></h2>
 <p>The following example find CFs for a given molecule where the HIV activity is zero.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -615,7 +709,7 @@ with open(&quot;gnn-simple.svg&quot;, &quot;w&quot;) as f:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/684a204f9b94edb64e95a28d8de3414e8fcbb37c174c6ec9fe7e48b85d8840e8.png" src="../_images/684a204f9b94edb64e95a28d8de3414e8fcbb37c174c6ec9fe7e48b85d8840e8.png" />
+<img alt="../_images/57beed281b9cc946a4439e43abdd35617d13f1466ccd8aa1e130549c9f4a7500.png" src="../_images/57beed281b9cc946a4439e43abdd35617d13f1466ccd8aa1e130549c9f4a7500.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -641,7 +735,7 @@ with open(&quot;gnn-space.svg&quot;, &quot;w&quot;) as f:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a3441be56049779ee6a0956283152888585a4fc6fda4ba45b79a13d0fff9daa8.png" src="../_images/a3441be56049779ee6a0956283152888585a4fc6fda4ba45b79a13d0fff9daa8.png" />
+<img alt="../_images/a1219dc5965a06b07bbf99f9244c9984bbe9c93edf285a6d0446f0211d7de159.png" src="../_images/a1219dc5965a06b07bbf99f9244c9984bbe9c93edf285a6d0446f0211d7de159.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -666,7 +760,7 @@ with open(&quot;gnn-simple-20.svg&quot;, &quot;w&quot;) as f:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5c478314c90ea46a642423d7b797256d654b7a2bc9094d8039bee8e0511815f4.png" src="../_images/5c478314c90ea46a642423d7b797256d654b7a2bc9094d8039bee8e0511815f4.png" />
+<img alt="../_images/a3ae482c01eb7b677fd8e50f19f80311dfad09a7bad4762e5d13d625f93a99af.png" src="../_images/a3ae482c01eb7b677fd8e50f19f80311dfad09a7bad4762e5d13d625f93a99af.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -683,7 +777,7 @@ plt.savefig(&quot;gnn-space.png&quot;, bbox_inches=&quot;tight&quot;, dpi=180)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/21613a4f68cb005efe8eeed3e5a5e232596cb85f94fc9ee6de39758f7c95b5cc.png" src="../_images/21613a4f68cb005efe8eeed3e5a5e232596cb85f94fc9ee6de39758f7c95b5cc.png" />
+<img alt="../_images/67d47da636263949ef0797840212a4901fd3ceaada4c9fa4228660f31c40b1de.png" src="../_images/67d47da636263949ef0797840212a4901fd3ceaada4c9fa4228660f31c40b1de.png" />
 </div>
 </div>
 </section>
@@ -691,35 +785,53 @@ plt.savefig(&quot;gnn-space.png&quot;, bbox_inches=&quot;tight&quot;, dpi=180)
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="RF.html" class="btn btn-neutral float-left" title="MMACE Paper: Random Forest for Blood-Brain Barrier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="Solubility-RNN.html" class="btn btn-neutral float-right" title="MMACE Paper: Recurrent Neural Network for Predicting Solubility" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="RF.html" class="btn btn-neutral float-left" title="MMACE Paper: Random Forest for Blood-Brain Barrier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
-      <span class="lastupdated">Last updated on True.
-      </span></p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">
+        Last updated on True.
+      </span>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
