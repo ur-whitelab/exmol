@@ -13,6 +13,7 @@ import selfies as sf  # type: ignore
 import tqdm  # type: ignore
 import textwrap  # type: ignore
 import skunk  # type: ignore
+import synspace  # type: ignore
 
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
@@ -572,12 +573,15 @@ def sample_space(
     """Sample chemical space around given SMILES
 
     This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule. ``num_samples`` will be
-    set to 3,000 by default if using STONED and 150 if using ``chemed``.
+    set to 3,000 by default if using STONED and 150 if using ``chemed``. If using ``custom`` then ``num_samples`` will be set to the length of
+    of the ``data`` list. If using ``synspace`` then ``num_samples`` will be set to 1,000. See :func:`run_stoned` and :func:`run_chemed` for more details.
+    ``synspace`` comes from the package `synspace <https://github.com/whitead/synspace>`. It generates synthetically feasible
+    molecules from a given SMILES.
 
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES or SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample commerically available compounds.
+    :param preset: Can be `"wide"`, `"medium"`, `"narrow"`, `"chemed"`, `"custom"`, or `"synspace`". Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample pubchem compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
@@ -648,6 +652,8 @@ def sample_space(
             method_kwargs["num_samples"] = 150 if num_samples is None else num_samples
         elif preset == "custom" and data is not None:
             method_kwargs["num_samples"] = len(data)
+        elif preset == "synspace":
+            method_kwargs["num_samples"] = 1000 if num_samples is None else num_samples
         else:
             raise ValueError(f'Unknown preset "{preset}"')
     try:
@@ -664,6 +670,17 @@ def sample_space(
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
         selfies = [sf.encoder(s) for s in smiles]
     elif preset == "custom":
+        smiles, scores = run_custom(
+            origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
+        )
+        selfies = [sf.encoder(s) for s in smiles]
+    elif preset == "synspace":
+        mols, _ = synspace.chemical_space(origin_smiles, _pbar=pbar, **method_kwargs)
+        if len(mols) < 5:
+            raise ValueError(
+                "Synspace did not return enough molecules. Try adjusting method_kwargs for synspace"
+            )
+        data = [mol2smi(mol) for mol in mols]
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )

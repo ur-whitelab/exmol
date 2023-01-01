@@ -324,6 +324,21 @@ def test_sample_custom():
     )
 
 
+def test_sample_synspace():
+    def model(s, se):
+        return int("N" in s)
+
+    explanation = exmol.sample_space(
+        "Cc1ccc(cc1Nc2nccc(n2)c3cccnc3)NC(=O)c4ccc(cc4)CN5CCN(CC5)C",
+        model,
+        preset="synspace",
+        batched=False,
+        num_samples=50,
+    )
+    # check that no redundants
+    assert len(explanation) == 50
+
+
 def test_cf_explain():
     def model(s, se):
         return int("N" in s)
