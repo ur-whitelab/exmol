@@ -174,62 +174,62 @@
 <p>Using exmol package: https://github.com/ur-whitelab/exmol</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Imports
-from typing import *
-import exmol
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">exmol</span>
 
-import seaborn as sns
-import pandas as pd
-import numpy as np
-import rdkit, rdkit.Chem, rdkit.Chem.rdDepictor, rdkit.Chem.Draw
-from IPython.display import display, SVG
-from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
-from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
-import skunk
-import cairosvg
-import matplotlib
-import warnings
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.rdDepictor</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">MolToImage</span> <span class="k">as</span> <span class="n">mol2img</span><span class="p">,</span> <span class="n">DrawMorganBit</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">rdchem</span><span class="p">,</span> <span class="n">MACCSkeys</span><span class="p">,</span> <span class="n">AllChem</span>  <span class="c1"># type: ignore</span>
+<span class="kn">import</span> <span class="nn">skunk</span>
+<span class="kn">import</span> <span class="nn">cairosvg</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
-warnings.filterwarnings(&quot;ignore&quot;)
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
-import pyrfume  # for loading dataset
+<span class="kn">import</span> <span class="nn">pyrfume</span>  <span class="c1"># for loading dataset</span>
 
-# Packages needed for GNN model (model used when creating spaces)
-##not needed if generating descriptor explanations or NLEs using a previously created sample space
-import haiku as hk
-import jax
-import jax.numpy as jnp
-import tensorflow as tf
+<span class="c1"># Packages needed for GNN model (model used when creating spaces)</span>
+<span class="c1">##not needed if generating descriptor explanations or NLEs using a previously created sample space</span>
+<span class="kn">import</span> <span class="nn">haiku</span> <span class="k">as</span> <span class="nn">hk</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 
-# Plotting style
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
-import urllib.request
+<span class="c1"># Plotting style</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.font_manager</span> <span class="k">as</span> <span class="nn">font_manager</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
 
-urllib.request.urlretrieve(
-    &quot;https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf&quot;,
-    &quot;IBMPlexMono-Regular.ttf&quot;,
-)
-fe = font_manager.FontEntry(fname=&quot;IBMPlexMono-Regular.ttf&quot;, name=&quot;plexmono&quot;)
-font_manager.fontManager.ttflist.append(fe)
-plt.rcParams.update(
-    {
-        &quot;axes.facecolor&quot;: &quot;#f5f4e9&quot;,
-        &quot;grid.color&quot;: &quot;#AAAAAA&quot;,
-        &quot;axes.edgecolor&quot;: &quot;#333333&quot;,
-        &quot;figure.facecolor&quot;: &quot;#FFFFFF&quot;,
-        &quot;axes.grid&quot;: False,
-        &quot;axes.prop_cycle&quot;: plt.cycler(&quot;color&quot;, plt.cm.Dark2.colors),
-        &quot;font.family&quot;: fe.name,
-        &quot;figure.figsize&quot;: (3.5, 3.5 / 1.2),
-        &quot;ytick.left&quot;: True,
-        &quot;xtick.bottom&quot;: True,
-    }
-)
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span>
+    <span class="s2">&quot;https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IBMPlexMono-Regular.ttf&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fe</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">FontEntry</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;IBMPlexMono-Regular.ttf&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;plexmono&quot;</span><span class="p">)</span>
+<span class="n">font_manager</span><span class="o">.</span><span class="n">fontManager</span><span class="o">.</span><span class="n">ttflist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fe</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;axes.facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#f5f4e9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#AAAAAA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;axes.edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#333333&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;figure.facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;axes.grid&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;axes.prop_cycle&quot;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Dark2</span><span class="o">.</span><span class="n">colors</span><span class="p">),</span>
+        <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="n">fe</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="s2">&quot;figure.figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">3.5</span> <span class="o">/</span> <span class="mf">1.2</span><span class="p">),</span>
+        <span class="s2">&quot;ytick.left&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;xtick.bottom&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 
-np.random.seed(0)
-tf.random.set_seed(0)
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -253,256 +253,256 @@ tf.random.set_seed(0)
 <p>Code below modified from example code given in the “Predicting DFT Energies with GNNs”, “Interpretability and Deep Learning” sections of “Deep Learning for Molecules and Materials” textbook (https://dmol.pub/applied/QM9.html)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Parameters for GNN model (parameters being read in)
-node_feat_length = 256
-message_feat_length = 256
-graph_feat_length = 512
-weights_stddevGNN = 0.01
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters for GNN model (parameters being read in)</span>
+<span class="n">node_feat_length</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">message_feat_length</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">graph_feat_length</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">weights_stddevGNN</span> <span class="o">=</span> <span class="mf">0.01</span>
 
-# Load data from pyrfume
-scentdata = scentdata = pyrfume.load_data(
-    &quot;leffingwell/leffingwell_data.csv&quot;, remote=True
-)
-
-
-# Code to generate list of all scent labels (scentClasses)
-numMolecules = len(scentdata.odor_labels_filtered)
-numClasses = 112  # No odorless class
-scentClasses = pd.read_csv(&quot;scentClasses.csv&quot;)
-scentClasses = scentClasses[&quot;Scent&quot;].tolist()
-moleculeScentList = []
-for i in range(numMolecules):
-    scentString = scentdata.odor_labels_filtered[i]
-    temp = scentString.replace(&quot;[&quot;, &quot;&quot;)
-    temp = temp.replace(&quot;]&quot;, &quot;&quot;)
-    temp = temp.replace(&quot;&#39;&quot;, &quot;&quot;)
-    temp = temp.replace(&quot; &quot;, &quot;&quot;)
-    scentList = temp.split(&quot;,&quot;)
-    if &quot;odorless&quot; in scentList:
-        scentList.remove(&quot;odorless&quot;)
-    moleculeScentList.append(scentList)
+<span class="c1"># Load data from pyrfume</span>
+<span class="n">scentdata</span> <span class="o">=</span> <span class="n">scentdata</span> <span class="o">=</span> <span class="n">pyrfume</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span>
+    <span class="s2">&quot;leffingwell/leffingwell_data.csv&quot;</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 
 
-def gen_smiles2graph(sml):
-    &quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence
-    returns: the graph
-    &quot;&quot;&quot;
-    m = rdkit.Chem.MolFromSmiles(sml)
-    m = rdkit.Chem.AddHs(m)
-    order_string = {
-        rdkit.Chem.rdchem.BondType.SINGLE: 1,
-        rdkit.Chem.rdchem.BondType.DOUBLE: 2,
-        rdkit.Chem.rdchem.BondType.TRIPLE: 3,
-        rdkit.Chem.rdchem.BondType.AROMATIC: 4,
-    }
-    N = len(list(m.GetAtoms()))
-    nodes = np.zeros((N, node_feat_length))
-    for i in m.GetAtoms():
-        nodes[i.GetIdx(), i.GetAtomicNum()] = 1
-        # Add in whether atom is in a ring or not for one-hot encoding
-        if i.IsInRing():
-            nodes[i.GetIdx(), -1] = 1
-
-    adj = np.zeros((N, N))
-    for j in m.GetBonds():
-        u = min(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
-        v = max(j.GetBeginAtomIdx(), j.GetEndAtomIdx())
-        order = j.GetBondType()
-        if order in order_string:
-            order = order_string[order]
-        else:
-            raise Warning(&quot;Ignoring bond order&quot; + order)
-        adj[u, v] = 1
-        adj[v, u] = 1
-    adj += np.eye(N)
-    return nodes, adj
+<span class="c1"># Code to generate list of all scent labels (scentClasses)</span>
+<span class="n">numMolecules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scentdata</span><span class="o">.</span><span class="n">odor_labels_filtered</span><span class="p">)</span>
+<span class="n">numClasses</span> <span class="o">=</span> <span class="mi">112</span>  <span class="c1"># No odorless class</span>
+<span class="n">scentClasses</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;scentClasses.csv&quot;</span><span class="p">)</span>
+<span class="n">scentClasses</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="p">[</span><span class="s2">&quot;Scent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">moleculeScentList</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numMolecules</span><span class="p">):</span>
+    <span class="n">scentString</span> <span class="o">=</span> <span class="n">scentdata</span><span class="o">.</span><span class="n">odor_labels_filtered</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">scentString</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">scentList</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;odorless&quot;</span> <span class="ow">in</span> <span class="n">scentList</span><span class="p">:</span>
+        <span class="n">scentList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;odorless&quot;</span><span class="p">)</span>
+    <span class="n">moleculeScentList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scentList</span><span class="p">)</span>
 
 
-# Function that creates label vector given list of strings describing scent of molecule as input
-# Each index in label vector corresponds to specific scent -&gt; if output has a 0 at index i, then molecule does not have scent i
-# If label vector has 1 at index i, then molecule does have scent i
+<span class="k">def</span> <span class="nf">gen_smiles2graph</span><span class="p">(</span><span class="n">sml</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence</span>
+<span class="sd">    returns: the graph</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">sml</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">order_string</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">TRIPLE</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">AROMATIC</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()))</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">node_feat_length</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">(),</span> <span class="n">i</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Add in whether atom is in a ring or not for one-hot encoding</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">IsInRing</span><span class="p">():</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">adj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">GetBeginAtomIdx</span><span class="p">(),</span> <span class="n">j</span><span class="o">.</span><span class="n">GetEndAtomIdx</span><span class="p">())</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">GetBeginAtomIdx</span><span class="p">(),</span> <span class="n">j</span><span class="o">.</span><span class="n">GetEndAtomIdx</span><span class="p">())</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">j</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">order_string</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">order_string</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Ignoring bond order&quot;</span> <span class="o">+</span> <span class="n">order</span><span class="p">)</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">adj</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span>
 
 
-def createLabelVector(scentsList):
-    # Find class index in label vector that each scent corresponds to &amp; update label for that molecule to 1
-    labelVector = np.zeros(numClasses)
-    for j in range(len(scentsList)):
-        # Find class index
-        classIndex = scentClasses.index(scentsList[j])
-        # print(classIndex)
-        # print(scentsList[j])
-        # print(scentClasses[classIndex])
-        # Update label vector
-        labelVector[classIndex] = 1
-    return labelVector
+<span class="c1"># Function that creates label vector given list of strings describing scent of molecule as input</span>
+<span class="c1"># Each index in label vector corresponds to specific scent -&gt; if output has a 0 at index i, then molecule does not have scent i</span>
+<span class="c1"># If label vector has 1 at index i, then molecule does have scent i</span>
 
 
-def generateGraphs():
-    for i in range(numMolecules):
-        graph = gen_smiles2graph(scentdata.smiles[i])
-        labels = createLabelVector(moleculeScentList[i])
-        yield graph, labels
+<span class="k">def</span> <span class="nf">createLabelVector</span><span class="p">(</span><span class="n">scentsList</span><span class="p">):</span>
+    <span class="c1"># Find class index in label vector that each scent corresponds to &amp; update label for that molecule to 1</span>
+    <span class="n">labelVector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">numClasses</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scentsList</span><span class="p">)):</span>
+        <span class="c1"># Find class index</span>
+        <span class="n">classIndex</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">scentsList</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="c1"># print(classIndex)</span>
+        <span class="c1"># print(scentsList[j])</span>
+        <span class="c1"># print(scentClasses[classIndex])</span>
+        <span class="c1"># Update label vector</span>
+        <span class="n">labelVector</span><span class="p">[</span><span class="n">classIndex</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">labelVector</span>
 
 
-# Get graph data for training, testing &amp; validation sets
-data = tf.data.Dataset.from_generator(
-    generateGraphs,
-    output_types=((tf.float32, tf.float32), tf.float32),
-    output_shapes=(
-        (tf.TensorShape([None, node_feat_length]), tf.TensorShape([None, None])),
-        tf.TensorShape([None]),
-    ),
-)
+<span class="k">def</span> <span class="nf">generateGraphs</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numMolecules</span><span class="p">):</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">scentdata</span><span class="o">.</span><span class="n">smiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">createLabelVector</span><span class="p">(</span><span class="n">moleculeScentList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">yield</span> <span class="n">graph</span><span class="p">,</span> <span class="n">labels</span>
 
 
-class GNNLayer(hk.Module):
-    def __init__(self, output_size, name=None):
-        super().__init__(name=name)
-        self.output_size = output_size
-
-    def __call__(self, inputs):
-        # split input into nodes, edges &amp; features
-        nodes, edges, features = inputs
-        # Nodes is of shape (N, Nf) --&gt; N = # atoms, Nf = node_feature_length
-        # Edges is of shape (N,N) (adjacency matrix)
-        # Features is of shape (Gf) --&gt; Gf = graph_feature_length
-
-        graph_feature_len = features.shape[-1]  # graph_feature_len (Gf)
-        node_feature_len = nodes.shape[-1]  # node_feature_len (Nf)
-        message_feature_len = message_feat_length  # message_feature_length (Mf)
-
-        # Initialize weights
-        w_init = hk.initializers.RandomNormal(stddev=weights_stddevGNN)
-
-        # we is of shape (Nf,Mf)
-        we = hk.get_parameter(
-            &quot;we&quot;, shape=[node_feature_len, message_feature_len], init=w_init
-        )
-
-        # b is of shape (Mf)
-        b = hk.get_parameter(&quot;b&quot;, shape=[message_feature_len], init=w_init)
-
-        # wv is of shape (Mf,Nf)
-        wv = hk.get_parameter(
-            &quot;wv&quot;, shape=[message_feature_len, node_feature_len], init=w_init
-        )
-
-        # wu is of shape (Nf,Gf)
-        wu = hk.get_parameter(
-            &quot;wu&quot;, shape=[node_feature_len, graph_feature_len], init=w_init
-        )
-
-        # make nodes be N x N x Nf so we can just multiply directly (N = number of atoms)
-        # ek is now shaped N x N x Mf
-        ek = jax.nn.leaky_relu(
-            b
-            + jnp.repeat(nodes[jnp.newaxis, ...], nodes.shape[0], axis=0)
-            @ we
-            * edges[..., None]
-        )
-
-        # Uncomment lines below to update edges (also edit return line so new_edges is returned)
-        # Update edges, use jnp.any to have new_edges be of shape N x N
-        # new_edges = jnp.any(ek, axis=-1)
-
-        # Normalize over edge features w/layer normalization
-        # new_edges = hk.LayerNorm(axis=[0,1], create_scale=False, create_offset=False, eps=1e-05)(new_edges)
-
-        # take sum over neighbors to get ebar shape = Nf x Mf
-        ebar = jnp.sum(ek, axis=1)
-
-        # dense layer for new nodes to get new_nodes shape = N x Nf
-        new_nodes = jax.nn.leaky_relu(ebar @ wv) + nodes  # Use leaky ReLU
-
-        # Normalize over node features w/layer normalization
-        new_nodes = hk.LayerNorm(
-            axis=[0, 1], create_scale=False, create_offset=False, eps=1e-05
-        )(new_nodes)
-
-        # sum over nodes to get shape features so global_node_features shape = Nf
-        global_node_features = jnp.sum(new_nodes, axis=0)
-
-        # dense layer for new features so new_features shape = Gf
-        new_features = (
-            jax.nn.leaky_relu(global_node_features @ wu) + features
-        )  # Use leaky ReLU for activation
-
-        # just return features for ease of use
-        return new_nodes, edges, new_features
+<span class="c1"># Get graph data for training, testing &amp; validation sets</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_generator</span><span class="p">(</span>
+    <span class="n">generateGraphs</span><span class="p">,</span>
+    <span class="n">output_types</span><span class="o">=</span><span class="p">((</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+    <span class="n">output_shapes</span><span class="o">=</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">TensorShape</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_feat_length</span><span class="p">]),</span> <span class="n">tf</span><span class="o">.</span><span class="n">TensorShape</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">TensorShape</span><span class="p">([</span><span class="kc">None</span><span class="p">]),</span>
+    <span class="p">),</span>
+<span class="p">)</span>
 
 
-def model_fn(x):
-    nodes, edges = x
-    features = jnp.ones(graph_feat_length)
-    x = nodes, edges, features
+<span class="k">class</span> <span class="nc">GNNLayer</span><span class="p">(</span><span class="n">hk</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
 
-    # NOTE: If edited num_GNN_layers, need to edit code below (increase or decrease # times have x = GNNLayer(...))
-    # 4 GNN layers
-    x = GNNLayer(output_size=graph_feat_length)(x)
-    x = GNNLayer(output_size=graph_feat_length)(x)
-    x = GNNLayer(output_size=graph_feat_length)(x)
-    x = GNNLayer(output_size=graph_feat_length)(x)
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="c1"># split input into nodes, edges &amp; features</span>
+        <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="n">inputs</span>
+        <span class="c1"># Nodes is of shape (N, Nf) --&gt; N = # atoms, Nf = node_feature_length</span>
+        <span class="c1"># Edges is of shape (N,N) (adjacency matrix)</span>
+        <span class="c1"># Features is of shape (Gf) --&gt; Gf = graph_feature_length</span>
 
-    # 2 dense layers
-    logits = hk.Linear(numClasses)(x[-1])
-    # logits = jax.nn.relu(logits) #ReLU activation between dense layer
-    logits = hk.Linear(numClasses)(logits)
+        <span class="n">graph_feature_len</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># graph_feature_len (Gf)</span>
+        <span class="n">node_feature_len</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># node_feature_len (Nf)</span>
+        <span class="n">message_feature_len</span> <span class="o">=</span> <span class="n">message_feat_length</span>  <span class="c1"># message_feature_length (Mf)</span>
 
-    return logits  # Model now returns logits
+        <span class="c1"># Initialize weights</span>
+        <span class="n">w_init</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">RandomNormal</span><span class="p">(</span><span class="n">stddev</span><span class="o">=</span><span class="n">weights_stddevGNN</span><span class="p">)</span>
+
+        <span class="c1"># we is of shape (Nf,Mf)</span>
+        <span class="n">we</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;we&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">node_feature_len</span><span class="p">,</span> <span class="n">message_feature_len</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="n">w_init</span>
+        <span class="p">)</span>
+
+        <span class="c1"># b is of shape (Mf)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">message_feature_len</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="n">w_init</span><span class="p">)</span>
+
+        <span class="c1"># wv is of shape (Mf,Nf)</span>
+        <span class="n">wv</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;wv&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">message_feature_len</span><span class="p">,</span> <span class="n">node_feature_len</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="n">w_init</span>
+        <span class="p">)</span>
+
+        <span class="c1"># wu is of shape (Nf,Gf)</span>
+        <span class="n">wu</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;wu&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">node_feature_len</span><span class="p">,</span> <span class="n">graph_feature_len</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="n">w_init</span>
+        <span class="p">)</span>
+
+        <span class="c1"># make nodes be N x N x Nf so we can just multiply directly (N = number of atoms)</span>
+        <span class="c1"># ek is now shaped N x N x Mf</span>
+        <span class="n">ek</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span>
+            <span class="n">b</span>
+            <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">@</span> <span class="n">we</span>
+            <span class="o">*</span> <span class="n">edges</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Uncomment lines below to update edges (also edit return line so new_edges is returned)</span>
+        <span class="c1"># Update edges, use jnp.any to have new_edges be of shape N x N</span>
+        <span class="c1"># new_edges = jnp.any(ek, axis=-1)</span>
+
+        <span class="c1"># Normalize over edge features w/layer normalization</span>
+        <span class="c1"># new_edges = hk.LayerNorm(axis=[0,1], create_scale=False, create_offset=False, eps=1e-05)(new_edges)</span>
+
+        <span class="c1"># take sum over neighbors to get ebar shape = Nf x Mf</span>
+        <span class="n">ebar</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ek</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># dense layer for new nodes to get new_nodes shape = N x Nf</span>
+        <span class="n">new_nodes</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="n">ebar</span> <span class="o">@</span> <span class="n">wv</span><span class="p">)</span> <span class="o">+</span> <span class="n">nodes</span>  <span class="c1"># Use leaky ReLU</span>
+
+        <span class="c1"># Normalize over node features w/layer normalization</span>
+        <span class="n">new_nodes</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span>
+            <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">create_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">create_offset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-05</span>
+        <span class="p">)(</span><span class="n">new_nodes</span><span class="p">)</span>
+
+        <span class="c1"># sum over nodes to get shape features so global_node_features shape = Nf</span>
+        <span class="n">global_node_features</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_nodes</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># dense layer for new features so new_features shape = Gf</span>
+        <span class="n">new_features</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">(</span><span class="n">global_node_features</span> <span class="o">@</span> <span class="n">wu</span><span class="p">)</span> <span class="o">+</span> <span class="n">features</span>
+        <span class="p">)</span>  <span class="c1"># Use leaky ReLU for activation</span>
+
+        <span class="c1"># just return features for ease of use</span>
+        <span class="k">return</span> <span class="n">new_nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">new_features</span>
 
 
-model = hk.without_apply_rng(hk.transform(model_fn))
+<span class="k">def</span> <span class="nf">model_fn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">graph_feat_length</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">features</span>
 
-# Initialize model
-rng = jax.random.PRNGKey(0)
-sampleData = data.take(1)
-for dataVal in sampleData:  # Look into later how to get larger set
-    (nodes_i, edges_i), yi = dataVal
-nodes_i = nodes_i.numpy()
-edges_i = edges_i.numpy()
+    <span class="c1"># NOTE: If edited num_GNN_layers, need to edit code below (increase or decrease # times have x = GNNLayer(...))</span>
+    <span class="c1"># 4 GNN layers</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">GNNLayer</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="n">graph_feat_length</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">GNNLayer</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="n">graph_feat_length</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">GNNLayer</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="n">graph_feat_length</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">GNNLayer</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="n">graph_feat_length</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 
-yi = yi.numpy()
-xi = (nodes_i, edges_i)
+    <span class="c1"># 2 dense layers</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">numClasses</span><span class="p">)(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># logits = jax.nn.relu(logits) #ReLU activation between dense layer</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">numClasses</span><span class="p">)(</span><span class="n">logits</span><span class="p">)</span>
 
-params = model.init(rng, xi)
+    <span class="k">return</span> <span class="n">logits</span>  <span class="c1"># Model now returns logits</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">hk</span><span class="o">.</span><span class="n">without_apply_rng</span><span class="p">(</span><span class="n">hk</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">model_fn</span><span class="p">))</span>
+
+<span class="c1"># Initialize model</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sampleData</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataVal</span> <span class="ow">in</span> <span class="n">sampleData</span><span class="p">:</span>  <span class="c1"># Look into later how to get larger set</span>
+    <span class="p">(</span><span class="n">nodes_i</span><span class="p">,</span> <span class="n">edges_i</span><span class="p">),</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">dataVal</span>
+<span class="n">nodes_i</span> <span class="o">=</span> <span class="n">nodes_i</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">edges_i</span> <span class="o">=</span> <span class="n">edges_i</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">yi</span> <span class="o">=</span> <span class="n">yi</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">xi</span> <span class="o">=</span> <span class="p">(</span><span class="n">nodes_i</span><span class="p">,</span> <span class="n">edges_i</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">xi</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load optimal parameters for GNN model
-print(&quot;Edit fileName to change parameters being loaded&quot;)
-fileName = &quot;optParams_dry-waterfall-17.npy&quot;  # Currently optimal parameters, edit when get better model
-paramsArr = jnp.load(fileName, allow_pickle=True)
-opt_params = {
-    &quot;gnn_layer&quot;: {
-        &quot;b&quot;: paramsArr[0],
-        &quot;we&quot;: paramsArr[1],
-        &quot;wu&quot;: paramsArr[2],
-        &quot;wv&quot;: paramsArr[3],
-    },
-    &quot;gnn_layer_1&quot;: {
-        &quot;b&quot;: paramsArr[4],
-        &quot;we&quot;: paramsArr[5],
-        &quot;wu&quot;: paramsArr[6],
-        &quot;wv&quot;: paramsArr[7],
-    },
-    &quot;gnn_layer_2&quot;: {
-        &quot;b&quot;: paramsArr[8],
-        &quot;we&quot;: paramsArr[9],
-        &quot;wu&quot;: paramsArr[10],
-        &quot;wv&quot;: paramsArr[11],
-    },
-    &quot;gnn_layer_3&quot;: {
-        &quot;b&quot;: paramsArr[12],
-        &quot;we&quot;: paramsArr[13],
-        &quot;wu&quot;: paramsArr[14],
-        &quot;wv&quot;: paramsArr[15],
-    },
-    &quot;linear&quot;: {&quot;b&quot;: paramsArr[16], &quot;w&quot;: paramsArr[17]},
-    &quot;linear_1&quot;: {&quot;b&quot;: paramsArr[18], &quot;w&quot;: paramsArr[19]},
-}
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load optimal parameters for GNN model</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edit fileName to change parameters being loaded&quot;</span><span class="p">)</span>
+<span class="n">fileName</span> <span class="o">=</span> <span class="s2">&quot;optParams_dry-waterfall-17.npy&quot;</span>  <span class="c1"># Currently optimal parameters, edit when get better model</span>
+<span class="n">paramsArr</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">opt_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;gnn_layer&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;we&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;wu&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="s2">&quot;wv&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;gnn_layer_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="s2">&quot;we&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="s2">&quot;wu&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="s2">&quot;wv&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;gnn_layer_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="s2">&quot;we&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="s2">&quot;wu&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="s2">&quot;wv&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;gnn_layer_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="s2">&quot;we&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="s2">&quot;wu&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="s2">&quot;wv&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;linear&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">17</span><span class="p">]},</span>
+    <span class="s2">&quot;linear_1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">paramsArr</span><span class="p">[</span><span class="mi">19</span><span class="p">]},</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -514,70 +514,70 @@ opt_params = {
 <h3>Modified functions used when selecting counterfactuals such that only the label for the selected scent is flipped<a class="headerlink" href="#modified-functions-used-when-selecting-counterfactuals-such-that-only-the-label-for-the-selected-scent-is-flipped" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def _select_examples(cond, examples, nmols):
-    result = []
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_select_examples</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
-    # similarity filtered by if cluster/counter
-    def cluster_score(e, i):
-        return (e.cluster == i) * cond(e) * e.similarity
+    <span class="c1"># similarity filtered by if cluster/counter</span>
+    <span class="k">def</span> <span class="nf">cluster_score</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">cluster</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">cond</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">e</span><span class="o">.</span><span class="n">similarity</span>
 
-    clusters = set([e.cluster for e in examples])
-    for i in clusters:
-        close_counter = max(examples, key=lambda e, i=i: cluster_score(e, i))
-        # check if actually is (since call could have been zero)
-        if cluster_score(close_counter, i):
-            result.append(close_counter)
+    <span class="n">clusters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">cluster</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">:</span>
+        <span class="n">close_counter</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="n">cluster_score</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="c1"># check if actually is (since call could have been zero)</span>
+        <span class="k">if</span> <span class="n">cluster_score</span><span class="p">(</span><span class="n">close_counter</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">close_counter</span><span class="p">)</span>
 
-    # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
+    <span class="c1"># trim, in case we had too many cluster</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">similarity</span> <span class="o">*</span> <span class="n">cond</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">nmols</span><span class="p">]</span>
 
-    # fill in remaining
-    ncount = sum([cond(e) for e in result])
-    fill = max(0, nmols - ncount)
-    result.extend(
-        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
-    )
+    <span class="c1"># fill in remaining</span>
+    <span class="n">ncount</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cond</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span>
+    <span class="n">fill</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nmols</span> <span class="o">-</span> <span class="n">ncount</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+        <span class="nb">sorted</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">similarity</span> <span class="o">*</span> <span class="n">cond</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">fill</span><span class="p">]</span>
+    <span class="p">)</span>
 
-    return list(filter(cond, result))
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
 
 
-def cf_explain(examples, nmols):
-    &quot;&quot;&quot;From given :obj:`Examples&lt;Example&gt;`, find closest counterfactuals (see :doc:`index`)
-    :param examples: Output from :func:`sample_space`
-    :param nmols: Desired number of molecules
-    &quot;&quot;&quot;
+<span class="k">def</span> <span class="nf">cf_explain</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From given :obj:`Examples&lt;Example&gt;`, find closest counterfactuals (see :doc:`index`)</span>
+<span class="sd">    :param examples: Output from :func:`sample_space`</span>
+<span class="sd">    :param nmols: Desired number of molecules</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def is_counter(e):
-        return e.yhat != examples[0].yhat
+    <span class="k">def</span> <span class="nf">is_counter</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="o">!=</span> <span class="n">examples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yhat</span>
 
-    scent_classes = np.array([x for x in scentClasses])
-    origin_labels = np.array(
-        [my_model(examples[0].smiles, scent) for scent in scent_classes]
-    )
-    print(origin_labels)
-    #     print([scentClasses[i] for i, x in enumerate(origin_labels) if x==1])
-    print(scent_classes[origin_labels == 1])
+    <span class="n">scent_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scentClasses</span><span class="p">])</span>
+    <span class="n">origin_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">my_model</span><span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">smiles</span><span class="p">,</span> <span class="n">scent</span><span class="p">)</span> <span class="k">for</span> <span class="n">scent</span> <span class="ow">in</span> <span class="n">scent_classes</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">origin_labels</span><span class="p">)</span>
+    <span class="c1">#     print([scentClasses[i] for i, x in enumerate(origin_labels) if x==1])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">scent_classes</span><span class="p">[</span><span class="n">origin_labels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
 
-    selection = _select_examples(is_counter, examples[1:], len(examples[1:]))
-    selection = sorted(
-        selection, key=lambda v: v.similarity * is_counter(v), reverse=True
-    )
+    <span class="n">selection</span> <span class="o">=</span> <span class="n">_select_examples</span><span class="p">(</span><span class="n">is_counter</span><span class="p">,</span> <span class="n">examples</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    <span class="n">selection</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">selection</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">similarity</span> <span class="o">*</span> <span class="n">is_counter</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
 
-    result = []
-    for e in selection:
-        labels = np.array([my_model(e.smiles, scent) for scent in scent_classes])
-        flips = origin_labels != labels
-        print(f&quot;flipped labels: {scent_classes[flips]}&quot;)
-        flip_count = np.sum(flips)
-        if flip_count &lt; 2 and e.similarity &gt; 0.3:
-            result.append(e)
-        if len(result) == nmols:
-            break
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">my_model</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">smiles</span><span class="p">,</span> <span class="n">scent</span><span class="p">)</span> <span class="k">for</span> <span class="n">scent</span> <span class="ow">in</span> <span class="n">scent_classes</span><span class="p">])</span>
+        <span class="n">flips</span> <span class="o">=</span> <span class="n">origin_labels</span> <span class="o">!=</span> <span class="n">labels</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flipped labels: </span><span class="si">{</span><span class="n">scent_classes</span><span class="p">[</span><span class="n">flips</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">flip_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">flips</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flip_count</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">similarity</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="n">nmols</span><span class="p">:</span>
+            <span class="k">break</span>
 
-    for i, r in enumerate(result):
-        r.label = f&quot;Counterfactual {i+1}&quot;
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Counterfactual </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    return examples[:1] + result
+    <span class="k">return</span> <span class="n">examples</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">result</span>
 </pre></div>
 </div>
 </div>
@@ -587,25 +587,25 @@ def cf_explain(examples, nmols):
 <h3>Cosine similarity function used to compute similarity for descriptor explanations with multiple base molecules<a class="headerlink" href="#cosine-similarity-function-used-to-compute-similarity-for-descriptor-explanations-with-multiple-base-molecules" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># compute dot product with labels
-def cosine_similarity_base(df, bases, llists):
-    df[&quot;label_dot&quot;] = np.array(0.0)
-    for j, row in df.iterrows():
-        if j in bases:
-            base = j
-            df[&quot;label_dot&quot;][j] = 1
-        else:
-            # cosine similarity
-            if np.all(llists[j] == 0):
-                df[&quot;label_dot&quot;][j] = 0
-                continue
-            df[&quot;label_dot&quot;][j] = (
-                llists[base]
-                @ llists[j]
-                / np.linalg.norm(llists[base])
-                / np.linalg.norm(llists[j])
-            )
-    return df
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute dot product with labels</span>
+<span class="k">def</span> <span class="nf">cosine_similarity_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">llists</span><span class="p">):</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># cosine similarity</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">llists</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">continue</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">llists</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+                <span class="o">@</span> <span class="n">llists</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">llists</span><span class="p">[</span><span class="n">base</span><span class="p">])</span>
+                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">llists</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -615,206 +615,206 @@ def cosine_similarity_base(df, bases, llists):
 <h3>Functions used for generating plots with model fit &amp; creating a list of exmol Examples from a csv file<a class="headerlink" href="#functions-used-for-generating-plots-with-model-fit-creating-a-list-of-exmol-examples-from-a-csv-file" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Code in this cell taken from Solubility-RNN.ipynb notebook from https://github.com/ur-whitelab/exmol/blob/main/paper2_LIME/Solubility-RNN.ipynb
-def weighted_mean(x, w):
-    return np.sum(x * w) / np.sum(w)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Code in this cell taken from Solubility-RNN.ipynb notebook from https://github.com/ur-whitelab/exmol/blob/main/paper2_LIME/Solubility-RNN.ipynb</span>
+<span class="k">def</span> <span class="nf">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
 
-def weighted_cov(x, y, w):
-    return np.sum(w * (x - weighted_mean(x, w)) * (y - weighted_mean(y, w))) / np.sum(w)
+<span class="k">def</span> <span class="nf">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
 
-def weighted_correlation(x, y, w):
-    return weighted_cov(x, y, w) / np.sqrt(
-        weighted_cov(x, x, w) * weighted_cov(y, y, w)
-    )
+<span class="k">def</span> <span class="nf">weighted_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+    <span class="p">)</span>
 
 
-def plot_correlation(space, descriptor_type):
-    beta = exmol.lime_explain(space, descriptor_type)
-    fkw = {&quot;figsize&quot;: (6, 4)}
-    font = {&quot;family&quot;: &quot;normal&quot;, &quot;weight&quot;: &quot;normal&quot;, &quot;size&quot;: 16}
+<span class="k">def</span> <span class="nf">plot_correlation</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="p">):</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="p">)</span>
+    <span class="n">fkw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)}</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">}</span>
 
-    fig = plt.figure(figsize=(10, 5))
-    matplotlib.rc(&quot;axes&quot;, titlesize=12)
-    matplotlib.rc(&quot;font&quot;, size=16)
-    ax_dict = fig.subplot_mosaic(&quot;AABBB&quot;)
-    # Plot space by fit
-    base_examples = [e for e in space if e.is_origin == True]
-    svg = plot_space_by_fit_multiple_bases(
-        space,
-        base_examples,
-        figure_kwargs=fkw,
-        mol_size=(200, 200),
-        offset=1,
-        ax=ax_dict[&quot;B&quot;],
-        beta=beta,
-    )
-    # Compute y_wls
-    w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in space])
-    non_zero = w &gt; 10 ** (-6)
-    w = w[non_zero]
-    N = w.shape[0]
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">ax_dict</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplot_mosaic</span><span class="p">(</span><span class="s2">&quot;AABBB&quot;</span><span class="p">)</span>
+    <span class="c1"># Plot space by fit</span>
+    <span class="n">base_examples</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+    <span class="n">svg</span> <span class="o">=</span> <span class="n">plot_space_by_fit_multiple_bases</span><span class="p">(</span>
+        <span class="n">space</span><span class="p">,</span>
+        <span class="n">base_examples</span><span class="p">,</span>
+        <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">fkw</span><span class="p">,</span>
+        <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+        <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span>
+        <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Compute y_wls</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">similarity</span> <span class="o">+</span> <span class="mf">0.000001</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])</span>
+    <span class="n">non_zero</span> <span class="o">=</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">non_zero</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    ys = np.array([e.yhat for e in space])[non_zero].reshape(N).astype(float)
-    x_mat = np.array([list(e.descriptors.descriptors) for e in space])[
-        non_zero
-    ].reshape(N, -1)
-    y_wls = x_mat @ beta
-    y_wls += np.mean(ys)
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])[</span><span class="n">non_zero</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">x_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptors</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">space</span><span class="p">])[</span>
+        <span class="n">non_zero</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">y_wls</span> <span class="o">=</span> <span class="n">x_mat</span> <span class="o">@</span> <span class="n">beta</span>
+    <span class="n">y_wls</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
 
-    lower = np.min(ys)
-    higher = np.max(ys)
+    <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+    <span class="n">higher</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
 
-    # set transparency using w
-    norm = plt.Normalize(min(w), max(w))
-    cmap = plt.cm.Oranges(w)
-    cmap[:, -1] = w
+    <span class="c1"># set transparency using w</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Oranges</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">cmap</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
 
-    corr = weighted_correlation(ys, y_wls, w)
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">weighted_correlation</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">y_wls</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 
-    ax_dict[&quot;A&quot;].plot(
-        np.linspace(lower, higher, 100),
-        np.linspace(lower, higher, 100),
-        &quot;--&quot;,
-        linewidth=2,
-    )
-    sc = ax_dict[&quot;A&quot;].scatter(ys, y_wls, s=50, marker=&quot;.&quot;, c=cmap, cmap=cmap)
-    ax_dict[&quot;A&quot;].text(max(ys) - 10, min(ys) + 1, f&quot;weighted \ncorrelation = {corr:.3f}&quot;)
-    ax_dict[&quot;A&quot;].set_xlabel(r&quot;$\hat{y}$&quot;)
-    ax_dict[&quot;A&quot;].set_ylabel(r&quot;$g$&quot;)
-    ax_dict[&quot;A&quot;].set_title(&quot;Weighted Least Squares Fit&quot;)
-    ax_dict[&quot;A&quot;].set_xlim(lower - 0.1, higher + 0.1)
-    ax_dict[&quot;A&quot;].set_ylim(lower - 0.1, higher + 0.1)
-    ax_dict[&quot;A&quot;].set_aspect(1.0 / ax_dict[&quot;A&quot;].get_data_ratio(), adjustable=&quot;box&quot;)
-    sm = plt.cm.ScalarMappable(cmap=plt.cm.Oranges, norm=norm)
-    cbar = plt.colorbar(sm, orientation=&quot;horizontal&quot;, pad=0.15, ax=ax_dict[&quot;A&quot;])
-    cbar.set_label(&quot;Chemical similarity&quot;)
-    plt.tight_layout()
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="s2">&quot;--&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">y_wls</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;weighted </span><span class="se">\n</span><span class="s2">correlation = </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{y}</span><span class="s2">$&quot;</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$g$&quot;</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Weighted Least Squares Fit&quot;</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">lower</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">higher</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">lower</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">higher</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data_ratio</span><span class="p">(),</span> <span class="n">adjustable</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">)</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Oranges</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_dict</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">])</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Chemical similarity&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Modified function for multiple bases based on plot_space_by_fit function in exmol plot_utils.py file
-def plot_space_by_fit_multiple_bases(
-    examples,
-    exps,
-    beta,
-    mol_size=(200, 200),
-    mol_fontsize=8,
-    offset=0,
-    ax=None,
-    figure_kwargs=None,
-    cartoon=False,
-    rasterized=False,
-):
-    imgs = exmol.plot_utils._mol_images(exps, mol_size, mol_fontsize)
-    if figure_kwargs is None:
-        figure_kwargs = {&quot;figsize&quot;: (12, 8)}
-    base_color = &quot;gray&quot;
-    if ax is None:
-        ax = plt.figure(**figure_kwargs).gca()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified function for multiple bases based on plot_space_by_fit function in exmol plot_utils.py file</span>
+<span class="k">def</span> <span class="nf">plot_space_by_fit_multiple_bases</span><span class="p">(</span>
+    <span class="n">examples</span><span class="p">,</span>
+    <span class="n">exps</span><span class="p">,</span>
+    <span class="n">beta</span><span class="p">,</span>
+    <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">mol_fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figure_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cartoon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rasterized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">imgs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">_mol_images</span><span class="p">(</span><span class="n">exps</span><span class="p">,</span> <span class="n">mol_size</span><span class="p">,</span> <span class="n">mol_fontsize</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">figure_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">figure_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">)}</span>
+    <span class="n">base_color</span> <span class="o">=</span> <span class="s2">&quot;gray&quot;</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">figure_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
-    yhat = np.array([e.yhat for e in examples]).astype(float)
-    yhat -= np.mean(yhat)
-    x_mat = np.array([list(e.descriptors.descriptors) for e in examples]).reshape(
-        len(examples), -1
-    )
-    y = x_mat @ beta
-    # use resids as colors
-    colors = (yhat - y) ** 2
-    normalizer = plt.Normalize(min(colors), max(colors))
-    cmap = &quot;PuBu_r&quot;
+    <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">yhat</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yhat</span><span class="p">)</span>
+    <span class="n">x_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptors</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x_mat</span> <span class="o">@</span> <span class="n">beta</span>
+    <span class="c1"># use resids as colors</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="n">yhat</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">normalizer</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">colors</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;PuBu_r&quot;</span>
 
-    space_x = [e.position[0] for e in examples]
-    space_y = [e.position[1] for e in examples]
-    if cartoon:
-        # plot shading, lines, front
-        ax.scatter(space_x, space_y, 50, &quot;0.0&quot;, lw=2, rasterized=rasterized)
-        ax.scatter(space_x, space_y, 50, &quot;1.0&quot;, lw=0, rasterized=rasterized)
-        ax.scatter(
-            space_x,
-            space_y,
-            50,
-            c=normalizer(colors),
-            cmap=cmap,
-            lw=2,
-            alpha=0.1,
-            rasterized=rasterized,
-        )
-    else:
-        im = ax.scatter(
-            space_x,
-            space_y,
-            40,
-            c=normalizer(colors),
-            cmap=cmap,
-            edgecolors=&quot;grey&quot;,
-            linewidth=0.25,
-        )
-    ax.set_aspect(1.0 / ax.get_data_ratio(), adjustable=&quot;box&quot;)
-    cbar = plt.colorbar(im, orientation=&quot;horizontal&quot;, aspect=35, pad=0.05)
-    cbar.set_label(&quot;squared error&quot;)
+    <span class="n">space_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">]</span>
+    <span class="n">space_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cartoon</span><span class="p">:</span>
+        <span class="c1"># plot shading, lines, front</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">space_x</span><span class="p">,</span> <span class="n">space_y</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;0.0&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rasterized</span><span class="o">=</span><span class="n">rasterized</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">space_x</span><span class="p">,</span> <span class="n">space_y</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rasterized</span><span class="o">=</span><span class="n">rasterized</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">space_x</span><span class="p">,</span>
+            <span class="n">space_y</span><span class="p">,</span>
+            <span class="mi">50</span><span class="p">,</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">normalizer</span><span class="p">(</span><span class="n">colors</span><span class="p">),</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">rasterized</span><span class="o">=</span><span class="n">rasterized</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">space_x</span><span class="p">,</span>
+            <span class="n">space_y</span><span class="p">,</span>
+            <span class="mi">40</span><span class="p">,</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">normalizer</span><span class="p">(</span><span class="n">colors</span><span class="p">),</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_data_ratio</span><span class="p">(),</span> <span class="n">adjustable</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">)</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;squared error&quot;</span><span class="p">)</span>
 
-    # now plot cfs/annotated points
-    ax.scatter(
-        [e.position[0] for e in exps],
-        [e.position[1] for e in exps],
-        c=normalizer([e.yhat for e in exps]),
-        cmap=cmap,
-        edgecolors=&quot;black&quot;,
-    )
+    <span class="c1"># now plot cfs/annotated points</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">],</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">normalizer</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">]),</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    x = np.array([e.position[0] for e in exps])
-    y = np.array([e.position[1] for e in exps])
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">])</span>
 
-    titles = []
-    colors = []
-    for e in exps:
-        if not e.is_origin:
-            titles.append(f&quot;Similarity = {e.similarity:.2f}\nf(x)={e.yhat:.3f}&quot;)
-            colors.append(cast(any, base_color))
-        else:
-            titles.append(f&quot;Base \nf(x)={e.yhat:.3f}&quot;)
-            colors.append(cast(any, base_color))
-    # exmol.plot_utils._image_scatter(x, y, imgs, titles, colors, ax, offset=offset)
-    ax.axis(&quot;off&quot;)
-    ax.set_aspect(&quot;auto&quot;)
+    <span class="n">titles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exps</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span><span class="p">:</span>
+            <span class="n">titles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarity = </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">f(x)=</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="nb">any</span><span class="p">,</span> <span class="n">base_color</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">titles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Base </span><span class="se">\n</span><span class="s2">f(x)=</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">yhat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="nb">any</span><span class="p">,</span> <span class="n">base_color</span><span class="p">))</span>
+    <span class="c1"># exmol.plot_utils._image_scatter(x, y, imgs, titles, colors, ax, offset=offset)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def createExampleListfromDataFrame(data):
-    exampleList = []  # list[exmol.Example]()
-    for i in range(len(data.index)):
-        # Since reading position values from csv file, data.position is a string - need to convert to list of floats
-        positionString = data.position.tolist()[i]
-        positionString = positionString.replace(&quot;[&quot;, &quot;&quot;)
-        positionString = positionString.replace(&quot;]&quot;, &quot;&quot;)
-        positionList = positionString.split(&quot; &quot;)
-        # remove empty string (&#39;&#39;) elements in positionList
-        while &quot;&quot; in positionList:
-            positionList.remove(&quot;&quot;)
-        positions = [float(p) for p in positionList]
-        # using weighted tanimoto with dot product
-        exampleList.append(
-            exmol.Example(
-                data.smiles.tolist()[i],
-                data.selfies.tolist()[i],
-                data.similarity.tolist()[i],
-                data.yhat.tolist()[i],
-                data.index.tolist()[i],
-                positions,
-                data.is_origin.tolist()[i],
-                data.cluster.tolist()[i],
-                data.label.tolist()[i],
-            )
-        )
-    return exampleList
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">createExampleListfromDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">exampleList</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list[exmol.Example]()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)):</span>
+        <span class="c1"># Since reading position values from csv file, data.position is a string - need to convert to list of floats</span>
+        <span class="n">positionString</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">positionString</span> <span class="o">=</span> <span class="n">positionString</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">positionString</span> <span class="o">=</span> <span class="n">positionString</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">positionList</span> <span class="o">=</span> <span class="n">positionString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="c1"># remove empty string (&#39;&#39;) elements in positionList</span>
+        <span class="k">while</span> <span class="s2">&quot;&quot;</span> <span class="ow">in</span> <span class="n">positionList</span><span class="p">:</span>
+            <span class="n">positionList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">positionList</span><span class="p">]</span>
+        <span class="c1"># using weighted tanimoto with dot product</span>
+        <span class="n">exampleList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">exmol</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">smiles</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">selfies</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">similarity</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">yhat</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">positions</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">is_origin</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">exampleList</span>
 </pre></div>
 </div>
 </div>
@@ -824,40 +824,40 @@ def plot_space_by_fit_multiple_bases(
 <h3>Create modified alphabet to use when creating explanations<a class="headerlink" href="#create-modified-alphabet-to-use-when-creating-explanations" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create modified alphabet to use
-alphabet = exmol.get_basic_alphabet()
-to_remove = []
-# remove [B],[#B],[=B]
-to_remove.extend([&quot;[B]&quot;, &quot;[#B]&quot;, &quot;[=B]&quot;])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create modified alphabet to use</span>
+<span class="n">alphabet</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">get_basic_alphabet</span><span class="p">()</span>
+<span class="n">to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># remove [B],[#B],[=B]</span>
+<span class="n">to_remove</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;[B]&quot;</span><span class="p">,</span> <span class="s2">&quot;[#B]&quot;</span><span class="p">,</span> <span class="s2">&quot;[=B]&quot;</span><span class="p">])</span>
 
-# remove [I],[F],[Cl], [Br]
-to_remove.extend([&quot;[I]&quot;, &quot;[F]&quot;, &quot;[Cl]&quot;, &quot;[Br]&quot;])
+<span class="c1"># remove [I],[F],[Cl], [Br]</span>
+<span class="n">to_remove</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;[I]&quot;</span><span class="p">,</span> <span class="s2">&quot;[F]&quot;</span><span class="p">,</span> <span class="s2">&quot;[Cl]&quot;</span><span class="p">,</span> <span class="s2">&quot;[Br]&quot;</span><span class="p">])</span>
 
-alphabet -= set(to_remove)
+<span class="n">alphabet</span> <span class="o">-=</span> <span class="nb">set</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check that alphabet does not contain boron, iodine, fluorine, bromine nor chlorine
-&quot;&quot;&quot;
-print(alphabet)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check that alphabet does not contain boron, iodine, fluorine, bromine nor chlorine</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">print(alphabet)</span>
 
-boronInAlphabet = (&quot;[#B]&quot; in alphabet) and (&quot;[B]&quot; in alphabet) and (&quot;[=B]&quot; in alphabet)
-iodineInAlphabet = (&quot;[I]&quot; in alphabet)
-fluorineInAlphabet = (&quot;[F]&quot; in alphabet)
-bromineInAlphabet = (&quot;[Br]&quot; in alphabet)
-chlorineInAlphabet = (&quot;[Cl]&quot; in alphabet)
+<span class="sd">boronInAlphabet = (&quot;[#B]&quot; in alphabet) and (&quot;[B]&quot; in alphabet) and (&quot;[=B]&quot; in alphabet)</span>
+<span class="sd">iodineInAlphabet = (&quot;[I]&quot; in alphabet)</span>
+<span class="sd">fluorineInAlphabet = (&quot;[F]&quot; in alphabet)</span>
+<span class="sd">bromineInAlphabet = (&quot;[Br]&quot; in alphabet)</span>
+<span class="sd">chlorineInAlphabet = (&quot;[Cl]&quot; in alphabet)</span>
 
-#Boron is in exmol basic alphabet
-print(&quot;Check that using modified basic alphabet (i.e. no Boron, Iodine, Fluorine, Bromine, nor Chlorine)&quot;)
-print(f&quot;Boron is in basic alphabet? {boronInAlphabet}&quot;)
-print(f&quot;Iodine is in basic alphabet? {iodineInAlphabet}&quot;)
-print(f&quot;Fluorine is in basic alphabet? {fluorineInAlphabet}&quot;)
-print(f&quot;Bromine is in basic alphabet? {bromineInAlphabet}&quot;)
-print(f&quot;Chlorine is in basic alphabet? {chlorineInAlphabet}&quot;)
-&quot;&quot;&quot;
+<span class="sd">#Boron is in exmol basic alphabet</span>
+<span class="sd">print(&quot;Check that using modified basic alphabet (i.e. no Boron, Iodine, Fluorine, Bromine, nor Chlorine)&quot;)</span>
+<span class="sd">print(f&quot;Boron is in basic alphabet? {boronInAlphabet}&quot;)</span>
+<span class="sd">print(f&quot;Iodine is in basic alphabet? {iodineInAlphabet}&quot;)</span>
+<span class="sd">print(f&quot;Fluorine is in basic alphabet? {fluorineInAlphabet}&quot;)</span>
+<span class="sd">print(f&quot;Bromine is in basic alphabet? {bromineInAlphabet}&quot;)</span>
+<span class="sd">print(f&quot;Chlorine is in basic alphabet? {chlorineInAlphabet}&quot;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -868,87 +868,87 @@ print(f&quot;Chlorine is in basic alphabet? {chlorineInAlphabet}&quot;)
 <h2>Generating counterfactual explanations for ethyl benzoate (“fruity”)<a class="headerlink" href="#generating-counterfactual-explanations-for-ethyl-benzoate-fruity" title="Permalink to this heading">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># For counterfactuals, need hard yhat values - read in thresholds from csv file
-thresholds = pd.read_csv(
-    &quot;ThresholdsForMaxF1_OdorlessClassRemoved_dry-waterfall-17_trainAndValid.csv&quot;
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For counterfactuals, need hard yhat values - read in thresholds from csv file</span>
+<span class="n">thresholds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s2">&quot;ThresholdsForMaxF1_OdorlessClassRemoved_dry-waterfall-17_trainAndValid.csv&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Model function that takes in SMILES string and scent string as input (rather than molecular graph + parameter)
-# Output is prediction on whether molecule has a certain scent (1) or not (0)
-def my_model(smilesString, scentString):
-    molecularGraph = gen_smiles2graph(smilesString)
-    pos = scentClasses.index(scentString)
-    thresholdIndex_scent = thresholds.index[thresholds.Scent == scentString].tolist()
-    threshold = thresholds.Threshold[thresholdIndex_scent].tolist()[
-        0
-    ]  # Threshold is the one that maximizes the F1 score
-    pred = jax.nn.sigmoid(model.apply(opt_params, molecularGraph))[pos]
-    if pred &gt; threshold:
-        pred = 1
-    else:
-        pred = 0
-    return pred
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Model function that takes in SMILES string and scent string as input (rather than molecular graph + parameter)</span>
+<span class="c1"># Output is prediction on whether molecule has a certain scent (1) or not (0)</span>
+<span class="k">def</span> <span class="nf">my_model</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
+    <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">scentString</span><span class="p">)</span>
+    <span class="n">thresholdIndex_scent</span> <span class="o">=</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">thresholds</span><span class="o">.</span><span class="n">Scent</span> <span class="o">==</span> <span class="n">scentString</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">Threshold</span><span class="p">[</span><span class="n">thresholdIndex_scent</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span>
+        <span class="mi">0</span>
+    <span class="p">]</span>  <span class="c1"># Threshold is the one that maximizes the F1 score</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">opt_params</span><span class="p">,</span> <span class="n">molecularGraph</span><span class="p">))[</span><span class="n">pos</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">pred</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">pred</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Molecules being examined/generating counterfactuals for:
-fruity_ethylbenzoate = &quot;CCOC(=O)C1=CC=CC=C1&quot;  # Ethyl benzoate (https://pubchem.ncbi.nlm.nih.gov/compound/Ethyl-benzoate#section=InChI)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Molecules being examined/generating counterfactuals for:</span>
+<span class="n">fruity_ethylbenzoate</span> <span class="o">=</span> <span class="s2">&quot;CCOC(=O)C1=CC=CC=C1&quot;</span>  <span class="c1"># Ethyl benzoate (https://pubchem.ncbi.nlm.nih.gov/compound/Ethyl-benzoate#section=InChI)</span>
 
-fatty_24decadienal = &quot;CCCCCC=CC=CC=O&quot;  # 2,4 Decadienal (https://pubchem.ncbi.nlm.nih.gov/compound/2_4-Decadienal#section=InChIKey)
+<span class="n">fatty_24decadienal</span> <span class="o">=</span> <span class="s2">&quot;CCCCCC=CC=CC=O&quot;</span>  <span class="c1"># 2,4 Decadienal (https://pubchem.ncbi.nlm.nih.gov/compound/2_4-Decadienal#section=InChIKey)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Uncomment code below to generate ethyl benzoate counterfactuals around fruity
-&quot;&quot;&quot;
-samples_ethylbenzoate_fruity = exmol.sample_space(
-    fruity_ethylbenzoate,
-    lambda smi, sel: my_model(smi, &quot;fruity&quot;),
-    batched=False,
-    preset=&quot;medium&quot;,
-    num_samples=20000,
-    method_kwargs= {&#39;alphabet&#39;: alphabet}
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment code below to generate ethyl benzoate counterfactuals around fruity</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">samples_ethylbenzoate_fruity = exmol.sample_space(</span>
+<span class="sd">    fruity_ethylbenzoate,</span>
+<span class="sd">    lambda smi, sel: my_model(smi, &quot;fruity&quot;),</span>
+<span class="sd">    batched=False,</span>
+<span class="sd">    preset=&quot;medium&quot;,</span>
+<span class="sd">    num_samples=20000,</span>
+<span class="sd">    method_kwargs= {&#39;alphabet&#39;: alphabet}</span>
+<span class="sd">)</span>
 
-cfs_ethylbenzoate_fruity = cf_explain(samples_ethylbenzoate_fruity, nmols=1)
-exmol.plot_cf(cfs_ethylbenzoate_fruity[:2], figure_kwargs = {&#39;figsize&#39;: (10,8)}, mol_size=(300, 300), nrows = 1)
-plt.show()
-&quot;&quot;&quot;
+<span class="sd">cfs_ethylbenzoate_fruity = cf_explain(samples_ethylbenzoate_fruity, nmols=1)</span>
+<span class="sd">exmol.plot_cf(cfs_ethylbenzoate_fruity[:2], figure_kwargs = {&#39;figsize&#39;: (10,8)}, mol_size=(300, 300), nrows = 1)</span>
+<span class="sd">plt.show()</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Read in ethyl benzoate cfs file &amp; create image
-cfs_ethylbenzoate_fruity = createExampleListfromDataFrame(
-    pd.read_csv(&quot;cfs_ethylbenzoate_fruity.csv&quot;)
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in ethyl benzoate cfs file &amp; create image</span>
+<span class="n">cfs_ethylbenzoate_fruity</span> <span class="o">=</span> <span class="n">createExampleListfromDataFrame</span><span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;cfs_ethylbenzoate_fruity.csv&quot;</span><span class="p">)</span>
+<span class="p">)</span>
 
-# Uncomment lines below to save results to csv
-# cfs_ethylbenzoate_fruity_data = pd.DataFrame(cfs_ethylbenzoate_fruity)
-# cfs_ethylbenzoate_fruity_data.to_csv(&quot;cfs_ethylbenzoate_fruity.csv&quot;, index=False)
-# samples_ethylbenzoate_fruity_data = pd.DataFrame(samples_ethylbenzoate_fruity)
-# samples_ethylbenzoate_fruity_data.to_csv(&quot;samples_ethylbenzoate_fruity.csv&quot;, index=False)
+<span class="c1"># Uncomment lines below to save results to csv</span>
+<span class="c1"># cfs_ethylbenzoate_fruity_data = pd.DataFrame(cfs_ethylbenzoate_fruity)</span>
+<span class="c1"># cfs_ethylbenzoate_fruity_data.to_csv(&quot;cfs_ethylbenzoate_fruity.csv&quot;, index=False)</span>
+<span class="c1"># samples_ethylbenzoate_fruity_data = pd.DataFrame(samples_ethylbenzoate_fruity)</span>
+<span class="c1"># samples_ethylbenzoate_fruity_data.to_csv(&quot;samples_ethylbenzoate_fruity.csv&quot;, index=False)</span>
 
-exmol.plot_cf(
-    cfs_ethylbenzoate_fruity[:2],
-    figure_kwargs={&quot;figsize&quot;: (10, 8)},
-    mol_size=(300, 300),
-    nrows=1,
-)
-plt.show()
-# plt.savefig(&quot;cfs_ethylbenzoate_fruity.png&quot;)
+<span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span>
+    <span class="n">cfs_ethylbenzoate_fruity</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
+    <span class="n">figure_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">)},</span>
+    <span class="n">mol_size</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&quot;cfs_ethylbenzoate_fruity.png&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -958,19 +958,19 @@ plt.show()
 <h2>Generate descriptor explanations &amp; natural language explanations for “fatty”<a class="headerlink" href="#generate-descriptor-explanations-natural-language-explanations-for-fatty" title="Permalink to this heading">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Function takes in a SMILES string for a molecule and returns the logit predictions for all scent classes
-def my_model_allScents_logits(smilesString):
-    molecularGraph = gen_smiles2graph(smilesString)
-    logits_predictions = model.apply(opt_params, molecularGraph)
-    return logits_predictions
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function takes in a SMILES string for a molecule and returns the logit predictions for all scent classes</span>
+<span class="k">def</span> <span class="nf">my_model_allScents_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">):</span>
+    <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
+    <span class="n">logits_predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">opt_params</span><span class="p">,</span> <span class="n">molecularGraph</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logits_predictions</span>
 
 
-# Function takes in a SMILES string for a molecule and returns the logit predictions for the specified scent
-def my_model_logits(smilesString, scentString):
-    molecularGraph = gen_smiles2graph(smilesString)
-    pos = scentClasses.index(scentString)
-    pred_logits = model.apply(opt_params, molecularGraph)[pos]
-    return pred_logits
+<span class="c1"># Function takes in a SMILES string for a molecule and returns the logit predictions for the specified scent</span>
+<span class="k">def</span> <span class="nf">my_model_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
+    <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">scentString</span><span class="p">)</span>
+    <span class="n">pred_logits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">opt_params</span><span class="p">,</span> <span class="n">molecularGraph</span><span class="p">)[</span><span class="n">pos</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">pred_logits</span>
 </pre></div>
 </div>
 </div>
@@ -979,37 +979,37 @@ def my_model_logits(smilesString, scentString):
 <h3>Create sample space<a class="headerlink" href="#create-sample-space" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Uncomment code in cell below to generate sample space
-&quot;&quot;&quot;
-#For each positive example, generate sample space (using STONED) around that example (use that example as the base molecule)
-space_total = []
-scent = &#39;fatty&#39;
-for i in range(numMolecules): #sample space created using positive examples
-    molecule = scentdata.smiles[i]
-    if(moleculeScentList[i].count(scent) == 1): 
-        sampleSpace = exmol.sample_space(molecule, lambda smi, sel: my_model_logits(smi,scent), batched=False, preset=&#39;medium&#39;, num_samples=200, method_kwargs= {&#39;alphabet&#39;: alphabet})
-        space_total.extend(sampleSpace)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment code in cell below to generate sample space</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">#For each positive example, generate sample space (using STONED) around that example (use that example as the base molecule)</span>
+<span class="sd">space_total = []</span>
+<span class="sd">scent = &#39;fatty&#39;</span>
+<span class="sd">for i in range(numMolecules): #sample space created using positive examples</span>
+<span class="sd">    molecule = scentdata.smiles[i]</span>
+<span class="sd">    if(moleculeScentList[i].count(scent) == 1): </span>
+<span class="sd">        sampleSpace = exmol.sample_space(molecule, lambda smi, sel: my_model_logits(smi,scent), batched=False, preset=&#39;medium&#39;, num_samples=200, method_kwargs= {&#39;alphabet&#39;: alphabet})</span>
+<span class="sd">        space_total.extend(sampleSpace)</span>
 
-space_total = pd.DataFrame(space_total)
+<span class="sd">space_total = pd.DataFrame(space_total)</span>
 
-#Get predictions for all scent classes for all molecules in the space
-predictions_logits = []
-mols = space_total[&#39;smiles&#39;]
-for mol in mols:
-    preds_logits = my_model_allScents_logits(mol)
-    predictions_logits.append(preds_logits)
+<span class="sd">#Get predictions for all scent classes for all molecules in the space</span>
+<span class="sd">predictions_logits = []</span>
+<span class="sd">mols = space_total[&#39;smiles&#39;]</span>
+<span class="sd">for mol in mols:</span>
+<span class="sd">    preds_logits = my_model_allScents_logits(mol)</span>
+<span class="sd">    predictions_logits.append(preds_logits)</span>
 
-#Save the space along with scent class predictions to a csv file
-scentClassesNamesWithLogits = []
-for c in scentClasses:
-    scentLogitString = f&#39;{c} + logits&#39;
-    scentClassesNamesWithLogits.append(scentLogitString)
+<span class="sd">#Save the space along with scent class predictions to a csv file</span>
+<span class="sd">scentClassesNamesWithLogits = []</span>
+<span class="sd">for c in scentClasses:</span>
+<span class="sd">    scentLogitString = f&#39;{c} + logits&#39;</span>
+<span class="sd">    scentClassesNamesWithLogits.append(scentLogitString)</span>
 
-space_total[scentClassesNamesWithLogits] = predictions_logits
-scentFileName = f&#39;space_{scent}.csv&#39;
-space_total.to_csv(scentFileName)
-space_total.head()
-&quot;&quot;&quot;
+<span class="sd">space_total[scentClassesNamesWithLogits] = predictions_logits</span>
+<span class="sd">scentFileName = f&#39;space_{scent}.csv&#39;</span>
+<span class="sd">space_total.to_csv(scentFileName)</span>
+<span class="sd">space_total.head()</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -1019,46 +1019,46 @@ space_total.head()
 <h3>Read in sample space from csv file &amp; create list of exmol Examples from it<a class="headerlink" href="#read-in-sample-space-from-csv-file-create-list-of-exmol-examples-from-it" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Download file for &quot;fatty&quot; space from figshare
-filename, headers = urllib.request.urlretrieve(
-    &quot;https://figshare.com/ndownloader/files/38472275&quot;
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download file for &quot;fatty&quot; space from figshare</span>
+<span class="n">filename</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span>
+    <span class="s2">&quot;https://figshare.com/ndownloader/files/38472275&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>scent = &quot;fatty&quot;
-# NOTE: below reading in a subset of the &quot;fatty&quot; sample space from figshare, code not working right now
-df = pd.read_csv(
-    filename,
-    usecols=np.arange(1, 11),
-)
-labels = pd.read_csv(
-    filename,
-    usecols=np.append([1], np.arange(11, 123)),
-)
-llists = labels.to_numpy()[:, 1:]
-bases = list(df[df[&quot;is_origin&quot;] == True].index)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scent</span> <span class="o">=</span> <span class="s2">&quot;fatty&quot;</span>
+<span class="c1"># NOTE: below reading in a subset of the &quot;fatty&quot; sample space from figshare, code not working right now</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">123</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">llists</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">bases</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;is_origin&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
-df = cosine_similarity_base(df, bases, llists)
-df[&quot;similarity&quot;] = df[&quot;similarity&quot;] * df[&quot;label_dot&quot;]
+<span class="n">df</span> <span class="o">=</span> <span class="n">cosine_similarity_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">llists</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">]</span>
 
-# Use smaller set of data (just to check code does not crash) - comment out line below when generating results
-df = df.sample(frac=0.2, random_state=0).reset_index(drop=True)
+<span class="c1"># Use smaller set of data (just to check code does not crash) - comment out line below when generating results</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-samples = createExampleListfromDataFrame(df)
+<span class="n">samples</span> <span class="o">=</span> <span class="n">createExampleListfromDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># delete pandas dataframe to save space
-colNames = df.columns.values.tolist()
-for c in colNames:
-    del df[c]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># delete pandas dataframe to save space</span>
+<span class="n">colNames</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colNames</span><span class="p">:</span>
+    <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1068,38 +1068,38 @@ for c in colNames:
 <h3>Create descriptor explanation plots for “fatty” &amp; plot model fit for each explanatory model<a class="headerlink" href="#create-descriptor-explanation-plots-for-fatty-plot-model-fit-for-each-explanatory-model" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>beta_ECFP = exmol.lime_explain(
-    samples, descriptor_type=&quot;ECFP&quot;
-)  # create ECFP descriptor explanation
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta_ECFP</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s2">&quot;ECFP&quot;</span>
+<span class="p">)</span>  <span class="c1"># create ECFP descriptor explanation</span>
 
-svg_ECFP = exmol.plot_descriptors(
-    samples, figure_kwargs={&quot;figsize&quot;: (9, 5)}, return_svg=True
-)
-cairosvg.svg2png(svg_ECFP, write_to=f&quot;{scent}_ecfp.png&quot;, background_color=&quot;white&quot;)
+<span class="n">svg_ECFP</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)},</span> <span class="n">return_svg</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">cairosvg</span><span class="o">.</span><span class="n">svg2png</span><span class="p">(</span><span class="n">svg_ECFP</span><span class="p">,</span> <span class="n">write_to</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scent</span><span class="si">}</span><span class="s2">_ecfp.png&quot;</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
-base_examples = [e for e in samples if e.is_origin == True]
+<span class="n">base_examples</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
 
-plot_correlation(samples, &quot;ECFP&quot;)  # plot ECFP model fit
-# plt.savefig(f&#39;{scent}_ECFPfitAndCorrelation.png&#39;, bbox_inches=&quot;tight&quot;, transparent=False)
+<span class="n">plot_correlation</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;ECFP&quot;</span><span class="p">)</span>  <span class="c1"># plot ECFP model fit</span>
+<span class="c1"># plt.savefig(f&#39;{scent}_ECFPfitAndCorrelation.png&#39;, bbox_inches=&quot;tight&quot;, transparent=False)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>beta_MACCS = exmol.lime_explain(
-    samples, descriptor_type=&quot;MACCS&quot;
-)  # create MACCS descriptor explanation
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta_MACCS</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="o">=</span><span class="s2">&quot;MACCS&quot;</span>
+<span class="p">)</span>  <span class="c1"># create MACCS descriptor explanation</span>
 
-svg_MACCS = exmol.plot_descriptors(
-    samples, figure_kwargs={&quot;figsize&quot;: (9, 5)}, return_svg=True
-)
-cairosvg.svg2png(svg_MACCS, write_to=f&quot;{scent}_maccs.png&quot;, background_color=&quot;white&quot;)
+<span class="n">svg_MACCS</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">plot_descriptors</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)},</span> <span class="n">return_svg</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">cairosvg</span><span class="o">.</span><span class="n">svg2png</span><span class="p">(</span><span class="n">svg_MACCS</span><span class="p">,</span> <span class="n">write_to</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scent</span><span class="si">}</span><span class="s2">_maccs.png&quot;</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
-base_examples = [e for e in samples if e.is_origin == True]
+<span class="n">base_examples</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
 
-plot_correlation(samples, &quot;MACCS&quot;)  # plot MACCS model fit
-# plt.savefig(f&#39;{scent}_MACCSfitAndCorrelation.png&#39;, bbox_inches=&quot;tight&quot;, transparent=False)
+<span class="n">plot_correlation</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;MACCS&quot;</span><span class="p">)</span>  <span class="c1"># plot MACCS model fit</span>
+<span class="c1"># plt.savefig(f&#39;{scent}_MACCSfitAndCorrelation.png&#39;, bbox_inches=&quot;tight&quot;, transparent=False)</span>
 </pre></div>
 </div>
 </div>
@@ -1109,24 +1109,24 @@ plot_correlation(samples, &quot;MACCS&quot;)  # plot MACCS model fit
 <h3>Create natural language explanations for “fatty” scent<a class="headerlink" href="#create-natural-language-explanations-for-fatty-scent" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>exmol.lime_explain(samples, &quot;ecfp&quot;)
-s1_ecfp = exmol.text_explain(samples, &quot;ecfp&quot;, presence_thresh=0.1)
-exmol.lime_explain(samples, &quot;maccs&quot;)
-s2_maccs = exmol.text_explain(samples, &quot;maccs&quot;, presence_thresh=0.1)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;ecfp&quot;</span><span class="p">)</span>
+<span class="n">s1_ecfp</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">text_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;ecfp&quot;</span><span class="p">,</span> <span class="n">presence_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;maccs&quot;</span><span class="p">)</span>
+<span class="n">s2_maccs</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">text_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;maccs&quot;</span><span class="p">,</span> <span class="n">presence_thresh</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
-# print(f&#39;s1_ecfp: {s1_ecfp}\n&#39;)
-# print(f&#39;s2_maccs: {s2_maccs}\n&#39;)
+<span class="c1"># print(f&#39;s1_ecfp: {s1_ecfp}\n&#39;)</span>
+<span class="c1"># print(f&#39;s2_maccs: {s2_maccs}\n&#39;)</span>
 
-explanation_list = exmol.merge_text_explains(s1_ecfp, s2_maccs, filter=1.96)[:5]
+<span class="n">explanation_list</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">merge_text_explains</span><span class="p">(</span><span class="n">s1_ecfp</span><span class="p">,</span> <span class="n">s2_maccs</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="mf">1.96</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
 
-# explanation_list = exmol.merge_text_explains(ecfp_standardized,maccs_standardized, filter=1.96)[:5]
-prompt = exmol.text_prompt(explanation_list, f&quot;{scent} scent&quot;)
-print(f&quot;Prompt: {prompt}&quot;)
+<span class="c1"># explanation_list = exmol.merge_text_explains(ecfp_standardized,maccs_standardized, filter=1.96)[:5]</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">text_prompt</span><span class="p">(</span><span class="n">explanation_list</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scent</span><span class="si">}</span><span class="s2"> scent&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-# To create NLE from prompt, uncomment code below
-# openAIKey = &#39;&#39; #Add in open AI key here to get NLE
-# nle = exmol.text_prompt(explanation_list, f&#39;{scent} scent&#39;, open_ai_key=openAIKey))
-# print(f&#39;NLE: {nle}&#39;)
+<span class="c1"># To create NLE from prompt, uncomment code below</span>
+<span class="c1"># openAIKey = &#39;&#39; #Add in open AI key here to get NLE</span>
+<span class="c1"># nle = exmol.text_prompt(explanation_list, f&#39;{scent} scent&#39;, open_ai_key=openAIKey))</span>
+<span class="c1"># print(f&#39;NLE: {nle}&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -1136,27 +1136,27 @@ print(f&quot;Prompt: {prompt}&quot;)
 <h3>Additional code to examine positive examples for the “fatty” scent<a class="headerlink" href="#additional-code-to-examine-positive-examples-for-the-fatty-scent" title="Permalink to this heading">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>base_examples = [e for e in samples if e.is_origin]
-rdkit.Chem.Draw.MolsToGridImage(
-    [rdkit.Chem.MolFromSmiles(s.smiles) for s in base_examples], molsPerRow=6
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_examples</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span><span class="p">]</span>
+<span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">Draw</span><span class="o">.</span><span class="n">MolsToGridImage</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">smiles</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">base_examples</span><span class="p">],</span> <span class="n">molsPerRow</span><span class="o">=</span><span class="mi">6</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>maccs_string = &quot;Is there a C=O double bond?&quot;
-count = 0
-for base_mol in base_examples:
-    pos_desc = base_mol.descriptors.descriptor_names.index(maccs_string)
-    desc = base_mol.descriptors.descriptors[pos_desc]
-    # print(desc, base_mol.descriptors.descriptor_names[pos_desc])
-    if desc == 1:
-        count += 1
-print(
-    f&#39;For the &quot;fatty&quot; base molecules, {count}/{len(base_examples)} match the descriptor: {maccs_string}&#39;
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">maccs_string</span> <span class="o">=</span> <span class="s2">&quot;Is there a C=O double bond?&quot;</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">base_mol</span> <span class="ow">in</span> <span class="n">base_examples</span><span class="p">:</span>
+    <span class="n">pos_desc</span> <span class="o">=</span> <span class="n">base_mol</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptor_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">maccs_string</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">base_mol</span><span class="o">.</span><span class="n">descriptors</span><span class="o">.</span><span class="n">descriptors</span><span class="p">[</span><span class="n">pos_desc</span><span class="p">]</span>
+    <span class="c1"># print(desc, base_mol.descriptors.descriptor_names[pos_desc])</span>
+    <span class="k">if</span> <span class="n">desc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s1">&#39;For the &quot;fatty&quot; base molecules, </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">base_examples</span><span class="p">)</span><span class="si">}</span><span class="s1"> match the descriptor: </span><span class="si">{</span><span class="n">maccs_string</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
