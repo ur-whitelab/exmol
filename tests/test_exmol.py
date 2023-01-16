@@ -347,6 +347,9 @@ def test_cf_explain():
     exps = exmol.cf_explain(samples, 3)
     assert len(exps) == 4  # +1 for base
 
+    exmol.cf_explain(samples, 3, False)
+    exmol.cf_explain(samples, 3, True)
+
 
 def test_rcf_explain():
     def model(s, se):
