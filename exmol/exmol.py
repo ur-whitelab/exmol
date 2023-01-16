@@ -750,10 +750,13 @@ def sample_space(
 
 def _select_examples(cond, examples, nmols, do_filter=False):
     result = []
-    if do_filter:
+    if do_filter or do_filter is None:
         from synspace.reos import REOS
 
         reos = REOS()
+        # if do_filter is None, check if 0th smiles passes filter
+        if do_filter is None:
+            do_filter = reos.process_mol(smi2mol(examples[0].smiles)) == ("ok", "ok")
 
     # similarity filtered by if cluster/counter
     def cluster_score(e, i):
@@ -844,13 +847,13 @@ def lime_explain(
 
 
 def cf_explain(
-    examples: List[Example], nmols: int = 3, filter_nondrug: bool = True
+    examples: List[Example], nmols: int = 3, filter_nondrug: Optional[bool] = None
 ) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
 
     :param examples: Output from :func:`sample_space`
     :param nmols: Desired number of molecules
-    :param filter_nondrug: Whether or not to filter out non-drug molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
 
     def is_counter(e):
@@ -867,7 +870,7 @@ def rcf_explain(
     examples: List[Example],
     delta: Union[Any, Tuple[float, float]] = (-1, 1),
     nmols: int = 4,
-    filter_nondrug: bool = True,
+    filter_nondrug: Optional[bool] = None,
 ) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
     This version works with regression, so that a counterfactual is if the given example is higher or
@@ -876,7 +879,7 @@ def rcf_explain(
     :param examples: Output from :func:`sample_space`
     :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
     :param nmols: Desired number of molecules
-    :param filter_nondrug: Whether or not to filter out non-drug molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
     if type(delta) is float:
         delta = (-delta, delta)
