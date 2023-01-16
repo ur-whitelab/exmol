@@ -359,7 +359,7 @@ def get_basic_alphabet() -> Set[str]:
         elif "-1" in ai:
             to_remove.append(ai)
     # remove [P],[#P],[=P]
-    to_remove.extend(["[P]", "[#P]", "[=P]"])
+    to_remove.extend(["[P]", "[#P]", "[=P]", "[B]", "[#B]", "[=B]"])
 
     a -= set(to_remove)
     a.add("[O-1]")
@@ -748,12 +748,17 @@ def sample_space(
     return exps
 
 
-def _select_examples(cond, examples, nmols):
+def _select_examples(cond, examples, nmols, do_filter=False):
     result = []
+    if do_filter:
+        from synspace.reos import REOS
+
+        reos = REOS()
 
     # similarity filtered by if cluster/counter
     def cluster_score(e, i):
-        return (e.cluster == i) * cond(e) * e.similarity
+        score = (e.cluster == i) * cond(e) * e.similarity
+        return score
 
     clusters = set([e.cluster for e in examples])
     for i in clusters:
@@ -762,17 +767,19 @@ def _select_examples(cond, examples, nmols):
         if cluster_score(close_counter, i):
             result.append(close_counter)
 
-    # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
-
-    # fill in remaining
-    ncount = sum([cond(e) for e in result])
-    fill = max(0, nmols - ncount)
-    result.extend(
-        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
-    )
-
-    return list(filter(cond, result))
+    # sort by similarity
+    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)
+    # back fill
+    result.extend(sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True))
+    final_result = []
+    if do_filter:
+        while len(final_result) < nmols:
+            e = result.pop(0)
+            if reos.process_mol(smi2mol(e.smiles)) == ("ok", "ok"):
+                final_result.append(e)
+    else:
+        final_result = result[:nmols]
+    return list(filter(cond, final_result))
 
 
 def lime_explain(
@@ -836,17 +843,20 @@ def lime_explain(
         return None
 
 
-def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
+def cf_explain(
+    examples: List[Example], nmols: int = 3, filter_nondrug: bool = True
+) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
 
     :param examples: Output from :func:`sample_space`
     :param nmols: Desired number of molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules
     """
 
     def is_counter(e):
         return e.yhat != examples[0].yhat
 
-    result = _select_examples(is_counter, examples[1:], nmols)
+    result = _select_examples(is_counter, examples[1:], nmols, filter_nondrug)
     for i, r in enumerate(result):
         r.label = f"Counterfactual {i+1}"
 
@@ -857,6 +867,7 @@ def rcf_explain(
     examples: List[Example],
     delta: Union[Any, Tuple[float, float]] = (-1, 1),
     nmols: int = 4,
+    filter_nondrug: bool = True,
 ) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
     This version works with regression, so that a counterfactual is if the given example is higher or
@@ -865,6 +876,7 @@ def rcf_explain(
     :param examples: Output from :func:`sample_space`
     :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
     :param nmols: Desired number of molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules
     """
     if type(delta) is float:
         delta = (-delta, delta)
@@ -876,12 +888,16 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+        []
+        if delta[0] is None
+        else _select_examples(is_high, examples[1:], nmols // 2, filter_nondrug)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
+        []
+        if delta[1] is None
+        else _select_examples(is_low, examples[1:], nmols // 2, filter_nondrug)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
