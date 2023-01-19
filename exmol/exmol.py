@@ -1395,7 +1395,7 @@ def text_explain(
         elif abs(v) >= T:
             imp = "This is important for the property\n"
         elif include_weak:
-            imp = "This could be relevent for the property\n"
+            imp = "This could be relevant for the property\n"
         else:
             continue
         # check if it's present in majority of base molecules
