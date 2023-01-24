@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-v3.0.0 (2023-??-??)
+v3.0.0 (2023-01-24)
 -------------------
 * Added `synspace` method to generate synthetically feasible space
 * Added drug-like filter by default for counterfactuals
