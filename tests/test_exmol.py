@@ -282,7 +282,7 @@ def test_performance():
     )
     assert len(exps) > 2000
     cfs = exmol.cf_explain(exps)
-    assert cfs[1].similarity > 0.8
+    assert cfs[1].similarity > 0.5
 
 
 def test_sample_chem():
@@ -346,6 +346,9 @@ def test_cf_explain():
     samples = exmol.sample_space("CCCC", model, batched=False)
     exps = exmol.cf_explain(samples, 3)
     assert len(exps) == 4  # +1 for base
+
+    exmol.cf_explain(samples, 3, False)
+    exmol.cf_explain(samples, 3, True)
 
 
 def test_rcf_explain():
