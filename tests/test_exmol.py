@@ -7,10 +7,19 @@ from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit import RDPaths
 from rdkit.Chem import AllChem
+import random
 
 
 def test_version():
     assert exmol.__version__
+
+
+def test_synspace_anybonds():
+    def rand_model(smi):
+        return random.randint(0, 1)
+
+    palbo_smi = "CC(=O)C1=C(C)c2cnc(Nc3ccc(cn3)N4CCNCC4)nc2N(C5CCCC5)C1=O"
+    exmol.sample_space(palbo_smi, rand_model, batched=False, preset="synspace")
 
 
 def test_example():

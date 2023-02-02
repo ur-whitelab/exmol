@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v3.0.1 (2023-02-02)
+-------------------
+* Removed `~` any bonds from SMILES strings coming from synspace
+
+
 v3.0.0 (2023-01-24)
 -------------------
 * Added `synspace` method to generate synthetically feasible space

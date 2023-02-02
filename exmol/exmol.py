@@ -680,7 +680,7 @@ def sample_space(
             raise ValueError(
                 "Synspace did not return enough molecules. Try adjusting method_kwargs for synspace"
             )
-        data = [mol2smi(mol) for mol in mols]
+        data = [mol2smi(mol).replace("~", "") for mol in mols]
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
