@@ -283,7 +283,7 @@ def similarity_map_using_tstats(
         d = rdkit.Chem.Draw.MolDraw2DCairo(*mol_size)
     d.SetDrawOptions(dos)
     rdkit.Chem.Draw.SimilarityMaps.GetSimilarityMapFromWeights(
-        mol, weights=weights, draw2d=d, contourLines=0, colorMap="bwr"
+        mol, weights=weights, draw2d=d, contourLines=0, colorMap="bwr_r"
     )
     d.FinishDrawing()
     text = d.GetDrawingText()

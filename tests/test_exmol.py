@@ -7,10 +7,19 @@ from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit import RDPaths
 from rdkit.Chem import AllChem
+import random
 
 
 def test_version():
     assert exmol.__version__
+
+
+def test_synspace_anybonds():
+    def rand_model(smi):
+        return random.randint(0, 1)
+
+    palbo_smi = "CC(=O)C1=C(C)c2cnc(Nc3ccc(cn3)N4CCNCC4)nc2N(C5CCCC5)C1=O"
+    exmol.sample_space(palbo_smi, rand_model, batched=False, preset="synspace")
 
 
 def test_example():
@@ -282,7 +291,7 @@ def test_performance():
     )
     assert len(exps) > 2000
     cfs = exmol.cf_explain(exps)
-    assert cfs[1].similarity > 0.8
+    assert cfs[1].similarity > 0.5
 
 
 def test_sample_chem():
@@ -290,7 +299,7 @@ def test_sample_chem():
         return int("N" in s)
 
     explanation = exmol.sample_space(
-        "CCCC", model, preset="chemed", batched=False, num_samples=50
+        "CCCC", model, preset="chemed", batched=False, num_samples=35
     )
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
@@ -301,7 +310,7 @@ def test_sample_chem():
         model,
         preset="chemed",
         batched=False,
-        num_samples=50,
+        num_samples=35,
         method_kwargs={"similarity": 0.2},
     )
 
@@ -324,11 +333,38 @@ def test_sample_custom():
     )
 
 
+def test_sample_synspace():
+    def model(s, se):
+        return int("N" in s)
+
+    explanation = exmol.sample_space(
+        "Cc1ccc(cc1Nc2nccc(n2)c3cccnc3)NC(=O)c4ccc(cc4)CN5CCN(CC5)C",
+        model,
+        preset="synspace",
+        batched=False,
+        num_samples=50,
+    )
+    # check that no redundants
+    assert len(explanation) == 50
+
+
 def test_cf_explain():
     def model(s, se):
         return int("N" in s)
 
     samples = exmol.sample_space("CCCC", model, batched=False)
+    exps = exmol.cf_explain(samples, 3)
+    assert len(exps) == 4  # +1 for base
+
+    exmol.cf_explain(samples, 3, False)
+    exmol.cf_explain(samples, 3, True)
+
+
+def test_cf_explain_split():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space("[Na+].CC(=O)CCCC", model, batched=False)
     exps = exmol.cf_explain(samples, 3)
     assert len(exps) == 4  # +1 for base
 

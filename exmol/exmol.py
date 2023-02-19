@@ -13,6 +13,7 @@ import selfies as sf  # type: ignore
 import tqdm  # type: ignore
 import textwrap  # type: ignore
 import skunk  # type: ignore
+import synspace  # type: ignore
 
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
@@ -358,7 +359,7 @@ def get_basic_alphabet() -> Set[str]:
         elif "-1" in ai:
             to_remove.append(ai)
     # remove [P],[#P],[=P]
-    to_remove.extend(["[P]", "[#P]", "[=P]"])
+    to_remove.extend(["[P]", "[#P]", "[=P]", "[B]", "[#B]", "[=B]"])
 
     a -= set(to_remove)
     a.add("[O-1]")
@@ -426,7 +427,9 @@ def run_stoned(
 
     # filter out duplicates
     all_mols = [smi2mol(s) for s in all_smiles_collect]
-    all_canon = [mol2smi(m, canonical=True) if m else None for m in all_mols]
+    all_canon = [
+        stoned.largest_mol(mol2smi(m, canonical=True)) if m else None for m in all_mols
+    ]
     seen = set()
     to_keep = [False for _ in all_canon]
     for i in range(len(all_canon)):
@@ -498,6 +501,17 @@ def run_chemed(
 
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
+    all_can = [
+        stoned.largest_mol(mol2smi(m, canonical=True)) if m else None for m in mols
+    ]
+    seen = set()
+    to_keep = [False for _ in all_can]
+    for i in range(len(all_can)):
+        if all_can[i] and all_can[i] not in seen:
+            to_keep[i] = True
+            seen.add(all_can[i])
+    smiles = [s for i, s in enumerate(smiles) if to_keep[i]]
+    mols = [m for i, m in enumerate(mols) if to_keep[i]]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
     # drop Nones
@@ -572,12 +586,15 @@ def sample_space(
     """Sample chemical space around given SMILES
 
     This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule. ``num_samples`` will be
-    set to 3,000 by default if using STONED and 150 if using ``chemed``.
+    set to 3,000 by default if using STONED and 150 if using ``chemed``. If using ``custom`` then ``num_samples`` will be set to the length of
+    of the ``data`` list. If using ``synspace`` then ``num_samples`` will be set to 1,000. See :func:`run_stoned` and :func:`run_chemed` for more details.
+    ``synspace`` comes from the package `synspace <https://github.com/whitead/synspace>`. It generates synthetically feasible
+    molecules from a given SMILES.
 
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES or SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
-    :param preset: Can be wide, medium, or narrow. Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample commerically available compounds.
+    :param preset: Can be `"wide"`, `"medium"`, `"narrow"`, `"chemed"`, `"custom"`, or `"synspace`". Determines how far across chemical space is sampled. Try `"chemed"` preset to only sample pubchem compounds.
     :param data: If not None and preset is `"custom"` will use this data instead of generating new ones.
     :param method_kwargs: More control over STONED, CHEMED and CUSTOM can be set here. See :func:`run_stoned`, :func:`run_chemed` and  :func:`run_custom`
     :param num_samples: Number of desired samples. Can be set in `method_kwargs` (overrides) or here. `None` means default for preset
@@ -618,6 +635,11 @@ def sample_space(
 
     if sanitize_smiles:
         origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
+    elif "." in origin_smiles:
+        raise ValueError(
+            "Given SMILES contains '.', which indicates it is not a single molecule. "
+            "Please sanitize it first or set sanitize_smiles=True"
+        )
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
     smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
@@ -648,6 +670,8 @@ def sample_space(
             method_kwargs["num_samples"] = 150 if num_samples is None else num_samples
         elif preset == "custom" and data is not None:
             method_kwargs["num_samples"] = len(data)
+        elif preset == "synspace":
+            method_kwargs["num_samples"] = 1000 if num_samples is None else num_samples
         else:
             raise ValueError(f'Unknown preset "{preset}"')
     try:
@@ -664,6 +688,17 @@ def sample_space(
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
         selfies = [sf.encoder(s) for s in smiles]
     elif preset == "custom":
+        smiles, scores = run_custom(
+            origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
+        )
+        selfies = [sf.encoder(s) for s in smiles]
+    elif preset == "synspace":
+        mols, _ = synspace.chemical_space(origin_smiles, _pbar=pbar, **method_kwargs)
+        if len(mols) < 5:
+            raise ValueError(
+                "Synspace did not return enough molecules. Try adjusting method_kwargs for synspace"
+            )
+        data = [mol2smi(mol).replace("~", "") for mol in mols]
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
@@ -731,12 +766,20 @@ def sample_space(
     return exps
 
 
-def _select_examples(cond, examples, nmols):
+def _select_examples(cond, examples, nmols, do_filter=False):
     result = []
+    if do_filter or do_filter is None:
+        from synspace.reos import REOS
+
+        reos = REOS()
+        # if do_filter is None, check if 0th smiles passes filter
+        if do_filter is None:
+            do_filter = reos.process_mol(smi2mol(examples[0].smiles)) == ("ok", "ok")
 
     # similarity filtered by if cluster/counter
     def cluster_score(e, i):
-        return (e.cluster == i) * cond(e) * e.similarity
+        score = (e.cluster == i) * cond(e) * e.similarity
+        return score
 
     clusters = set([e.cluster for e in examples])
     for i in clusters:
@@ -745,17 +788,19 @@ def _select_examples(cond, examples, nmols):
         if cluster_score(close_counter, i):
             result.append(close_counter)
 
-    # trim, in case we had too many cluster
-    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)[:nmols]
-
-    # fill in remaining
-    ncount = sum([cond(e) for e in result])
-    fill = max(0, nmols - ncount)
-    result.extend(
-        sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True)[:fill]
-    )
-
-    return list(filter(cond, result))
+    # sort by similarity
+    result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)
+    # back fill
+    result.extend(sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True))
+    final_result = []
+    if do_filter:
+        while len(final_result) < nmols:
+            e = result.pop(0)
+            if reos.process_mol(smi2mol(e.smiles)) == ("ok", "ok"):
+                final_result.append(e)
+    else:
+        final_result = result[:nmols]
+    return list(filter(cond, final_result))
 
 
 def lime_explain(
@@ -819,17 +864,20 @@ def lime_explain(
         return None
 
 
-def cf_explain(examples: List[Example], nmols: int = 3) -> List[Example]:
+def cf_explain(
+    examples: List[Example], nmols: int = 3, filter_nondrug: Optional[bool] = None
+) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
 
     :param examples: Output from :func:`sample_space`
     :param nmols: Desired number of molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
 
     def is_counter(e):
         return e.yhat != examples[0].yhat
 
-    result = _select_examples(is_counter, examples[1:], nmols)
+    result = _select_examples(is_counter, examples[1:], nmols, filter_nondrug)
     for i, r in enumerate(result):
         r.label = f"Counterfactual {i+1}"
 
@@ -840,6 +888,7 @@ def rcf_explain(
     examples: List[Example],
     delta: Union[Any, Tuple[float, float]] = (-1, 1),
     nmols: int = 4,
+    filter_nondrug: Optional[bool] = None,
 ) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
     This version works with regression, so that a counterfactual is if the given example is higher or
@@ -848,6 +897,7 @@ def rcf_explain(
     :param examples: Output from :func:`sample_space`
     :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
     :param nmols: Desired number of molecules
+    :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
     if type(delta) is float:
         delta = (-delta, delta)
@@ -859,12 +909,16 @@ def rcf_explain(
         return e.yhat + delta[1] <= examples[0].yhat
 
     hresult = (
-        [] if delta[0] is None else _select_examples(is_high, examples[1:], nmols // 2)
+        []
+        if delta[0] is None
+        else _select_examples(is_high, examples[1:], nmols // 2, filter_nondrug)
     )
     for i, h in enumerate(hresult):
         h.label = f"Increase ({i+1})"
     lresult = (
-        [] if delta[1] is None else _select_examples(is_low, examples[1:], nmols // 2)
+        []
+        if delta[1] is None
+        else _select_examples(is_low, examples[1:], nmols // 2, filter_nondrug)
     )
     for i, l in enumerate(lresult):
         l.label = f"Decrease ({i+1})"
@@ -1378,7 +1432,7 @@ def text_explain(
         elif abs(v) >= T:
             imp = "This is important for the property\n"
         elif include_weak:
-            imp = "This could be relevent for the property\n"
+            imp = "This could be relevant for the property\n"
         else:
             continue
         # check if it's present in majority of base molecules
