@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+v3.0.2
+-------------------
+* Now try to find largest component with multiple compounds separated via `.` in SMILES
+
+
+
 v3.0.1 (2023-02-02)
 -------------------
 * Removed `~` any bonds from SMILES strings coming from synspace

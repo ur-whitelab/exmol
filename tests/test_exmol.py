@@ -299,7 +299,7 @@ def test_sample_chem():
         return int("N" in s)
 
     explanation = exmol.sample_space(
-        "CCCC", model, preset="chemed", batched=False, num_samples=50
+        "CCCC", model, preset="chemed", batched=False, num_samples=35
     )
     # check that no redundants
     assert len(explanation) == len(set([e.smiles for e in explanation]))
@@ -310,7 +310,7 @@ def test_sample_chem():
         model,
         preset="chemed",
         batched=False,
-        num_samples=50,
+        num_samples=35,
         method_kwargs={"similarity": 0.2},
     )
 
@@ -358,6 +358,15 @@ def test_cf_explain():
 
     exmol.cf_explain(samples, 3, False)
     exmol.cf_explain(samples, 3, True)
+
+
+def test_cf_explain_split():
+    def model(s, se):
+        return int("N" in s)
+
+    samples = exmol.sample_space("[Na+].CC(=O)CCCC", model, batched=False)
+    exps = exmol.cf_explain(samples, 3)
+    assert len(exps) == 4  # +1 for base
 
 
 def test_rcf_explain():

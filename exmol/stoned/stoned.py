@@ -207,6 +207,7 @@
 # 2. Minimized imports
 # 3. broke out fingerprint distance
 # 4. Added optional passed in alphabet
+# 5. Made sanitize also choose larges connected component
 
 import selfies  # type: ignore
 import random
@@ -241,8 +242,14 @@ def randomize_smiles(mol):
     )
 
 
+def largest_mol(smiles):
+    ss = smiles.split(".")
+    ss.sort(key=lambda a: len(a))
+    return ss[-1]
+
+
 def sanitize_smiles(smi, canonical=False):
-    """Return a canonical smile representation of smi
+    """Return a sanitized smile representation of smi
 
     Parameters:
     smi (string) : smile string to be sanitized
@@ -254,6 +261,9 @@ def sanitize_smiles(smi, canonical=False):
     conversion_successful (bool): True/False to indicate if conversion was  successful
     """
     try:
+        # only take largest smiles
+        if "." in smi:
+            smi = largest_mol(smi)
         mol = smi2mol(smi, sanitize=True)
         smi = mol2smi(mol, canonical=canonical, kekuleSmiles=True)
         if mol is None:

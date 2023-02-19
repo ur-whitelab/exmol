@@ -427,7 +427,9 @@ def run_stoned(
 
     # filter out duplicates
     all_mols = [smi2mol(s) for s in all_smiles_collect]
-    all_canon = [mol2smi(m, canonical=True) if m else None for m in all_mols]
+    all_canon = [
+        stoned.largest_mol(mol2smi(m, canonical=True)) if m else None for m in all_mols
+    ]
     seen = set()
     to_keep = [False for _ in all_canon]
     for i in range(len(all_canon)):
@@ -499,6 +501,17 @@ def run_chemed(
 
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
+    all_can = [
+        stoned.largest_mol(mol2smi(m, canonical=True)) if m else None for m in mols
+    ]
+    seen = set()
+    to_keep = [False for _ in all_can]
+    for i in range(len(all_can)):
+        if all_can[i] and all_can[i] not in seen:
+            to_keep[i] = True
+            seen.add(all_can[i])
+    smiles = [s for i, s in enumerate(smiles) if to_keep[i]]
+    mols = [m for i, m in enumerate(mols) if to_keep[i]]
     fp0 = stoned.get_fingerprint(mol0, fp_type)
     scores = []
     # drop Nones
@@ -622,6 +635,11 @@ def sample_space(
 
     if sanitize_smiles:
         origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
+    elif "." in origin_smiles:
+        raise ValueError(
+            "Given SMILES contains '.', which indicates it is not a single molecule. "
+            "Please sanitize it first or set sanitize_smiles=True"
+        )
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
     smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
