@@ -1354,7 +1354,13 @@ def text_explain_generate(
     """Insert text explanations into template, and generate explanation."""
     # want to have negative examples at the end
     text_explanations.sort(key=lambda x: x[1], reverse=True)
-    text = "".join([f"{x[0]}" for x in text_explanations])
+    text = "\n".join(
+        [
+            f"{x[0][:-1]}. {'Positive' if x[1] > 0 else 'Negative'} correlation."
+            for x in text_explanations
+        ]
+    )
+    print(text)
     prompt_template = prompts.PromptTemplate(
         input_variables=["property", "text"], template=_prompt
     )
