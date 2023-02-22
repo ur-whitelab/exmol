@@ -1340,7 +1340,7 @@ _prompt = (
     'An answer of "Counterfactual" means the lack of that '
     "attribute contributed to the molecular property. "
     "Using this information, provide a comprehensive explanation (25-50 words) "
-    'for the molecular property "{property}". Only use the information below.\n\n'
+    'for the molecular property "{property}". Only use the information below, but you can rephrase it.\n\n'
     "{text}\n\n"
     "Explanation:"
 )
@@ -1361,7 +1361,6 @@ def text_explain_generate(
     prompt = prompt_template.format(property=property_name, text=text)
     if llm is None:
         llm = llms.OpenAI(temperature=0.05)
-    print(prompt)
     return llm(prompt)
 
 
