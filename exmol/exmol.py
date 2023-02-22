@@ -1333,14 +1333,15 @@ def merge_text_explains(
 
 
 _prompt = (
-    "The following is information about molecules that connect their structure "
-    'to the property "{property}". '
+    "The following is information about molecules that connect their structures "
+    'to the property called "{property}." '
     "The information is attributes of molecules expressed as questions with answers and "
-    "relative importance for the property. "
-    'An answer of "Counterfactual" means the lack of that '
-    "attribute contributed to the molecular property. "
-    "Using this information, provide a comprehensive explanation (25-50 words) "
-    'for the molecular property "{property}". Only use the information below, but you can rephrase it.\n\n'
+    "relative importance. "
+    "Using all aspects of this information, propose an explanation (50-150 words) "
+    'for the molecular property "{property}." '
+    "Only use the information below. Answer in a scientific "
+    'tone and make use of counterfactuals (e.g., "If X were present, {property} would be negatively...").'
+    "\n\n"
     "{text}\n\n"
     "Explanation:"
 )
@@ -1356,11 +1357,11 @@ def text_explain_generate(
     text_explanations.sort(key=lambda x: x[1], reverse=True)
     text = "\n".join(
         [
-            f"{x[0][:-1]}. {'Positive' if x[1] > 0 else 'Negative'} correlation."
+            # f"{x[0][:-1]} {'Positive' if x[1] > 0 else 'Negative'} correlation."
+            f"{x[0][:-1]}."
             for x in text_explanations
         ]
     )
-    print(text)
     prompt_template = prompts.PromptTemplate(
         input_variables=["property", "text"], template=_prompt
     )
@@ -1442,10 +1443,10 @@ def text_explain(
             if neg_count == count - 2:
                 # don't want to have only negative examples
                 continue
-            kind = "No (Counterfactual)."
+            kind = "No and it would be negatively correlated with property (counterfactual)."
             neg_count += 1
         elif present / nbases > presence_thresh and v > 0:
-            kind = "Yes."
+            kind = "Yes and this is positively correlated with property."
             pos_count += 1
         else:
             continue
