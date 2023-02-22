@@ -1,10 +1,10 @@
 Change Log
 ==========
 
-v3.0.2
+v3.0.2 (2023-02-23)
 -------------------
 * Now try to find largest component with multiple compounds separated via `.` in SMILES
-
+* Added langchain for text explanations
 
 
 v3.0.1 (2023-02-02)
