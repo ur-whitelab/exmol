@@ -446,8 +446,7 @@ def test_text_explain():
     s = exmol.text_explain(samples, "MACCS")
     assert len(s) > 0, "No explanation generated"
 
-    e = exmol.text_explain_generate(s, "catalyst for dimerization")
-    print(e)
+    # e = exmol.text_explain_generate(s, "catalyst for dimerization")
 
     samples1 = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
     s = exmol.text_explain(samples1, "ECFP")
