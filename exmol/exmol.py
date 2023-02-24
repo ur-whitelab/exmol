@@ -1352,9 +1352,9 @@ _single_prompt = (
     "The information is structural attributes expressed as questions with answers and "
     "relative importance. "
     "Using all aspects of this information, propose an explanation (50-150 words) "
-    'for relationship between this molecule\'s structure and its property "{property}." '
+    'for this molecule\'s property "{property}." '
     "Only use the information below. Answer in a scientific "
-    'tone and make use of counterfactuals (e.g., "If X were present, {property} would be negatively...").'
+    'tone and make use of counterfactuals (e.g., "If X were present, its {property} would be negatively...").'
     "\n\n"
     "{text}\n\n"
     "Explanation:"
