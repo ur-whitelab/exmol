@@ -1332,7 +1332,7 @@ def merge_text_explains(
     return pos + joint
 
 
-_prompt = (
+_multi_prompt = (
     "The following is information about molecules that connect their structures "
     'to the property called "{property}." '
     "The information is attributes of molecules expressed as questions with answers and "
@@ -1346,13 +1346,35 @@ _prompt = (
     "Explanation:"
 )
 
+_single_prompt = (
+    "The following is information about a specific molecule that connects its structure "
+    'to the property "{property}." '
+    "The information is structural attributes expressed as questions with answers and "
+    "relative importance. "
+    "Using all aspects of this information, propose an explanation (50-150 words) "
+    'for relationship between this molecule\'s structure and its property "{property}." '
+    "Only use the information below. Answer in a scientific "
+    'tone and make use of counterfactuals (e.g., "If X were present, {property} would be negatively...").'
+    "\n\n"
+    "{text}\n\n"
+    "Explanation:"
+)
+
 
 def text_explain_generate(
     text_explanations: List[Tuple[str, float]],
     property_name: str,
     llm: Optional[llms.BaseLLM] = None,
+    single: bool = True,
 ) -> str:
-    """Insert text explanations into template, and generate explanation."""
+    """Insert text explanations into template, and generate explanation.
+
+    Args:
+        text_explanations: List of text explanations.
+        property_name: Name of property.
+        llm: Language model to use.
+        single: Whether to use a prompt about a single molecule or multiple molecules.
+    """
     # want to have negative examples at the end
     text_explanations.sort(key=lambda x: x[1], reverse=True)
     text = "\n".join(
@@ -1363,7 +1385,8 @@ def text_explain_generate(
         ]
     )
     prompt_template = prompts.PromptTemplate(
-        input_variables=["property", "text"], template=_prompt
+        input_variables=["property", "text"],
+        template=_single_prompt if single else _multi_prompt,
     )
     prompt = prompt_template.format(property=property_name, text=text)
     if llm is None:
