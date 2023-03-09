@@ -29,6 +29,8 @@ jobs:
       run: |
         pip install .
     - name: Run Test
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
          pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
          # mypy -p exmol --ignore-missing-imports
