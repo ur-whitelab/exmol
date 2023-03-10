@@ -28,14 +28,20 @@ jobs:
       run: |
         pip install -r paper1_CFs/requirements.txt
     - name: Run paper1 experiments
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper1_CFs/*.ipynb" --to notebook --output-dir='temp' --clear-output
     - name: Install paper2 depends
       run: |
         pip install -r paper2_LIME/requirements.txt
     - name: Run paper2 experiments
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper2_LIME/*.ipynb" --to notebook --output-dir='temp' --clear-output
     - name: Install paper3 depends
       run: |
         pip install -r paper3_Scents/requirements.txt
     - name: Run paper3 experiments
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute "paper3_Scents/*.ipynb" --to notebook --output-dir='temp' --clear-output

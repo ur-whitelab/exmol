@@ -26,7 +26,8 @@ from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
-
+import langchain.llms as llms
+import langchain.prompts as prompts
 
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter, _bit2atoms
@@ -1331,45 +1332,66 @@ def merge_text_explains(
     return pos + joint
 
 
-_text_prompt = """
-The following are a series of questions about molecules that connect their structure to a property, along with how important each question is for the molecular property. An answer of "Yes" means that the question was true and that attribute of structure contributed to the molecular property. An answer of "Counterfactual" means the lack of that attribute contributed to the molecular property. A summary paragraph is given below, which only summarizes on the most important structure-property relationships.
+_multi_prompt = (
+    "The following is information about molecules that connect their structures "
+    'to the property called "{property}." '
+    "The information is attributes of molecules expressed as questions with answers and "
+    "relative importance. "
+    "Using all aspects of this information, propose an explanation (50-150 words) "
+    'for the molecular property "{property}." '
+    "Only use the information below. Answer in a scientific "
+    'tone and make use of counterfactuals (e.g., "If X were present, {property} would be negatively...").'
+    "\n\n"
+    "{text}\n\n"
+    "Explanation:"
+)
 
-Property: [PROPERTY]
-[TEXT]
-Summary: The molecular property "[PROPERTY]" can be explained"""
+_single_prompt = (
+    "The following is information about a specific molecule that connects its structure "
+    'to the property "{property}." '
+    "The information is structural attributes expressed as questions with answers and "
+    "relative importance. "
+    "Using all aspects of this information, propose an explanation (50-150 words) "
+    'for this molecule\'s property "{property}." '
+    "Only use the information below. Answer in a scientific "
+    'tone and make use of counterfactuals (e.g., "If X were present, its {property} would be negatively...").'
+    "\n\n"
+    "{text}\n\n"
+    "Explanation:"
+)
 
 
-def text_prompt(
+def text_explain_generate(
     text_explanations: List[Tuple[str, float]],
     property_name: str,
-    open_ai_key: Optional[str] = None,
+    llm: Optional[llms.BaseLLM] = None,
+    single: bool = True,
 ) -> str:
-    """Insert text explanations into template, and optionally send to OpenAI."""
-    result = _text_prompt.replace("[PROPERTY]", property_name)
+    """Insert text explanations into template, and generate explanation.
+
+    Args:
+        text_explanations: List of text explanations.
+        property_name: Name of property.
+        llm: Language model to use.
+        single: Whether to use a prompt about a single molecule or multiple molecules.
+    """
     # want to have negative examples at the end
     text_explanations.sort(key=lambda x: x[1], reverse=True)
-    result = result.replace("[TEXT]", "".join([f"{t[0]}" for t in text_explanations]))
-    if open_ai_key is not None:
-        import openai
-
-        openai.api_key = open_ai_key
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=result,
-            temperature=0.7,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-        )
-        completion = response["choices"][0]["text"]
-        return (
-            'The molecular property "'
-            + property_name
-            + '" can be explained'
-            + completion
-        )
-    return result
+    text = "\n".join(
+        [
+            # f"{x[0][:-1]} {'Positive' if x[1] > 0 else 'Negative'} correlation."
+            f"{x[0][:-1]}."
+            for x in text_explanations
+        ]
+    )
+    prompt_template = prompts.PromptTemplate(
+        input_variables=["property", "text"],
+        template=_single_prompt if single else _multi_prompt,
+    )
+    prompt = prompt_template.format(property=property_name, text=text)
+    if llm is None:
+        llm = llms.OpenAI(temperature=0.05)
+    return llm(prompt)
 
 
 def text_explain(
@@ -1444,10 +1466,10 @@ def text_explain(
             if neg_count == count - 2:
                 # don't want to have only negative examples
                 continue
-            kind = "No (Counterfactual)."
+            kind = "No and it would be negatively correlated with property (counterfactual)."
             neg_count += 1
         elif present / nbases > presence_thresh and v > 0:
-            kind = "Yes."
+            kind = "Yes and this is positively correlated with property."
             pos_count += 1
         else:
             continue

@@ -32,6 +32,8 @@ jobs:
       run: |
         pip install .
     - name: Run Test
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
          pytest tests
          # mypy -p exmol --ignore-missing-imports
