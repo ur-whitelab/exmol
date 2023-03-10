@@ -1,94 +1,47 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Code to Generate Explanations for Different Scents &mdash; exmol  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../toc.html" class="icon icon-home"> exmol
           
-
-          
+          <a href="../toc.html" class="icon icon-home">
+            exmol
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
@@ -102,75 +55,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../paper2_LIME/RF-lime.html">LIME paper: Random Forest for Solubility Prediciton</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../toc.html">exmol</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Code to Generate Explanations for Different Scents</li>
-    
-    
+      <li><a href="../toc.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Code to Generate Explanations for Different Scents</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper3_Scents/GeneratingScentExplanations.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="code-to-generate-explanations-for-different-scents">
-<h1>Code to Generate Explanations for Different Scents<a class="headerlink" href="#code-to-generate-explanations-for-different-scents" title="Permalink to this heading">¶</a></h1>
+<h1>Code to Generate Explanations for Different Scents<a class="headerlink" href="#code-to-generate-explanations-for-different-scents" title="Permalink to this heading"></a></h1>
 <p>Using exmol package: https://github.com/ur-whitelab/exmol</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -249,7 +159,7 @@
 </div>
 </div>
 <section id="gnn-model-related-code">
-<h2>GNN model related code<a class="headerlink" href="#gnn-model-related-code" title="Permalink to this heading">¶</a></h2>
+<h2>GNN model related code<a class="headerlink" href="#gnn-model-related-code" title="Permalink to this heading"></a></h2>
 <p>Code below modified from example code given in the “Predicting DFT Energies with GNNs”, “Interpretability and Deep Learning” sections of “Deep Learning for Molecules and Materials” textbook (https://dmol.pub/applied/QM9.html)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -509,9 +419,9 @@
 </div>
 </section>
 <section id="explanation-plotting-related-functions">
-<h2>Explanation &amp; plotting related functions<a class="headerlink" href="#explanation-plotting-related-functions" title="Permalink to this heading">¶</a></h2>
+<h2>Explanation &amp; plotting related functions<a class="headerlink" href="#explanation-plotting-related-functions" title="Permalink to this heading"></a></h2>
 <section id="modified-functions-used-when-selecting-counterfactuals-such-that-only-the-label-for-the-selected-scent-is-flipped">
-<h3>Modified functions used when selecting counterfactuals such that only the label for the selected scent is flipped<a class="headerlink" href="#modified-functions-used-when-selecting-counterfactuals-such-that-only-the-label-for-the-selected-scent-is-flipped" title="Permalink to this heading">¶</a></h3>
+<h3>Modified functions used when selecting counterfactuals such that only the label for the selected scent is flipped<a class="headerlink" href="#modified-functions-used-when-selecting-counterfactuals-such-that-only-the-label-for-the-selected-scent-is-flipped" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_select_examples</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
@@ -584,7 +494,7 @@
 </div>
 </section>
 <section id="cosine-similarity-function-used-to-compute-similarity-for-descriptor-explanations-with-multiple-base-molecules">
-<h3>Cosine similarity function used to compute similarity for descriptor explanations with multiple base molecules<a class="headerlink" href="#cosine-similarity-function-used-to-compute-similarity-for-descriptor-explanations-with-multiple-base-molecules" title="Permalink to this heading">¶</a></h3>
+<h3>Cosine similarity function used to compute similarity for descriptor explanations with multiple base molecules<a class="headerlink" href="#cosine-similarity-function-used-to-compute-similarity-for-descriptor-explanations-with-multiple-base-molecules" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute dot product with labels</span>
@@ -612,7 +522,7 @@
 </div>
 </section>
 <section id="functions-used-for-generating-plots-with-model-fit-creating-a-list-of-exmol-examples-from-a-csv-file">
-<h3>Functions used for generating plots with model fit &amp; creating a list of exmol Examples from a csv file<a class="headerlink" href="#functions-used-for-generating-plots-with-model-fit-creating-a-list-of-exmol-examples-from-a-csv-file" title="Permalink to this heading">¶</a></h3>
+<h3>Functions used for generating plots with model fit &amp; creating a list of exmol Examples from a csv file<a class="headerlink" href="#functions-used-for-generating-plots-with-model-fit-creating-a-list-of-exmol-examples-from-a-csv-file" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Code in this cell taken from Solubility-RNN.ipynb notebook from https://github.com/ur-whitelab/exmol/blob/main/paper2_LIME/Solubility-RNN.ipynb</span>
@@ -821,7 +731,7 @@
 </div>
 </section>
 <section id="create-modified-alphabet-to-use-when-creating-explanations">
-<h3>Create modified alphabet to use when creating explanations<a class="headerlink" href="#create-modified-alphabet-to-use-when-creating-explanations" title="Permalink to this heading">¶</a></h3>
+<h3>Create modified alphabet to use when creating explanations<a class="headerlink" href="#create-modified-alphabet-to-use-when-creating-explanations" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create modified alphabet to use</span>
@@ -865,7 +775,7 @@
 </section>
 </section>
 <section id="generating-counterfactual-explanations-for-ethyl-benzoate-fruity">
-<h2>Generating counterfactual explanations for ethyl benzoate (“fruity”)<a class="headerlink" href="#generating-counterfactual-explanations-for-ethyl-benzoate-fruity" title="Permalink to this heading">¶</a></h2>
+<h2>Generating counterfactual explanations for ethyl benzoate (“fruity”)<a class="headerlink" href="#generating-counterfactual-explanations-for-ethyl-benzoate-fruity" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For counterfactuals, need hard yhat values - read in thresholds from csv file</span>
@@ -955,7 +865,7 @@
 </div>
 </section>
 <section id="generate-descriptor-explanations-natural-language-explanations-for-fatty">
-<h2>Generate descriptor explanations &amp; natural language explanations for “fatty”<a class="headerlink" href="#generate-descriptor-explanations-natural-language-explanations-for-fatty" title="Permalink to this heading">¶</a></h2>
+<h2>Generate descriptor explanations &amp; natural language explanations for “fatty”<a class="headerlink" href="#generate-descriptor-explanations-natural-language-explanations-for-fatty" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function takes in a SMILES string for a molecule and returns the logit predictions for all scent classes</span>
@@ -976,7 +886,7 @@
 </div>
 </div>
 <section id="create-sample-space">
-<h3>Create sample space<a class="headerlink" href="#create-sample-space" title="Permalink to this heading">¶</a></h3>
+<h3>Create sample space<a class="headerlink" href="#create-sample-space" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment code in cell below to generate sample space</span>
@@ -1016,7 +926,7 @@
 </div>
 </section>
 <section id="read-in-sample-space-from-csv-file-create-list-of-exmol-examples-from-it">
-<h3>Read in sample space from csv file &amp; create list of exmol Examples from it<a class="headerlink" href="#read-in-sample-space-from-csv-file-create-list-of-exmol-examples-from-it" title="Permalink to this heading">¶</a></h3>
+<h3>Read in sample space from csv file &amp; create list of exmol Examples from it<a class="headerlink" href="#read-in-sample-space-from-csv-file-create-list-of-exmol-examples-from-it" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download file for &quot;fatty&quot; space from figshare</span>
@@ -1065,7 +975,7 @@
 </div>
 </section>
 <section id="create-descriptor-explanation-plots-for-fatty-plot-model-fit-for-each-explanatory-model">
-<h3>Create descriptor explanation plots for “fatty” &amp; plot model fit for each explanatory model<a class="headerlink" href="#create-descriptor-explanation-plots-for-fatty-plot-model-fit-for-each-explanatory-model" title="Permalink to this heading">¶</a></h3>
+<h3>Create descriptor explanation plots for “fatty” &amp; plot model fit for each explanatory model<a class="headerlink" href="#create-descriptor-explanation-plots-for-fatty-plot-model-fit-for-each-explanatory-model" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta_ECFP</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span>
@@ -1106,7 +1016,7 @@
 </div>
 </section>
 <section id="create-natural-language-explanations-for-fatty-scent">
-<h3>Create natural language explanations for “fatty” scent<a class="headerlink" href="#create-natural-language-explanations-for-fatty-scent" title="Permalink to this heading">¶</a></h3>
+<h3>Create natural language explanations for “fatty” scent<a class="headerlink" href="#create-natural-language-explanations-for-fatty-scent" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;ecfp&quot;</span><span class="p">)</span>
@@ -1120,20 +1030,15 @@
 <span class="n">explanation_list</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">merge_text_explains</span><span class="p">(</span><span class="n">s1_ecfp</span><span class="p">,</span> <span class="n">s2_maccs</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="mf">1.96</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
 
 <span class="c1"># explanation_list = exmol.merge_text_explains(ecfp_standardized,maccs_standardized, filter=1.96)[:5]</span>
-<span class="n">prompt</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">text_prompt</span><span class="p">(</span><span class="n">explanation_list</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scent</span><span class="si">}</span><span class="s2"> scent&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># To create NLE from prompt, uncomment code below</span>
-<span class="c1"># openAIKey = &#39;&#39; #Add in open AI key here to get NLE</span>
-<span class="c1"># nle = exmol.text_prompt(explanation_list, f&#39;{scent} scent&#39;, open_ai_key=openAIKey))</span>
-<span class="c1"># print(f&#39;NLE: {nle}&#39;)</span>
+<span class="n">nle</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">text_explain_generate</span><span class="p">(</span><span class="n">explanation_list</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scent</span><span class="si">}</span><span class="s2"> scent&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nle</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="additional-code-to-examine-positive-examples-for-the-fatty-scent">
-<h3>Additional code to examine positive examples for the “fatty” scent<a class="headerlink" href="#additional-code-to-examine-positive-examples-for-the-fatty-scent" title="Permalink to this heading">¶</a></h3>
+<h3>Additional code to examine positive examples for the “fatty” scent<a class="headerlink" href="#additional-code-to-examine-positive-examples-for-the-fatty-scent" title="Permalink to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_examples</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">is_origin</span><span class="p">]</span>
@@ -1167,49 +1072,32 @@
 
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
-      <span class="lastupdated">
-        Last updated on True.
-      </span>
-
-    </p>
+    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">Last updated on True.
+      </span></p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

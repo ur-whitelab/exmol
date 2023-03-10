@@ -20,15 +20,11 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "import os\n",
-    "\n",
-    "os.environ[\"CUDA_VISIBLE_DEVICES\"] = \"0\"\n",
     "import pandas as pd\n",
     "import matplotlib.pyplot as plt\n",
     "from matplotlib.patches import Rectangle, FancyBboxPatch\n",
     "from matplotlib.offsetbox import AnnotationBbox\n",
     "import seaborn as sns\n",
-    "import textwrap\n",
     "import skunk\n",
     "import matplotlib as mpl\n",
     "import numpy as np\n",
@@ -38,29 +34,41 @@
     "from dataclasses import dataclass\n",
     "from rdkit.Chem.Draw import rdDepictor, MolsToGridImage\n",
     "from rdkit.Chem import MolFromSmiles, MACCSkeys\n",
+    "import random\n",
+    "\n",
     "\n",
     "rdDepictor.SetPreferCoordGen(True)\n",
-    "sns.set_context(\"notebook\")\n",
-    "sns.set_style(\n",
-    "    \"dark\",\n",
-    "    {\n",
-    "        \"xtick.bottom\": True,\n",
-    "        \"ytick.left\": True,\n",
-    "        \"xtick.color\": \"#666666\",\n",
-    "        \"ytick.color\": \"#666666\",\n",
-    "        \"axes.edgecolor\": \"#666666\",\n",
-    "        \"axes.linewidth\": 0.8,\n",
-    "        \"figure.dpi\": 300,\n",
-    "    },\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.font_manager as font_manager\n",
+    "import urllib.request\n",
+    "\n",
+    "urllib.request.urlretrieve(\n",
+    "    \"https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf\",\n",
+    "    \"IBMPlexMono-Regular.ttf\",\n",
     ")\n",
-    "color_cycle = [\"#F06060\", \"#1BBC9B\", \"#F06060\", \"#5C4B51\", \"#F3B562\", \"#6e5687\"]\n",
-    "mpl.rcParams[\"axes.prop_cycle\"] = mpl.cycler(color=color_cycle)\n",
-    "mpl.rcParams[\"font.size\"] = 10\n",
+    "fe = font_manager.FontEntry(fname=\"IBMPlexMono-Regular.ttf\", name=\"plexmono\")\n",
+    "font_manager.fontManager.ttflist.append(fe)\n",
+    "plt.rcParams.update(\n",
+    "    {\n",
+    "        \"axes.facecolor\": \"#f5f4e9\",\n",
+    "        \"grid.color\": \"#AAAAAA\",\n",
+    "        \"axes.edgecolor\": \"#333333\",\n",
+    "        \"figure.facecolor\": \"#FFFFFF\",\n",
+    "        \"axes.grid\": False,\n",
+    "        \"axes.prop_cycle\": plt.cycler(\"color\", plt.cm.Dark2.colors),\n",
+    "        \"font.family\": fe.name,\n",
+    "        \"figure.figsize\": (3.5, 3.5 / 1.2),\n",
+    "        \"ytick.left\": True,\n",
+    "        \"xtick.bottom\": True,\n",
+    "    }\n",
+    ")\n",
+    "mpl.rcParams[\"font.size\"] = 12\n",
     "soldata = pd.read_csv(\n",
     "    \"https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv\"\n",
     ")\n",
     "features_start_at = list(soldata.columns).index(\"MolWt\")\n",
-    "np.random.seed(0)"
+    "np.random.seed(0)\n",
+    "random.seed(0)"
    ]
   },
   {
@@ -80,8 +88,73 @@
    "metadata": {},
    "outputs": [],
    "source": [
+    "from rdkit.Chem import MolToSmiles\n",
+    "\n",
+    "\n",
+    "def _randomize_smiles(mol, isomericSmiles=True):\n",
+    "    return MolToSmiles(\n",
+    "        mol,\n",
+    "        canonical=False,\n",
+    "        doRandom=True,\n",
+    "        isomericSmiles=isomericSmiles,\n",
+    "        kekuleSmiles=random.random() < 0.5,\n",
+    "    )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "smiles = list(soldata[\"SMILES\"])\n",
+    "solubilities = list(soldata[\"Solubility\"])\n",
+    "\n",
+    "aug_data = 10\n",
+    "\n",
+    "\n",
+    "def largest_mol(smiles):\n",
+    "    ss = smiles.split(\".\")\n",
+    "    ss.sort(key=lambda a: len(a))\n",
+    "    return ss[-1]\n",
+    "\n",
+    "\n",
+    "aug_smiles = []\n",
+    "aug_solubilities = []\n",
+    "for sml, sol in zip(smiles, solubilities):\n",
+    "    sml = largest_mol(sml)\n",
+    "    if len(sml) <= 4:\n",
+    "        continue  # ion or metal\n",
+    "    new_smls = []\n",
+    "    new_smls.append(sml)\n",
+    "    aug_solubilities.append(sol)\n",
+    "    for _ in range(aug_data):\n",
+    "        try:\n",
+    "            new_sml = _randomize_smiles(MolFromSmiles(sml))\n",
+    "            if new_sml not in new_smls:\n",
+    "                new_smls.append(new_sml)\n",
+    "                aug_solubilities.append(sol)\n",
+    "        except:\n",
+    "            continue\n",
+    "    aug_smiles.extend(new_smls)\n",
+    "\n",
+    "aug_df_AqSolDB = pd.DataFrame(\n",
+    "    data={\"SMILES\": aug_smiles, \"Solubility\": aug_solubilities}\n",
+    ")\n",
+    "\n",
+    "print(f\"The dataset was augmented from {len(soldata)} to {len(aug_df_AqSolDB)}.\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
     "selfies_list = []\n",
-    "for s in soldata.SMILES:\n",
+    "for s in aug_df_AqSolDB.SMILES:\n",
     "    try:\n",
     "        selfies_list.append(sf.encoder(exmol.sanitize_smiles(s)[1]))\n",
     "    except sf.EncoderError:\n",
@@ -99,7 +172,7 @@
     "data_vocab = set(\n",
     "    sf.get_alphabet_from_selfies([s for s in selfies_list if s is not None])\n",
     ")\n",
-    "vocab = ['[nop]']\n",
+    "vocab = [\"[nop]\"]\n",
     "vocab.extend(list(data_vocab.union(basic)))\n",
     "vocab_stoi = {o: i for o, i in zip(vocab, range(len(vocab)))}\n",
     "\n",
@@ -107,8 +180,6 @@
     "def selfies2ints(s):\n",
     "    result = []\n",
     "    for token in sf.split_selfies(s):\n",
-    "        if token == '.':\n",
-    "            continue  # ?\n",
     "        if token in vocab_stoi:\n",
     "            result.append(vocab_stoi[token])\n",
     "        else:\n",
@@ -123,14 +194,10 @@
     "\n",
     "# test them out\n",
     "s = selfies_list[0]\n",
-    "print('selfies:', s)\n",
+    "print(\"selfies:\", s)\n",
     "v = selfies2ints(s)\n",
-    "print('selfies2ints:', v)\n",
-    "so = ints2selfies(v)\n",
-    "print('ints2selfes:', so)\n",
-    "assert so == s.replace(\n",
-    "    '.', ''\n",
-    ")  # make sure '.' is removed from Selfies string during assertion"
+    "print(\"selfies2ints:\", v)\n",
+    "so = ints2selfies(v)"
    ]
   },
   {
@@ -149,16 +216,18 @@
     "    embedding_dim: int\n",
     "    rnn_units: int\n",
     "    hidden_dim: int\n",
+    "    drop_rate: float\n",
     "\n",
     "\n",
     "config = Config(\n",
     "    vocab_size=len(vocab),\n",
     "    example_number=len(selfies_list),\n",
-    "    batch_size=16,\n",
+    "    batch_size=128,\n",
     "    buffer_size=10000,\n",
-    "    embedding_dim=256,\n",
-    "    hidden_dim=128,\n",
-    "    rnn_units=128,\n",
+    "    embedding_dim=64,\n",
+    "    hidden_dim=32,\n",
+    "    rnn_units=64,\n",
+    "    drop_rate=0.20,\n",
     ")"
    ]
   },
@@ -172,17 +241,25 @@
    "source": [
     "# now get sequences\n",
     "encoded = [selfies2ints(s) for s in selfies_list if s is not None]\n",
+    "# check for non-Nones\n",
+    "dsolubilities = aug_df_AqSolDB.Solubility.values[[s is not None for s in selfies_list]]\n",
     "padded_seqs = tf.keras.preprocessing.sequence.pad_sequences(encoded, padding=\"post\")\n",
     "\n",
-    "# Now build dataset\n",
-    "data = tf.data.Dataset.from_tensor_slices(\n",
-    "    (padded_seqs, soldata.Solubility.iloc[[bool(s) for s in selfies_list]].values)\n",
-    ")\n",
-    "# now split into val, test, train and batch\n",
-    "N = len(data)\n",
+    "# Should be shuffled from the beginning, so no worries\n",
+    "N = len(padded_seqs)\n",
     "split = int(0.1 * N)\n",
-    "test_data = data.take(split).batch(config.batch_size)\n",
-    "nontest = data.skip(split)\n",
+    "\n",
+    "# Now build dataset\n",
+    "test_data = tf.data.Dataset.from_tensor_slices(\n",
+    "    (padded_seqs[:split], dsolubilities[:split])\n",
+    ").batch(config.batch_size)\n",
+    "\n",
+    "nontest = tf.data.Dataset.from_tensor_slices(\n",
+    "    (\n",
+    "        padded_seqs[split:],\n",
+    "        dsolubilities[split:],\n",
+    "    )\n",
+    ")\n",
     "val_data, train_data = nontest.take(split).batch(config.batch_size), nontest.skip(\n",
     "    split\n",
     ").shuffle(config.buffer_size).batch(config.batch_size).prefetch(\n",
@@ -206,11 +283,13 @@
     "        input_dim=config.vocab_size, output_dim=config.embedding_dim, mask_zero=True\n",
     "    )\n",
     ")\n",
-    "\n",
+    "model.add(tf.keras.layers.Dropout(config.drop_rate))\n",
     "# RNN layer\n",
-    "model.add(tf.keras.layers.GRU(config.rnn_units))\n",
+    "model.add(tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(config.rnn_units)))\n",
+    "model.add(tf.keras.layers.Dropout(config.drop_rate))\n",
     "# a dense hidden layer\n",
     "model.add(tf.keras.layers.Dense(config.hidden_dim, activation=\"relu\"))\n",
+    "model.add(tf.keras.layers.Dropout(config.drop_rate))\n",
     "# regression, so no activation\n",
     "model.add(tf.keras.layers.Dense(1))\n",
     "\n",
@@ -225,9 +304,9 @@
    },
    "outputs": [],
    "source": [
-    "model.compile(tf.optimizers.Adam(1e-4), loss=\"mean_squared_error\")\n",
+    "model.compile(tf.optimizers.Adam(1e-3), loss=\"mean_squared_error\")\n",
     "# verbose=0 silences output, to get progress bar set verbose=1\n",
-    "result = model.fit(train_data, validation_data=val_data, epochs=100, verbose=0)"
+    "result = model.fit(train_data, validation_data=val_data, epochs=50)"
    ]
   },
   {
@@ -318,7 +397,7 @@
     "    valid = [1.0 if sum(e) > 0 else np.nan for e in encoded]\n",
     "    encoded = [np.nan_to_num(e, nan=0) for e in encoded]\n",
     "    padded_seqs = tf.keras.preprocessing.sequence.pad_sequences(encoded, padding=\"post\")\n",
-    "    labels = np.reshape(model.predict(padded_seqs), (-1))\n",
+    "    labels = np.reshape(model(padded_seqs, training=False), (-1))\n",
     "    return labels * valid"
    ]
   },
@@ -338,15 +417,18 @@
    "outputs": [],
    "source": [
     "# Make sure SMILES doesn't contain multiple fragments\n",
-    "smi = soldata.SMILES[0]\n",
+    "smi = \"CCCCC(=O)N(CC1=CC=C(C=C1)C2=C(C=CC=C2)C3=NN=N[NH]3)C(C(C)C)C(O)=O\"  # mol1 - not soluble\n",
+    "# smi = \"CC(CC(=O)NC1=CC=CC=C1)C(=O)O\" #mol2 - highly soluble\n",
+    "af = exmol.get_basic_alphabet()\n",
     "stoned_kwargs = {\n",
-    "    \"num_samples\": 2500,\n",
-    "    \"alphabet\": exmol.get_basic_alphabet(),\n",
+    "    \"num_samples\": 5000,\n",
+    "    \"alphabet\": af,\n",
     "    \"max_mutations\": 2,\n",
     "}\n",
     "space = exmol.sample_space(\n",
     "    smi, predictor_function, stoned_kwargs=stoned_kwargs, quiet=True\n",
-    ")"
+    ")\n",
+    "print(len(space))"
    ]
   },
   {
@@ -364,10 +446,23 @@
     "for d in desc_type:\n",
     "    beta = exmol.lime_explain(space, descriptor_type=d)\n",
     "    if d == \"ecfp\":\n",
-    "        exmol.plot_descriptors(space, output_file=f\"{d}.svg\")\n",
+    "        display(\n",
+    "            SVG(\n",
+    "                exmol.plot_descriptors(\n",
+    "                    space, output_file=f\"{d}_mol2.svg\", return_svg=True\n",
+    "                )\n",
+    "            )\n",
+    "        )\n",
     "        plt.close()\n",
     "    else:\n",
-    "        exmol.plot_descriptors(space)"
+    "        exmol.plot_descriptors(space, output_file=f\"{d}_mol2.svg\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Text explanations"
    ]
   },
   {
@@ -376,8 +471,63 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "beta = exmol.lime_explain(space, \"ECFP\")\n",
-    "weights = exmol.plot_utils.similarity_map_using_tstats(space[0])"
+    "exmol.lime_explain(space, \"ecfp\")\n",
+    "s1_ecfp = exmol.text_explain(space, \"ecfp\")\n",
+    "explanation = exmol.text_explain_generate(s1_ecfp, \"aqueous solubility\")\n",
+    "print(explanation)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Similarity map"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "beta = exmol.lime_explain(space, \"ecfp\")\n",
+    "svg = exmol.plot_utils.similarity_map_using_tstats(space[0], return_svg=True)\n",
+    "display(SVG(svg))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Write figure to file\n",
+    "with open(\"ecfp_similarity_map_mol2.svg\", \"w\") as f:\n",
+    "    f.write(svg)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "# Inspect space\n",
+    "MolsToGridImage(\n",
+    "    [MolFromSmiles(m.smiles) for m in space],\n",
+    "    legends=[f\"yhat = {m.yhat:.3}\" for m in space],\n",
+    "    molsPerRow=10,\n",
+    "    maxMols=100,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### How's the fit?"
    ]
   },
   {
@@ -672,11 +822,9 @@
   }
  ],
  "metadata": {
-  "interpreter": {
-   "hash": "abc1ef2aae668f29add333aedc207234808b19831866b8480f007a054a2482dc"
-  },
   "kernelspec": {
-   "display_name": "Python 3.7.13 64-bit ('exmol': conda)",
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
    "name": "python3"
   },
   "language_info": {
@@ -689,7 +837,12 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.7.13"
+   "version": "3.8.11"
+  },
+  "vscode": {
+   "interpreter": {
+    "hash": "3e5a039a7a113538395a7d74f5574b0c5900118222149a18efb009bf03645fce"
+   }
   }
  },
  "nbformat": 4,

@@ -1,95 +1,48 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>LIME paper: Random Forest for Solubility Prediciton &mdash; exmol  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="LIME paper: Recurrent Neural Network for Solubility Prediciton" href="Solubility-RNN.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../toc.html" class="icon icon-home"> exmol
           
-
-          
+          <a href="../toc.html" class="icon icon-home">
+            exmol
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change Log</a></li>
@@ -109,77 +62,34 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../toc.html">exmol</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../toc.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>LIME paper: Random Forest for Solubility Prediciton</li>
-    
-    
+      <li><a href="../toc.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">LIME paper: Random Forest for Solubility Prediciton</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/ur-whitelab/exmol/blob/main/docs/source/paper2_LIME/RF-lime.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section class="tex2jax_ignore mathjax_ignore" id="lime-paper-random-forest-for-solubility-prediciton">
-<h1>LIME paper: Random Forest for Solubility Prediciton<a class="headerlink" href="#lime-paper-random-forest-for-solubility-prediciton" title="Permalink to this heading">¶</a></h1>
+<h1>LIME paper: Random Forest for Solubility Prediciton<a class="headerlink" href="#lime-paper-random-forest-for-solubility-prediciton" title="Permalink to this heading"></a></h1>
 <section id="import-packages">
-<h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this heading">¶</a></h2>
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -219,7 +129,7 @@
 </div>
 </section>
 <section id="build-and-train-a-random-forest-model">
-<h2>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this heading">¶</a></h2>
+<h2>Build and train a Random Forest model<a class="headerlink" href="#build-and-train-a-random-forest-model" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make object that can compute descriptors</span>
@@ -325,12 +235,12 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a18fe9490f7d0abff058cece36d08f97e7dda0abbecb46e2d3ba5b9d44304776.png" src="../_images/a18fe9490f7d0abff058cece36d08f97e7dda0abbecb46e2d3ba5b9d44304776.png" />
+<img alt="../_images/99a358e893af2f36f22ab11f6e5309c0218596a1d0ef6b26a1e69eb5abaa5eb9.png" src="../_images/99a358e893af2f36f22ab11f6e5309c0218596a1d0ef6b26a1e69eb5abaa5eb9.png" />
 </div>
 </div>
 </section>
 <section id="compute-descriptor-attributions">
-<h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this heading">¶</a></h2>
+<h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
@@ -384,23 +294,23 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;aromatic bonds count&#39;: 1.0118080067655162,
- &#39;number of hydrogen bond acceptor&#39;: 0.9772510749774933,
- &#39;number of heteroatoms&#39;: -0.7250389816859604,
- &#39;ring count&#39;: -0.6194284548591665,
- &#39;number of rotatable bonds&#39;: -0.4480756022995554,
- &#39;acidic group count&#39;: -0.23303623622906125,
- &#39;number of hydrogen bond donor&#39;: -0.1922076203263274,
- &#39;Wildman-Crippen LogP&#39;: 0.16509246657742774,
- &#39;atomic polarizability&#39;: 0.1506819878227043,
- &#39;basic group count&#39;: 0.026933168177767666}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;aromatic bonds count&#39;: 1.7863330736978154,
+ &#39;acidic group count&#39;: -1.0323361342067836,
+ &#39;Wildman-Crippen LogP&#39;: -0.8642282356994028,
+ &#39;basic group count&#39;: -0.6556507981722565,
+ &#39;number of hydrogen bond donor&#39;: -0.25480900402986045,
+ &#39;ring count&#39;: -0.1911406740544471,
+ &#39;number of hydrogen bond acceptor&#39;: 0.12257185505552246,
+ &#39;atomic polarizability&#39;: 0.1041648560651912,
+ &#39;number of rotatable bonds&#39;: -0.0915573255515068,
+ &#39;number of heteroatoms&#39;: -0.08154323095606751}
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="do-we-recover-training-features">
-<h2>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this heading">¶</a></h2>
+<h2>Do we recover training features?<a class="headerlink" href="#do-we-recover-training-features" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">wls_attr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -434,7 +344,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
 </pre></div>
 </div>
-<img alt="../_images/f5d9766560312acb0b81da7dd1db8a898a8c8a3398db7147e42ee38858ae0177.png" src="../_images/f5d9766560312acb0b81da7dd1db8a898a8c8a3398db7147e42ee38858ae0177.png" />
+<img alt="../_images/9c8bf4d1d3f361336eff2352fc95d2efe8689efd6eee4caa64c580188a5091f4.png" src="../_images/9c8bf4d1d3f361336eff2352fc95d2efe8689efd6eee4caa64c580188a5091f4.png" />
 </div>
 </div>
 </section>
@@ -442,52 +352,34 @@
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Solubility-RNN.html" class="btn btn-neutral float-left" title="LIME paper: Recurrent Neural Network for Solubility Prediciton" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
-      <span class="lastupdated">
-        Last updated on True.
-      </span>
-
-    </p>
+    <p>&#169; Copyright 2022, Geemi Wellawatte, Andrew D White.
+      <span class="lastupdated">Last updated on True.
+      </span></p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
