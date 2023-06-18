@@ -19,7 +19,7 @@ class Descriptors:
     tstats: tuple = ()
 
 
-@dataclass
+#@dataclass
 class Example:
     """Example of a molecule"""
 
