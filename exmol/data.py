@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Optional
 import numpy as np  # type: ignore
 
@@ -19,7 +19,7 @@ class Descriptors:
     tstats: tuple = ()
 
 
-#: @dataclass
+@dataclass
 class Example:
     """Example of a molecule"""
 
@@ -34,7 +34,7 @@ class Example:
     #: Index relative to other examples
     index: int
     #: PCA projected position from similarity
-    position: np.ndarray = np.array(None)
+    position: np.ndarray = field(default_factory=np.array(None))
     #: True if base
     is_origin: bool = False
     #: Index of cluster, can be -1 for no cluster
