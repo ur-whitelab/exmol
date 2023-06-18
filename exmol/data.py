@@ -34,7 +34,7 @@ class Example:
     #: Index relative to other examples
     index: int
     #: PCA projected position from similarity
-    position: np.ndarray = field(default_factory=np.array(None))
+    position: np.array = field(default_factory=np.array(None))
     #: True if base
     is_origin: bool = False
     #: Index of cluster, can be -1 for no cluster
