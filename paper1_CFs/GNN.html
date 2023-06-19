@@ -133,15 +133,13 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:00.596183: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2023-03-10 03:49:00.717722: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.16/x64/lib
-2023-03-10 03:49:00.717747: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:16.037697: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-06-19 19:53:16.087850: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-06-19 19:53:16.089195: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:01.499571: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.16/x64/lib
-2023-03-10 03:49:01.499669: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.16/x64/lib
-2023-03-10 03:49:01.499678: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:16.980913: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
 </pre></div>
 </div>
 </div>
@@ -445,13 +443,6 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>__________________________________________________________________________________________________
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:03.122010: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.8.16/x64/lib
-2023-03-10 03:49:03.122037: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
-2023-03-10 03:49:03.122059: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (fv-az413-554): /proc/driver/nvidia/version does not exist
-2023-03-10 03:49:03.122322: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-</pre></div>
-</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -500,19 +491,31 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:08.196741: W tensorflow/tsl/framework/cpu_allocator_impl.cc:82] Allocation of 99123200 exceeds 10% of free system memory.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:19.841122: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor &#39;Placeholder/_15&#39; with dtype float and shape [2]
+	 [[{{node Placeholder/_15}}]]
+2023-06-19 19:53:19.841577: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor &#39;Placeholder/_15&#39; with dtype float and shape [2]
+	 [[{{node Placeholder/_15}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:08.546610: W tensorflow/tsl/framework/cpu_allocator_impl.cc:82] Allocation of 99123200 exceeds 10% of free system memory.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:24.910376: W tensorflow/tsl/framework/cpu_allocator_impl.cc:83] Allocation of 99123200 exceeds 10% of free system memory.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:08.927497: W tensorflow/tsl/framework/cpu_allocator_impl.cc:82] Allocation of 99123200 exceeds 10% of free system memory.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:25.281284: W tensorflow/tsl/framework/cpu_allocator_impl.cc:83] Allocation of 99123200 exceeds 10% of free system memory.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:09.790289: W tensorflow/tsl/framework/cpu_allocator_impl.cc:82] Allocation of 99123200 exceeds 10% of free system memory.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:25.684645: W tensorflow/tsl/framework/cpu_allocator_impl.cc:83] Allocation of 99123200 exceeds 10% of free system memory.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-10 03:49:10.722451: W tensorflow/tsl/framework/cpu_allocator_impl.cc:82] Allocation of 99123200 exceeds 10% of free system memory.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:26.627282: W tensorflow/tsl/framework/cpu_allocator_impl.cc:83] Allocation of 99123200 exceeds 10% of free system memory.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:27.612907: W tensorflow/tsl/framework/cpu_allocator_impl.cc:83] Allocation of 99123200 exceeds 10% of free system memory.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 19:53:49.345099: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor &#39;Placeholder/_0&#39; with dtype int32
+	 [[{{node Placeholder/_0}}]]
+2023-06-19 19:53:49.345430: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor &#39;Placeholder/_0&#39; with dtype int32
+	 [[{{node Placeholder/_0}}]]
 </pre></div>
 </div>
 </div>
@@ -538,7 +541,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3531451fa59277975c2e83d679e7f759629c8a5c0c779de34f0a868de45a13f5.png" src="../_images/3531451fa59277975c2e83d679e7f759629c8a5c0c779de34f0a868de45a13f5.png" />
+<img alt="../_images/df3b0c81e95d8565e1c12fb88b60d93c6d861e04307ab6ae3d5fb96475b7b237.png" src="../_images/df3b0c81e95d8565e1c12fb88b60d93c6d861e04307ab6ae3d5fb96475b7b237.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -562,6 +565,12 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-06-19 20:10:57.781477: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor &#39;Placeholder/_0&#39; with dtype int32
+	 [[{{node Placeholder/_0}}]]
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -577,7 +586,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/21f211a2da7c55f77ec48251bf674a36c2188f5ef0c58ebd748edcc363fb5514.png" src="../_images/21f211a2da7c55f77ec48251bf674a36c2188f5ef0c58ebd748edcc363fb5514.png" />
+<img alt="../_images/05599d3545b6b56ff595223c88111401f0df6f9c50e727291db6fa2cd0083d0d.png" src="../_images/05599d3545b6b56ff595223c88111401f0df6f9c50e727291db6fa2cd0083d0d.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -636,7 +645,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c88a0dc6f271e9ffb59c4e0806736700b9ccd5324f55bb96eaec4d0f40aae8a3.png" src="../_images/c88a0dc6f271e9ffb59c4e0806736700b9ccd5324f55bb96eaec4d0f40aae8a3.png" />
+<img alt="../_images/763ceb16ab31338cc0c6dc55d43dfacb1d40da71c815edd8dc7a5dd79dae0c58.png" src="../_images/763ceb16ab31338cc0c6dc55d43dfacb1d40da71c815edd8dc7a5dd79dae0c58.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -662,7 +671,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/89425a5cdf5b49cbcab108e5f6d0a233d7baa47b7e8968a2b0d0a5bc20b28224.png" src="../_images/89425a5cdf5b49cbcab108e5f6d0a233d7baa47b7e8968a2b0d0a5bc20b28224.png" />
+<img alt="../_images/98b043213ed8855ea7671ff83907c913e0055ab7f0c9b7fec98d779d8c61806e.png" src="../_images/98b043213ed8855ea7671ff83907c913e0055ab7f0c9b7fec98d779d8c61806e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -687,7 +696,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5f1b0dcdb6fc1e2a693558a7bec62a4f94ed77fd802e30547c768c69449f04e7.png" src="../_images/5f1b0dcdb6fc1e2a693558a7bec62a4f94ed77fd802e30547c768c69449f04e7.png" />
+<img alt="../_images/6761a93e56d29e013a6a311a92ccd327391871af955d39bd2d8a608851831673.png" src="../_images/6761a93e56d29e013a6a311a92ccd327391871af955d39bd2d8a608851831673.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -704,7 +713,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ae0d64384ef8931f3bb2817b318ec92ec7b1541eb80d7006d6b9b6dd14fdeb10.png" src="../_images/ae0d64384ef8931f3bb2817b318ec92ec7b1541eb80d7006d6b9b6dd14fdeb10.png" />
+<img alt="../_images/418c60d6bfed25119fd582da1dec2239d38e793f7e01b973c0bf543ea44d1ea6.png" src="../_images/418c60d6bfed25119fd582da1dec2239d38e793f7e01b973c0bf543ea44d1ea6.png" />
 </div>
 </div>
 </section>

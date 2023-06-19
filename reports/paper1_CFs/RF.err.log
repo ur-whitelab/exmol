@@ -1,0 +1,139 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+    return loop.run_until_complete(inner)
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+fm = raw_features.mean()
+fs = raw_features.std()
+
+
+def feature_convert(f):
+    f -= fm
+    f /= fs
+    return f
+
+
+features = feature_convert(raw_features)
+
+# we have some nans in features, likely because std was 0
+features = features.values.astype(float)
+features_select = np.all(np.isfinite(features), axis=0)
+features = features[:, features_select]
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[5], line 1[0m
+[0;32m----> 1[0m fm [38;5;241m=[39m [43mraw_features[49m[38;5;241;43m.[39;49m[43mmean[49m[43m([49m[43m)[49m
+[1;32m      2[0m fs [38;5;241m=[39m raw_features[38;5;241m.[39mstd()
+[1;32m      5[0m [38;5;28;01mdef[39;00m [38;5;21mfeature_convert[39m(f):
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/generic.py:11556[0m, in [0;36mNDFrame._add_numeric_operations.<locals>.mean[0;34m(self, axis, skipna, numeric_only, **kwargs)[0m
+[1;32m  11539[0m [38;5;129m@doc[39m(
+[1;32m  11540[0m     _num_doc,
+[1;32m  11541[0m     desc[38;5;241m=[39m[38;5;124m"[39m[38;5;124mReturn the mean of the values over the requested axis.[39m[38;5;124m"[39m,
+[0;32m   (...)[0m
+[1;32m  11554[0m     [38;5;241m*[39m[38;5;241m*[39mkwargs,
+[1;32m  11555[0m ):
+[0;32m> 11556[0m     [38;5;28;01mreturn[39;00m [43mNDFrame[49m[38;5;241;43m.[39;49m[43mmean[49m[43m([49m[38;5;28;43mself[39;49m[43m,[49m[43m [49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[43m,[49m[43m [49m[43mnumeric_only[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/generic.py:11201[0m, in [0;36mNDFrame.mean[0;34m(self, axis, skipna, numeric_only, **kwargs)[0m
+[1;32m  11194[0m [38;5;28;01mdef[39;00m [38;5;21mmean[39m(
+[1;32m  11195[0m     [38;5;28mself[39m,
+[1;32m  11196[0m     axis: Axis [38;5;241m|[39m [38;5;28;01mNone[39;00m [38;5;241m=[39m [38;5;241m0[39m,
+[0;32m   (...)[0m
+[1;32m  11199[0m     [38;5;241m*[39m[38;5;241m*[39mkwargs,
+[1;32m  11200[0m ) [38;5;241m-[39m[38;5;241m>[39m Series [38;5;241m|[39m [38;5;28mfloat[39m:
+[0;32m> 11201[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_stat_function[49m[43m([49m
+[1;32m  11202[0m [43m        [49m[38;5;124;43m"[39;49m[38;5;124;43mmean[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[43mnanops[49m[38;5;241;43m.[39;49m[43mnanmean[49m[43m,[49m[43m [49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[43m,[49m[43m [49m[43mnumeric_only[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m
+[1;32m  11203[0m [43m    [49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/generic.py:11158[0m, in [0;36mNDFrame._stat_function[0;34m(self, name, func, axis, skipna, numeric_only, **kwargs)[0m
+[1;32m  11154[0m     nv[38;5;241m.[39mvalidate_stat_func((), kwargs, fname[38;5;241m=[39mname)
+[1;32m  11156[0m validate_bool_kwarg(skipna, [38;5;124m"[39m[38;5;124mskipna[39m[38;5;124m"[39m, none_allowed[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
+[0;32m> 11158[0m [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_reduce[49m[43m([49m
+[1;32m  11159[0m [43m    [49m[43mfunc[49m[43m,[49m[43m [49m[43mname[49m[38;5;241;43m=[39;49m[43mname[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[38;5;241;43m=[39;49m[43mskipna[49m[43m,[49m[43m [49m[43mnumeric_only[49m[38;5;241;43m=[39;49m[43mnumeric_only[49m
+[1;32m  11160[0m [43m[49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/frame.py:10519[0m, in [0;36mDataFrame._reduce[0;34m(self, op, name, axis, skipna, numeric_only, filter_type, **kwds)[0m
+[1;32m  10515[0m     df [38;5;241m=[39m df[38;5;241m.[39mT
+[1;32m  10517[0m [38;5;66;03m# After possibly _get_data and transposing, we are now in the[39;00m
+[1;32m  10518[0m [38;5;66;03m#  simple case where we can use BlockManager.reduce[39;00m
+[0;32m> 10519[0m res [38;5;241m=[39m [43mdf[49m[38;5;241;43m.[39;49m[43m_mgr[49m[38;5;241;43m.[39;49m[43mreduce[49m[43m([49m[43mblk_func[49m[43m)[49m
+[1;32m  10520[0m out [38;5;241m=[39m df[38;5;241m.[39m_constructor(res)[38;5;241m.[39miloc[[38;5;241m0[39m]
+[1;32m  10521[0m [38;5;28;01mif[39;00m out_dtype [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/internals/managers.py:1534[0m, in [0;36mBlockManager.reduce[0;34m(self, func)[0m
+[1;32m   1532[0m res_blocks: [38;5;28mlist[39m[Block] [38;5;241m=[39m []
+[1;32m   1533[0m [38;5;28;01mfor[39;00m blk [38;5;129;01min[39;00m [38;5;28mself[39m[38;5;241m.[39mblocks:
+[0;32m-> 1534[0m     nbs [38;5;241m=[39m [43mblk[49m[38;5;241;43m.[39;49m[43mreduce[49m[43m([49m[43mfunc[49m[43m)[49m
+[1;32m   1535[0m     res_blocks[38;5;241m.[39mextend(nbs)
+[1;32m   1537[0m index [38;5;241m=[39m Index([[38;5;28;01mNone[39;00m])  [38;5;66;03m# placeholder[39;00m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/internals/blocks.py:339[0m, in [0;36mBlock.reduce[0;34m(self, func)[0m
+[1;32m    333[0m [38;5;129m@final[39m
+[1;32m    334[0m [38;5;28;01mdef[39;00m [38;5;21mreduce[39m([38;5;28mself[39m, func) [38;5;241m-[39m[38;5;241m>[39m [38;5;28mlist[39m[Block]:
+[1;32m    335[0m     [38;5;66;03m# We will apply the function and reshape the result into a single-row[39;00m
+[1;32m    336[0m     [38;5;66;03m#  Block with the same mgr_locs; squeezing will be done at a higher level[39;00m
+[1;32m    337[0m     [38;5;28;01massert[39;00m [38;5;28mself[39m[38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m2[39m
+[0;32m--> 339[0m     result [38;5;241m=[39m [43mfunc[49m[43m([49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mvalues[49m[43m)[49m
+[1;32m    341[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mvalues[38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m1[39m:
+[1;32m    342[0m         [38;5;66;03m# TODO(EA2D): special case not needed with 2D EAs[39;00m
+[1;32m    343[0m         res_values [38;5;241m=[39m np[38;5;241m.[39marray([[result]])
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/frame.py:10482[0m, in [0;36mDataFrame._reduce.<locals>.blk_func[0;34m(values, axis)[0m
+[1;32m  10480[0m     [38;5;28;01mreturn[39;00m values[38;5;241m.[39m_reduce(name, skipna[38;5;241m=[39mskipna, [38;5;241m*[39m[38;5;241m*[39mkwds)
+[1;32m  10481[0m [38;5;28;01melse[39;00m:
+[0;32m> 10482[0m     [38;5;28;01mreturn[39;00m [43mop[49m[43m([49m[43mvalues[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[38;5;241;43m=[39;49m[43mskipna[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwds[49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/nanops.py:96[0m, in [0;36mdisallow.__call__.<locals>._f[0;34m(*args, **kwargs)[0m
+[1;32m     94[0m [38;5;28;01mtry[39;00m:
+[1;32m     95[0m     [38;5;28;01mwith[39;00m np[38;5;241m.[39merrstate(invalid[38;5;241m=[39m[38;5;124m"[39m[38;5;124mignore[39m[38;5;124m"[39m):
+[0;32m---> 96[0m         [38;5;28;01mreturn[39;00m [43mf[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m     97[0m [38;5;28;01mexcept[39;00m [38;5;167;01mValueError[39;00m [38;5;28;01mas[39;00m e:
+[1;32m     98[0m     [38;5;66;03m# we want to transform an object array[39;00m
+[1;32m     99[0m     [38;5;66;03m# ValueError message to the more typical TypeError[39;00m
+[1;32m    100[0m     [38;5;66;03m# e.g. this is normally a disallowed function on[39;00m
+[1;32m    101[0m     [38;5;66;03m# object arrays that contain strings[39;00m
+[1;32m    102[0m     [38;5;28;01mif[39;00m is_object_dtype(args[[38;5;241m0[39m]):
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/nanops.py:158[0m, in [0;36mbottleneck_switch.__call__.<locals>.f[0;34m(values, axis, skipna, **kwds)[0m
+[1;32m    156[0m         result [38;5;241m=[39m alt(values, axis[38;5;241m=[39maxis, skipna[38;5;241m=[39mskipna, [38;5;241m*[39m[38;5;241m*[39mkwds)
+[1;32m    157[0m [38;5;28;01melse[39;00m:
+[0;32m--> 158[0m     result [38;5;241m=[39m [43malt[49m[43m([49m[43mvalues[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[38;5;241;43m=[39;49m[43mskipna[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwds[49m[43m)[49m
+[1;32m    160[0m [38;5;28;01mreturn[39;00m result
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/nanops.py:421[0m, in [0;36m_datetimelike_compat.<locals>.new_func[0;34m(values, axis, skipna, mask, **kwargs)[0m
+[1;32m    418[0m [38;5;28;01mif[39;00m datetimelike [38;5;129;01mand[39;00m mask [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[1;32m    419[0m     mask [38;5;241m=[39m isna(values)
+[0;32m--> 421[0m result [38;5;241m=[39m [43mfunc[49m[43m([49m[43mvalues[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m,[49m[43m [49m[43mskipna[49m[38;5;241;43m=[39;49m[43mskipna[49m[43m,[49m[43m [49m[43mmask[49m[38;5;241;43m=[39;49m[43mmask[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m    423[0m [38;5;28;01mif[39;00m datetimelike:
+[1;32m    424[0m     result [38;5;241m=[39m _wrap_results(result, orig_values[38;5;241m.[39mdtype, fill_value[38;5;241m=[39miNaT)
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pandas/core/nanops.py:727[0m, in [0;36mnanmean[0;34m(values, axis, skipna, mask)[0m
+[1;32m    724[0m     dtype_count [38;5;241m=[39m dtype
+[1;32m    726[0m count [38;5;241m=[39m _get_counts(values[38;5;241m.[39mshape, mask, axis, dtype[38;5;241m=[39mdtype_count)
+[0;32m--> 727[0m the_sum [38;5;241m=[39m _ensure_numeric([43mvalues[49m[38;5;241;43m.[39;49m[43msum[49m[43m([49m[43maxis[49m[43m,[49m[43m [49m[43mdtype[49m[38;5;241;43m=[39;49m[43mdtype_sum[49m[43m)[49m)
+[1;32m    729[0m [38;5;28;01mif[39;00m axis [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;129;01mand[39;00m [38;5;28mgetattr[39m(the_sum, [38;5;124m"[39m[38;5;124mndim[39m[38;5;124m"[39m, [38;5;28;01mFalse[39;00m):
+[1;32m    730[0m     count [38;5;241m=[39m cast(np[38;5;241m.[39mndarray, count)
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/numpy/core/_methods.py:48[0m, in [0;36m_sum[0;34m(a, axis, dtype, out, keepdims, initial, where)[0m
+[1;32m     46[0m [38;5;28;01mdef[39;00m [38;5;21m_sum[39m(a, axis[38;5;241m=[39m[38;5;28;01mNone[39;00m, dtype[38;5;241m=[39m[38;5;28;01mNone[39;00m, out[38;5;241m=[39m[38;5;28;01mNone[39;00m, keepdims[38;5;241m=[39m[38;5;28;01mFalse[39;00m,
+[1;32m     47[0m          initial[38;5;241m=[39m_NoValue, where[38;5;241m=[39m[38;5;28;01mTrue[39;00m):
+[0;32m---> 48[0m     [38;5;28;01mreturn[39;00m [43mumr_sum[49m[43m([49m[43ma[49m[43m,[49m[43m [49m[43maxis[49m[43m,[49m[43m [49m[43mdtype[49m[43m,[49m[43m [49m[43mout[49m[43m,[49m[43m [49m[43mkeepdims[49m[43m,[49m[43m [49m[43minitial[49m[43m,[49m[43m [49m[43mwhere[49m[43m)[49m
+
+[0;31mTypeError[0m: unsupported operand type(s) for +: 'float' and 'Missing'
+
