@@ -1,3 +1,4 @@
+
 from functools import reduce
 import inspect
 from typing import *
@@ -14,7 +15,6 @@ import tqdm  # type: ignore
 import textwrap  # type: ignore
 import skunk  # type: ignore
 import synspace  # type: ignore
-
 from ratelimit import limits, sleep_and_retry  # type: ignore
 from sklearn.cluster import DBSCAN  # type: ignore
 from sklearn.decomposition import PCA  # type: ignore
@@ -28,24 +28,21 @@ from rdkit.Chem import rdchem  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 import langchain.llms as llms
 import langchain.prompts as prompts
-
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter, _bit2atoms
 from .data import *
-
-
+np.set_printoptions(precision=10)
 def _fp_dist_matrix(smiles, fp_type, _pbar):
     mols = [(smi2mol(s), _pbar.update(0.5))[0] for s in smiles]
     # Sorry about the one-line. Just sneaky insertion of progressbar update
     fp = [(stoned.get_fingerprint(m, fp_type), _pbar.update(0.5))[0] for m in mols]
     M = np.array([BulkTanimotoSimilarity(f, fp) for f in fp])
+    #print('debugging m shape and fp len', M.shape, len(fp)) (11, 11) 11
     # 1 - similarity because we want distance
     return 1 - M
 
-
 def _check_multiple_bases(examples):
     return sum([e.is_origin for e in examples]) > 1
-
 
 def _ecfp_names(examples, joint_bits):
     # add names for given descriptor indices
@@ -77,10 +74,8 @@ def _ecfp_names(examples, joint_bits):
         result.append(name)
     return tuple(result)
 
-
 def _calculate_rdkit_descriptors(mol):
     from rdkit.ML.Descriptors import MoleculeDescriptors  # type: ignore
-
     dlist = [
         "NumHDonors",
         "NumHAcceptors",
@@ -91,15 +86,12 @@ def _calculate_rdkit_descriptors(mol):
     ]  # , 'NumHeteroatoms']
     c = MoleculeDescriptors.MolecularDescriptorCalculator(dlist)
     d = c.CalcDescriptors(mol)
-
     def calc_aromatic_bonds(mol):
         return sum(1 for b in mol.GetBonds() if b.GetIsAromatic())
-
     def _create_smarts(SMARTS):
         s = ",".join("$(" + s + ")" for s in SMARTS)
         _mol = MolFromSmarts("[" + s + "]")
         return _mol
-
     def calc_acid_groups(mol):
         acid_smarts = (
             "[O;H1]-[C,S,P]=O",
@@ -109,7 +101,6 @@ def _calculate_rdkit_descriptors(mol):
         )
         pat = _create_smarts(acid_smarts)
         return len(mol.GetSubstructMatches(pat))
-
     def calc_basic_groups(mol):
         basic_smarts = (
             "[NH2]-[CX4]",
@@ -121,13 +112,11 @@ def _calculate_rdkit_descriptors(mol):
         )
         pat = _create_smarts(basic_smarts)
         return len(mol.GetSubstructMatches(pat))
-
     def calc_apol(mol, includeImplicitHs=True):
         # atomic polarizabilities available here:
         # https://github.com/mordred-descriptor/mordred/blob/develop/mordred/data/polarizalibity78.txt
         from importlib_resources import files  # type: ignore
         import exmol.lime_data  # type: ignore
-
         ap = files(exmol.lime_data).joinpath("atom_pols.txt")
         with open(ap, "r") as f:
             atom_pols = [float(x) for x in next(f).split(",")]
@@ -142,7 +131,6 @@ def _calculate_rdkit_descriptors(mol):
             else:
                 raise ValueError(f"atomic number {anum} not found")
         return res
-
     d = d + (
         calc_aromatic_bonds(mol),
         calc_acid_groups(mol),
@@ -150,7 +138,6 @@ def _calculate_rdkit_descriptors(mol):
         calc_apol(mol),
     )
     return d
-
 
 def _get_joint_ecfp_descriptors(examples):
     """Create a union of ECFP bits from all base molecules"""
@@ -180,9 +167,7 @@ def _get_joint_ecfp_descriptors(examples):
             output_names.append(n)
     return output_ecfp, output_names
 
-
 _SMARTS = None
-
 
 def _load_smarts(path, rank_cutoff=500):
     # we have a rank cut for SMARTS that match too often
@@ -204,10 +189,8 @@ def _load_smarts(path, rank_cutoff=500):
             smarts[name] = (m, rank)
     return smarts
 
-
 def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
     """Get the name of a Morgan bit using a SMARTS dictionary
-
     :param m: RDKit molecule
     :param bitInfo: bitInfo dictionary from rdkit.Chem.AllChem.GetMorganFingerprint
     :param key: bit key corresponding to the fingerprint you want to have named
@@ -216,7 +199,6 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
     if _SMARTS is None:
         from importlib_resources import files  # type: ignore
         import exmol.lime_data  # type: ignore
-
         sp = files(exmol.lime_data).joinpath("smarts.txt")
         _SMARTS = _load_smarts(sp)
     morgan_atoms = _bit2atoms(m, bitInfo, key)
@@ -251,12 +233,10 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
         return None
     return name
 
-
 def clear_descriptors(
     examples: List[Example],
 ) -> List[Example]:
     """Clears all descriptors from examples
-
     :param examples: list of examples
     :param descriptor_type: type of descriptor to clear, if None, all descriptors are cleared
     """
@@ -264,14 +244,12 @@ def clear_descriptors(
         e.descriptors = None  # type: ignore
     return examples
 
-
 def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
     mols: List[Any] = None,
 ) -> List[Example]:
     """Add descriptors to passed examples
-
     :param examples: List of example
     :param descriptor_type: Kind of descriptors to return, choose between 'Classic', 'ECFP', or 'MACCS'. Default is 'MACCS'.
     :param mols: Can be used if you already have rdkit Mols computed.
@@ -279,7 +257,6 @@ def add_descriptors(
     """
     from importlib_resources import files
     import exmol.lime_data
-
     if mols is None:
         mols = [smi2mol(m.smiles) for m in examples]
     if descriptor_type.lower() == "classic":
@@ -343,12 +320,9 @@ def add_descriptors(
             "Invalid descriptor string. Valid descriptor strings are 'Classic', 'ECFP', or 'MACCS'."
         )
 
-
 def get_basic_alphabet() -> Set[str]:
     """Returns set of interpretable SELFIES tokens
-
     Generated by removing P and most ionization states from :func:`selfies.get_semantic_robust_alphabet`
-
     :return: Set of interpretable SELFIES tokens
     """
     a = sf.get_semantic_robust_alphabet()
@@ -361,11 +335,9 @@ def get_basic_alphabet() -> Set[str]:
             to_remove.append(ai)
     # remove [P],[#P],[=P]
     to_remove.extend(["[P]", "[#P]", "[=P]", "[B]", "[#B]", "[=B]"])
-
     a -= set(to_remove)
     a.add("[O-1]")
     return a
-
 
 def run_stoned(
     start_smiles: str,
@@ -378,7 +350,6 @@ def run_stoned(
     _pbar: Any = None,
 ) -> Union[Tuple[List[str], List[float]], Tuple[List[str], List[str], List[float]]]:
     """Run ths STONED SELFIES algorithm. Typically not used, call :func:`sample_space` instead.
-
     :param start_smiles: SMILES string to start from
     :param fp_type: Fingerprint type
     :param num_samples: Number of total molecules to generate
@@ -393,20 +364,16 @@ def run_stoned(
     if type(alphabet) == set:
         alphabet = list(alphabet)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
-
     start_mol = smi2mol(start_smiles)
     if start_mol == None:
         raise Exception("Invalid starting structure encountered")
-
     # want it so after sampling have num_samples
     randomized_smile_orderings = [
         stoned.randomize_smiles(smi2mol(start_smiles))
         for _ in range(num_samples // len(num_mutation_ls))
     ]
-
     # Convert all the molecules to SELFIES
     selfies_ls = [sf.encoder(x) for x in randomized_smile_orderings]
-
     all_smiles_collect: List[str] = []
     all_selfies_collect: List[str] = []
     for num_mutations in num_mutation_ls:
@@ -422,10 +389,8 @@ def run_stoned(
         all_selfies_collect = all_selfies_collect + selfies_mut
         if _pbar:
             _pbar.update(len(smiles_back))
-
     if _pbar:
         _pbar.set_description(f"🥌STONED🥌 Filtering")
-
     # filter out duplicates
     all_mols = [smi2mol(s) for s in all_smiles_collect]
     all_canon = [
@@ -437,25 +402,20 @@ def run_stoned(
         if all_canon[i] and all_canon[i] not in seen:
             to_keep[i] = True
             seen.add(all_canon[i])
-
     # now do filter
     filter_mols = [m for i, m in enumerate(all_mols) if to_keep[i]]
     filter_selfies = [s for i, s in enumerate(all_selfies_collect) if to_keep[i]]
     filter_smiles = [s for i, s in enumerate(all_smiles_collect) if to_keep[i]]
-
     # compute similarity scores
     base_fp = stoned.get_fingerprint(start_mol, fp_type=fp_type)
     fps = [stoned.get_fingerprint(m, fp_type) for m in filter_mols]
     scores = BulkTanimotoSimilarity(base_fp, fps)  # type: List[float]
-
     if _pbar:
         _pbar.set_description(f"🥌STONED🥌 Done")
-
     if return_selfies:
         return filter_selfies, filter_smiles, scores
     else:
         return filter_smiles, scores
-
 
 @sleep_and_retry
 @limits(calls=2, period=30)
@@ -468,7 +428,6 @@ def run_chemed(
 ) -> Tuple[List[str], List[float]]:
     """
     This method is similar to STONED but works by quering PubChem
-
     :param origin_smiles: Base SMILES
     :param num_samples: Minimum number of returned molecules. May return less due to network timeout or exhausting tree
     :param similarity: Tanimoto similarity to use in query (float between 0 to 1)
@@ -496,10 +455,8 @@ def run_chemed(
         return [], []
     smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
     smiles = list(set(smiles))
-
     if _pbar:
         _pbar.set_description(f"Received {len(smiles)} similar molecules")
-
     mol0 = smi2mol(origin_smiles)
     mols = [smi2mol(s) for s in smiles]
     all_can = [
@@ -526,7 +483,6 @@ def run_chemed(
             _pbar.update()
     return smiles, scores
 
-
 def run_custom(
     origin_smiles: str,
     data: List[Union[str, rdchem.Mol]],
@@ -536,7 +492,6 @@ def run_custom(
 ) -> Tuple[List[str], List[float]]:
     """
     This method is similar to STONED but uses a custom dataset provided by the user
-
     :param origin_smiles: Base SMILES
     :param data: List of SMILES or RDKit molecules
     :param fp_type: Fingerprint type
@@ -565,7 +520,6 @@ def run_custom(
             _pbar.update()
     return smiles, scores
 
-
 def sample_space(
     origin_smiles: str,
     f: Union[
@@ -585,13 +539,11 @@ def sample_space(
     sanitize_smiles: bool = True,
 ) -> List[Example]:
     """Sample chemical space around given SMILES
-
     This will evaluate the given function and run the :func:`run_stoned` function over chemical space around molecule. ``num_samples`` will be
     set to 3,000 by default if using STONED and 150 if using ``chemed``. If using ``custom`` then ``num_samples`` will be set to the length of
     of the ``data`` list. If using ``synspace`` then ``num_samples`` will be set to 1,000. See :func:`run_stoned` and :func:`run_chemed` for more details.
     ``synspace`` comes from the package `synspace <https://github.com/whitead/synspace>`. It generates synthetically feasible
     molecules from a given SMILES.
-
     :param origin_smiles: starting SMILES
     :param f: A function which takes in SMILES or SELFIES and returns predicted value. Assumed to work with lists of SMILES/SELFIES unless `batched = False`
     :param batched: If `f` is batched
@@ -605,9 +557,7 @@ def sample_space(
     :param sanitize_smiles: If True, will sanitize all SMILES
     :return: List of generated :obj:`Example`
     """
-
     wrapped_f = f
-
     # if f only takes in 1 arg, wrap it in a function that takes in 2
     # count args with no default value. Looks fancy because of possible objects/partials
     argcount = len(
@@ -619,21 +569,16 @@ def sample_space(
     )
     if argcount == 1:
         if use_selfies:
-
             def wrapped_f(sm, sf):
                 return f(sf)
-
         else:
-
             def wrapped_f(sm, sf):
                 return f(sm)
-
     batched_f: Any = wrapped_f
     if not batched:
-
         def batched_f(sm, se):
+            #print('^^^ in batched f',np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)]))
             return np.array([wrapped_f(smi, sei) for smi, sei in zip(sm, se)])
-
     if sanitize_smiles:
         origin_smiles = stoned.sanitize_smiles(origin_smiles)[1]
     elif "." in origin_smiles:
@@ -644,15 +589,14 @@ def sample_space(
     if origin_smiles is None:
         raise ValueError("Given SMILES does not appear to be valid")
     smi_yhat = np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)]))
+    #print('### smi_yhat', np.asarray(batched_f([origin_smiles], [sf.encoder(origin_smiles)])))
     try:
         iter(smi_yhat)
     except TypeError:
         raise ValueError("Your model function does not appear to be batched")
     smi_yhat = np.squeeze(smi_yhat[0])
-
     if stoned_kwargs is not None:
         method_kwargs = stoned_kwargs
-
     if method_kwargs is None:
         method_kwargs = {}
         if preset == "medium":
@@ -681,9 +625,7 @@ def sample_space(
         if num_samples is None:
             num_samples = 150
         method_kwargs["num_samples"] = num_samples
-
     pbar = tqdm.tqdm(total=num_samples, disable=quiet)
-
     # STONED
     if preset.startswith("chem"):
         smiles, scores = run_chemed(origin_smiles, _pbar=pbar, **method_kwargs)
@@ -700,6 +642,7 @@ def sample_space(
                 "Synspace did not return enough molecules. Try adjusting method_kwargs for synspace"
             )
         data = [mol2smi(mol).replace("~", "") for mol in mols]
+        print(len(data),'(((((')
         smiles, scores = run_custom(
             origin_smiles, data=cast(Any, data), _pbar=pbar, **method_kwargs
         )
@@ -709,12 +652,10 @@ def sample_space(
             origin_smiles, _pbar=pbar, return_selfies=True, **method_kwargs
         )
         selfies, smiles, scores = cast(Tuple[List[str], List[str], List[float]], result)
-
     pbar.set_description("😀Calling your model function😀")
     if sanitize_smiles:
         smiles = [stoned.sanitize_smiles(s)[1] for s in smiles]
     fxn_values = batched_f(smiles, selfies)
-
     # pack them into data structure with filtering out identical
     # and nan
     exps = [
@@ -731,64 +672,57 @@ def sample_space(
         for i, (sm, se, s, y) in enumerate(zip(smiles, selfies, scores, fxn_values))
         if s < 1.0 and np.isfinite(np.squeeze(y))
     ]
-
+    #todo filter out based on low scores
     for i, e in enumerate(exps):  # type: ignore
         e.index = i  # type: ignore
 
+    """
+    
     pbar.reset(len(exps))
     pbar.set_description("🔭Projecting...🔭")
-
     # compute distance matrix
     full_dmat = _fp_dist_matrix(
         [e.smiles for e in exps],
         method_kwargs["fp_type"] if ("fp_type" in method_kwargs) else "ECFP4",
         _pbar=pbar,
     )
-
     pbar.set_description("🥰Finishing up🥰")
-
     # compute PCA
     pca = PCA(n_components=2)
     proj_dmat = pca.fit_transform(full_dmat)
     for e in exps:  # type: ignore
         e.position = proj_dmat[e.index, :]  # type: ignore
-
     # do clustering everywhere (maybe do counter/same separately?)
     # clustering = AgglomerativeClustering(
     #    n_clusters=max_k, affinity='precomputed', linkage='complete').fit(full_dmat)
     # Just do it on projected so it looks prettier.
     clustering = DBSCAN(eps=0.15, min_samples=5).fit(proj_dmat)
-
     for i, e in enumerate(exps):  # type: ignore
         e.cluster = clustering.labels_[i]  # type: ignore
-
+    """
     pbar.set_description("🤘Done🤘")
     pbar.close()
     return exps
 
-
 def _select_examples(cond, examples, nmols, do_filter=False):
+    #todo remove clustering part
     result = []
     if do_filter or do_filter is None:
         from synspace.reos import REOS
-
         reos = REOS()
         # if do_filter is None, check if 0th smiles passes filter
         if do_filter is None:
             do_filter = reos.process_mol(smi2mol(examples[0].smiles)) == ("ok", "ok")
-
     # similarity filtered by if cluster/counter
     def cluster_score(e, i):
         score = (e.cluster == i) * cond(e) * e.similarity
         return score
-
     clusters = set([e.cluster for e in examples])
     for i in clusters:
         close_counter = max(examples, key=lambda e, i=i: cluster_score(e, i))
         # check if actually is (since call could have been zero)
         if cluster_score(close_counter, i):
             result.append(close_counter)
-
     # sort by similarity
     result = sorted(result, key=lambda v: v.similarity * cond(v), reverse=True)
     # back fill
@@ -804,6 +738,12 @@ def _select_examples(cond, examples, nmols, do_filter=False):
     return list(filter(cond, final_result))
 
 
+def _select_examples_bare_min(cond, examples, nmols, do_filter=False):
+    #todo remove clustering part
+    result = []
+    result.extend(sorted(examples, key=lambda v: v.similarity * cond(v), reverse=True))
+    final_result = result[:nmols]
+    return list(filter(cond, final_result))
 def lime_explain(
     examples: List[Example],
     descriptor_type: str = "MACCS",
@@ -811,7 +751,6 @@ def lime_explain(
 ):
     """From given :obj:`Examples<Example>`, find descriptor t-statistics (see
     :doc: `index`)
-
     :param examples: Output from :func: `sample_space`
     :param descriptor_type: Desired descriptors, choose from 'Classic', 'ECFP' 'MACCS'
     :return_beta: Whether or not the function should return regression coefficient values
@@ -864,26 +803,23 @@ def lime_explain(
     else:
         return None
 
-
 def cf_explain(
     examples: List[Example], nmols: int = 3, filter_nondrug: Optional[bool] = None
 ) -> List[Example]:
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
-
     :param examples: Output from :func:`sample_space`
     :param nmols: Desired number of molecules
     :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
-
+    print('******** in Montai\'s exmol')
     def is_counter(e):
-        return e.yhat != examples[0].yhat
-
-    result = _select_examples(is_counter, examples[1:], nmols, filter_nondrug)
+        #print('e is ', e.smiles,'e.yhat is ',e.yhat, 'orig score', examples[0].yhat, 'return of this func ',e.yhat <=0.3)
+        return e.yhat <=0.5 # if the original molecule has prediction > 0.7
+        #return e.yhat != examples[0].yhat
+    result = _select_examples_bare_min(is_counter, examples[1:], nmols, filter_nondrug)
     for i, r in enumerate(result):
         r.label = f"Counterfactual {i+1}"
-
     return examples[:1] + result
-
 
 def rcf_explain(
     examples: List[Example],
@@ -894,7 +830,6 @@ def rcf_explain(
     """From given :obj:`Examples<Example>`, find closest counterfactuals (see :doc:`index`)
     This version works with regression, so that a counterfactual is if the given example is higher or
     lower than base.
-
     :param examples: Output from :func:`sample_space`
     :param delta: float or tuple of hi/lo indicating margin for what is counterfactual
     :param nmols: Desired number of molecules
@@ -902,13 +837,10 @@ def rcf_explain(
     """
     if type(delta) is float:
         delta = (-delta, delta)
-
     def is_high(e):
         return e.yhat + delta[0] >= examples[0].yhat
-
     def is_low(e):
         return e.yhat + delta[1] <= examples[0].yhat
-
     hresult = (
         []
         if delta[0] is None
@@ -925,7 +857,6 @@ def rcf_explain(
         l.label = f"Decrease ({i+1})"
     return examples[:1] + lresult + hresult
 
-
 def plot_space(
     examples: List[Example],
     exps: List[Example],
@@ -939,7 +870,6 @@ def plot_space(
     rasterized: bool = False,
 ):
     """Plot chemical space around example and annotate given examples.
-
     :param examples: Large list of :obj:Example which make-up points
     :param exps: Small list of :obj:Example which will be annotated
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
@@ -959,12 +889,9 @@ def plot_space(
         ax = plt.figure(**figure_kwargs).gca()
     if highlight_clusters:
         colors = [e.cluster for e in examples]
-
         def normalizer(x):
             return x
-
         cmap = "Accent"
-
     else:
         colors = cast(Any, [e.yhat for e in examples])
         normalizer = plt.Normalize(min(colors), max(colors))
@@ -1003,7 +930,6 @@ def plot_space(
         cmap=cmap,
         edgecolors="black",
     )
-
     x = [e.position[0] for e in exps]
     y = [e.position[1] for e in exps]
     titles = []
@@ -1019,7 +945,6 @@ def plot_space(
     ax.axis("off")
     ax.set_aspect("auto")
 
-
 def plot_cf(
     exps: List[Example],
     fig: Any = None,
@@ -1030,7 +955,6 @@ def plot_cf(
     ncols: int = None,
 ):
     """Draw the given set of Examples in a grid
-
     :param exps: Small list of :obj:`Example` which will be drawn
     :param fig: Figure to plot onto
     :param figure_kwargs: kwargs to pass to :func:`plt.figure<matplotlib.pyplot.figure>`
@@ -1068,7 +992,6 @@ def plot_cf(
         axs[j].set_facecolor("white")
     plt.tight_layout()
 
-
 def plot_descriptors(
     examples: List[Example],
     output_file: str = None,
@@ -1078,7 +1001,6 @@ def plot_descriptors(
     return_svg: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples.
-
     :param examples: Output from :func:`sample_space`
     :param output_file: Output file name to save the plot - optional except for ECFP
     :param fig: Figure to plot on to
@@ -1086,19 +1008,14 @@ def plot_descriptors(
     :param title: Title for the plot
     :param return_svg: Whether to return svg for plot
     """
-
     from importlib_resources import files
     import exmol.lime_data
     import pickle  # type: ignore
-
     # infer descriptor_type from examples
     descriptor_type = examples[0].descriptors.descriptor_type.lower()
-
     multiple_bases = _check_multiple_bases(examples)
-
     if output_file is None and descriptor_type == "ecfp" and not return_svg:
         raise ValueError("No filename provided to save the plot")
-
     space_tstats = list(examples[0].descriptors.tstats)
     if fig is None:
         if figure_kwargs is None:
@@ -1108,7 +1025,6 @@ def plot_descriptors(
                 else {"figsize": (8, 5)}
             )
         fig, ax = plt.subplots(nrows=1, ncols=1, dpi=180, **figure_kwargs)
-
     # find important descriptors
     d_importance = {
         a: [b, i, n]
@@ -1128,7 +1044,6 @@ def plot_descriptors(
     key_ids = [a[1] for a in list(d_importance.values())][:5]
     keys = [a for a in list(d_importance.keys())]
     names = [a[2] for a in list(d_importance.values())][:5]
-
     # set colors
     colors = []
     for ti in t:
@@ -1155,7 +1070,6 @@ def plot_descriptors(
         new_patches.append(p_bbox)
     for patch in new_patches:
         ax.add_patch(patch)
-
     count = 0
     sk_dict, key_imgs = {}, {}
     if descriptor_type == "maccs":
@@ -1234,7 +1148,6 @@ def plot_descriptors(
                 boxcoords="axes fraction",
                 bboxprops=dict(lw=0.5),
             )
-
             ax.add_artist(ab)
             if descriptor_type == "maccs":
                 sk_dict[f"sk{count}"] = key_imgs[ki]["svg"]
@@ -1301,7 +1214,6 @@ def plot_descriptors(
             plt.tight_layout()
             plt.savefig(output_file, dpi=180, bbox_inches="tight")
 
-
 def check_multiple_aromatic_rings(mol):
     ri = mol.GetRingInfo()
     count = 0
@@ -1314,7 +1226,6 @@ def check_multiple_aromatic_rings(mol):
         if flag:
             count += 1
     return True if count > 1 else False
-
 
 def merge_text_explains(
     *args: List[Tuple[str, float]], filter: Optional[float] = None
@@ -1331,7 +1242,6 @@ def merge_text_explains(
     joint = sorted(joint, key=lambda x: np.absolute(x[1]), reverse=True)
     return pos + joint
 
-
 _multi_prompt = (
     "The following is information about molecules that connect their structures "
     'to the property called "{property}." '
@@ -1345,7 +1255,6 @@ _multi_prompt = (
     "{text}\n\n"
     "Explanation:"
 )
-
 _single_prompt = (
     "The following is information about a specific molecule that connects its structure "
     'to the property "{property}." '
@@ -1360,7 +1269,6 @@ _single_prompt = (
     "Explanation:"
 )
 
-
 def text_explain_generate(
     text_explanations: List[Tuple[str, float]],
     property_name: str,
@@ -1368,7 +1276,6 @@ def text_explain_generate(
     single: bool = True,
 ) -> str:
     """Insert text explanations into template, and generate explanation.
-
     Args:
         text_explanations: List of text explanations.
         property_name: Name of property.
@@ -1393,7 +1300,6 @@ def text_explain_generate(
         llm = llms.OpenAI(temperature=0.05)
     return llm(prompt)
 
-
 def text_explain(
     examples: List[Example],
     descriptor_type: str = "maccs",
@@ -1402,7 +1308,6 @@ def text_explain(
     include_weak: Optional[bool] = None,
 ) -> List[Tuple[str, float]]:
     """Take an example and convert t-statistics into text explanations
-
     :param examples: Output from :func:`sample_space`
     :param descriptor_type: Type of descriptor, either "maccs", or "ecfp".
     :param count: Number of text explanations to return
@@ -1416,7 +1321,6 @@ def text_explain(
     if examples[-1].descriptors is None:
         lime_explain(examples, descriptor_type=descriptor_type)
     nbases = sum([1 for e in examples if e.is_origin])
-
     # Take t-statistics, rank them
     d_importance = [
         (n, t, i)  # name, t-stat, index
@@ -1429,7 +1333,6 @@ def text_explain(
         # don't want NANs and want match (if not multiple bases)
         if not np.isnan(t)
     ]
-
     d_importance = sorted(d_importance, key=lambda x: abs(x[1]), reverse=True)
     # get significance value - if >significance, then important else weakly important?
     w = np.array([1 / (1 + (1 / (e.similarity + 0.000001) - 1) ** 5) for e in examples])
@@ -1437,7 +1340,6 @@ def text_explain(
     if np.isnan(effective_n):
         effective_n = len(examples)
     T = ss.t.ppf(0.975, df=effective_n)
-
     pos_count = 0
     neg_count = 0
     result = []
@@ -1458,7 +1360,6 @@ def text_explain(
         else:
             continue
         # check if it's present in majority of base molecules
-
         present = sum(
             [1 for e in examples if e.descriptors.descriptors[i] != 0 and e.is_origin]
         )
