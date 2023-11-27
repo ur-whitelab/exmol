@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v3.0.3 (2023-06-19)
+-------------------
+* Now compatible with python 3.11
+
+
 v3.0.2 (2023-02-23)
 -------------------
 * Now try to find largest component with multiple compounds separated via `.` in SMILES

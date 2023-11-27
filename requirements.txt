@@ -3,3 +3,4 @@ mypy
 pytest
 pytest-cov
 click
+openai
