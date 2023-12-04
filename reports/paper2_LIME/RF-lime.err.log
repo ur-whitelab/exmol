@@ -17,49 +17,46 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 ------------------
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+
+# import seaborn as sns
 import matplotlib as mpl
 import rdkit, rdkit.Chem, rdkit.Chem.Draw
 from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
-import skunk
 import mordred, mordred.descriptors
+from mordred import HydrogenBond, Polarizability
+from mordred import SLogP, AcidBase, BertzCT, Aromatic, BondCount, AtomCount
+from mordred import Calculator
+
 import exmol as exmol
 from rdkit.Chem.Draw import rdDepictor
-from sklearn.ensemble import RandomForestClassifier
+import os
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, plot_roc_curve
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 rdDepictor.SetPreferCoordGen(True)
 
 IPythonConsole.ipython_useSVG = True
-sns.set_context("notebook")
-sns.set_style(
-    "dark",
-    {
-        "xtick.bottom": True,
-        "ytick.left": True,
-        "xtick.color": "#666666",
-        "ytick.color": "#666666",
-        "axes.edgecolor": "#666666",
-        "axes.linewidth": 0.8,
-        "figure.dpi": 300,
-    },
-)
-color_cycle = ["#1BBC9B", "#F06060", "#F3B562", "#6e5687", "#5C4B51"]
+color_cycle = ["#F06060", "#1BBC9B", "#F3B562", "#6e5687", "#5C4B51"]
 mpl.rcParams["axes.prop_cycle"] = mpl.cycler(color=color_cycle)
 np.random.seed(0)
+soldata = pd.read_csv(
+    "https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv"
+)
+features_start_at = list(soldata.columns).index("MolWt")
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mImportError[0m                               Traceback (most recent call last)
-Cell [0;32mIn[1], line 10[0m
-[1;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mskunk[39;00m
-[1;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mmordred[39;00m[38;5;241m,[39m [38;5;21;01mmordred[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdescriptors[39;00m
-[0;32m---> 10[0m [38;5;28;01mimport[39;00m [38;5;21;01mexmol[39;00m [38;5;28;01mas[39;00m [38;5;21;01mexmol[39;00m
-[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDraw[39;00m [38;5;28;01mimport[39;00m rdDepictor
-[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mensemble[39;00m [38;5;28;01mimport[39;00m RandomForestClassifier
+Cell [0;32mIn[1], line 14[0m
+[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmordred[39;00m [38;5;28;01mimport[39;00m SLogP, AcidBase, BertzCT, Aromatic, BondCount, AtomCount
+[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmordred[39;00m [38;5;28;01mimport[39;00m Calculator
+[0;32m---> 14[0m [38;5;28;01mimport[39;00m [38;5;21;01mexmol[39;00m [38;5;28;01mas[39;00m [38;5;21;01mexmol[39;00m
+[1;32m     15[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDraw[39;00m [38;5;28;01mimport[39;00m rdDepictor
+[1;32m     16[0m [38;5;28;01mimport[39;00m [38;5;21;01mos[39;00m
 
 File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/exmol/__init__.py:3[0m
 [1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mversion[39;00m [38;5;28;01mimport[39;00m __version__

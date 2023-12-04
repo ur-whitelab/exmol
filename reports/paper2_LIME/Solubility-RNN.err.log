@@ -1,49 +1,281 @@
 Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 1305, in execute
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/nbclient/client.py", line 1305, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
     return future.result()
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 705, in async_execute
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/nbclient/client.py", line 705, in async_execute
     await self.async_execute_cell(
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/nbclient/client.py", line 1058, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-exmol.lime_explain(space, "ecfp")
-s1_ecfp = exmol.text_explain(space, "ecfp")
-explanation = exmol.text_explain_generate(s1_ecfp, "aqueous solubility")
-print(explanation)
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyBboxPatch
+from matplotlib.offsetbox import AnnotationBbox
+import seaborn as sns
+import skunk
+import matplotlib as mpl
+import numpy as np
+import tensorflow as tf
+import selfies as sf
+import exmol
+from dataclasses import dataclass
+from rdkit.Chem.Draw import rdDepictor, MolsToGridImage
+from rdkit.Chem import MolFromSmiles, MACCSkeys
+import random
+
+
+rdDepictor.SetPreferCoordGen(True)
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as font_manager
+import urllib.request
+
+urllib.request.urlretrieve(
+    "https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf",
+    "IBMPlexMono-Regular.ttf",
+)
+fe = font_manager.FontEntry(fname="IBMPlexMono-Regular.ttf", name="plexmono")
+font_manager.fontManager.ttflist.append(fe)
+plt.rcParams.update(
+    {
+        "axes.facecolor": "#f5f4e9",
+        "grid.color": "#AAAAAA",
+        "axes.edgecolor": "#333333",
+        "figure.facecolor": "#FFFFFF",
+        "axes.grid": False,
+        "axes.prop_cycle": plt.cycler("color", plt.cm.Dark2.colors),
+        "font.family": fe.name,
+        "figure.figsize": (3.5, 3.5 / 1.2),
+        "ytick.left": True,
+        "xtick.bottom": True,
+    }
+)
+mpl.rcParams["font.size"] = 12
+soldata = pd.read_csv(
+    "https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv"
+)
+features_start_at = list(soldata.columns).index("MolWt")
+np.random.seed(0)
+random.seed(0)
 ------------------
 
+----- stderr -----
+2023-12-04 18:07:06.565393: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-12-04 18:07:06.603003: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-12-04 18:07:06.603764: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+----- stderr -----
+2023-12-04 18:07:07.302411: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mValidationError[0m                           Traceback (most recent call last)
-Cell [0;32mIn[17], line 3[0m
-[1;32m      1[0m exmol[38;5;241m.[39mlime_explain(space, [38;5;124m"[39m[38;5;124mecfp[39m[38;5;124m"[39m)
-[1;32m      2[0m s1_ecfp [38;5;241m=[39m exmol[38;5;241m.[39mtext_explain(space, [38;5;124m"[39m[38;5;124mecfp[39m[38;5;124m"[39m)
-[0;32m----> 3[0m explanation [38;5;241m=[39m [43mexmol[49m[38;5;241;43m.[39;49m[43mtext_explain_generate[49m[43m([49m[43ms1_ecfp[49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43maqueous solubility[39;49m[38;5;124;43m"[39;49m[43m)[49m
-[1;32m      4[0m [38;5;28mprint[39m(explanation)
+[0;31mImportError[0m                               Traceback (most recent call last)
+Cell [0;32mIn[1], line 11[0m
+[1;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mtensorflow[39;00m [38;5;28;01mas[39;00m [38;5;21;01mtf[39;00m
+[1;32m     10[0m [38;5;28;01mimport[39;00m [38;5;21;01mselfies[39;00m [38;5;28;01mas[39;00m [38;5;21;01msf[39;00m
+[0;32m---> 11[0m [38;5;28;01mimport[39;00m [38;5;21;01mexmol[39;00m
+[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01mdataclasses[39;00m [38;5;28;01mimport[39;00m dataclass
+[1;32m     13[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDraw[39;00m [38;5;28;01mimport[39;00m rdDepictor, MolsToGridImage
 
-File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/exmol/exmol.py:1393[0m, in [0;36mtext_explain_generate[0;34m(text_explanations, property_name, llm, single)[0m
-[1;32m   1391[0m prompt [38;5;241m=[39m prompt_template[38;5;241m.[39mformat([38;5;28mproperty[39m[38;5;241m=[39mproperty_name, text[38;5;241m=[39mtext)
-[1;32m   1392[0m [38;5;28;01mif[39;00m llm [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
-[0;32m-> 1393[0m     llm [38;5;241m=[39m [43mllms[49m[38;5;241;43m.[39;49m[43mOpenAI[49m[43m([49m[43mtemperature[49m[38;5;241;43m=[39;49m[38;5;241;43m0.05[39;49m[43m)[49m
-[1;32m   1394[0m [38;5;28;01mreturn[39;00m llm(prompt)
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/exmol/__init__.py:3[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mversion[39;00m [38;5;28;01mimport[39;00m __version__
+[1;32m      2[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m [38;5;28;01mimport[39;00m stoned
+[0;32m----> 3[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mexmol[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m
+[1;32m      4[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m
+[1;32m      5[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mstoned[39;00m [38;5;28;01mimport[39;00m sanitize_smiles
 
-File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/langchain/load/serializable.py:64[0m, in [0;36mSerializable.__init__[0;34m(self, **kwargs)[0m
-[1;32m     63[0m [38;5;28;01mdef[39;00m [38;5;21m__init__[39m([38;5;28mself[39m, [38;5;241m*[39m[38;5;241m*[39mkwargs: Any) [38;5;241m-[39m[38;5;241m>[39m [38;5;28;01mNone[39;00m:
-[0;32m---> 64[0m     [38;5;28;43msuper[39;49m[43m([49m[43m)[49m[38;5;241;43m.[39;49m[38;5;21;43m__init__[39;49m[43m([49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-[1;32m     65[0m     [38;5;28mself[39m[38;5;241m.[39m_lc_kwargs [38;5;241m=[39m kwargs
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/exmol/exmol.py:30[0m
+[1;32m     28[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m [38;5;28;01mimport[39;00m rdchem  [38;5;66;03m# type: ignore[39;00m
+[1;32m     29[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDataStructs[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcDataStructs[39;00m [38;5;28;01mimport[39;00m BulkTanimotoSimilarity, TanimotoSimilarity  [38;5;66;03m# type: ignore[39;00m
+[0;32m---> 30[0m [38;5;28;01mimport[39;00m [38;5;21;01mlangchain[39;00m[38;5;21;01m.[39;00m[38;5;21;01mllms[39;00m [38;5;28;01mas[39;00m [38;5;21;01mllms[39;00m
+[1;32m     31[0m [38;5;28;01mimport[39;00m [38;5;21;01mlangchain[39;00m[38;5;21;01m.[39;00m[38;5;21;01mprompts[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprompts[39;00m
+[1;32m     33[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m [38;5;28;01mimport[39;00m stoned
 
-File [0;32m/opt/hostedtoolcache/Python/3.8.17/x64/lib/python3.8/site-packages/pydantic/main.py:341[0m, in [0;36mpydantic.main.BaseModel.__init__[0;34m()[0m
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain/llms/__init__.py:22[0m
+[1;32m      1[0m [38;5;124;03m"""[39;00m
+[1;32m      2[0m [38;5;124;03m**LLM** classes provide[39;00m
+[1;32m      3[0m [38;5;124;03maccess to the large language model (**LLM**) APIs and services.[39;00m
+[0;32m   (...)[0m
+[1;32m     18[0m [38;5;124;03m    AIMessage, BaseMessage[39;00m
+[1;32m     19[0m [38;5;124;03m"""[39;00m  [38;5;66;03m# noqa: E501[39;00m
+[1;32m     20[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping[39;00m [38;5;28;01mimport[39;00m Any, Callable, Dict, Type
+[0;32m---> 22[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain[39;00m[38;5;21;01m.[39;00m[38;5;21;01mllms[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbase[39;00m [38;5;28;01mimport[39;00m BaseLLM
+[1;32m     25[0m [38;5;28;01mdef[39;00m [38;5;21m_import_ai21[39m() [38;5;241m-[39m[38;5;241m>[39m Any:
+[1;32m     26[0m     [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain[39;00m[38;5;21;01m.[39;00m[38;5;21;01mllms[39;00m[38;5;21;01m.[39;00m[38;5;21;01mai21[39;00m [38;5;28;01mimport[39;00m AI21
 
-[0;31mValidationError[0m: 1 validation error for OpenAI
-__root__
-  Did not find openai_api_key, please add an environment variable `OPENAI_API_KEY` which contains it, or pass  `openai_api_key` as a named parameter. (type=value_error)
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain/llms/base.py:2[0m
+[1;32m      1[0m [38;5;66;03m# Backwards compatibility.[39;00m
+[0;32m----> 2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m [38;5;28;01mimport[39;00m BaseLanguageModel
+[1;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m[38;5;21;01m.[39;00m[38;5;21;01mllms[39;00m [38;5;28;01mimport[39;00m (
+[1;32m      4[0m     LLM,
+[1;32m      5[0m     BaseLLM,
+[0;32m   (...)[0m
+[1;32m      9[0m     update_cache,
+[1;32m     10[0m )
+[1;32m     12[0m __all__ [38;5;241m=[39m [
+[1;32m     13[0m     [38;5;124m"[39m[38;5;124mcreate_base_retry_decorator[39m[38;5;124m"[39m,
+[1;32m     14[0m     [38;5;124m"[39m[38;5;124mget_prompts[39m[38;5;124m"[39m,
+[0;32m   (...)[0m
+[1;32m     19[0m     [38;5;124m"[39m[38;5;124mLLM[39m[38;5;124m"[39m,
+[1;32m     20[0m ]
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain_core/language_models/__init__.py:7[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbase[39;00m [38;5;28;01mimport[39;00m (
+[1;32m      2[0m     BaseLanguageModel,
+[1;32m      3[0m     LanguageModelInput,
+[1;32m      4[0m     LanguageModelOutput,
+[1;32m      5[0m     get_tokenizer,
+[1;32m      6[0m )
+[0;32m----> 7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m[38;5;21;01m.[39;00m[38;5;21;01mchat_models[39;00m [38;5;28;01mimport[39;00m BaseChatModel, SimpleChatModel
+[1;32m      8[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m[38;5;21;01m.[39;00m[38;5;21;01mllms[39;00m [38;5;28;01mimport[39;00m LLM, BaseLLM
+[1;32m     10[0m __all__ [38;5;241m=[39m [
+[1;32m     11[0m     [38;5;124m"[39m[38;5;124mBaseLanguageModel[39m[38;5;124m"[39m,
+[1;32m     12[0m     [38;5;124m"[39m[38;5;124mBaseChatModel[39m[38;5;124m"[39m,
+[0;32m   (...)[0m
+[1;32m     18[0m     [38;5;124m"[39m[38;5;124mLanguageModelOutput[39m[38;5;124m"[39m,
+[1;32m     19[0m ]
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain_core/language_models/chat_models.py:20[0m
+[1;32m      7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfunctools[39;00m [38;5;28;01mimport[39;00m partial
+[1;32m      8[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping[39;00m [38;5;28;01mimport[39;00m (
+[1;32m      9[0m     TYPE_CHECKING,
+[1;32m     10[0m     Any,
+[0;32m   (...)[0m
+[1;32m     17[0m     cast,
+[1;32m     18[0m )
+[0;32m---> 20[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m [38;5;28;01mimport[39;00m (
+[1;32m     21[0m     AsyncCallbackManager,
+[1;32m     22[0m     AsyncCallbackManagerForLLMRun,
+[1;32m     23[0m     BaseCallbackManager,
+[1;32m     24[0m     CallbackManager,
+[1;32m     25[0m     CallbackManagerForLLMRun,
+[1;32m     26[0m     Callbacks,
+[1;32m     27[0m )
+[1;32m     28[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mglobals[39;00m [38;5;28;01mimport[39;00m get_llm_cache
+[1;32m     29[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlanguage_models[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbase[39;00m [38;5;28;01mimport[39;00m BaseLanguageModel, LanguageModelInput
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain_core/callbacks/__init__.py:13[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbase[39;00m [38;5;28;01mimport[39;00m (
+[1;32m      2[0m     AsyncCallbackHandler,
+[1;32m      3[0m     BaseCallbackHandler,
+[0;32m   (...)[0m
+[1;32m     11[0m     ToolManagerMixin,
+[1;32m     12[0m )
+[0;32m---> 13[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m[38;5;21;01m.[39;00m[38;5;21;01mmanager[39;00m [38;5;28;01mimport[39;00m (
+[1;32m     14[0m     AsyncCallbackManager,
+[1;32m     15[0m     AsyncCallbackManagerForChainGroup,
+[1;32m     16[0m     AsyncCallbackManagerForChainRun,
+[1;32m     17[0m     AsyncCallbackManagerForLLMRun,
+[1;32m     18[0m     AsyncCallbackManagerForRetrieverRun,
+[1;32m     19[0m     AsyncCallbackManagerForToolRun,
+[1;32m     20[0m     AsyncParentRunManager,
+[1;32m     21[0m     AsyncRunManager,
+[1;32m     22[0m     BaseRunManager,
+[1;32m     23[0m     CallbackManager,
+[1;32m     24[0m     CallbackManagerForChainGroup,
+[1;32m     25[0m     CallbackManagerForChainRun,
+[1;32m     26[0m     CallbackManagerForLLMRun,
+[1;32m     27[0m     CallbackManagerForRetrieverRun,
+[1;32m     28[0m     CallbackManagerForToolRun,
+[1;32m     29[0m     ParentRunManager,
+[1;32m     30[0m     RunManager,
+[1;32m     31[0m )
+[1;32m     32[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m[38;5;21;01m.[39;00m[38;5;21;01mstdout[39;00m [38;5;28;01mimport[39;00m StdOutCallbackHandler
+[1;32m     33[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m[38;5;21;01m.[39;00m[38;5;21;01mstreaming_stdout[39;00m [38;5;28;01mimport[39;00m StreamingStdOutCallbackHandler
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langchain_core/callbacks/manager.py:26[0m
+[1;32m      9[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping[39;00m [38;5;28;01mimport[39;00m (
+[1;32m     10[0m     TYPE_CHECKING,
+[1;32m     11[0m     Any,
+[0;32m   (...)[0m
+[1;32m     22[0m     cast,
+[1;32m     23[0m )
+[1;32m     24[0m [38;5;28;01mfrom[39;00m [38;5;21;01muuid[39;00m [38;5;28;01mimport[39;00m UUID
+[0;32m---> 26[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrun_helpers[39;00m [38;5;28;01mimport[39;00m get_run_tree_context
+[1;32m     27[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtenacity[39;00m [38;5;28;01mimport[39;00m RetryCallState
+[1;32m     29[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangchain_core[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcallbacks[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbase[39;00m [38;5;28;01mimport[39;00m (
+[1;32m     30[0m     BaseCallbackHandler,
+[1;32m     31[0m     BaseCallbackManager,
+[0;32m   (...)[0m
+[1;32m     37[0m     ToolManagerMixin,
+[1;32m     38[0m )
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langsmith/__init__.py:10[0m
+[1;32m      6[0m [38;5;28;01mexcept[39;00m metadata[38;5;241m.[39mPackageNotFoundError:
+[1;32m      7[0m     [38;5;66;03m# Case where package metadata is not available.[39;00m
+[1;32m      8[0m     __version__ [38;5;241m=[39m [38;5;124m"[39m[38;5;124m"[39m
+[0;32m---> 10[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mclient[39;00m [38;5;28;01mimport[39;00m Client
+[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluation[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluator[39;00m [38;5;28;01mimport[39;00m EvaluationResult, RunEvaluator
+[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrun_helpers[39;00m [38;5;28;01mimport[39;00m trace, traceable
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langsmith/client.py:43[0m
+[1;32m     41[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m [38;5;28;01mimport[39;00m schemas [38;5;28;01mas[39;00m ls_schemas
+[1;32m     42[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m [38;5;28;01mimport[39;00m utils [38;5;28;01mas[39;00m ls_utils
+[0;32m---> 43[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluation[39;00m [38;5;28;01mimport[39;00m evaluator [38;5;28;01mas[39;00m ls_evaluator
+[1;32m     45[0m [38;5;28;01mif[39;00m TYPE_CHECKING:
+[1;32m     46[0m     [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langsmith/evaluation/__init__.py:4[0m
+[1;32m      1[0m [38;5;124;03m"""Evaluation Helpers."""[39;00m
+[1;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluation[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluator[39;00m [38;5;28;01mimport[39;00m EvaluationResult, RunEvaluator
+[0;32m----> 4[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluation[39;00m[38;5;21;01m.[39;00m[38;5;21;01mstring_evaluator[39;00m [38;5;28;01mimport[39;00m StringEvaluator
+[1;32m      6[0m __all__ [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mEvaluationResult[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mRunEvaluator[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mStringEvaluator[39m[38;5;124m"[39m]
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/langsmith/evaluation/string_evaluator.py:3[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping[39;00m [38;5;28;01mimport[39;00m Callable, Dict, Optional
+[0;32m----> 3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpydantic[39;00m [38;5;28;01mimport[39;00m BaseModel
+[1;32m      5[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluation[39;00m[38;5;21;01m.[39;00m[38;5;21;01mevaluator[39;00m [38;5;28;01mimport[39;00m EvaluationResult, RunEvaluator
+[1;32m      6[0m [38;5;28;01mfrom[39;00m [38;5;21;01mlangsmith[39;00m[38;5;21;01m.[39;00m[38;5;21;01mschemas[39;00m [38;5;28;01mimport[39;00m Example, Run
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/pydantic/__init__.py:372[0m, in [0;36m__getattr__[0;34m(attr_name)[0m
+[1;32m    370[0m     [38;5;28;01mreturn[39;00m import_module([38;5;124mf[39m[38;5;124m'[39m[38;5;124m.[39m[38;5;132;01m{[39;00mattr_name[38;5;132;01m}[39;00m[38;5;124m'[39m, package[38;5;241m=[39mpackage)
+[1;32m    371[0m [38;5;28;01melse[39;00m:
+[0;32m--> 372[0m     module [38;5;241m=[39m [43mimport_module[49m[43m([49m[43mmodule_name[49m[43m,[49m[43m [49m[43mpackage[49m[38;5;241;43m=[39;49m[43mpackage[49m[43m)[49m
+[1;32m    373[0m     [38;5;28;01mreturn[39;00m [38;5;28mgetattr[39m(module, attr_name)
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/importlib/__init__.py:127[0m, in [0;36mimport_module[0;34m(name, package)[0m
+[1;32m    125[0m             [38;5;28;01mbreak[39;00m
+[1;32m    126[0m         level [38;5;241m+[39m[38;5;241m=[39m [38;5;241m1[39m
+[0;32m--> 127[0m [38;5;28;01mreturn[39;00m [43m_bootstrap[49m[38;5;241;43m.[39;49m[43m_gcd_import[49m[43m([49m[43mname[49m[43m[[49m[43mlevel[49m[43m:[49m[43m][49m[43m,[49m[43m [49m[43mpackage[49m[43m,[49m[43m [49m[43mlevel[49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/pydantic/main.py:15[0m
+[1;32m     12[0m [38;5;28;01mimport[39;00m [38;5;21;01mtyping_extensions[39;00m
+[1;32m     13[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpydantic_core[39;00m [38;5;28;01mimport[39;00m PydanticUndefined
+[0;32m---> 15[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_internal[39;00m [38;5;28;01mimport[39;00m (
+[1;32m     16[0m     _config,
+[1;32m     17[0m     _decorators,
+[1;32m     18[0m     _fields,
+[1;32m     19[0m     _forward_ref,
+[1;32m     20[0m     _generics,
+[1;32m     21[0m     _mock_val_ser,
+[1;32m     22[0m     _model_construction,
+[1;32m     23[0m     _repr,
+[1;32m     24[0m     _typing_extra,
+[1;32m     25[0m     _utils,
+[1;32m     26[0m )
+[1;32m     27[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_migration[39;00m [38;5;28;01mimport[39;00m getattr_migration
+[1;32m     28[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mannotated_handlers[39;00m [38;5;28;01mimport[39;00m GetCoreSchemaHandler, GetJsonSchemaHandler
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/pydantic/_internal/_decorators.py:15[0m
+[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping_extensions[39;00m [38;5;28;01mimport[39;00m Literal, TypeAlias, is_typeddict
+[1;32m     14[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m.[39;00m[38;5;21;01merrors[39;00m [38;5;28;01mimport[39;00m PydanticUserError
+[0;32m---> 15[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_core_utils[39;00m [38;5;28;01mimport[39;00m get_type_ref
+[1;32m     16[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_internal_dataclass[39;00m [38;5;28;01mimport[39;00m slots_true
+[1;32m     17[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_typing_extra[39;00m [38;5;28;01mimport[39;00m get_function_type_hints
+
+File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/pydantic/_internal/_core_utils.py:16[0m
+[1;32m     14[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpydantic_core[39;00m [38;5;28;01mimport[39;00m CoreSchema, core_schema
+[1;32m     15[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpydantic_core[39;00m [38;5;28;01mimport[39;00m validate_core_schema [38;5;28;01mas[39;00m _validate_core_schema
+[0;32m---> 16[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtyping_extensions[39;00m [38;5;28;01mimport[39;00m TypeAliasType, TypeGuard, get_args, get_origin
+[1;32m     18[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m [38;5;28;01mimport[39;00m _repr
+[1;32m     19[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01m_typing_extra[39;00m [38;5;28;01mimport[39;00m is_generic_alias
+
+[0;31mImportError[0m: cannot import name 'TypeAliasType' from 'typing_extensions' (/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/typing_extensions.py)
 

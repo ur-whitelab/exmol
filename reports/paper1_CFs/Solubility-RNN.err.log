@@ -15,24 +15,20 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib as mpl
-import rdkit, rdkit.Chem, rdkit.Chem.Draw
-from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
-import skunk
-import mordred, mordred.descriptors
-import exmol as exmol
+import tensorflow as tf
+import selfies as sf
+import exmol
+from dataclasses import dataclass
 from rdkit.Chem.Draw import rdDepictor
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score, plot_roc_curve
 
 rdDepictor.SetPreferCoordGen(True)
-
-IPythonConsole.ipython_useSVG = True
 sns.set_context("notebook")
 sns.set_style(
     "dark",
@@ -46,20 +42,32 @@ sns.set_style(
         "figure.dpi": 300,
     },
 )
-color_cycle = ["#1BBC9B", "#F06060", "#F3B562", "#6e5687", "#5C4B51"]
+color_cycle = ["#1BBC9B", "#F06060", "#5C4B51", "#F3B562", "#6e5687"]
 mpl.rcParams["axes.prop_cycle"] = mpl.cycler(color=color_cycle)
+soldata = pd.read_csv(
+    "https://github.com/whitead/dmol-book/raw/main/data/curated-solubility-dataset.csv"
+)
+features_start_at = list(soldata.columns).index("MolWt")
 np.random.seed(0)
 ------------------
 
+----- stderr -----
+2023-12-04 18:06:56.198364: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-12-04 18:06:56.236221: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-12-04 18:06:56.236948: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+----- stderr -----
+2023-12-04 18:06:56.945141: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mImportError[0m                               Traceback (most recent call last)
 Cell [0;32mIn[1], line 10[0m
-[1;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mskunk[39;00m
-[1;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mmordred[39;00m[38;5;241m,[39m [38;5;21;01mmordred[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdescriptors[39;00m
-[0;32m---> 10[0m [38;5;28;01mimport[39;00m [38;5;21;01mexmol[39;00m [38;5;28;01mas[39;00m [38;5;21;01mexmol[39;00m
-[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDraw[39;00m [38;5;28;01mimport[39;00m rdDepictor
-[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mensemble[39;00m [38;5;28;01mimport[39;00m RandomForestClassifier
+[1;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mtensorflow[39;00m [38;5;28;01mas[39;00m [38;5;21;01mtf[39;00m
+[1;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mselfies[39;00m [38;5;28;01mas[39;00m [38;5;21;01msf[39;00m
+[0;32m---> 10[0m [38;5;28;01mimport[39;00m [38;5;21;01mexmol[39;00m
+[1;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mdataclasses[39;00m [38;5;28;01mimport[39;00m dataclass
+[1;32m     12[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrdkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mChem[39;00m[38;5;21;01m.[39;00m[38;5;21;01mDraw[39;00m [38;5;28;01mimport[39;00m rdDepictor
 
 File [0;32m/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/exmol/__init__.py:3[0m
 [1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01m.[39;00m[38;5;21;01mversion[39;00m [38;5;28;01mimport[39;00m __version__
