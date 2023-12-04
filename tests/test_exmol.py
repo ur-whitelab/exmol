@@ -45,7 +45,6 @@ def test_sanitize_smiles_chiral():
     assert "@" in result[1]
 
 
-# TODO let STONED people write these when they finish their repo
 def test_run_stoned():
     result = exmol.run_stoned(
         "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC",
@@ -199,13 +198,26 @@ def test_run_custom():
 
 def test_run_stones_alphabet():
     result = exmol.run_stoned(
-        "N#CC=CC(C(=O)NCC1=CC=CC=C1C(=O)N)(C)CC2=CC=C(F)C=C2CC",
-        num_samples=10,
-        max_mutations=1,
+        "C1=CC=C(C=C1)C2=CC=CC=C2",
+        num_samples=25,
+        max_mutations=3,
         alphabet=["[C]", "[O]"],
     )
     # Can get duplicates
     assert len(result[0]) >= 0
+
+    # check no other characters
+    for mol in result[0]:
+        print(["C", "O", "#", "(", ")"] + list([str(i) for i in range(10)]))
+        print(mol)
+        assert not any(
+            [
+                c
+                not in ["C", "O", "#", "(", ")", "="]
+                + list([str(i) for i in range(10)])
+                for c in mol
+            ]
+        )
 
 
 def test_sample():

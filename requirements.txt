@@ -2,5 +2,4 @@ pre-commit
 mypy
 pytest
 pytest-cov
-click
 openai

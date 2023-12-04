@@ -446,7 +446,6 @@ def get_mutated_SELFIES(selfies_ls, num_mutations, alphabet):
     for _ in range(num_mutations):
         selfie_ls_mut_ls = []
         for str_ in selfies_ls:
-
             str_chars = get_selfie_chars(str_)
             max_molecules_len = len(str_chars) + num_mutations
 
