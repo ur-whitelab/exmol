@@ -28,7 +28,9 @@ from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
-import openai
+from openai import OpenAI
+
+client = OpenAI()
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter, _bit2atoms
 from .data import *
@@ -1441,10 +1443,8 @@ def text_explain_generate(
         },
         {"role": "user", "content": prompt},
     ]
-    response = openai.ChatCompletion.create(
-        model=llm_model,
-        messages=messages,
-        temperature=0.05,
+    response = client.chat.completions.create(
+        model=llm_model, messages=messages, temperature=0.05
     )
 
     return response.choices[0].message["content"]
