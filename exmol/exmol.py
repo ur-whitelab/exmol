@@ -1447,7 +1447,7 @@ def text_explain_generate(
         model=llm_model, messages=messages, temperature=0.05
     )
 
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
 
 
 def text_explain(
