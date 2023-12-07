@@ -27,9 +27,10 @@ from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
 from rdkit.Chem import rdchem  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
-import langchain.llms as llms
-import langchain.prompts as prompts
 
+from openai import OpenAI
+
+client = OpenAI()
 from . import stoned
 from .plot_utils import _mol_images, _image_scatter, _bit2atoms
 from .data import *
@@ -392,6 +393,7 @@ def _check_alphabet_consistency(
     alphabet_symbols = _alphabet_to_elements(set(alphabet_symbols))
     # find all elements in smiles (Upper alpha or upper alpha followed by lower alpha)
     smiles_symbols = set(re.findall(r"[A-Z][a-z]?", smiles))
+
     if check and not smiles_symbols.issubset(alphabet_symbols):
         # show which symbols are not in alphabet
         raise ValueError(
@@ -1410,7 +1412,7 @@ _single_prompt = (
 def text_explain_generate(
     text_explanations: List[Tuple[str, float]],
     property_name: str,
-    llm: Optional[llms.BaseLLM] = None,
+    llm_model: str = "gpt-4",
     single: bool = True,
 ) -> str:
     """Insert text explanations into template, and generate explanation.
@@ -1430,14 +1432,22 @@ def text_explain_generate(
             for x in text_explanations
         ]
     )
-    prompt_template = prompts.PromptTemplate(
-        input_variables=["property", "text"],
-        template=_single_prompt if single else _multi_prompt,
-    )
+
+    prompt_template = _single_prompt if single else _multi_prompt
     prompt = prompt_template.format(property=property_name, text=text)
-    if llm is None:
-        llm = llms.OpenAI(temperature=0.05)
-    return llm(prompt)
+
+    messages = [
+        {
+            "role": "system",
+            "content": "Your goal is to explain which molecular features are important to its properties based on the given text.",
+        },
+        {"role": "user", "content": prompt},
+    ]
+    response = client.chat.completions.create(
+        model=llm_model, messages=messages, temperature=0.05
+    )
+
+    return response.choices[0].message.content
 
 
 def text_explain(
