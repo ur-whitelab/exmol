@@ -1,4 +1,4 @@
-from functools import reduce
+from functools import reduce, lru_cache
 import inspect
 from typing import *
 import io
@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt  # type: ignore
 from matplotlib.patches import Rectangle, FancyBboxPatch  # type: ignore
 from matplotlib.offsetbox import AnnotationBbox  # type: ignore
 import matplotlib as mpl  # type: ignore
+import re
 import selfies as sf  # type: ignore
 import tqdm  # type: ignore
 import textwrap  # type: ignore
@@ -367,6 +368,38 @@ def get_basic_alphabet() -> Set[str]:
     return a
 
 
+# The code below checks for accidental addition of symbols outside of the alphabet.
+# the only way this can happen is if the character indicating a ring
+# length is mutated to appear eleswhere. The ring length symbol
+# is always a plain uncharged element.
+
+
+def _alphabet_to_elements(alphabet: List[str]) -> Set[str]:
+    """Converts SELFIES alphabet to element symbols"""
+    symbols = []
+    for s in alphabet:
+        s = s.replace("[", "").replace("]", "")
+        if s.isalpha():
+            symbols.append(s)
+    return set(symbols)
+
+
+def _check_alphabet_consistency(
+    smiles: str, alphabet_symbols: Set[str], check=False
+) -> True:
+    """Checks if SMILES only contains tokens from alphabet"""
+
+    alphabet_symbols = _alphabet_to_elements(set(alphabet_symbols))
+    # find all elements in smiles (Upper alpha or upper alpha followed by lower alpha)
+    smiles_symbols = set(re.findall(r"[A-Z][a-z]?", smiles))
+    if check and not smiles_symbols.issubset(alphabet_symbols):
+        # show which symbols are not in alphabet
+        raise ValueError(
+            "symbols not in alphabet" + smiles_symbols.difference(alphabet_symbols)
+        )
+    return smiles_symbols.issubset(alphabet_symbols)
+
+
 def run_stoned(
     start_smiles: str,
     fp_type: str = "ECFP4",
@@ -392,6 +425,9 @@ def run_stoned(
         alphabet = get_basic_alphabet()
     if type(alphabet) == set:
         alphabet = list(alphabet)
+    alphabet_symbols = _alphabet_to_elements(alphabet)
+    # make sure starting smiles is consistent with alphabet
+    _ = _check_alphabet_consistency(start_smiles, alphabet_symbols, check=True)
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
 
     start_mol = smi2mol(start_smiles)
@@ -418,6 +454,16 @@ def run_stoned(
         )
         # Convert back to SMILES:
         smiles_back = [sf.decoder(x) for x in selfies_mut]
+        # check if smiles are consistent with alphabet and downslect
+        selfies_mut, smiles_back = zip(
+            *[
+                (s, sm)
+                for s, sm in zip(selfies_mut, smiles_back)
+                if _check_alphabet_consistency(sm, alphabet_symbols)
+            ]
+        )
+        selfies_mut, smiles_back = list(selfies_mut), list(smiles_back)
+
         all_smiles_collect = all_smiles_collect + smiles_back
         all_selfies_collect = all_selfies_collect + selfies_mut
         if _pbar:
