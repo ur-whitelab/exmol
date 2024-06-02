@@ -214,6 +214,7 @@ import random
 from rdkit import Chem  # type: ignore
 from rdkit.Chem import MolFromSmiles as smi2mol  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
+from rdkit.Chem import MolToRandomSmilesVect # type: ignore
 
 from rdkit.Chem import AllChem  # type: ignore
 from rdkit.DataStructs.cDataStructs import TanimotoSimilarity  # type: ignore
@@ -237,9 +238,10 @@ def randomize_smiles(mol):
     if not mol:
         return None
 
-    return mol2smi(
-        mol, canonical=False, doRandom=True, isomericSmiles=True, kekuleSmiles=True
-    )
+    # return mol2smi(
+    #     mol, canonical=False, doRandom=True, isomericSmiles=True, kekuleSmiles=True
+    # )
+    return MolToRandomSmilesVect(mol, 1, isomericSmiles=True, kekuleSmiles=True, randomSeed=np.random.randint(0,100))[0]
 
 
 def largest_mol(smiles):
