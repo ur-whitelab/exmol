@@ -1,25 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GNN Model Code &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -82,7 +79,7 @@
            <div itemprop="articleBody">
              
   <section id="gnn-model-code">
-<h1>GNN Model Code<a class="headerlink" href="#gnn-model-code" title="Permalink to this heading"></a></h1>
+<h1>GNN Model Code<a class="headerlink" href="#gnn-model-code" title="Link to this heading"></a></h1>
 <p>GNN model using molecular scent dataset from Leffingwell Odor Datset (loaded using Pyrfume - https://pyrfume.org)</p>
 <p>Code below modified from example code given in the “Predicting DFT Energies with GNNs”, “Interpretability and Deep Learning” sections of “Deep Learning for Molecules and Materials” textbook (https://dmol.pub/applied/QM9.html)</p>
 <div class="cell docutils container">
@@ -152,7 +149,7 @@
 </div>
 </div>
 <section id="model-training-related-code">
-<h2>Model Training Related Code<a class="headerlink" href="#model-training-related-code" title="Permalink to this heading"></a></h2>
+<h2>Model Training Related Code<a class="headerlink" href="#model-training-related-code" title="Link to this heading"></a></h2>
 <p>NOTE: numEpochs is currently set to 2 &amp; the dataset is downsampled, edit code when actually training/evaluating model to use the entire dataset &amp; a larger number of empochs</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -657,9 +654,9 @@
 </div>
 </section>
 <section id="model-evaluation-related-code">
-<h2>Model Evaluation Related Code<a class="headerlink" href="#model-evaluation-related-code" title="Permalink to this heading"></a></h2>
+<h2>Model Evaluation Related Code<a class="headerlink" href="#model-evaluation-related-code" title="Link to this heading"></a></h2>
 <section id="run-2-cells-below-if-reading-model-parameters-from-file-have-not-run-earlier-cells-in-the-notebook">
-<h3>Run 2 cells below if reading model parameters from file &amp; have not run earlier cells in the notebook<a class="headerlink" href="#run-2-cells-below-if-reading-model-parameters-from-file-have-not-run-earlier-cells-in-the-notebook" title="Permalink to this heading"></a></h3>
+<h3>Run 2 cells below if reading model parameters from file &amp; have not run earlier cells in the notebook<a class="headerlink" href="#run-2-cells-below-if-reading-model-parameters-from-file-have-not-run-earlier-cells-in-the-notebook" title="Link to this heading"></a></h3>
 <p>NOTE: the dataset is downsampled, edit code when actually training/evaluating model to use the entire dataset</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1044,7 +1041,7 @@
 </div>
 </section>
 <section id="calculate-auroc-values-on-test-set">
-<h3>Calculate AUROC values on test set<a class="headerlink" href="#calculate-auroc-values-on-test-set" title="Permalink to this heading"></a></h3>
+<h3>Calculate AUROC values on test set<a class="headerlink" href="#calculate-auroc-values-on-test-set" title="Link to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute AUROC &amp; Create ROC curve for each scent class - uses scikit-learn</span>

@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v3.1.0 (2024-11-21)
+-------------------
+* Removed langchain and switched to use openai API directly
+
 v3.0.3 (2023-06-19)
 -------------------
 * Now compatible with python 3.11
