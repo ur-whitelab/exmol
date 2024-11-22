@@ -395,7 +395,7 @@ def _check_alphabet_consistency(
     if check and not smiles_symbols.issubset(alphabet_symbols):
         # show which symbols are not in alphabet
         raise ValueError(
-            "symbols not in alphabet" + smiles_symbols.difference(alphabet_symbols)
+            "symbols not in alphabet" + str(smiles_symbols.difference(alphabet_symbols))
         )
     return smiles_symbols.issubset(alphabet_symbols)
 
