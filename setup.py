@@ -28,6 +28,7 @@ setup(
         "skunk >= 0.4.0",
         "importlib-resources",
         "synspace",
+        "openai",
     ],
     test_suite="tests",
     long_description=long_description,
