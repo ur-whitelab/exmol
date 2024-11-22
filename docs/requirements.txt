@@ -3,8 +3,8 @@ myst-parser
 sphinx-rtd-theme
 sphinx_autodoc_typehints
 myst-nb
-mordred[full]==1.2.0
-scikit-learn==1.1.2
+mordred[full]
+scikit-learn
 jupyter
 seaborn
 pandas
