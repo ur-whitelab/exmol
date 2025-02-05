@@ -3,7 +3,7 @@ myst-parser
 sphinx-rtd-theme
 sphinx_autodoc_typehints
 myst-nb
-mordred[full]
+mordredcommunity[full]
 scikit-learn
 jupyter
 seaborn
