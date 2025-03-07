@@ -1,4 +1,4 @@
-mordred[full]
+mordredcommunity[full]
 scikit-learn
 jupyter
 seaborn
