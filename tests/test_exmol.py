@@ -505,7 +505,7 @@ def test_functional_groups():
     ), "Molecule with no functional groups should return empty list"
 
     # Test disabling interaction
-    expected_groups = {"secondary alcohol", "primary aliphiatic amine", "cyclopentane"}
+    expected_groups = {"secondary alcohol", "primary aliphatic amine", "cyclopentane"}
     result_groups = exmol.get_functional_groups("NCC1CCCC1O", True)
     assert all(
         group in result_groups for group in expected_groups

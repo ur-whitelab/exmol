@@ -34,10 +34,10 @@ Alkylarylthioether:184: [SX2](c)[CX4;!$(C([OX2])[O,S,#7,#15,F,Cl,Br,I])]
 Diarylthioether:138: [c][SX2][c]
 Oxonium:171: [O+;!$([O]~[!#6]);!$([S]*~[#7,#8,#15,#16])]
 Amine:286: [NX3+0,NX4+;!$([N]~[!#6]);!$([N]*~[#7,#8,#15,#16])]
-Primary_aliphiatic_amine:236: C[NX3H2+0,NX4H3+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])]
-Secondary_aliphiatic_amine:255: C[NX3H1+0,NX4H2+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])]C
-Tertiary_aliphiatic_amine:266: C[NX3H0+0,NX4H1+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])](C)C
-Quaternary_aliphiatic_ammonium:142: C[NX4H0+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])](C)(C)C
+Primary_aliphatic_amine:236: C[NX3H2+0,NX4H3+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])]
+Secondary_aliphatic_amine:255: C[NX3H1+0,NX4H2+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])]C
+Tertiary_aliphatic_amine:266: C[NX3H0+0,NX4H1+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])](C)C
+Quaternary_aliphatic_ammonium:142: C[NX4H0+;!$([N][!C]);!$([N]*~[#7,#8,#15,#16])](C)(C)C
 Primary_aromatic_amine:223: [NX3H2+0,NX4H3+]c
 Secondary_aromatic_amine:135: [c,C][NX3H1+0,NX4H2+;!$([N][!c]);!$([N]*~[#7,#8,#15,#16])][c,C]
 Tertiary_aromatic_amine:0: [c,C][NX3H0+0,NX4H1+;!$([N][!c]);!$([N]*~[#7,#8,#15,#16])]([c,C])[c,C]
