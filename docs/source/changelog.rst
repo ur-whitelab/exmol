@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v3.2.0 (2025-03-07)
+-------------------
+* Fixed paper github actions
+* Added `get_functional_groups` method to get functional groups from SMILES
+
 v3.1.0 (2024-11-21)
 -------------------
 * Removed langchain and switched to use openai API directly
