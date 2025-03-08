@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v3.2.1 (2025-03-08)
+-------------------
+* Added flag to `get_functional_groups` to get even more functional groups
+
+
 v3.2.0 (2025-03-07)
 -------------------
 * Fixed paper github actions
