@@ -199,29 +199,42 @@ This repo uses pre-commit, so after cloning run `pip install -r requirements.txt
 For the counterfactual work, please cite [Wellawatte et al.](https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract)
 
 ```bibtex
-@Article{wellawatte_seshadri_white_2021,
-author ="Wellawatte, Geemi P. and Seshadri, Aditi and White, Andrew D.",
-title  ="Model agnostic generation of counterfactual explanations for molecules",
-journal  ="Chem. Sci.",
-year  ="2022",
-pages  ="-",
-publisher  ="The Royal Society of Chemistry",
-doi  ="10.1039/D1SC05259D",
-url  ="http://dx.doi.org/10.1039/D1SC05259D",
+@article{wellawatte2022model,
+  title     = {Model agnostic generation of counterfactual explanations for molecules},
+  author    = {Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D},
+  journal   = {Chemical Science},
+  volume    = {13},
+  number    = {13},
+  pages     = {3697--3705},
+  year      = {2022},
+  publisher = {Royal Society of Chemistry}
 }
 ```
 
 For the descriptor explanations, please cite [Gandhi et. al.](https://doi.org/10.26434/chemrxiv-2022-v5p6m-v2)
 
 ```bibtex
-@Article{gandhi_white_2022,
-place = "Cambridge",
-title = "Explaining structure-activity relationships using locally faithful surrogate models",
-DOI = "10.26434/chemrxiv-2022-v5p6m",
-url = "https://doi.org/10.26434/chemrxiv-2022-v5p6m"
-journal = "ChemRxiv",
-publisher = "Cambridge Open Engage",
-author = "Gandhi, Heta A. and White, Andrew D.",
-year = "2022"
+@article{gandhi_white_2022,
+  title     = {Explaining structure-activity relationships using locally faithful surrogate models},
+  author    = {Gandhi, Heta A and White, Andrew D},
+  journal   = {ChemRxiv},
+  publisher = {Cambridge Open Engage},
+  year      = {2022},
+  doi       = {10.26434/chemrxiv-2022-v5p6m},
+  url       = {https://doi.org/10.26434/chemrxiv-2022-v5p6m}
+}
+```
+
+For the natural language explanations, please cite [Gandhi and White](https://chemrxiv.org/engage/chemrxiv/article-details/633731d1f764e6e535093041)
+
+```bibtex
+@article{gandhi2022explaining,
+  title     = {Explaining molecular properties with natural language},
+  author    = {Gandhi, Heta A and White, Andrew D},
+  journal   = {ChemRxiv},
+  publisher = {Cambridge Open Engage},
+  year      = {2022},
+  doi       = {10.26434/chemrxiv-2022-v5p6m-v3},
+  url       = {https://chemrxiv.org/engage/chemrxiv/article-details/633731d1f764e6e535093041}
 }
 ```
