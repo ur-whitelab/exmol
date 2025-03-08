@@ -255,12 +255,12 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
 def get_functional_groups(
     mol: Any, return_all: bool = False, cutoff: int = 300
 ) -> set[str]:
-    """Get a list of functional groups present in a molecule, sorted by priority, avoiding overlaps.
+    """Get a set of functional groups present in a molecule, sorted by priority, avoiding overlaps.
 
     :param mol: RDKit molecule
     :param return_all: If True, will return all functional groups found in the molecule
     :param cutoff: Maximum rank of functional groups to consider based on popularity (increase to include groups like methyl, ethyl, etc.)
-    :return: List of unique functional group names present in the molecule, sorted by priority
+    :return: set of unique functional group names present in the molecule
     """
     global _SMARTS
     if _SMARTS is None:
