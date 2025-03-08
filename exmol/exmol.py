@@ -252,12 +252,15 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
     return name
 
 
-def get_functional_groups(mol: Any, cutoff: int = 300) -> List[str]:
-    """Get a list of functional groups present in a molecule, sorted by priority, avoiding overlaps.
+def get_functional_groups(
+    mol: Any, return_all: bool = False, cutoff: int = 300
+) -> set[str]:
+    """Get a set of functional groups present in a molecule, sorted by priority, avoiding overlaps.
 
     :param mol: RDKit molecule
-    :param cutoff: Maximum rank of functional groups to consider based on popularity
-    :return: List of unique functional group names present in the molecule, sorted by priority
+    :param return_all: If True, will return all functional groups found in the molecule
+    :param cutoff: Maximum rank of functional groups to consider based on popularity (increase to include groups like methyl, ethyl, etc.)
+    :return: set of unique functional group names present in the molecule
     """
     global _SMARTS
     if _SMARTS is None:
@@ -273,18 +276,18 @@ def get_functional_groups(mol: Any, cutoff: int = 300) -> List[str]:
         return []
 
     matched_atoms = set()
-    result = []
+    result = set()
 
     sorted_smarts = sorted(_SMARTS.items(), key=lambda x: x[1][1])
 
     for name, (sm, rank) in sorted_smarts:
-        if rank > cutoff:
+        if not return_all and rank > cutoff:
             continue
         for match in mol.GetSubstructMatches(sm):
             match_set = set(match)
-            if not match_set.intersection(matched_atoms):
+            if return_all or not match_set.intersection(matched_atoms):
                 formatted_name = name[0].lower() + name[1:].replace("_", " ")
-                result.append(formatted_name)
+                result.add(formatted_name)
                 matched_atoms.update(match_set)
                 break  # Only add group once per molecule
 

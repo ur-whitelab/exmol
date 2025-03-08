@@ -500,6 +500,13 @@ def test_functional_groups():
         ), "Carboxylic acid should have higher priority than ester"
 
     # Test molecule with no functional groups
-    assert (
-        exmol.get_functional_groups("C") == []
+    assert not exmol.get_functional_groups(
+        "C"
     ), "Molecule with no functional groups should return empty list"
+
+    # Test disabling interaction
+    expected_groups = {"secondary alcohol", "primary aliphatic amine", "cyclopentane"}
+    result_groups = exmol.get_functional_groups("NCC1CCCC1O", True)
+    assert all(
+        group in result_groups for group in expected_groups
+    ), f"Expected functional groups not all present in {result_groups}"
