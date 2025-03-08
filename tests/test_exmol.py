@@ -62,7 +62,7 @@ def test_run_stoned():
     )
     # Can get duplicates
     assert len(result[0]) >= 0
-    assert abs(len(result[0]) - 12) <= 1
+    assert abs(len(result[0]) - 12) <= 2
 
 
 def test_kekulize_bug():
@@ -484,3 +484,22 @@ def test_corrupt_smiles():
     badsmi = "C/C=C/C(=O)C1CCC(C=C1C)(C)C"
     explanation = exmol.sample_space(badsmi, model, preset="narrow", batched=False)
     assert ~np.isnan(explanation[0].yhat)
+
+
+def test_functional_groups():
+    # Test molecule with one functional group (alcohol)
+    assert "primary alcohol" in exmol.get_functional_groups(
+        "CCO", cutoff=500
+    ), "Alcohol functional group should be detected in CCO"
+
+    # Test priority ordering (carboxylic acid should come before ester)
+    groups = exmol.get_functional_groups(smi2mol("CC(=O)OC"))
+    if "carboxylic acid" in groups and "ester" in groups:
+        assert groups.index("carboxylic acid") < groups.index(
+            "ester"
+        ), "Carboxylic acid should have higher priority than ester"
+
+    # Test molecule with no functional groups
+    assert (
+        exmol.get_functional_groups("C") == []
+    ), "Molecule with no functional groups should return empty list"

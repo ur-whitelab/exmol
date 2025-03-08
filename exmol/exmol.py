@@ -252,6 +252,45 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
     return name
 
 
+def get_functional_groups(mol: Any, cutoff: int = 300) -> List[str]:
+    """Get a list of functional groups present in a molecule, sorted by priority, avoiding overlaps.
+
+    :param mol: RDKit molecule
+    :param cutoff: Maximum rank of functional groups to consider based on popularity
+    :return: List of unique functional group names present in the molecule, sorted by priority
+    """
+    global _SMARTS
+    if _SMARTS is None:
+        from importlib_resources import files  # type: ignore
+        import exmol.lime_data  # type: ignore
+
+        sp = files(exmol.lime_data).joinpath("smarts.txt")
+        _SMARTS = _load_smarts(sp)
+
+    if isinstance(mol, str):
+        mol = smi2mol(mol)
+    if mol is None:
+        return []
+
+    matched_atoms = set()
+    result = []
+
+    sorted_smarts = sorted(_SMARTS.items(), key=lambda x: x[1][1])
+
+    for name, (sm, rank) in sorted_smarts:
+        if rank > cutoff:
+            continue
+        for match in mol.GetSubstructMatches(sm):
+            match_set = set(match)
+            if not match_set.intersection(matched_atoms):
+                formatted_name = name[0].lower() + name[1:].replace("_", " ")
+                result.append(formatted_name)
+                matched_atoms.update(match_set)
+                break  # Only add group once per molecule
+
+    return result
+
+
 def clear_descriptors(
     examples: List[Example],
 ) -> List[Example]:
