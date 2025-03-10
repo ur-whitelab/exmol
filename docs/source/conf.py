@@ -93,4 +93,4 @@ myst_enable_extensions = [
     "html_image",
 ]
 myst_url_schemes = ["http", "https", "mailto"]
-execution_timeout = -1
+nb_execution_timeout = -1
