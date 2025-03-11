@@ -4,7 +4,8 @@ name: docs
 on:
   push:
     branches: [ main ]
-
+  pull_request:
+    branches: [ main ]
 jobs:
   docs:
 
@@ -28,6 +29,7 @@ jobs:
         cp -R paper* docs/source
         cd docs && make html
     - name: Deploy
+      if: github.event_name == 'push'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
