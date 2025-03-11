@@ -94,5 +94,5 @@ myst_enable_extensions = [
 ]
 myst_url_schemes = ["http", "https", "mailto"]
 
-nb_kernel_rgx_aliases = {r'.*': 'python3'}
+nb_kernel_rgx_aliases = {r".*": "python3"}
 nb_execution_timeout = -1
