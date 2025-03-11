@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Getting Started &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
@@ -152,7 +152,7 @@ Descriptor attributions can explain a prediction by computing QSARs for molecula
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>Let’s assume you have a deep learning model <code class="docutils literal notranslate"><span class="pre">my_model(s)</span></code> that takes in one SMILES string and outputs a predicted binary class. We first expand chemical space around the prediction of interest</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">exmol</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">exmol</span>
 
 <span class="c1"># mol of interest</span>
 <span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;Cc1onc(-c2ccccc2Cl)c1C(=O)NC1C(=O)N2C1SC(C)(C)C2C(=O)O&#39;</span>
@@ -247,7 +247,7 @@ degenerate molecules. See API for complete description.</p>
 <h2>SVG<a class="headerlink" href="#svg" title="Link to this heading"></a></h2>
 <p>Molecules are by default drawn as PNGs. If you would like to have them drawn as SVGs, call <code class="docutils literal notranslate"><span class="pre">insert_svg</span></code> after calling
 <code class="docutils literal notranslate"><span class="pre">plot_space</span></code> or <code class="docutils literal notranslate"><span class="pre">plot_cf</span></code></p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">skunk</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">skunk</span>
 <span class="n">exmol</span><span class="o">.</span><span class="n">plot_cf</span><span class="p">(</span><span class="n">exps</span><span class="p">)</span>
 <span class="n">svg</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">insert_svg</span><span class="p">(</span><span class="n">exps</span><span class="p">,</span> <span class="n">mol_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
@@ -277,28 +277,39 @@ description of the methods and implementation.</p>
 <section id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
 <p>For the counterfactual work, please cite <a class="reference external" href="https://pubs.rsc.org/en/content/articlelanding/2022/sc/d1sc05259d#!divAbstract">Wellawatte et al.</a></p>
-<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@Article</span><span class="p">{</span><span class="nl">wellawatte_seshadri_white_2021</span><span class="p">,</span>
-<span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="s">&quot;Wellawatte, Geemi P. and Seshadri, Aditi and White, Andrew D.&quot;</span><span class="p">,</span>
-<span class="na">title</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;Model agnostic generation of counterfactual explanations for molecules&quot;</span><span class="p">,</span>
-<span class="na">journal</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;Chem. Sci.&quot;</span><span class="p">,</span>
-<span class="na">year</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;2022&quot;</span><span class="p">,</span>
-<span class="na">pages</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;-&quot;</span><span class="p">,</span>
-<span class="na">publisher</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;The Royal Society of Chemistry&quot;</span><span class="p">,</span>
-<span class="na">doi</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;10.1039/D1SC05259D&quot;</span><span class="p">,</span>
-<span class="na">url</span><span class="w">  </span><span class="p">=</span><span class="s">&quot;http://dx.doi.org/10.1039/D1SC05259D&quot;</span><span class="p">,</span>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">wellawatte2022model</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Model agnostic generation of counterfactual explanations for molecules}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Wellawatte, Geemi P and Seshadri, Aditi and White, Andrew D}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{Chemical Science}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{13}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">number</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{13}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{3697--3705}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Royal Society of Chemistry}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>For the descriptor explanations, please cite <a class="reference external" href="https://doi.org/10.26434/chemrxiv-2022-v5p6m-v2">Gandhi et. al.</a></p>
-<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@Article</span><span class="p">{</span><span class="nl">gandhi_white_2022</span><span class="p">,</span>
-<span class="na">place</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Cambridge&quot;</span><span class="p">,</span>
-<span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Explaining structure-activity relationships using locally faithful surrogate models&quot;</span><span class="p">,</span>
-<span class="na">DOI</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;10.26434/chemrxiv-2022-v5p6m&quot;</span><span class="p">,</span>
-<span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;https://doi.org/10.26434/chemrxiv-2022-v5p6m&quot;</span>
-<span class="nv">journal</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="err">&quot;ChemRxiv&quot;,</span>
-<span class="err">publisher</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="err">&quot;Cambridge</span><span class="w"> </span><span class="err">Open</span><span class="w"> </span><span class="err">Engage&quot;,</span>
-<span class="err">author</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="err">&quot;Gandhi,</span><span class="w"> </span><span class="err">Heta</span><span class="w"> </span><span class="err">A.</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">White,</span><span class="w"> </span><span class="err">Andrew</span><span class="w"> </span><span class="err">D.&quot;,</span>
-<span class="err">year</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="err">&quot;2022&quot;</span>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">gandhi_white_2022</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Explaining structure-activity relationships using locally faithful surrogate models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Gandhi, Heta A and White, Andrew D}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{ChemRxiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Cambridge Open Engage}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{10.26434/chemrxiv-2022-v5p6m}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.26434/chemrxiv-2022-v5p6m}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For the natural language explanations, please cite <a class="reference external" href="https://chemrxiv.org/engage/chemrxiv/article-details/633731d1f764e6e535093041">Gandhi and White</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">gandhi2022explaining</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">     </span><span class="p">=</span><span class="w"> </span><span class="s">{Explaining molecular properties with natural language}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Gandhi, Heta A and White, Andrew D}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="s">{ChemRxiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Cambridge Open Engage}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{10.26434/chemrxiv-2022-v5p6m-v3}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{https://chemrxiv.org/engage/chemrxiv/article-details/633731d1f764e6e535093041}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

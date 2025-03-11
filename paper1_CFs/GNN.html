@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MMACE Paper: Graph Neural Network for HIV Inhibition &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
@@ -94,21 +94,21 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import os</span>
 <span class="c1"># os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;2&quot;</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">selfies</span> <span class="k">as</span> <span class="nn">sf</span>
-<span class="kn">import</span> <span class="nn">exmol</span>
-<span class="kn">import</span> <span class="nn">skunk</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">selfies</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">exmol</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">skunk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdDepictor</span>
 
 <span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">IPythonConsole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">IPythonConsole</span>
 
 <span class="n">IPythonConsole</span><span class="o">.</span><span class="n">ipython_useSVG</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
@@ -132,13 +132,13 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:53:49.666154: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2024-11-22 06:53:49.669420: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2024-11-22 06:53:49.676319: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:56:17.752433: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-11 21:56:17.755582: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-11 21:56:17.764279: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1732258429.689897    1865 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1732258429.694156    1865 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2024-11-22 06:53:49.710319: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1741730177.778288    2050 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741730177.782456    2050 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-11 21:56:17.798212: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -215,7 +215,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gen_smiles2graph</span><span class="p">(</span><span class="n">sml</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gen_smiles2graph</span><span class="p">(</span><span class="n">sml</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence</span>
 <span class="sd">    returns: the graph</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -254,21 +254,21 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GCNLayer</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GCNLayer</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of GCN as layer&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># constructor, which just calls super constructor</span>
         <span class="c1"># and turns requested activation into a callable function</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GCNLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">activations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">activation</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">):</span>
         <span class="c1"># create trainable weights</span>
         <span class="n">node_shape</span><span class="p">,</span> <span class="n">adj_shape</span> <span class="o">=</span> <span class="n">input_shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_weight</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">node_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">node_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># split input into nodes, adj</span>
         <span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="n">inputs</span>
         <span class="c1"># compute degree</span>
@@ -283,13 +283,13 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GRLayer</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GRLayer</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reduction layer: A GNN layer that computes average over all node features&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;GRLayer&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;GRLayer&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GRLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="n">inputs</span>
         <span class="n">reduction</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reduction</span>
@@ -332,7 +332,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:53:52.117248: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:152] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:56:20.389216: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:152] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 </pre></div>
 </div>
 <div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "functional"</span>
@@ -380,7 +380,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gen_data</span><span class="p">():</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gen_data</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hivdata</span><span class="p">)):</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">hivdata</span><span class="o">.</span><span class="n">smiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="n">activity</span> <span class="o">=</span> <span class="n">hivdata</span><span class="o">.</span><span class="n">HIV_active</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -424,29 +424,29 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:54:11.690013: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:56:40.482737: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
-/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/contextlib.py:158: UserWarning: Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches. You may need to use the `.repeat()` function when building your dataset.
-  self.gen.throw(typ, value, traceback)
+/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/keras/src/trainers/epoch_iterator.py:151: UserWarning: Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches. You may need to use the `.repeat()` function when building your dataset.
+  self._interrupted_warning()
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:54:13.555166: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
-	 [[{{node IteratorGetNext}}]]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:54:32.998708: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:56:42.465800: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:55:12.569708: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:57:02.470035: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:56:30.212414: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:57:42.968585: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 06:59:07.961691: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 21:59:03.471012: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+	 [[{{node IteratorGetNext}}]]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 22:01:44.080562: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
@@ -473,13 +473,13 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4f46d06e68b7f518ba46df7956d4588d1be3d0870073fed98f93056cf3153a1e.png" src="../_images/4f46d06e68b7f518ba46df7956d4588d1be3d0870073fed98f93056cf3153a1e.png" />
+<img alt="../_images/314caa13b537c78ce47dc1d702d531c577aad817aa4b69145676a2e9714f24d9.png" src="../_images/314caa13b537c78ce47dc1d702d531c577aad817aa4b69145676a2e9714f24d9.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">auc</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_curve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">auc</span>
 
 <span class="n">prediction</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">test_y</span> <span class="o">=</span> <span class="p">[]</span>
@@ -512,7 +512,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fb1118e2ea9f3a4c666de7f918aac1c5a0364ae330e3e126f3da870a12f89ec9.png" src="../_images/fb1118e2ea9f3a4c666de7f918aac1c5a0364ae330e3e126f3da870a12f89ec9.png" />
+<img alt="../_images/9e47df4dacf0254ad9698e5c87e8ada7dec287a8d4222e5d4933ea2511850e44.png" src="../_images/9e47df4dacf0254ad9698e5c87e8ada7dec287a8d4222e5d4933ea2511850e44.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -520,7 +520,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 <p>The following example find CFs for a given molecule where the HIV activity is zero.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">predictor_function</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">selfies</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">predictor_function</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">selfies</span><span class="p">):</span>
     <span class="c1"># print(&#39;inut:&#39;,smiles)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">sml</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
@@ -571,7 +571,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ce2459bc9f45c5fe0108b87052320173e7b21568a7fb525cb276fe42b0c1a5e1.png" src="../_images/ce2459bc9f45c5fe0108b87052320173e7b21568a7fb525cb276fe42b0c1a5e1.png" />
+<img alt="../_images/9dc9a62f06df583f14d565c7ba553a79bd454c3c6e48920d8bf5919293e51146.png" src="../_images/9dc9a62f06df583f14d565c7ba553a79bd454c3c6e48920d8bf5919293e51146.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -597,11 +597,11 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1865/1297770767.py:14: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all Axes decorations.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2050/1297770767.py:14: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all Axes decorations.
   plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../_images/4254bead9c80353557540e5432d96d223eb110281580caa78fe82a3838cdb27b.png" src="../_images/4254bead9c80353557540e5432d96d223eb110281580caa78fe82a3838cdb27b.png" />
+<img alt="../_images/63743d77d5d54aa657a78b86cdc90c5b30cac78e336790ec5a888da44e912dd1.png" src="../_images/63743d77d5d54aa657a78b86cdc90c5b30cac78e336790ec5a888da44e912dd1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -626,7 +626,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/379abef24bfb219859c51a8226bd1d25055d36da60f874c021ae38435d27e5f4.png" src="../_images/379abef24bfb219859c51a8226bd1d25055d36da60f874c021ae38435d27e5f4.png" />
+<img alt="../_images/2247bbfd22e723bb4325dfdc0a7768f14514da9258624579f024137ae0407505.png" src="../_images/2247bbfd22e723bb4325dfdc0a7768f14514da9258624579f024137ae0407505.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -643,7 +643,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1056918e099881d087c159f718009db3c05acec0e8e1adfd0570c47b5cafd919.png" src="../_images/1056918e099881d087c159f718009db3c05acec0e8e1adfd0570c47b5cafd919.png" />
+<img alt="../_images/be7e871fba6990f57dd05ac0e0f76d50a59f4d5123265df1cca883b1db5b8261.png" src="../_images/be7e871fba6990f57dd05ac0e0f76d50a59f4d5123265df1cca883b1db5b8261.png" />
 </div>
 </div>
 </section>

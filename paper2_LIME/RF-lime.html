@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LIME paper: Random Forest for Solubility Prediciton &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
@@ -91,24 +91,24 @@
 <h2>Import packages<a class="headerlink" href="#import-packages" title="Link to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="c1"># import seaborn as sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">IPythonConsole</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">mordred</span><span class="o">,</span> <span class="nn">mordred.descriptors</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">HydrogenBond</span><span class="p">,</span> <span class="n">Polarizability</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">SLogP</span><span class="p">,</span> <span class="n">AcidBase</span><span class="p">,</span> <span class="n">Aromatic</span><span class="p">,</span> <span class="n">BondCount</span><span class="p">,</span> <span class="n">AtomCount</span>
-<span class="kn">from</span> <span class="nn">mordred</span> <span class="kn">import</span> <span class="n">Calculator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rdkit</span><span class="o">,</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="o">,</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">IPythonConsole</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mordred</span><span class="o">,</span><span class="w"> </span><span class="nn">mordred.descriptors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mordred</span><span class="w"> </span><span class="kn">import</span> <span class="n">HydrogenBond</span><span class="p">,</span> <span class="n">Polarizability</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mordred</span><span class="w"> </span><span class="kn">import</span> <span class="n">SLogP</span><span class="p">,</span> <span class="n">AcidBase</span><span class="p">,</span> <span class="n">Aromatic</span><span class="p">,</span> <span class="n">BondCount</span><span class="p">,</span> <span class="n">AtomCount</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mordred</span><span class="w"> </span><span class="kn">import</span> <span class="n">Calculator</span>
 
-<span class="kn">import</span> <span class="nn">exmol</span> <span class="k">as</span> <span class="nn">exmol</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">exmol</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">exmol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdDepictor</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
 <span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -122,6 +122,9 @@
 <span class="p">)</span>
 <span class="c1">#drop smile with containing &#39;P&#39;</span>
 <span class="n">soldata</span> <span class="o">=</span> <span class="n">soldata</span><span class="p">[</span><span class="n">soldata</span><span class="p">[</span><span class="s2">&quot;SMILES&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">]</span>
+<span class="c1">#drop smile where rdkit.Chem.MolFromSmiles return None</span>
+<span class="n">soldata</span> <span class="o">=</span> <span class="n">soldata</span><span class="p">[</span><span class="n">soldata</span><span class="p">[</span><span class="s2">&quot;SMILES&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">smiles</span><span class="p">:</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)]</span>
+
 
 <span class="n">features_start_at</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">soldata</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;MolWt&quot;</span><span class="p">)</span>
 </pre></div>
@@ -175,11 +178,11 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pick_features</span><span class="p">(</span><span class="n">raw_features</span><span class="p">):</span>
     <span class="n">fm</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">raw_features</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">feature_convert</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feature_convert</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">-=</span> <span class="n">fm</span>
         <span class="n">f</span> <span class="o">/=</span> <span class="n">fs</span>
         <span class="k">return</span> <span class="n">f</span>
@@ -214,7 +217,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(9569, 3) [&#39;Wildman-Crippen LogP&#39; &#39;number of hydrogen bond donor&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(9567, 3) [&#39;Wildman-Crippen LogP&#39; &#39;number of hydrogen bond donor&#39;
  &#39;basic group count&#39;]
 </pre></div>
 </div>
@@ -242,7 +245,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0b803fba09c1ef1f6dd51e2419ba53dc2e7df8c49b871aafa81ad9ea6c1c16d1.png" src="../_images/0b803fba09c1ef1f6dd51e2419ba53dc2e7df8c49b871aafa81ad9ea6c1c16d1.png" />
+<img alt="../_images/f8ce07da72fbd912a73ca7a3988754a25a579d9a427ec2e7232ae879c7e7c62b.png" src="../_images/f8ce07da72fbd912a73ca7a3988754a25a579d9a427ec2e7232ae879c7e7c62b.png" />
 </div>
 </div>
 </section>
@@ -250,7 +253,7 @@
 <h2>Compute descriptor attributions<a class="headerlink" href="#compute-descriptor-attributions" title="Link to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">model_eval</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
     <span class="n">molecules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">]</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">labels</span>
@@ -276,8 +279,8 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_feature_importance</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calc_feature_importance</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
 
     <span class="n">feature_importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">tstats</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">b</span><span class="p">)}</span>
     <span class="n">feature_importance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -301,16 +304,16 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;number of hydrogen bond acceptor&#39;: 1.4775475696952518,
- &#39;number of heteroatoms&#39;: -1.0134150119811955,
- &#39;Wildman-Crippen LogP&#39;: 0.9808548577875669,
- &#39;number of hydrogen bond donor&#39;: -0.6161917216797034,
- &#39;aromatic bonds count&#39;: -0.6093312712664206,
- &#39;number of rotatable bonds&#39;: -0.2620474639634041,
- &#39;ring count&#39;: 0.0354866944274913,
- &#39;atomic polarizability&#39;: 0.0298257473861139,
- &#39;basic group count&#39;: -0.026129316369596346,
- &#39;acidic group count&#39;: -0.01962442351126895}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;number of hydrogen bond donor&#39;: np.float64(-1.6325734350684629),
+ &#39;number of hydrogen bond acceptor&#39;: np.float64(0.8731048794862812),
+ &#39;acidic group count&#39;: np.float64(-0.774319257724953),
+ &#39;number of heteroatoms&#39;: np.float64(-0.286697823512548),
+ &#39;atomic polarizability&#39;: np.float64(0.26632928726326327),
+ &#39;basic group count&#39;: np.float64(0.21613881583795605),
+ &#39;aromatic bonds count&#39;: np.float64(-0.18797579287635993),
+ &#39;ring count&#39;: np.float64(-0.14663687959211888),
+ &#39;Wildman-Crippen LogP&#39;: np.float64(-0.08327343211279531),
+ &#39;number of rotatable bonds&#39;: np.float64(-0.04145799980696289)}
 </pre></div>
 </div>
 </div>
@@ -351,7 +354,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Random Forest Regression&#39;)
 </pre></div>
 </div>
-<img alt="../_images/d2121732caf0df50e66fefaa42c8e7cd14616a8871a2b5969d8ab5e778cd77cc.png" src="../_images/d2121732caf0df50e66fefaa42c8e7cd14616a8871a2b5969d8ab5e778cd77cc.png" />
+<img alt="../_images/cd1f30ddf54084a865c7f2c3958070aa2117eb80b0d483a034a8fbfbf06f31f6.png" src="../_images/cd1f30ddf54084a865c7f2c3958070aa2117eb80b0d483a034a8fbfbf06f31f6.png" />
 </div>
 </div>
 </section>

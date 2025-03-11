@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Code to Generate Explanations for Different Scents &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
@@ -84,36 +84,36 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">exmol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">exmol</span>
 
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">rdkit</span><span class="o">,</span> <span class="nn">rdkit.Chem</span><span class="o">,</span> <span class="nn">rdkit.Chem.rdDepictor</span><span class="o">,</span> <span class="nn">rdkit.Chem.Draw</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">SVG</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">MolToImage</span> <span class="k">as</span> <span class="n">mol2img</span><span class="p">,</span> <span class="n">DrawMorganBit</span>  <span class="c1"># type: ignore</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">rdchem</span><span class="p">,</span> <span class="n">MACCSkeys</span><span class="p">,</span> <span class="n">AllChem</span>  <span class="c1"># type: ignore</span>
-<span class="kn">import</span> <span class="nn">skunk</span>
-<span class="kn">import</span> <span class="nn">cairosvg</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rdkit</span><span class="o">,</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="o">,</span><span class="w"> </span><span class="nn">rdkit.Chem.rdDepictor</span><span class="o">,</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">SVG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolToImage</span> <span class="k">as</span> <span class="n">mol2img</span><span class="p">,</span> <span class="n">DrawMorganBit</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdchem</span><span class="p">,</span> <span class="n">MACCSkeys</span><span class="p">,</span> <span class="n">AllChem</span>  <span class="c1"># type: ignore</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">skunk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cairosvg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">pyrfume</span>  <span class="c1"># for loading dataset</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyrfume</span>  <span class="c1"># for loading dataset</span>
 
 <span class="c1"># Packages needed for GNN model (model used when creating spaces)</span>
 <span class="c1">##not needed if generating descriptor explanations or NLEs using a previously created sample space</span>
-<span class="kn">import</span> <span class="nn">haiku</span> <span class="k">as</span> <span class="nn">hk</span>
-<span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">haiku</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
 
 <span class="c1"># Plotting style</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib.font_manager</span> <span class="k">as</span> <span class="nn">font_manager</span>
-<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.font_manager</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">font_manager</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
 
 <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span>
     <span class="s2">&quot;https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf&quot;</span><span class="p">,</span>
@@ -146,11 +146,11 @@
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">13</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">rdchem</span><span class="p">,</span> <span class="n">MACCSkeys</span><span class="p">,</span> <span class="n">AllChem</span>  <span class="c1"># type: ignore</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span> <span class="nn">skunk</span>
-<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">import</span> <span class="nn">cairosvg</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdchem</span><span class="p">,</span> <span class="n">MACCSkeys</span><span class="p">,</span> <span class="n">AllChem</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span><span class="w"> </span><span class="nn">skunk</span>
+<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">import</span><span class="w"> </span><span class="nn">cairosvg</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="ne">ModuleNotFoundError</span>: No module named &#39;cairosvg&#39;
 </pre></div>
@@ -192,7 +192,7 @@
     <span class="n">moleculeScentList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scentList</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">gen_smiles2graph</span><span class="p">(</span><span class="n">sml</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gen_smiles2graph</span><span class="p">(</span><span class="n">sml</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Argument for the RD2NX function should be a valid SMILES sequence</span>
 <span class="sd">    returns: the graph</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -232,7 +232,7 @@
 <span class="c1"># If label vector has 1 at index i, then molecule does have scent i</span>
 
 
-<span class="k">def</span> <span class="nf">createLabelVector</span><span class="p">(</span><span class="n">scentsList</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">createLabelVector</span><span class="p">(</span><span class="n">scentsList</span><span class="p">):</span>
     <span class="c1"># Find class index in label vector that each scent corresponds to &amp; update label for that molecule to 1</span>
     <span class="n">labelVector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">numClasses</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scentsList</span><span class="p">)):</span>
@@ -246,7 +246,7 @@
     <span class="k">return</span> <span class="n">labelVector</span>
 
 
-<span class="k">def</span> <span class="nf">generateGraphs</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generateGraphs</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numMolecules</span><span class="p">):</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">scentdata</span><span class="o">.</span><span class="n">smiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="n">createLabelVector</span><span class="p">(</span><span class="n">moleculeScentList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -264,12 +264,12 @@
 <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">GNNLayer</span><span class="p">(</span><span class="n">hk</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GNNLayer</span><span class="p">(</span><span class="n">hk</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># split input into nodes, edges &amp; features</span>
         <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="n">inputs</span>
         <span class="c1"># Nodes is of shape (N, Nf) --&gt; N = # atoms, Nf = node_feature_length</span>
@@ -340,7 +340,7 @@
         <span class="k">return</span> <span class="n">new_nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">new_features</span>
 
 
-<span class="k">def</span> <span class="nf">model_fn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_fn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">x</span>
     <span class="n">features</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">graph_feat_length</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">features</span>
@@ -423,11 +423,11 @@
 <h3>Modified functions used when selecting counterfactuals such that only the label for the selected scent is flipped<a class="headerlink" href="#modified-functions-used-when-selecting-counterfactuals-such-that-only-the-label-for-the-selected-scent-is-flipped" title="Link to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_select_examples</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_select_examples</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># similarity filtered by if cluster/counter</span>
-    <span class="k">def</span> <span class="nf">cluster_score</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cluster_score</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">cluster</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">cond</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">e</span><span class="o">.</span><span class="n">similarity</span>
 
     <span class="n">clusters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">cluster</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">])</span>
@@ -450,13 +450,13 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">cf_explain</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cf_explain</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">nmols</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;From given :obj:`Examples&lt;Example&gt;`, find closest counterfactuals (see :doc:`index`)</span>
 <span class="sd">    :param examples: Output from :func:`sample_space`</span>
 <span class="sd">    :param nmols: Desired number of molecules</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">is_counter</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_counter</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">yhat</span> <span class="o">!=</span> <span class="n">examples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yhat</span>
 
     <span class="n">scent_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scentClasses</span><span class="p">])</span>
@@ -497,7 +497,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute dot product with labels</span>
-<span class="k">def</span> <span class="nf">cosine_similarity_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">llists</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cosine_similarity_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">llists</span><span class="p">):</span>
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label_dot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
@@ -525,21 +525,21 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Code in this cell taken from Solubility-RNN.ipynb notebook from https://github.com/ur-whitelab/exmol/blob/main/paper2_LIME/Solubility-RNN.ipynb</span>
-<span class="k">def</span> <span class="nf">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">weighted_mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">weighted_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weighted_correlation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
         <span class="n">weighted_cov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">weighted_cov</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">plot_correlation</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_correlation</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="p">):</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="n">exmol</span><span class="o">.</span><span class="n">lime_explain</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">descriptor_type</span><span class="p">)</span>
     <span class="n">fkw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)}</span>
     <span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">}</span>
@@ -607,7 +607,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified function for multiple bases based on plot_space_by_fit function in exmol plot_utils.py file</span>
-<span class="k">def</span> <span class="nf">plot_space_by_fit_multiple_bases</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_space_by_fit_multiple_bases</span><span class="p">(</span>
     <span class="n">examples</span><span class="p">,</span>
     <span class="n">exps</span><span class="p">,</span>
     <span class="n">beta</span><span class="p">,</span>
@@ -697,7 +697,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">createExampleListfromDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">createExampleListfromDataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="n">exampleList</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list[exmol.Example]()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)):</span>
         <span class="c1"># Since reading position values from csv file, data.position is a string - need to convert to list of floats</span>
@@ -789,7 +789,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Model function that takes in SMILES string and scent string as input (rather than molecular graph + parameter)</span>
 <span class="c1"># Output is prediction on whether molecule has a certain scent (1) or not (0)</span>
-<span class="k">def</span> <span class="nf">my_model</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_model</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
     <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">scentString</span><span class="p">)</span>
     <span class="n">thresholdIndex_scent</span> <span class="o">=</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">thresholds</span><span class="o">.</span><span class="n">Scent</span> <span class="o">==</span> <span class="n">scentString</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -868,14 +868,14 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function takes in a SMILES string for a molecule and returns the logit predictions for all scent classes</span>
-<span class="k">def</span> <span class="nf">my_model_allScents_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_model_allScents_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">):</span>
     <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
     <span class="n">logits_predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">opt_params</span><span class="p">,</span> <span class="n">molecularGraph</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">logits_predictions</span>
 
 
 <span class="c1"># Function takes in a SMILES string for a molecule and returns the logit predictions for the specified scent</span>
-<span class="k">def</span> <span class="nf">my_model_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_model_logits</span><span class="p">(</span><span class="n">smilesString</span><span class="p">,</span> <span class="n">scentString</span><span class="p">):</span>
     <span class="n">molecularGraph</span> <span class="o">=</span> <span class="n">gen_smiles2graph</span><span class="p">(</span><span class="n">smilesString</span><span class="p">)</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">scentClasses</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">scentString</span><span class="p">)</span>
     <span class="n">pred_logits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">opt_params</span><span class="p">,</span> <span class="n">molecularGraph</span><span class="p">)[</span><span class="n">pos</span><span class="p">]</span>

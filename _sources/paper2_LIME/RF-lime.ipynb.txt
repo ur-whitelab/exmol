@@ -51,6 +51,9 @@
     ")\n",
     "#drop smile with containing 'P'\n",
     "soldata = soldata[soldata[\"SMILES\"].str.contains(\"P\") == False]\n",
+    "#drop smile where rdkit.Chem.MolFromSmiles return None\n",
+    "soldata = soldata[soldata[\"SMILES\"].apply(lambda smiles: rdkit.Chem.MolFromSmiles(smiles) is not None)]\n",
+    "\n",
     "\n",
     "features_start_at = list(soldata.columns).index(\"MolWt\")"
    ]

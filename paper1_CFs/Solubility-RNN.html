@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MMACE Paper: Recurrent Neural Network for Predicting Solubility &mdash; exmol  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
 
@@ -95,16 +95,16 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import os</span>
 <span class="c1"># os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0&quot;</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">selfies</span> <span class="k">as</span> <span class="nn">sf</span>
-<span class="kn">import</span> <span class="nn">exmol</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdDepictor</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">selfies</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">exmol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem.Draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdDepictor</span>
 
 <span class="n">rdDepictor</span><span class="o">.</span><span class="n">SetPreferCoordGen</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
@@ -132,13 +132,13 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 07:04:24.268688: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2024-11-22 07:04:24.272008: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2024-11-22 07:04:24.280867: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 22:20:32.817732: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-11 22:20:32.820901: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-11 22:20:32.829616: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1732259064.295749    2575 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1732259064.300043    2575 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2024-11-22 07:04:24.316196: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1741731632.843781   20300 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741731632.847952   20300 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-11 22:20:32.863889: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -349,7 +349,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 <span class="n">vocab_stoi</span> <span class="o">=</span> <span class="p">{</span><span class="n">o</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">)))}</span>
 
 
-<span class="k">def</span> <span class="nf">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">split_selfies</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
@@ -362,7 +362,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
     <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="k">def</span> <span class="nf">ints2selfies</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ints2selfies</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">vocab</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span>
 
 
@@ -381,7 +381,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [36, 41, 81, 36, 36, 36, 6, 36, 11, 41, 36, 17, 36, 17, 81, 36, 1, 36, 81, 36, 1, 17, 25, 5]
+selfies2ints: [15, 65, 50, 15, 15, 15, 69, 15, 14, 65, 15, 8, 15, 8, 50, 15, 31, 15, 50, 15, 31, 8, 9, 74]
 ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
 </pre></div>
 </div>
@@ -390,7 +390,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
     <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">example_number</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span>
@@ -437,7 +437,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 07:04:27.731534: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:152] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 22:20:36.944828: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:152] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 </pre></div>
 </div>
 </div>
@@ -507,7 +507,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e6f052657050374547f62fbd3807d43388c1c631e0053acce82b904569f6fc08.png" src="../_images/e6f052657050374547f62fbd3807d43388c1c631e0053acce82b904569f6fc08.png" />
+<img alt="../_images/49a0c6f78a21a7841e4be19cf944dd84b17cf13d0958f45770b69f00013caf51.png" src="../_images/49a0c6f78a21a7841e4be19cf944dd84b17cf13d0958f45770b69f00013caf51.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -532,10 +532,10 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-11-22 07:12:00.399203: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-11 22:27:34.749486: I tensorflow/core/framework/local_rendezvous.cc:405] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 </pre></div>
 </div>
-<img alt="../_images/3c4c7edacc95ebe4f5c1f6b02b685269bdc6cb7f2b79669a18894e83a1cf20f7.png" src="../_images/3c4c7edacc95ebe4f5c1f6b02b685269bdc6cb7f2b79669a18894e83a1cf20f7.png" />
+<img alt="../_images/b5b338a8566a25001ce2225a4d9abb0076b96d8fff6bf735936d021493e5db9b.png" src="../_images/b5b338a8566a25001ce2225a4d9abb0076b96d8fff6bf735936d021493e5db9b.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -543,7 +543,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 <p>In the following example let’s say we would like our molecules to return a solubility value of -3.5. Here we use MMACE algorithm to createcounter factual explanations. In other words, we would like to see what are the minimal mutations that could to be done to our input structure to get our desired solubility.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">predictor_function</span><span class="p">(</span><span class="n">smile_list</span><span class="p">,</span> <span class="n">selfies</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">predictor_function</span><span class="p">(</span><span class="n">smile_list</span><span class="p">,</span> <span class="n">selfies</span><span class="p">):</span>
     <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span><span class="n">selfies2ints</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selfies</span><span class="p">]</span>
     <span class="c1"># check for nans</span>
     <span class="n">valid</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">encoded</span><span class="p">]</span>
@@ -562,14 +562,14 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 157ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 145ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 158ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 155ms/step
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.58667541,        nan])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.44474116,        nan])
 </pre></div>
 </div>
 </div>
@@ -589,50 +589,46 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 174ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 163ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 175ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 173ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/65</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 20ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/65</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 19ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/65</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step 
+<span class=" -Color -Color-Bold">10/65</span> <span class=" -Color -Color-Green">━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/65</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">19/65</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/65</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">28/65</span> <span class=" -Color -Color-Green">━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">37/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">41/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">46/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">49/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">55/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">57/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">64/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">65/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">65/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">65/65</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 </div>
@@ -649,7 +645,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fbf8d5b5a2be7df1487c998447f9d4a021071383943e1150fce88fe081b4cc09.png" src="../_images/fbf8d5b5a2be7df1487c998447f9d4a021071383943e1150fce88fe081b4cc09.png" />
+<img alt="../_images/cdccf1d1a1acbe3daa112fb8a931531071c0c050c554611e383421b19ad093e7.png" src="../_images/cdccf1d1a1acbe3daa112fb8a931531071c0c050c554611e383421b19ad093e7.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -674,7 +670,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6751d96806e3f464705b8af98c0c8094fd82fc0415bf5676f10a61b110fed17a.png" src="../_images/6751d96806e3f464705b8af98c0c8094fd82fc0415bf5676f10a61b110fed17a.png" />
+<img alt="../_images/4bf9a9320a59319a753ad508ab52df9e84caaf34d4c36a6126e196bae9167d37.png" src="../_images/4bf9a9320a59319a753ad508ab52df9e84caaf34d4c36a6126e196bae9167d37.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -687,58 +683,54 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 14ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 23ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/83</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 20ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/84</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 18ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/83</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step 
+<span class=" -Color -Color-Bold"> 9/84</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/83</span> <span class=" -Color -Color-Green">━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">18/84</span> <span class=" -Color -Color-Green">━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/83</span> <span class=" -Color -Color-Green">━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">27/84</span> <span class=" -Color -Color-Green">━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/83</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">36/84</span> <span class=" -Color -Color-Green">━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">41/83</span> <span class=" -Color -Color-Green">━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">45/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">49/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">54/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">57/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">63/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">65/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">72/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">73/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">81/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">81/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">83/83</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 7ms/step
+<span class=" -Color -Color-Bold">84/84</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 6ms/step
 </pre></div>
 </div>
 </div>
@@ -760,7 +752,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4a12e824802783dff1c1a33edfa4c144d66238d6294f565ee0b4257c3a32920b.png" src="../_images/4a12e824802783dff1c1a33edfa4c144d66238d6294f565ee0b4257c3a32920b.png" />
+<img alt="../_images/9ca58711d3ec5f23cff25e7a9e0afc29b65caa444d9104c93ea0f5e88878fba0.png" src="../_images/9ca58711d3ec5f23cff25e7a9e0afc29b65caa444d9104c93ea0f5e88878fba0.png" />
 </div>
 </div>
 </section>
@@ -797,130 +789,122 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 24ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/53</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 19ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/52</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 21ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">10/53</span> <span class=" -Color -Color-Green">━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
+<span class=" -Color -Color-Bold">10/52</span> <span class=" -Color -Color-Green">━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">19/53</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">20/52</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">28/53</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">29/52</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">37/53</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">39/52</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">45/53</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">48/52</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">53/53</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">52/52</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 24ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/74</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 20ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/74</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 18ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/74</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step 
+<span class=" -Color -Color-Bold">10/74</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/74</span> <span class=" -Color -Color-Green">━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">19/74</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">24/74</span> <span class=" -Color -Color-Green">━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">28/74</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">32/74</span> <span class=" -Color -Color-Green">━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">37/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">40/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">46/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">48/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">55/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">56/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">64/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">64/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">73/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">72/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">74/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">74/74</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 14ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 24ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/72</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 19ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/71</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 16ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/72</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step 
+<span class=" -Color -Color-Bold">10/71</span> <span class=" -Color -Color-Green">━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/72</span> <span class=" -Color -Color-Green">━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">19/71</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/72</span> <span class=" -Color -Color-Green">━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">28/71</span> <span class=" -Color -Color-Green">━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/72</span> <span class=" -Color -Color-Green">━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">37/71</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">41/72</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">46/71</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">49/72</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">55/71</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">57/72</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">64/71</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">65/72</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">72/72</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">71/71</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 </div>
@@ -937,7 +921,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c2fc5059fbaa463eabec4bf5c7c02f3d6882aba60b2807c00805ca1c5178ea87.png" src="../_images/c2fc5059fbaa463eabec4bf5c7c02f3d6882aba60b2807c00805ca1c5178ea87.png" />
+<img alt="../_images/7ee66995743b68a40d05eb90b0eb43e27aaba428615004ed8afcfb14d0bb1795.png" src="../_images/7ee66995743b68a40d05eb90b0eb43e27aaba428615004ed8afcfb14d0bb1795.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -953,7 +937,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7fa5e1203c4e46490a288ba1d4b167fd48c9c9392f34b43558e3f094cb4e3fce.png" src="../_images/7fa5e1203c4e46490a288ba1d4b167fd48c9c9392f34b43558e3f094cb4e3fce.png" />
+<img alt="../_images/8479bcd3322978ad891f2bde480014154017a643030825fcd9a17cb08621b0b7.png" src="../_images/8479bcd3322978ad891f2bde480014154017a643030825fcd9a17cb08621b0b7.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -982,90 +966,78 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 23ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/34</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 18ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/34</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/34</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
+<span class=" -Color -Color-Bold">10/34</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">19/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">28/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 <span class=" -Color -Color-Bold">34/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 14ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 23ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/33</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 18ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/32</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/33</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step 
+<span class=" -Color -Color-Bold">10/32</span> <span class=" -Color -Color-Green">━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/33</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">20/32</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/33</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">29/32</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/33</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
+<span class=" -Color -Color-Bold">32/32</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/33</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 7ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 15ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 13ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
+<span class=" -Color -Color-Bold">1/1</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 23ms/step
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/34</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 19ms/step
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold"> 1/34</span> <span class=" -Color -Color-White">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 16ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold"> 9/34</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
+<span class=" -Color -Color-Bold">10/34</span> <span class=" -Color -Color-Green">━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step 
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">17/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">19/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">25/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-<span class=" -Color -Color-Bold">33/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
+<span class=" -Color -Color-Bold">28/34</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━</span><span class=" -Color -Color-White">━━━━</span> <span class=" -Color -Color-Bold">0s</span> 6ms/step
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1084,7 +1056,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/be80967913fb733da39a1e60697d652b9ecc657f0b9d48ced25a8c090f21712a.png" src="../_images/be80967913fb733da39a1e60697d652b9ecc657f0b9d48ced25a8c090f21712a.png" />
+<img alt="../_images/79bb977f2ea81d608ab9e60196b6c8c4932bdb7fbdae6aa2c30624d1ff486527.png" src="../_images/79bb977f2ea81d608ab9e60196b6c8c4932bdb7fbdae6aa2c30624d1ff486527.png" />
 </div>
 </div>
 </section>

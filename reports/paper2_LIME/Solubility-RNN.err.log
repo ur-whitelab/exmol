@@ -1,55 +1,96 @@
 Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/nbclient/client.py", line 1314, in execute
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/nbclient/client.py", line 1319, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+  File "/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-model.save("solubility-rnn-accurate")
-# model = tf.keras.models.load_model('solubility-rnn-accurate/')
+exmol.lime_explain(space, "ecfp")
+s1_ecfp = exmol.text_explain(space, "ecfp")
+explanation = exmol.text_explain_generate(s1_ecfp, "aqueous solubility")
+print(explanation)
 ------------------
 
 
-[0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-Cell [0;32mIn[11], line 1[0m
-[0;32m----> 1[0m [43mmodel[49m[38;5;241;43m.[39;49m[43msave[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43msolubility-rnn-accurate[39;49m[38;5;124;43m"[39;49m[43m)[49m
-[1;32m      2[0m [38;5;66;03m# model = tf.keras.models.load_model('solubility-rnn-accurate/')[39;00m
+[31m---------------------------------------------------------------------------[39m
+[31mOpenAIError[39m                               Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[17][39m[32m, line 3[39m
+[32m      1[39m exmol.lime_explain(space, [33m"[39m[33mecfp[39m[33m"[39m)
+[32m      2[39m s1_ecfp = exmol.text_explain(space, [33m"[39m[33mecfp[39m[33m"[39m)
+[32m----> [39m[32m3[39m explanation = [43mexmol[49m[43m.[49m[43mtext_explain_generate[49m[43m([49m[43ms1_ecfp[49m[43m,[49m[43m [49m[33;43m"[39;49m[33;43maqueous solubility[39;49m[33;43m"[39;49m[43m)[49m
+[32m      4[39m [38;5;28mprint[39m(explanation)
 
-File [0;32m/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py:122[0m, in [0;36mfilter_traceback.<locals>.error_handler[0;34m(*args, **kwargs)[0m
-[1;32m    119[0m     filtered_tb [38;5;241m=[39m _process_traceback_frames(e[38;5;241m.[39m__traceback__)
-[1;32m    120[0m     [38;5;66;03m# To get the full stack trace, call:[39;00m
-[1;32m    121[0m     [38;5;66;03m# `keras.config.disable_traceback_filtering()`[39;00m
-[0;32m--> 122[0m     [38;5;28;01mraise[39;00m e[38;5;241m.[39mwith_traceback(filtered_tb) [38;5;28;01mfrom[39;00m [38;5;28;01mNone[39;00m
-[1;32m    123[0m [38;5;28;01mfinally[39;00m:
-[1;32m    124[0m     [38;5;28;01mdel[39;00m filtered_tb
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/exmol/exmol.py:1486[39m, in [36mtext_explain_generate[39m[34m(text_explanations, property_name, llm_model, single)[39m
+[32m   1477[39m prompt = prompt_template.format([38;5;28mproperty[39m=property_name, text=text)
+[32m   1479[39m messages = [
+[32m   1480[39m     {
+[32m   1481[39m         [33m"[39m[33mrole[39m[33m"[39m: [33m"[39m[33msystem[39m[33m"[39m,
+[32m   (...)[39m[32m   1484[39m     {[33m"[39m[33mrole[39m[33m"[39m: [33m"[39m[33muser[39m[33m"[39m, [33m"[39m[33mcontent[39m[33m"[39m: prompt},
+[32m   1485[39m ]
+[32m-> [39m[32m1486[39m response = [43mopenai[49m[43m.[49m[43mchat[49m[43m.[49m[43mcompletions[49m.create(
+[32m   1487[39m     model=llm_model,
+[32m   1488[39m     messages=messages,
+[32m   1489[39m     temperature=[32m0.05[39m,
+[32m   1490[39m )
+[32m   1492[39m [38;5;28;01mreturn[39;00m response.choices[[32m0[39m].message.content
 
-File [0;32m/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/keras/src/saving/saving_api.py:114[0m, in [0;36msave_model[0;34m(model, filepath, overwrite, zipped, **kwargs)[0m
-[1;32m    110[0m [38;5;28;01mif[39;00m [38;5;28mstr[39m(filepath)[38;5;241m.[39mendswith(([38;5;124m"[39m[38;5;124m.h5[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124m.hdf5[39m[38;5;124m"[39m)):
-[1;32m    111[0m     [38;5;28;01mreturn[39;00m legacy_h5_format[38;5;241m.[39msave_model_to_hdf5(
-[1;32m    112[0m         model, filepath, overwrite, include_optimizer
-[1;32m    113[0m     )
-[0;32m--> 114[0m [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
-[1;32m    115[0m     [38;5;124m"[39m[38;5;124mInvalid filepath extension for saving. [39m[38;5;124m"[39m
-[1;32m    116[0m     [38;5;124m"[39m[38;5;124mPlease add either a `.keras` extension for the native Keras [39m[38;5;124m"[39m
-[1;32m    117[0m     [38;5;124mf[39m[38;5;124m"[39m[38;5;124mformat (recommended) or a `.h5` extension. [39m[38;5;124m"[39m
-[1;32m    118[0m     [38;5;124m"[39m[38;5;124mUse `model.export(filepath)` if you want to export a SavedModel [39m[38;5;124m"[39m
-[1;32m    119[0m     [38;5;124m"[39m[38;5;124mfor use with TFLite/TFServing/etc. [39m[38;5;124m"[39m
-[1;32m    120[0m     [38;5;124mf[39m[38;5;124m"[39m[38;5;124mReceived: filepath=[39m[38;5;132;01m{[39;00mfilepath[38;5;132;01m}[39;00m[38;5;124m.[39m[38;5;124m"[39m
-[1;32m    121[0m )
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/openai/_utils/_proxy.py:20[39m, in [36mLazyProxy.__getattr__[39m[34m(self, attr)[39m
+[32m     19[39m [38;5;28;01mdef[39;00m[38;5;250m [39m[34m__getattr__[39m([38;5;28mself[39m, attr: [38;5;28mstr[39m) -> [38;5;28mobject[39m:
+[32m---> [39m[32m20[39m     proxied = [38;5;28;43mself[39;49m[43m.[49m[43m__get_proxied__[49m[43m([49m[43m)[49m
+[32m     21[39m     [38;5;28;01mif[39;00m [38;5;28misinstance[39m(proxied, LazyProxy):
+[32m     22[39m         [38;5;28;01mreturn[39;00m proxied  [38;5;66;03m# pyright: ignore[39;00m
 
-[0;31mValueError[0m: Invalid filepath extension for saving. Please add either a `.keras` extension for the native Keras format (recommended) or a `.h5` extension. Use `model.export(filepath)` if you want to export a SavedModel for use with TFLite/TFServing/etc. Received: filepath=solubility-rnn-accurate.
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/openai/_utils/_proxy.py:55[39m, in [36mLazyProxy.__get_proxied__[39m[34m(self)[39m
+[32m     54[39m [38;5;28;01mdef[39;00m[38;5;250m [39m[34m__get_proxied__[39m([38;5;28mself[39m) -> T:
+[32m---> [39m[32m55[39m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[43m.[49m[43m__load__[49m[43m([49m[43m)[49m
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/openai/_module_client.py:12[39m, in [36mChatProxy.__load__[39m[34m(self)[39m
+[32m     10[39m [38;5;129m@override[39m
+[32m     11[39m [38;5;28;01mdef[39;00m[38;5;250m [39m[34m__load__[39m([38;5;28mself[39m) -> resources.Chat:
+[32m---> [39m[32m12[39m     [38;5;28;01mreturn[39;00m [43m_load_client[49m[43m([49m[43m)[49m.chat
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/openai/__init__.py:329[39m, in [36m_load_client[39m[34m()[39m
+[32m    313[39m         _client = _AzureModuleClient(  [38;5;66;03m# type: ignore[39;00m
+[32m    314[39m             api_version=api_version,
+[32m    315[39m             azure_endpoint=azure_endpoint,
+[32m   (...)[39m[32m    325[39m             http_client=http_client,
+[32m    326[39m         )
+[32m    327[39m         [38;5;28;01mreturn[39;00m _client
+[32m--> [39m[32m329[39m     _client = [43m_ModuleClient[49m[43m([49m
+[32m    330[39m [43m        [49m[43mapi_key[49m[43m=[49m[43mapi_key[49m[43m,[49m
+[32m    331[39m [43m        [49m[43morganization[49m[43m=[49m[43morganization[49m[43m,[49m
+[32m    332[39m [43m        [49m[43mproject[49m[43m=[49m[43mproject[49m[43m,[49m
+[32m    333[39m [43m        [49m[43mbase_url[49m[43m=[49m[43mbase_url[49m[43m,[49m
+[32m    334[39m [43m        [49m[43mtimeout[49m[43m=[49m[43mtimeout[49m[43m,[49m
+[32m    335[39m [43m        [49m[43mmax_retries[49m[43m=[49m[43mmax_retries[49m[43m,[49m
+[32m    336[39m [43m        [49m[43mdefault_headers[49m[43m=[49m[43mdefault_headers[49m[43m,[49m
+[32m    337[39m [43m        [49m[43mdefault_query[49m[43m=[49m[43mdefault_query[49m[43m,[49m
+[32m    338[39m [43m        [49m[43mhttp_client[49m[43m=[49m[43mhttp_client[49m[43m,[49m
+[32m    339[39m [43m    [49m[43m)[49m
+[32m    340[39m     [38;5;28;01mreturn[39;00m _client
+[32m    342[39m [38;5;28;01mreturn[39;00m _client
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/openai/_client.py:114[39m, in [36mOpenAI.__init__[39m[34m(self, api_key, organization, project, base_url, websocket_base_url, timeout, max_retries, default_headers, default_query, http_client, _strict_response_validation)[39m
+[32m    112[39m     api_key = os.environ.get([33m"[39m[33mOPENAI_API_KEY[39m[33m"[39m)
+[32m    113[39m [38;5;28;01mif[39;00m api_key [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[32m--> [39m[32m114[39m     [38;5;28;01mraise[39;00m OpenAIError(
+[32m    115[39m         [33m"[39m[33mThe api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable[39m[33m"[39m
+[32m    116[39m     )
+[32m    117[39m [38;5;28mself[39m.api_key = api_key
+[32m    119[39m [38;5;28;01mif[39;00m organization [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+
+[31mOpenAIError[39m: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable
 
