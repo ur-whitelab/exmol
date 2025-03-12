@@ -25,6 +25,8 @@ jobs:
       run: |
         pip install . && pip install -r docs/requirements.txt
     - name: Sphinx build
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
         cp -R paper* docs/source
         cd docs && make html
