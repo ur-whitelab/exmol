@@ -271,7 +271,7 @@
     "    valid = [1.0 if sum(e) > 0 else np.nan for e in encoded]\n",
     "    encoded = [np.nan_to_num(e, nan=0) for e in encoded]\n",
     "    padded_seqs = tf.keras.preprocessing.sequence.pad_sequences(encoded, padding=\"post\")\n",
-    "    labels = np.reshape(model.predict(padded_seqs), (-1))\n",
+    "    labels = np.reshape(model.predict(padded_seqs, verbose=0), (-1))\n",
     "    return labels * valid"
    ]
   },

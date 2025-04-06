@@ -132,17 +132,17 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:24:45.783703: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-03-21 16:24:45.787229: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-03-21 16:24:45.796206: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:23:01.732249: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-04-06 12:23:01.735610: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-04-06 12:23:01.744224: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1742574285.811421    2110 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1742574285.816104    2110 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1742574285.828211    2110 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1742574285.828226    2110 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1742574285.828228    2110 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1742574285.828230    2110 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2025-03-21 16:24:45.832569: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1743942181.758738    2138 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743942181.762926    2138 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1743942181.774760    2138 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743942181.774774    2138 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743942181.774776    2138 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1743942181.774778    2138 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-04-06 12:23:01.778640: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -336,7 +336,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:24:48.640081: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:23:04.469606: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 </pre></div>
 </div>
 <div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "functional"</span>
@@ -428,29 +428,29 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:25:08.856001: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:23:24.345288: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 /opt/hostedtoolcache/Python/3.12.9/x64/lib/python3.12/site-packages/keras/src/trainers/epoch_iterator.py:151: UserWarning: Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches. You may need to use the `.repeat()` function when building your dataset.
   self._interrupted_warning()
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:25:10.830374: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:23:26.343435: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:25:51.081586: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:23:46.476426: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:26:32.139987: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:24:26.820202: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:27:53.356309: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:25:47.584872: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-21 16:30:35.103665: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:28:28.884441: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 	 [[{{node IteratorGetNext}}]]
 </pre></div>
 </div>
@@ -477,7 +477,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5f2e7e70ba92992589d3cfe43615cbcb5b584bb4aed747d6fe7a5d5fd3261acc.png" src="../_images/5f2e7e70ba92992589d3cfe43615cbcb5b584bb4aed747d6fe7a5d5fd3261acc.png" />
+<img alt="../_images/75d65c0af9531fffa083e57b4c8c9af2bf9c497ae561eb7d91612c58dd80f37f.png" src="../_images/75d65c0af9531fffa083e57b4c8c9af2bf9c497ae561eb7d91612c58dd80f37f.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -516,7 +516,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/53b2dd360c93c29fefe2452d781d669003ce921d71b6aacff46dfec962933ef3.png" src="../_images/53b2dd360c93c29fefe2452d781d669003ce921d71b6aacff46dfec962933ef3.png" />
+<img alt="../_images/8a07de99c2546cb604b6fd6a9773367dfe1364a2605d3036e524be68aa6f3db7.png" src="../_images/8a07de99c2546cb604b6fd6a9773367dfe1364a2605d3036e524be68aa6f3db7.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -575,7 +575,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/517a67b0f43b8e17a203712b396adf420902f9860ca172932ebffaa5cf361a00.png" src="../_images/517a67b0f43b8e17a203712b396adf420902f9860ca172932ebffaa5cf361a00.png" />
+<img alt="../_images/8f470e700f7352e54d43d9cbc0793eca21e8f9af8e92729d69b2098756ab712a.png" src="../_images/8f470e700f7352e54d43d9cbc0793eca21e8f9af8e92729d69b2098756ab712a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -601,11 +601,11 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2110/1297770767.py:14: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all Axes decorations.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2138/1297770767.py:14: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all Axes decorations.
   plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../_images/de70acf6774d43dd2fa81a5baa4f008fadbe32542e648f89035aea25cece6068.png" src="../_images/de70acf6774d43dd2fa81a5baa4f008fadbe32542e648f89035aea25cece6068.png" />
+<img alt="../_images/8e1f220360fb41b23e77903f1e86dbf0dbbcfaa060ee887e1b2bfd89a1b94d50.png" src="../_images/8e1f220360fb41b23e77903f1e86dbf0dbbcfaa060ee887e1b2bfd89a1b94d50.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -630,7 +630,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cfb6b90ab20ccf968c5179116cdb13785432ace6bc64287fd2457ae9bf5d2d7a.png" src="../_images/cfb6b90ab20ccf968c5179116cdb13785432ace6bc64287fd2457ae9bf5d2d7a.png" />
+<img alt="../_images/414858e149a93f8fcf9560e69247d3b7ffd53ed68ef28602d76558b1b34576ac.png" src="../_images/414858e149a93f8fcf9560e69247d3b7ffd53ed68ef28602d76558b1b34576ac.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -647,7 +647,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/50ac0f628139b144f035876ddd3574b4405b4086e124c52caa5afc3b1de3c19b.png" src="../_images/50ac0f628139b144f035876ddd3574b4405b4086e124c52caa5afc3b1de3c19b.png" />
+<img alt="../_images/d8fabedd3f130712e1dca26cd6eb2fae7d90ca0af0975031653aa077725d4751.png" src="../_images/d8fabedd3f130712e1dca26cd6eb2fae7d90ca0af0975031653aa077725d4751.png" />
 </div>
 </div>
 </section>
