@@ -1,7 +1,7 @@
 import os
 from glob import glob
 from setuptools import setup
-
+from exmol import __version__
 exec(open("exmol/version.py").read())
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -16,7 +16,7 @@ setup(
     url="https://ur-whitelab.github.io/exmol/",
     license="MIT",
     packages=["exmol", "exmol.stoned"],
-    package_data={"exmol": ["lime_data/*.txt", "lime_data/*.pb"]},
+    package_data={"exmol": ["lime_data/*.txt", "lime_data/*.pb", "exmol/py.typed"]},
     install_requires=[
         "selfies >= 2.0.0",
         "numpy",
