@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="exmol",
-    version=__version__,
+    version=__version__,  # type: ignore
     description="Counterfactual generation with STONED SELFIES",
     author="Aditi Seshadri, Geemi Wellawatte, Andrew White",
     author_email="andrew.white@rochester.edu",
