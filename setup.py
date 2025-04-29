@@ -1,7 +1,8 @@
 import os
 from glob import glob
 from setuptools import setup
-from exmol import __version__
+from exmol.version import __version__
+
 exec(open("exmol/version.py").read())
 
 with open("README.md", "r", encoding="utf-8") as fh:
