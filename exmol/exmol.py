@@ -205,7 +205,7 @@ def _load_smarts(path, rank_cutoff=500):
     return smarts
 
 
-def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> str:
+def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> Optional[str]:
     """Get the name of a Morgan bit using a SMARTS dictionary
 
     :param m: RDKit molecule
@@ -273,9 +273,9 @@ def get_functional_groups(
     if isinstance(mol, str):
         mol = smi2mol(mol)
     if mol is None:
-        return []
+        return set([])
 
-    matched_atoms = set()
+    matched_atoms: set = set()
     result = set()
 
     sorted_smarts = sorted(_SMARTS.items(), key=lambda x: x[1][1])
@@ -310,7 +310,7 @@ def clear_descriptors(
 def add_descriptors(
     examples: List[Example],
     descriptor_type: str = "MACCS",
-    mols: List[Any] = None,
+    mols: Optional[List[Any]] = None,
 ) -> List[Example]:
     """Add descriptors to passed examples
 
@@ -415,7 +415,7 @@ def get_basic_alphabet() -> Set[str]:
 # is always a plain uncharged element.
 
 
-def _alphabet_to_elements(alphabet: List[str]) -> Set[str]:
+def _alphabet_to_elements(alphabet: Union[List[str], Set[str]]) -> Set[str]:
     """Converts SELFIES alphabet to element symbols"""
     symbols = []
     for s in alphabet:
@@ -426,8 +426,8 @@ def _alphabet_to_elements(alphabet: List[str]) -> Set[str]:
 
 
 def _check_alphabet_consistency(
-    smiles: str, alphabet_symbols: Set[str], check=False
-) -> True:
+    smiles: str, alphabet_symbols: Union[Set[str], List[str]], check=False
+) -> bool:
     """Checks if SMILES only contains tokens from alphabet"""
 
     alphabet_symbols = _alphabet_to_elements(set(alphabet_symbols))
@@ -448,7 +448,7 @@ def run_stoned(
     num_samples: int = 2000,
     max_mutations: int = 2,
     min_mutations: int = 1,
-    alphabet: Union[List[str], Set[str]] = None,
+    alphabet: Optional[Union[List[str], Set[str]]] = None,
     return_selfies: bool = False,
     _pbar: Any = None,
 ) -> Union[Tuple[List[str], List[float]], Tuple[List[str], List[str], List[float]]]:
@@ -491,11 +491,11 @@ def run_stoned(
         # Mutate the SELFIES:
         if _pbar:
             _pbar.set_description(f"🥌STONED🥌 Mutations: {num_mutations}")
-        selfies_mut = stoned.get_mutated_SELFIES(
+        selfies_mut: list | tuple = stoned.get_mutated_SELFIES(
             selfies_ls.copy(), num_mutations=num_mutations, alphabet=alphabet
         )
         # Convert back to SMILES:
-        smiles_back = [sf.decoder(x) for x in selfies_mut]
+        smiles_back: list | tuple = [sf.decoder(x) for x in selfies_mut]
         # check if smiles are consistent with alphabet and downslect
         selfies_mut, smiles_back = zip(
             *[
@@ -664,10 +664,10 @@ def sample_space(
     ],
     batched: bool = True,
     preset: str = "medium",
-    data: List[Union[str, rdchem.Mol]] = None,
-    method_kwargs: Dict = None,
-    num_samples: int = None,
-    stoned_kwargs: Dict = None,
+    data: Optional[List[Union[str, rdchem.Mol]]] = None,
+    method_kwargs: Optional[Dict] = None,
+    num_samples: Optional[int] = None,
+    stoned_kwargs: Optional[Dict] = None,
     quiet: bool = False,
     use_selfies: bool = False,
     sanitize_smiles: bool = True,
@@ -1017,7 +1017,7 @@ def rcf_explain(
 def plot_space(
     examples: List[Example],
     exps: List[Example],
-    figure_kwargs: Dict = None,
+    figure_kwargs: Optional[Dict] = None,
     mol_size: Tuple[int, int] = (200, 200),
     highlight_clusters: bool = False,
     mol_fontsize: int = 8,
@@ -1111,11 +1111,11 @@ def plot_space(
 def plot_cf(
     exps: List[Example],
     fig: Any = None,
-    figure_kwargs: Dict = None,
+    figure_kwargs: Optional[Dict] = None,
     mol_size: Tuple[int, int] = (200, 200),
     mol_fontsize: int = 10,
-    nrows: int = None,
-    ncols: int = None,
+    nrows: Optional[int] = None,
+    ncols: Optional[int] = None,
 ):
     """Draw the given set of Examples in a grid
 
@@ -1159,10 +1159,10 @@ def plot_cf(
 
 def plot_descriptors(
     examples: List[Example],
-    output_file: str = None,
+    output_file: Optional[str] = None,
     fig: Any = None,
-    figure_kwargs: Dict = None,
-    title: str = None,
+    figure_kwargs: Optional[Dict] = None,
+    title: Optional[str] = None,
     return_svg: bool = False,
 ):
     """Plot descriptor attributions from given set of Examples.
