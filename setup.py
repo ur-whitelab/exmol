@@ -1,7 +1,6 @@
 import os
 from glob import glob
 from setuptools import setup
-from exmol.version import __version__
 
 exec(open("exmol/version.py").read())
 
