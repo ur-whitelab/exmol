@@ -211,6 +211,8 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> Optional[str]:
     :param m: RDKit molecule
     :param bitInfo: bitInfo dictionary from rdkit.Chem.AllChem.GetMorganFingerprint
     :param key: bit key corresponding to the fingerprint you want to have named
+
+    :return: Name of the bit, or None if no match is found
     """
     global _SMARTS
     if _SMARTS is None:
