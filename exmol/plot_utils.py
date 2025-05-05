@@ -290,6 +290,7 @@ def similarity_map_using_tstats(
     if return_svg:
         return text
     _imgtext2mpl(text)
+    return None
 
 
 def plot_space_by_fit(
@@ -300,7 +301,7 @@ def plot_space_by_fit(
     mol_fontsize: int = 8,
     offset: int = 0,
     ax: Any = None,
-    figure_kwargs: Dict = None,
+    figure_kwargs: Optional[Dict] = None,
     cartoon: bool = False,
     rasterized: bool = False,
 ):
