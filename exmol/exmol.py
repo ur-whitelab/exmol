@@ -262,7 +262,7 @@ def get_functional_groups(
     :param mol: RDKit molecule
     :param return_all: If True, will return all functional groups found in the molecule
     :param cutoff: Maximum rank of functional groups to consider based on popularity (increase to include groups like methyl, ethyl, etc.)
-    :return: set of unique functional group names present in the molecule
+    :return: set of unique functional group names present in the molecule. If mol is None, returns an empty set.
     """
     global _SMARTS
     if _SMARTS is None:
