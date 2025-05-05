@@ -385,9 +385,9 @@
  "metadata": {
   "celltoolbar": "Tags",
   "kernelspec": {
-   "display_name": "exmol312",
+   "display_name": "Python 3 (ipykernel)",
    "language": "python",
-   "name": "exmol312"
+   "name": "python3"
   },
   "language_info": {
    "codemirror_mode": {

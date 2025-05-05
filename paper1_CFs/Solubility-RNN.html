@@ -132,17 +132,17 @@
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:46:57.546820: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-04-06 12:46:57.550177: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-04-06 12:46:57.558849: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 19:56:32.818893: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-05-05 19:56:32.822136: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-05-05 19:56:32.830667: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1743943617.572836   20398 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1743943617.577122   20398 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1743943617.589001   20398 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1743943617.589011   20398 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1743943617.589013   20398 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1743943617.589014   20398 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2025-04-06 12:46:57.592980: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1746474992.844618   19867 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1746474992.848885   19867 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1746474992.860398   19867 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746474992.860409   19867 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746474992.860411   19867 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746474992.860413   19867 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-05-05 19:56:32.864821: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -385,7 +385,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [61, 67, 33, 61, 61, 61, 47, 61, 44, 67, 61, 5, 61, 5, 33, 61, 34, 61, 33, 61, 34, 5, 8, 68]
+selfies2ints: [64, 7, 82, 64, 64, 64, 27, 64, 21, 7, 64, 12, 64, 12, 82, 64, 55, 64, 82, 64, 55, 12, 48, 25]
 ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
 </pre></div>
 </div>
@@ -441,7 +441,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:47:01.745965: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 19:56:36.661191: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 </pre></div>
 </div>
 </div>
@@ -511,7 +511,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/45d803e3672ac3f2b974749da0c3e794015612972102afb8492741c6d41ec823.png" src="../_images/45d803e3672ac3f2b974749da0c3e794015612972102afb8492741c6d41ec823.png" />
+<img alt="../_images/72d2939391abe3461c31b8c5758613627e6fe6e1bf43e5a84355205822079155.png" src="../_images/72d2939391abe3461c31b8c5758613627e6fe6e1bf43e5a84355205822079155.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -536,10 +536,10 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-06 12:53:52.703117: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 20:03:38.012203: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 </pre></div>
 </div>
-<img alt="../_images/95d2fb5a7963392f53341db77e692fa71f102b56b176964f10dd86fdf11aaec1.png" src="../_images/95d2fb5a7963392f53341db77e692fa71f102b56b176964f10dd86fdf11aaec1.png" />
+<img alt="../_images/7d7f5f97e6ba7dfe4ea8e13457f821bd5661c7e3b9560569ff78d5406e651f9a.png" src="../_images/7d7f5f97e6ba7dfe4ea8e13457f821bd5661c7e3b9560569ff78d5406e651f9a.png" />
 </div>
 </div>
 <section id="cf-explanation">
@@ -566,7 +566,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.31711555,        nan])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.51280421,        nan])
 </pre></div>
 </div>
 </div>
@@ -598,7 +598,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/11087b7861f55a676e3244693b76957d87cf0c722847a88e1ea05fe33a086408.png" src="../_images/11087b7861f55a676e3244693b76957d87cf0c722847a88e1ea05fe33a086408.png" />
+<img alt="../_images/58cfe681f48982d66ae7427358b179f973aa4c95876dc9fca91e4b61cae2620f.png" src="../_images/58cfe681f48982d66ae7427358b179f973aa4c95876dc9fca91e4b61cae2620f.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -623,7 +623,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bb85e3291a8faba407d7aae71a5f72932620955b8901f7201508ad8b5b369c9e.png" src="../_images/bb85e3291a8faba407d7aae71a5f72932620955b8901f7201508ad8b5b369c9e.png" />
+<img alt="../_images/50dd21443e31b7d4984b94a9f890c45fe4c27d935019ffe411f6e67d2a5f1615.png" src="../_images/50dd21443e31b7d4984b94a9f890c45fe4c27d935019ffe411f6e67d2a5f1615.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -653,7 +653,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c7d330caa7752a310c925c917a154797ab2d107135ed3573903a2137b65ae57b.png" src="../_images/c7d330caa7752a310c925c917a154797ab2d107135ed3573903a2137b65ae57b.png" />
+<img alt="../_images/c28435a12e3b1eaaaa66fea245556e6b24171230c291bc4b8058efb022aa8d88.png" src="../_images/c28435a12e3b1eaaaa66fea245556e6b24171230c291bc4b8058efb022aa8d88.png" />
 </div>
 </div>
 </section>
@@ -698,7 +698,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4e38758436726d6de6e1a8c2ea250c864954d07f84ddb23eb1679d2f9266aac4.png" src="../_images/4e38758436726d6de6e1a8c2ea250c864954d07f84ddb23eb1679d2f9266aac4.png" />
+<img alt="../_images/82436879f3cc5e36ceb76a6c98f0951ba553822d098c03db319539f008b2fdd7.png" src="../_images/82436879f3cc5e36ceb76a6c98f0951ba553822d098c03db319539f008b2fdd7.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -714,7 +714,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fe572dc59db483b845be64d3294a37dde5752dfac02a506c3839acefe304947f.png" src="../_images/fe572dc59db483b845be64d3294a37dde5752dfac02a506c3839acefe304947f.png" />
+<img alt="../_images/1186093badc1b4e375845db2339c52d2129f128a3c8a73a5780af4ad2f48198c.png" src="../_images/1186093badc1b4e375845db2339c52d2129f128a3c8a73a5780af4ad2f48198c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -753,7 +753,7 @@ ints2selfes: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9e21cf4559893beae5118dce6d7a3fa151468bbf450ac1f78c29cdd080cfe7e1.png" src="../_images/9e21cf4559893beae5118dce6d7a3fa151468bbf450ac1f78c29cdd080cfe7e1.png" />
+<img alt="../_images/eba24714768fad2e31190b769b2ac2159a9334527cb0b11fd6417874883903a8.png" src="../_images/eba24714768fad2e31190b769b2ac2159a9334527cb0b11fd6417874883903a8.png" />
 </div>
 </div>
 </section>
