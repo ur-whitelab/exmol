@@ -147,17 +147,17 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 20:05:13.885333: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-05-05 20:05:13.888637: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
-2025-05-05 20:05:13.897148: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-08 18:39:14.684417: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-05-08 18:39:14.687766: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-05-08 18:39:14.696309: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1746475513.911377   41352 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1746475513.915665   41352 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1746475513.928355   41352 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1746475513.928395   41352 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1746475513.928397   41352 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1746475513.928400   41352 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2025-05-05 20:05:13.934296: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+E0000 00:00:1746729554.710987   41558 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1746729554.715170   41558 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1746729554.727001   41558 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746729554.727032   41558 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746729554.727034   41558 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746729554.727036   41558 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-05-08 18:39:14.730665: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -458,7 +458,7 @@ To enable the following instructions: AVX2 FMA, in other operations, rebuild Ten
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>selfies: [C][N][Branch1][C][C][C][=Branch1][C][=O][N][C][=C][C][=C][Branch1][C][Cl][C][Branch1][C][Cl][=C][Ring1][Branch2]
-selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 25, 34, 25, 26, 8, 46, 5]
+selfies2ints: [5, 36, 6, 5, 5, 5, 24, 5, 44, 36, 5, 23, 5, 23, 6, 5, 12, 5, 6, 5, 12, 23, 11, 4]
 </pre></div>
 </div>
 </div>
@@ -524,7 +524,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 20:05:17.873872: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-08 18:39:19.411981: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
 </pre></div>
 </div>
 </div>
@@ -613,7 +613,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7f7a2443144e5850969357ee2a640e279fa2dd8d078660bc80842225d96348fe.png" src="../_images/7f7a2443144e5850969357ee2a640e279fa2dd8d078660bc80842225d96348fe.png" />
+<img alt="../_images/d16ce08238bde3494edc661c89a07fcd47052dfe9e1e8b71e376d90e94603c29.png" src="../_images/d16ce08238bde3494edc661c89a07fcd47052dfe9e1e8b71e376d90e94603c29.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -647,10 +647,10 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-05 20:05:52.877036: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-05-08 18:39:54.065399: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
 </pre></div>
 </div>
-<img alt="../_images/9f2126b9339cff927769022ab0d2a9e6eee7878f67577d7578b386327e9f4b16.png" src="../_images/9f2126b9339cff927769022ab0d2a9e6eee7878f67577d7578b386327e9f4b16.png" />
+<img alt="../_images/26c2d275c4adb0c8f94864328b0ef2563aa0e9a9090a644623a9ad67f6b62c83.png" src="../_images/26c2d275c4adb0c8f94864328b0ef2563aa0e9a9090a644623a9ad67f6b62c83.png" />
 </div>
 </div>
 </section>
@@ -696,7 +696,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4210
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4197
 </pre></div>
 </div>
 </div>
@@ -724,11 +724,11 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ce99043fac789112e32be9180ea83aadd45ef688e2b2374825f3a2074f229f01.svg" src="../_images/ce99043fac789112e32be9180ea83aadd45ef688e2b2374825f3a2074f229f01.svg" />
+<img alt="../_images/f401cf5a58e3b5ddf70f920462831c4b87beb7a6cf98f499b25f3c2f2b49bdb6.svg" src="../_images/f401cf5a58e3b5ddf70f920462831c4b87beb7a6cf98f499b25f3c2f2b49bdb6.svg" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
 </pre></div>
 </div>
-<img alt="../_images/c6f4249066dbe11d4dd4c440ee0f30d379225ca6073fb64cf57ff499dbb6cad8.png" src="../_images/c6f4249066dbe11d4dd4c440ee0f30d379225ca6073fb64cf57ff499dbb6cad8.png" />
+<img alt="../_images/117bc7720effb20342be3ed16dba387ce704dba214d12688a85c60f923f5b4bb.png" src="../_images/117bc7720effb20342be3ed16dba387ce704dba214d12688a85c60f923f5b4bb.png" />
 </div>
 </div>
 </section>
@@ -744,7 +744,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The molecule&#39;s aqueous solubility is significantly influenced by the presence of specific structural features. The n-butyl/amide group contributes positively to solubility, likely due to its ability to engage in hydrogen bonding with water molecules, enhancing solubility. Additionally, the presence of hetero N basic H, hetero N nonbasic, and heteroaromatic groups further enhances solubility. These groups can participate in hydrogen bonding and dipole-dipole interactions with water, increasing the molecule&#39;s affinity for aqueous environments. If these groups were absent, the molecule&#39;s solubility in water would likely decrease due to reduced interaction with water molecules. Conversely, if hydrophobic groups were present, they could negatively impact solubility by reducing the molecule&#39;s overall polarity and interaction with water.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The molecule&#39;s aqueous solubility is significantly influenced by the presence of hetero nitrogen (N) atoms, both in basic and nonbasic forms, as well as in heteroaromatic groups. These structural features are positively correlated with solubility, indicating that they enhance the molecule&#39;s ability to dissolve in water. The basic hetero N atoms can engage in hydrogen bonding with water molecules, increasing solubility. Similarly, nonbasic hetero N atoms and heteroaromatic groups contribute to solubility through potential hydrogen bonding and pi-stacking interactions with water. If these hetero N groups were absent, the molecule&#39;s aqueous solubility would likely decrease, as fewer interactions with water would be possible. Thus, the presence of these nitrogen-containing groups is crucial for maintaining high aqueous solubility.
 </pre></div>
 </div>
 </div>
@@ -761,7 +761,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c9df8a048aec50cdcb615f9d3b8456b59da360de5c59c6d3aec6dba030b5c73e.svg" src="../_images/c9df8a048aec50cdcb615f9d3b8456b59da360de5c59c6d3aec6dba030b5c73e.svg" />
+<img alt="../_images/7bf38ca4987f1558e6ffadd86ec66352a113e7a27838de54ccea49c17fc4f2a8.svg" src="../_images/7bf38ca4987f1558e6ffadd86ec66352a113e7a27838de54ccea49c17fc4f2a8.svg" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -790,7 +790,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
   warnings.warn(
 </pre></div>
 </div>
-<img alt="../_images/1d8ccb8e5e4571789b0c736c5018ba2c79df3d47d0bb601d1a9491d23e918362.png" src="../_images/1d8ccb8e5e4571789b0c736c5018ba2c79df3d47d0bb601d1a9491d23e918362.png" />
+<img alt="../_images/d8a5b5a9337a18bd300555e766e2523e0992d34398348c32d48d875ddc0a6f67.png" src="../_images/d8a5b5a9337a18bd300555e766e2523e0992d34398348c32d48d875ddc0a6f67.png" />
 </div>
 </div>
 </section>
@@ -874,13 +874,11 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_41352/2076087530.py:60: UserWarning: No data for colormapping provided via &#39;c&#39;. Parameters &#39;cmap&#39; will be ignored
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_41558/2076087530.py:60: UserWarning: No data for colormapping provided via &#39;c&#39;. Parameters &#39;cmap&#39; will be ignored
   sc = ax_dict[&quot;A&quot;].scatter(ys, y_wls, s=50, marker=&quot;.&quot;, c=cmap, cmap=cmap)
-/tmp/ipykernel_41352/2076087530.py:71: UserWarning: Tight layout not applied. tight_layout cannot make Axes width small enough to accommodate all Axes decorations
-  plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../_images/8d817f13a4f37c4400147dfaf4bab63b87fe91afa8e2fcb55349292f6e945a9a.png" src="../_images/8d817f13a4f37c4400147dfaf4bab63b87fe91afa8e2fcb55349292f6e945a9a.png" />
+<img alt="../_images/54a0269bed52879e6d2aeb9ad1b567feb5f70d47c3bbdf0b717da964cbfd557f.png" src="../_images/54a0269bed52879e6d2aeb9ad1b567feb5f70d47c3bbdf0b717da964cbfd557f.png" />
 </div>
 </div>
 </section>
@@ -904,7 +902,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4215
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4216
 </pre></div>
 </div>
 </div>
@@ -997,7 +995,7 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/98d9cd1b7dba74585a7b6a1ab63df06641e18f1f638e25f339d625446596d197.png" src="../_images/98d9cd1b7dba74585a7b6a1ab63df06641e18f1f638e25f339d625446596d197.png" />
+<img alt="../_images/cfa7e00fe1ac8f6c70942ded56681675bd6cfa1aba163ee7f841275be94fa9f0.png" src="../_images/cfa7e00fe1ac8f6c70942ded56681675bd6cfa1aba163ee7f841275be94fa9f0.png" />
 </div>
 </div>
 </section>
@@ -1025,9 +1023,9 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/737fc2b34f2df3a94038a946ec2f8636f730bf913af0c4f5ff87777c2d704ba4.png" src="../_images/737fc2b34f2df3a94038a946ec2f8636f730bf913af0c4f5ff87777c2d704ba4.png" />
-<img alt="../_images/c1a08656312a2c4669e40e7927db63d20d57f545b030a9c64495d02ce2f8e63b.png" src="../_images/c1a08656312a2c4669e40e7927db63d20d57f545b030a9c64495d02ce2f8e63b.png" />
-<img alt="../_images/30ae4128524a6e38dd16090ba4db74a9347522099676d8b4a104ed0b14eae456.png" src="../_images/30ae4128524a6e38dd16090ba4db74a9347522099676d8b4a104ed0b14eae456.png" />
+<img alt="../_images/8dc18a15f9a737c60b908debc5265e9c64500ae14a6513498679552779fe0ccf.png" src="../_images/8dc18a15f9a737c60b908debc5265e9c64500ae14a6513498679552779fe0ccf.png" />
+<img alt="../_images/76613f41ebe8af4706c99a7079be6d0301b7035e8cfdb8b1d4ae77dfbe3cd1ca.png" src="../_images/76613f41ebe8af4706c99a7079be6d0301b7035e8cfdb8b1d4ae77dfbe3cd1ca.png" />
+<img alt="../_images/a294f619f814ba83e47f5bfdb259cb2fa73e4c60bdfe7506bbba69235947039b.png" src="../_images/a294f619f814ba83e47f5bfdb259cb2fa73e4c60bdfe7506bbba69235947039b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1059,9 +1057,9 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
 </pre></div>
 </div>
-<img alt="../_images/3b167ec9739d9343ce3c9e9b6b04ac6ead74b50741e9abd012d3e09d69126f7b.png" src="../_images/3b167ec9739d9343ce3c9e9b6b04ac6ead74b50741e9abd012d3e09d69126f7b.png" />
-<img alt="../_images/af59877c8a9767f889a85c86d5ba98c7295a32804bde9933b8f485ab4f43f63f.png" src="../_images/af59877c8a9767f889a85c86d5ba98c7295a32804bde9933b8f485ab4f43f63f.png" />
-<img alt="../_images/37b17929a2deae559a81f90fc32004eaa2ce03b3b239ee04788323f883d1b01f.png" src="../_images/37b17929a2deae559a81f90fc32004eaa2ce03b3b239ee04788323f883d1b01f.png" />
+<img alt="../_images/231f6ac40757a3f25a989035842657a783d004a12681a6622b3e06363f9a1369.png" src="../_images/231f6ac40757a3f25a989035842657a783d004a12681a6622b3e06363f9a1369.png" />
+<img alt="../_images/a036553ce123378d21c8a2bd701222a42a331a52dac9a734b91b6a023378c69c.png" src="../_images/a036553ce123378d21c8a2bd701222a42a331a52dac9a734b91b6a023378c69c.png" />
+<img alt="../_images/f0adfb9cd2d172987e6c33a055ae4483126fca9b844bb0e52904265c1cc16ee0.png" src="../_images/f0adfb9cd2d172987e6c33a055ae4483126fca9b844bb0e52904265c1cc16ee0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1097,9 +1095,9 @@ selfies2ints: [25, 39, 34, 25, 25, 25, 7, 25, 43, 39, 25, 8, 25, 8, 34, 25, 26, 
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SMARTS annotations for MACCS descriptors were created using SMARTSviewer (smartsview.zbh.uni-hamburg.de, Copyright: ZBH, Center for Bioinformatics Hamburg) developed by K. Schomburg et. al. (J. Chem. Inf. Model. 2010, 50, 9, 1529–1535)
 </pre></div>
 </div>
-<img alt="../_images/af89428aaab2d63a7aba541919abffd80113efb9945c590b5952916c86236c1d.png" src="../_images/af89428aaab2d63a7aba541919abffd80113efb9945c590b5952916c86236c1d.png" />
-<img alt="../_images/ff8bd69b04fbc3a2a50bddc3e7a67ed0007b479806586e55a9632e00e29d2153.png" src="../_images/ff8bd69b04fbc3a2a50bddc3e7a67ed0007b479806586e55a9632e00e29d2153.png" />
-<img alt="../_images/51abf84bc5e88fe5098a810b22aeb558aa569e43f32981f9ed4f902740fcc3ef.png" src="../_images/51abf84bc5e88fe5098a810b22aeb558aa569e43f32981f9ed4f902740fcc3ef.png" />
+<img alt="../_images/202e6037f7a47b789fc2d4e337baf5c07cad69879c8580972fe9f2c29d5f535b.png" src="../_images/202e6037f7a47b789fc2d4e337baf5c07cad69879c8580972fe9f2c29d5f535b.png" />
+<img alt="../_images/b861ac90e51c78fb6261c2607cc95e575f0ab58e0db049ccc86632059bfd944d.png" src="../_images/b861ac90e51c78fb6261c2607cc95e575f0ab58e0db049ccc86632059bfd944d.png" />
+<img alt="../_images/d4b47b66f031276d9f79148253aa3c5456564099a16ee621a6852e4f4e591605.png" src="../_images/d4b47b66f031276d9f79148253aa3c5456564099a16ee621a6852e4f4e591605.png" />
 </div>
 </div>
 </section>
