@@ -555,6 +555,7 @@ def run_chemed(
     similarity: float = 0.1,
     fp_type: str = "ECFP4",
     _pbar: Any = None,
+    smi_name : str = "ConnectivitySMILES"
 ) -> Tuple[List[str], List[float]]:
     """
     This method is similar to STONED but works by quering PubChem
@@ -584,7 +585,7 @@ def run_chemed(
         data = reply.json()
     except:
         return [], []
-    smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
+    smiles = [d[smi_name] for d in data["PropertyTable"]["Properties"]]
     smiles = list(set(smiles))
 
     if _pbar:
