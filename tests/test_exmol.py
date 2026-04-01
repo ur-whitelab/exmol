@@ -3,6 +3,7 @@ import numpy as np
 from exmol.exmol import lime_explain
 import selfies as sf
 import exmol
+import pytest
 from rdkit.Chem import MolFromSmiles as smi2mol
 from rdkit.Chem import MolToSmiles as mol2smi
 from rdkit import RDPaths
@@ -458,7 +459,8 @@ def test_text_explain():
     s = exmol.text_explain(samples, "MACCS")
     assert len(s) > 0, "No explanation generated"
 
-    e = exmol.text_explain_generate(s, "soluble in water")
+    if os.environ.get("OPENAI_API_KEY"):
+        e = exmol.text_explain_generate(s, "soluble in water")
 
     samples1 = exmol.sample_space("c1cc(C(=O)O)c(OC(=O)C)cc1", model, batched=False)
     s = exmol.text_explain(samples1, "ECFP")
