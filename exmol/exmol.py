@@ -585,7 +585,11 @@ def run_chemed(
         return [], []
     if "PropertyTable" not in data or "Properties" not in data["PropertyTable"]:
         return [], []
-    smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"] if "CanonicalSMILES" in d]
+    smiles = [
+        d["CanonicalSMILES"]
+        for d in data["PropertyTable"]["Properties"]
+        if "CanonicalSMILES" in d
+    ]
     smiles = list(set(smiles))
 
     if _pbar:
