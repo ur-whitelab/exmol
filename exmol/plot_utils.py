@@ -1,7 +1,6 @@
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox, TextArea, VPacker  # type: ignore
-from typing import *
-import xml.etree.ElementTree as ET  # type: ignore
-import io  # type: ignore
+from matplotlib.offsetbox import AnnotationBbox, TextArea, VPacker  # type: ignore
+from typing import Any, Dict, List, Optional, Tuple
+import io
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np  # type: ignore
 from rdkit.Chem import rdFMCS as MCS  # type: ignore

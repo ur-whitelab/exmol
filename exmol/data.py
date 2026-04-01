@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict, field
-from typing import Optional
+from typing import Optional, Tuple
 import numpy as np  # type: ignore
 
 
@@ -10,13 +10,13 @@ class Descriptors:
     #: Descriptor type
     descriptor_type: str
     #: Descriptor values
-    descriptors: tuple
+    descriptors: Tuple
     # Descriptor name
-    descriptor_names: tuple
+    descriptor_names: Tuple
     # plotting name
-    plotting_names: tuple = ()
+    plotting_names: Tuple = ()
     # t_stats for each molecule
-    tstats: tuple = ()
+    tstats: Tuple = ()
 
 
 @dataclass

@@ -1,18 +1,18 @@
-from functools import reduce, lru_cache
+from functools import reduce
 import inspect
-from typing import *
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, cast
 import io
 import math
 import requests  # type: ignore
 import numpy as np
 import matplotlib.pyplot as plt  # type: ignore
-from matplotlib.patches import Rectangle, FancyBboxPatch  # type: ignore
+from matplotlib.patches import FancyBboxPatch  # type: ignore
 from matplotlib.offsetbox import AnnotationBbox  # type: ignore
 import matplotlib as mpl  # type: ignore
 import re
 import selfies as sf  # type: ignore
 import tqdm  # type: ignore
-import textwrap  # type: ignore
+import textwrap
 import skunk  # type: ignore
 import synspace  # type: ignore
 
@@ -25,7 +25,6 @@ from rdkit.Chem import MolFromSmarts  # type: ignore
 from rdkit.Chem import MolToSmiles as mol2smi  # type: ignore
 from rdkit.Chem import rdchem, MACCSkeys, AllChem  # type: ignore
 from rdkit.Chem.Draw import MolToImage as mol2img, DrawMorganBit  # type: ignore
-from rdkit.Chem import rdchem  # type: ignore
 from rdkit.DataStructs.cDataStructs import BulkTanimotoSimilarity, TanimotoSimilarity  # type: ignore
 
 import openai
@@ -52,7 +51,7 @@ def _ecfp_names(examples, joint_bits):
     multiple_bases = _check_multiple_bases(examples)
     # need to get base molecule(s) for naming
     bitInfo = {}  # Type Dict[Any, Any]
-    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
+    base_mol = [smi2mol(e.smiles) for e in examples if e.is_origin]
     if multiple_bases:
         multiBitInfo = {}  # type: Dict[int, Tuple[Any, int, int]]
         for b in base_mol:
@@ -256,7 +255,7 @@ def name_morgan_bit(m: Any, bitInfo: Dict[Any, Any], key: int) -> Optional[str]:
 
 def get_functional_groups(
     mol: Any, return_all: bool = False, cutoff: int = 300
-) -> set[str]:
+) -> Set[str]:
     """Get a set of functional groups present in a molecule, sorted by priority, avoiding overlaps.
 
     :param mol: RDKit molecule
@@ -467,7 +466,7 @@ def run_stoned(
     """
     if alphabet is None:
         alphabet = get_basic_alphabet()
-    if type(alphabet) == set:
+    if isinstance(alphabet, set):
         alphabet = list(alphabet)
     alphabet_symbols = _alphabet_to_elements(alphabet)
     # make sure starting smiles is consistent with alphabet
@@ -475,8 +474,8 @@ def run_stoned(
     num_mutation_ls = list(range(min_mutations, max_mutations + 1))
 
     start_mol = smi2mol(start_smiles)
-    if start_mol == None:
-        raise Exception("Invalid starting structure encountered")
+    if start_mol is None:
+        raise ValueError("Invalid starting structure encountered")
 
     # want it so after sampling have num_samples
     randomized_smile_orderings = [
@@ -582,7 +581,7 @@ def run_chemed(
         return [], []
     try:
         data = reply.json()
-    except:
+    except Exception:
         return [], []
     smiles = [d["CanonicalSMILES"] for d in data["PropertyTable"]["Properties"]]
     smiles = list(set(smiles))
@@ -990,7 +989,7 @@ def rcf_explain(
     :param nmols: Desired number of molecules
     :param filter_nondrug: Whether or not to filter out non-drug molecules. Default is True if input passes filter
     """
-    if type(delta) is float:
+    if isinstance(delta, (int, float)):
         delta = (-delta, delta)
 
     def is_high(e):
@@ -1144,7 +1143,7 @@ def plot_cf(
         fig, axs = plt.subplots(R, C, **figure_kwargs)
     else:
         axs = fig.subplots(R, C)
-    if type(axs) != np.ndarray:  # Happens if nrows=ncols=1
+    if not isinstance(axs, np.ndarray):  # Happens if nrows=ncols=1
         axs = np.array([[axs]])
     axs = axs.flatten()
     for i, (img, e) in enumerate(zip(imgs, exps)):
@@ -1256,7 +1255,7 @@ def plot_descriptors(
     if descriptor_type == "ecfp":
         # get reference for ECFP
         if multiple_bases:
-            bases = [smi2mol(e.smiles) for e in examples if e.is_origin == True]
+            bases = [smi2mol(e.smiles) for e in examples if e.is_origin]
             bi = {}  # type: Dict[Any, Any]
             for b in bases:
                 bit_info = {}  # type: Dict[Any, Any]
@@ -1403,7 +1402,7 @@ def check_multiple_aromatic_rings(mol):
                 continue
         if flag:
             count += 1
-    return True if count > 1 else False
+    return count > 1
 
 
 def merge_text_explains(
