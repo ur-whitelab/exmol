@@ -1,5 +1,5 @@
 from matplotlib.offsetbox import AnnotationBbox, TextArea, VPacker  # type: ignore
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, cast
 import io
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np  # type: ignore
